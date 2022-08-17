@@ -7,7 +7,8 @@
   "scripts": {
     "serve": "webpack serve --config webpack.dev.js",
     "build": "webpack build --config webpack.prod.js",
-    "preview": "webpack build -o dist_preview --config webpack.prod.js"
+    "preview": "webpack build -o dist_preview --config webpack.prod.js",
+    "deploy": "npm run build && echo 'fluxolab.app' > ./dist/CNAME && npx gh-pages -d dist"
   },
   "keywords": [],
   "author": "",
