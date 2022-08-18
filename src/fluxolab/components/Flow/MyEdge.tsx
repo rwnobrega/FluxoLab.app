@@ -13,6 +13,7 @@ import {
 } from '@tisoap/react-flow-smart-edge'
 
 export default function (props: EdgeProps): JSX.Element {
+  const [mouseHover, setMouseHover] = React.useState<boolean>(false)
   const nodes = useNodes()
 
   const options = {
@@ -34,7 +35,13 @@ export default function (props: EdgeProps): JSX.Element {
 
   return (
     <path
-      style={props.style}
+      style={{
+        strokeWidth: 3,
+        stroke: props.selected === true ? 'black' : 'gray',
+        strokeOpacity: mouseHover ? 1 : 0.5
+      }}
+      onMouseEnter={() => setMouseHover(true)}
+      onMouseLeave={() => setMouseHover(false)}
       className='react-flow__edge-path'
       d={svgPathString}
       markerEnd='arrow'
