@@ -8,7 +8,8 @@ module.exports = {
   devtool: 'inline-source-map',
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'FluxoLab.app'
+      title: 'FluxoLab.app',
+      favicon: './src/fluxolab/assets/FluxoLab.svg'
     })
   ],
   output: {
