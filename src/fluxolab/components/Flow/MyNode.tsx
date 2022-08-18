@@ -44,8 +44,8 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
     if (labelRef.current !== null) {
       const zoom = getZoom()
       const labelWidth = labelRef.current.getBoundingClientRect().width / zoom
-      const borderWidth = (40 * Math.ceil(labelWidth / 40) - labelWidth)
-      setMargin(20 + borderWidth / 2)
+      const totalMarginWidth = 40 * Math.ceil(labelWidth / 40) - labelWidth + 40
+      setMargin(totalMarginWidth / 2)
     }
   }, [nodes])
 
