@@ -16,8 +16,8 @@ export default function ({ type, title, box }: Props): JSX.Element {
   }
 
   return (
-    <div draggable onDragStart={onDragStart} style={{ cursor: 'move' }}>
-      <SymbolBox width={120} box={box}>
+    <div draggable onDragStart={onDragStart} style={{ cursor: 'move', width: 120 }}>
+      <SymbolBox box={box}>
         <span>{title}</span>
       </SymbolBox>
     </div>

@@ -5,14 +5,13 @@ import { getDarkerColor, getStripedBackground } from 'utils/colors'
 import { Box } from 'components/Symbols'
 
 interface Props {
-  width?: number
   box: Box
   boxFilter?: string
   isSelected?: boolean
   children: JSX.Element
 }
 
-export default function ({ width, box, boxFilter, isSelected = false, children }: Props): JSX.Element {
+export default function ({ box, boxFilter, isSelected = false, children }: Props): JSX.Element {
   const [mouseHover, setMouseHover] = useState<boolean>(false)
 
   function getBackground (): string {
@@ -34,7 +33,6 @@ export default function ({ width, box, boxFilter, isSelected = false, children }
     >
       <div
         style={{
-          width: width,
           lineHeight: '40px',
           fontWeight: 'bold',
           color: box.textColor,
