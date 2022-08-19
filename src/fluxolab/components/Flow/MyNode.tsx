@@ -28,7 +28,6 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
   const [margin, setMargin] = useState<number>(0)
   const [width, setWidth] = useState<number>(0)
   const [mouseHover, setMouseHover] = useState<boolean>(false)
-  const [isCurNode, setIsCurNode] = useState<boolean>(false)
   const [boxFilter, setBoxFilter] = useState<string>('')
   const [showModal, setShowModal] = useState<boolean>(false)
 
@@ -53,17 +52,13 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
   }, [nodes])
 
   useEffect(() => {
-    setIsCurNode(nodeId === state.curSymbolId)
-  }, [state])
-
-  useEffect(() => {
     setBoxFilter(
       () => {
         if (compileError !== null) {
           if (_.includes(compileError?.nodeIds, nodeId)) {
             return getDropShadow('#dc3545')
           }
-        } else if (isCurNode) {
+        } else if (nodeId === state.curSymbolId) {
           if (state.status === 'error') {
             return getDropShadow('#dc3545')
           } else {
@@ -73,7 +68,7 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
         return ''
       }
     )
-  }, [isCurNode, state, compileError])
+  }, [state, compileError])
 
   return (
     <div style={{ position: 'relative', left: -width / 2 }}>
