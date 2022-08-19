@@ -17,10 +17,10 @@ import {
 
 interface StoreFlow {
   nodes: Node[]
+  edges: Edge[]
   addNode: (node: Node) => void
   onNodesChange: (changes: NodeChange[]) => void
   updateNodeProp: (id: string, path: string, value: any) => void
-  edges: Edge[]
   onEdgesChange: (changes: EdgeChange[]) => void
   onConnect: (connection: Connection) => void
 }
@@ -29,6 +29,7 @@ const useStoreFlow = create<StoreFlow, any>(
   persist(
     (set, get) => ({
       nodes: [],
+      edges: [],
       addNode: node => set({ nodes: [...get().nodes, node] }),
       onNodesChange: changes => set({ nodes: applyNodeChanges(changes, get().nodes) }),
       updateNodeProp: (id, path, value) => {
@@ -42,7 +43,6 @@ const useStoreFlow = create<StoreFlow, any>(
           })
         })
       },
-      edges: [],
       onEdgesChange: changes => set({ edges: applyEdgeChanges(changes, get().edges) }),
       onConnect: connection => {
         const edges = get().edges
