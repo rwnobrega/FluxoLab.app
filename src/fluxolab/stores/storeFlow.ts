@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 import create from 'zustand'
 
 import { persist } from 'zustand/middleware'
@@ -17,7 +19,7 @@ interface StoreFlow {
   nodes: Node[]
   addNode: (node: Node) => void
   onNodesChange: (changes: NodeChange[]) => void
-  updateNodeValue: (id: string, value: string) => void
+  updateNodeProp: (id: string, path: string, value: any) => void
   edges: Edge[]
   onEdgesChange: (changes: EdgeChange[]) => void
   onConnect: (connection: Connection) => void
@@ -29,27 +31,21 @@ const useStoreFlow = create<StoreFlow, any>(
   persist(
     (set, get) => ({
       nodes: [],
-      addNode: node => set(state => ({ ...state, nodes: [...state.nodes, node] })),
-      onNodesChange: changes => {
-        set({ nodes: applyNodeChanges(changes, get().nodes) })
-      },
-      updateNodeValue: (id, value) => {
+      addNode: node => set({ nodes: [...get().nodes, node] }),
+      onNodesChange: changes => set({ nodes: applyNodeChanges(changes, get().nodes) }),
+      updateNodeProp: (id, path, value) => {
         set({
           nodes: get().nodes.map(node => {
             if (node.id === id) {
-              node.data = { ...node.data, value }
+              _.set(node, path, value)
             }
             return node
           })
         })
       },
       edges: [],
-      onEdgesChange: changes => {
-        set({ edges: applyEdgeChanges(changes, get().edges) })
-      },
-      onConnect: connection => {
-        set({ edges: addEdge({ ...connection, type: 'smartEdge' }, get().edges) })
-      },
+      onEdgesChange: changes => set({ edges: applyEdgeChanges(changes, get().edges) }),
+      onConnect: connection => set({ edges: addEdge({ ...connection, type: 'smartEdge' }, get().edges) }),
       startInputText: '',
       setStartInputText: input => set({ startInputText: input })
     }),

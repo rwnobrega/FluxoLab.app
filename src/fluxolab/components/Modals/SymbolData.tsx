@@ -16,11 +16,11 @@ interface Props {
 export default function ({ nodeId, value, showModal, setShowModal }: Props): JSX.Element {
   const [textValue, setTextValue] = useState<string>(value)
 
-  const { updateNodeValue } = useStoreFlow()
+  const { updateNodeProp } = useStoreFlow()
 
   function handleSubmit (event: any): void {
     event.preventDefault()
-    setTimeout(() => { updateNodeValue(nodeId, textValue) }, 200)
+    setTimeout(() => { updateNodeProp(nodeId, 'data.value', textValue) }, 200)
     setShowModal(false)
   }
 
