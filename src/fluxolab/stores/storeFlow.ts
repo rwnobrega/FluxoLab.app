@@ -18,10 +18,10 @@ import {
 interface StoreFlow {
   nodes: Node[]
   edges: Edge[]
-  addNode: (node: Node) => void
   onNodesChange: (changes: NodeChange[]) => void
-  updateNodeProp: (id: string, path: string, value: any) => void
   onEdgesChange: (changes: EdgeChange[]) => void
+  addNode: (node: Node) => void
+  updateNodeProp: (id: string, path: string, value: any) => void
   onConnect: (connection: Connection) => void
 }
 
@@ -30,20 +30,16 @@ const useStoreFlow = create<StoreFlow, any>(
     (set, get) => ({
       nodes: [],
       edges: [],
-      addNode: node => set({ nodes: [...get().nodes, node] }),
       onNodesChange: changes => set({ nodes: applyNodeChanges(changes, get().nodes) }),
+      onEdgesChange: changes => set({ edges: applyEdgeChanges(changes, get().edges) }),
+      addNode: node => set({ nodes: [...get().nodes, node] }),
       updateNodeProp: (id, path, value) => {
         const nodes = get().nodes
-        set({
-          nodes: _.map(nodes, node => {
-            if (node.id === id) {
-              _.set(node, path, value)
-            }
-            return node
-          })
-        })
+        const node = _.find(nodes, { id })
+        if (node === undefined) throw new Error('Node not found')
+        _.set(node, path, value)
+        set({ nodes })
       },
-      onEdgesChange: changes => set({ edges: applyEdgeChanges(changes, get().edges) }),
       onConnect: connection => {
         const edges = get().edges
         _.remove(edges, edge => edge.source === connection.source)
