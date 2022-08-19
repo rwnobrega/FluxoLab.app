@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid'
 import React, { useCallback, useRef, useState } from 'react'
 import ReactFlow, { Background, Controls, EdgeTypes, NodeTypes } from 'react-flow-renderer'
 
-import ExecutionGroup from 'components/ExecutionGroup'
+import PlayButtons from 'components/PlayButtons'
 import StatusMessage from 'components/StatusMessage'
 import symbols from 'components/Symbols'
 
@@ -72,7 +72,7 @@ export default function (): JSX.Element {
         snapGrid={[20, 20]}
       >
         <div className='position-absolute top-0 start-0 m-3' style={{ zIndex: 5 }}>
-          <ExecutionGroup />
+          <PlayButtons />
         </div>
         <Controls />
         <Background gap={20} />
