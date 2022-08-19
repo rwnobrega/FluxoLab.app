@@ -2,6 +2,9 @@ import _ from 'lodash'
 
 import React, { useCallback } from 'react'
 
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
+import Button from 'react-bootstrap/Button'
+
 import Tooltip from 'components/Tooltip'
 
 import useStoreMachine from 'stores/storeMachine'
@@ -57,19 +60,14 @@ export default function (): JSX.Element {
   )
 
   return (
-    <div className='btn-group' role='group'>
+    <ButtonGroup>
       {_.map(buttonList, ({ id, tooltipText, icon, isDisabled }) => (
         <Tooltip key={id} text={isDisabled(state, compileError) ? '' : tooltipText}>
-          <button
-            type='button'
-            className='btn btn-primary'
-            disabled={isDisabled(state, compileError)}
-            onClick={() => onClick(id)}
-          >
+          <Button disabled={isDisabled(state, compileError)} onClick={() => onClick(id)}>
             <i className={`bi ${icon}`} />
-          </button>
+          </Button>
         </Tooltip>
       ))}
-    </div>
+    </ButtonGroup>
   )
 }
