@@ -9,9 +9,6 @@ import {
   Node,
   NodeChange,
   addEdge,
-  OnNodesChange,
-  OnEdgesChange,
-  OnConnect,
   applyNodeChanges,
   applyEdgeChanges
 } from 'react-flow-renderer'
@@ -19,13 +16,13 @@ import {
 interface StoreFlow {
   nodes: Node[]
   setNodes: (nodes: Node[]) => void
-  onNodesChange: OnNodesChange
+  onNodesChange: (changes: NodeChange[]) => void
   addNode: (node: Node) => void
   updateNodeValue: (id: string, value: string) => void
   edges: Edge[]
   setEdges: (edges: Edge[]) => void
-  onEdgesChange: OnEdgesChange
-  onConnect: OnConnect
+  onEdgesChange: (changes: EdgeChange[]) => void
+  onConnect: (connection: Connection) => void
   startInputText: string
   setStartInputText: (input: string) => void
 }
@@ -35,7 +32,7 @@ const useStoreFlow = create<StoreFlow, any>(
     (set, get) => ({
       nodes: [],
       setNodes: nodes => { set({ nodes }) },
-      onNodesChange: (changes: NodeChange[]) => {
+      onNodesChange: changes => {
         set({ nodes: applyNodeChanges(changes, get().nodes) })
       },
       addNode: node => set(state => ({ ...state, nodes: [...state.nodes, node] })),
@@ -51,10 +48,10 @@ const useStoreFlow = create<StoreFlow, any>(
       },
       edges: [],
       setEdges: edges => { set({ edges }) },
-      onEdgesChange: (changes: EdgeChange[]) => {
+      onEdgesChange: changes => {
         set({ edges: applyEdgeChanges(changes, get().edges) })
       },
-      onConnect: (connection: Connection) => {
+      onConnect: connection => {
         set({ edges: addEdge({ ...connection, type: 'smartEdge' }, get().edges) })
       },
       startInputText: '',
