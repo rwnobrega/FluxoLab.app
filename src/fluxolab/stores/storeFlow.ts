@@ -43,7 +43,11 @@ const useStoreFlow = create<StoreFlow, any>(
       },
       edges: [],
       onEdgesChange: changes => set({ edges: applyEdgeChanges(changes, get().edges) }),
-      onConnect: connection => set({ edges: addEdge({ ...connection, type: 'smartEdge' }, get().edges) })
+      onConnect: connection => {
+        const edges = get().edges
+        _.remove(edges, edge => edge.source === connection.source)
+        set({ edges: addEdge({ ...connection, type: 'smartEdge' }, edges) })
+      }
     }),
     {
       name: 'fluxolab_flow',
