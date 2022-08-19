@@ -26,30 +26,31 @@ interface Props {
 
 export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.Element {
   const [margin, setMargin] = useState<number>(0)
-  const [width, setWidth] = useState<number>(0)
   const [mouseHover, setMouseHover] = useState<boolean>(false)
   const [boxFilter, setBoxFilter] = useState<string>('')
   const [showModal, setShowModal] = useState<boolean>(false)
 
-  const { nodes } = useStoreFlow()
+  const { nodes, updateNodeProp } = useStoreFlow()
   const { compileError } = useStoreMachine()
   const { state } = useStoreMachineState()
   const { getZoom } = useReactFlow()
 
-  const node: Node | undefined = _.find(nodes, { id: nodeId })
-
   const labelRef = useRef<HTMLInputElement>(null)
+
+  const node: Node | undefined = _.find(nodes, { id: nodeId })
 
   useEffect(() => {
     if (labelRef.current !== null) {
       const zoom = getZoom()
       const labelWidth = labelRef.current.getBoundingClientRect().width / zoom
-      const divWidth = 40 + 40 * Math.ceil(labelWidth / 40)
-      const marginWidth = (divWidth - labelWidth) / 2
-      setWidth(divWidth)
+      const newNodeWidth = 40 + 40 * Math.ceil(labelWidth / 40)
+      const marginWidth = (newNodeWidth - labelWidth) / 2
+      if (node?.width !== undefined && node.width !== null) {
+        updateNodeProp(nodeId, 'position.x', node.position.x - (newNodeWidth - node.width) / 2)
+      }
       setMargin(marginWidth)
     }
-  }, [nodes])
+  }, [node?.data.value])
 
   useEffect(() => {
     setBoxFilter(
@@ -71,7 +72,7 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
   }, [state, compileError])
 
   return (
-    <div style={{ position: 'relative', left: -width / 2 }}>
+    <div>
       <ModalSymbolData nodeId={nodeId} value={node?.data.value} showModal={showModal} setShowModal={setShowModal} />
       <SymbolBox box={box} boxFilter={boxFilter} isSelected={node?.selected}>
         <span
