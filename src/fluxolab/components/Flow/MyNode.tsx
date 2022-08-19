@@ -26,6 +26,7 @@ interface Props {
 
 export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.Element {
   const [margin, setMargin] = useState<number>(0)
+  const [width, setWidth] = useState<number>(0)
   const [mouseHover, setMouseHover] = useState<boolean>(false)
   const [isCurNode, setIsCurNode] = useState<boolean>(false)
   const [boxFilter, setBoxFilter] = useState<string>('')
@@ -44,8 +45,10 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
     if (labelRef.current !== null) {
       const zoom = getZoom()
       const labelWidth = labelRef.current.getBoundingClientRect().width / zoom
-      const totalMarginWidth = 40 * Math.ceil(labelWidth / 40) - labelWidth + 40
-      setMargin(totalMarginWidth / 2)
+      const divWidth = 40 + 40 * Math.ceil(labelWidth / 40)
+      const marginWidth = (divWidth - labelWidth) / 2
+      setWidth(divWidth)
+      setMargin(marginWidth)
     }
   }, [nodes])
 
@@ -73,7 +76,7 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
   }, [isCurNode, state, compileError])
 
   return (
-    <div>
+    <div style={{ position: 'relative', left: -width / 2 }}>
       <ModalSymbolData nodeId={nodeId} value={node?.data.value} showModal={showModal} setShowModal={setShowModal} />
       <SymbolBox box={box} boxFilter={boxFilter} isSelected={node?.selected}>
         <span
