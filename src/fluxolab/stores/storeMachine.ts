@@ -17,6 +17,8 @@ interface StoreMachine {
   changeVariableType: (id: string, type: Variable['type']) => void
   compileError: CompileError | null
   setCompileError: (compileError: CompileError | null) => void
+  startInputText: string
+  setStartInputText: (input: string) => void
 }
 
 const useStoreMachine = create<StoreMachine, any>(
@@ -77,7 +79,9 @@ const useStoreMachine = create<StoreMachine, any>(
         set({ machine })
       },
       compileError: null,
-      setCompileError: compileError => { set({ compileError }) }
+      setCompileError: compileError => { set({ compileError }) },
+      startInputText: '',
+      setStartInputText: input => set({ startInputText: input })
     }),
     {
       name: 'fluxolab_machine',

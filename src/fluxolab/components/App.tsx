@@ -17,8 +17,8 @@ import compile from 'machine/compiler'
 import { resetMachineState } from 'machine/machine'
 
 export default function (): JSX.Element {
-  const { nodes, edges, startInputText } = useStoreFlow()
-  const { machine, setFlowchart, setStartSymbolId, setCompileError } = useStoreMachine()
+  const { nodes, edges } = useStoreFlow()
+  const { machine, setFlowchart, setStartSymbolId, setCompileError, startInputText } = useStoreMachine()
   const { state, setState, setStateHistory } = useStoreMachineState()
 
   useEffect(() => {

@@ -23,8 +23,6 @@ interface StoreFlow {
   edges: Edge[]
   onEdgesChange: (changes: EdgeChange[]) => void
   onConnect: (connection: Connection) => void
-  startInputText: string
-  setStartInputText: (input: string) => void
 }
 
 const useStoreFlow = create<StoreFlow, any>(
@@ -45,9 +43,7 @@ const useStoreFlow = create<StoreFlow, any>(
       },
       edges: [],
       onEdgesChange: changes => set({ edges: applyEdgeChanges(changes, get().edges) }),
-      onConnect: connection => set({ edges: addEdge({ ...connection, type: 'smartEdge' }, get().edges) }),
-      startInputText: '',
-      setStartInputText: input => set({ startInputText: input })
+      onConnect: connection => set({ edges: addEdge({ ...connection, type: 'smartEdge' }, get().edges) })
     }),
     {
       name: 'fluxolab_flow',

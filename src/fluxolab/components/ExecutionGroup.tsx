@@ -4,7 +4,6 @@ import React, { useCallback } from 'react'
 
 import Tooltip from 'components/Tooltip'
 
-import useStoreFlow from 'stores/storeFlow'
 import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
 
@@ -66,8 +65,7 @@ const buttonList: Button[] = [
 ]
 
 export default function (): JSX.Element {
-  const { startInputText } = useStoreFlow()
-  const { machine, compileError } = useStoreMachine()
+  const { machine, compileError, startInputText } = useStoreMachine()
   const { state, setState, stateHistory, setStateHistory } = useStoreMachineState()
 
   const onClick = useCallback(

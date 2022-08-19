@@ -1,10 +1,10 @@
 import React from 'react'
 
-import useStoreFlow from 'stores/storeFlow'
+import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
 
 export default function (): JSX.Element {
-  const { startInputText, setStartInputText } = useStoreFlow()
+  const { startInputText, setStartInputText } = useStoreMachine()
   const { state } = useStoreMachineState()
 
   return (
