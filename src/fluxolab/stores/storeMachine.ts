@@ -13,7 +13,7 @@ interface StoreMachine {
   getVariable: (variableId: string) => Variable | undefined
   addVariable: (id: string, type: Variable['type']) => void
   removeVariable: (id: string) => void
-  renameVariable: (id: string, newName: string) => void
+  renameVariable: (id: string, newId: string) => void
   changeVariableType: (id: string, type: Variable['type']) => void
   compileError: CompileError | null
   setCompileError: (compileError: CompileError | null) => void
