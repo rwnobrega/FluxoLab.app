@@ -32,8 +32,9 @@ const useStoreFlow = create<StoreFlow, any>(
       addNode: node => set({ nodes: [...get().nodes, node] }),
       onNodesChange: changes => set({ nodes: applyNodeChanges(changes, get().nodes) }),
       updateNodeProp: (id, path, value) => {
+        const nodes = get().nodes
         set({
-          nodes: get().nodes.map(node => {
+          nodes: _.map(nodes, node => {
             if (node.id === id) {
               _.set(node, path, value)
             }
