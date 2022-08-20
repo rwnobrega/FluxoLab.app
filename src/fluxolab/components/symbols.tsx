@@ -2,6 +2,8 @@ import React from 'react'
 
 import { HandleType, Position } from 'react-flow-renderer'
 
+import { palette } from 'utils/colors'
+
 export interface Box {
   backgroundColor?: string
   textColor?: string
@@ -28,7 +30,7 @@ const symbols: Symbol[] = [
     type: 'start',
     title: 'Início',
     box: {
-      backgroundColor: '#6f42c1',
+      backgroundColor: palette.purple,
       textColor: 'white',
       borderRadius: '15px'
     },
@@ -42,7 +44,7 @@ const symbols: Symbol[] = [
     type: 'input_',
     title: 'Entrada',
     box: {
-      backgroundColor: '#0d6efd',
+      backgroundColor: palette.blue,
       textColor: 'white',
       clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 100%, 20px 100%)'
     },
@@ -57,7 +59,7 @@ const symbols: Symbol[] = [
     type: 'output_',
     title: 'Saída',
     box: {
-      backgroundColor: '#198754',
+      backgroundColor: palette.green,
       textColor: 'white',
       clipPath: 'polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%)',
       clipPathBorder: 'polygon(20px 0, calc(100% + 1px) 0, calc(100% - 21px) 100%, -1px calc(100% - 1px))'
@@ -73,7 +75,7 @@ const symbols: Symbol[] = [
     type: 'assignment',
     title: 'Atribuição',
     box: {
-      backgroundColor: '#fd7e14',
+      backgroundColor: palette.orange,
       textColor: 'white'
     },
     editable: true,
@@ -87,7 +89,7 @@ const symbols: Symbol[] = [
     type: 'conditional',
     title: 'Condicional',
     box: {
-      backgroundColor: '#F93154',
+      backgroundColor: palette.red,
       textColor: 'white',
       clipPath: 'polygon(20px 0, 0 50%, 20px 100%, calc(100% - 20px) 100%, 100% 50%, calc(100% - 20px) 0)'
     },
@@ -103,7 +105,7 @@ const symbols: Symbol[] = [
     type: 'end',
     title: 'Fim',
     box: {
-      backgroundColor: '#6f42c1',
+      backgroundColor: palette.purple,
       textColor: 'white',
       borderRadius: '15px'
     },

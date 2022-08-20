@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { Node, HandleType, Position, useReactFlow } from 'react-flow-renderer'
 
-import { getDropShadow } from 'utils/colors'
+import { palette, getDropShadow } from 'utils/colors'
 
 import SymbolBox from 'components/SymbolBox'
 import ModalSymbolData from 'components/Modals/SymbolData'
@@ -58,13 +58,13 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
       () => {
         if (compileError !== null) {
           if (_.includes(compileError?.nodeIds, nodeId)) {
-            return getDropShadow('#dc3545')
+            return getDropShadow(palette.red)
           }
         } else if (nodeId === state.curSymbolId) {
           if (state.status === 'error') {
-            return getDropShadow('#dc3545')
+            return getDropShadow(palette.red)
           } else {
-            return getDropShadow('#adb5bd')
+            return getDropShadow(palette.gray500)
           }
         }
         return ''

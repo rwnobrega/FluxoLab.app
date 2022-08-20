@@ -3,6 +3,8 @@ import React from 'react'
 import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
 
+import { palette } from 'utils/colors'
+
 interface Triplet {
   backgroundColor: string
   statusIcon: string
@@ -16,31 +18,31 @@ export default function (): JSX.Element {
   function getTriplet (): Triplet {
     if (compileError !== null) {
       return {
-        backgroundColor: '#dc3545',
+        backgroundColor: palette.red,
         statusIcon: 'bi-exclamation-triangle-fill',
         statusText: `Erro de compilação: ${compileError.message}`
       }
     } else if (state.status === 'error') {
       return {
-        backgroundColor: '#dc3545',
+        backgroundColor: palette.red,
         statusIcon: 'bi-exclamation-circle-fill',
         statusText: `Erro de execução: ${state.errorMessage as string}`
       }
     } else if (state.status === 'halted') {
       return {
-        backgroundColor: '#6f42c1',
+        backgroundColor: palette.purple,
         statusIcon: 'bi-check-circle-fill-fill',
         statusText: 'Execução concluída.'
       }
     } else if (state.timeSlot === 0) {
       return {
-        backgroundColor: '#6f42c1',
+        backgroundColor: palette.purple,
         statusIcon: 'bi-check-circle-fill',
         statusText: 'Pronto para iniciar execução.'
       }
     } else {
       return {
-        backgroundColor: '#198754',
+        backgroundColor: palette.green,
         statusIcon: 'bi-check-circle-fill',
         statusText: `Executado passo ${state.timeSlot}.`
       }
