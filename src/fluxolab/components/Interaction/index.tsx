@@ -10,7 +10,7 @@ export default function (): JSX.Element {
   const { state } = useStoreMachineState()
   return (
     <div>
-      <p className='fw-semibold'>Interação</p>
+      <p className='fw-semibold'>Entrada / Saída</p>
       <div className='vstack gap-1 p-2 overflow-auto'>
         {_.map(state.interaction, ({ direction, text }, index) => (
           <ChatBubble key={index} direction={direction} text={text} />
