@@ -12,7 +12,8 @@ import {
   NodeChange,
   addEdge,
   applyNodeChanges,
-  applyEdgeChanges
+  applyEdgeChanges,
+  MarkerType
 } from 'react-flow-renderer'
 
 interface StoreFlow {
@@ -43,7 +44,11 @@ const useStoreFlow = create<StoreFlow, any>(
       onConnect: connection => {
         const edges = get().edges
         _.remove(edges, edge => edge.source === connection.source)
-        set({ edges: addEdge({ ...connection, type: 'smartEdge' }, edges) })
+        const edgeProps = {
+          type: 'smartEdge',
+          markerEnd: { type: MarkerType.ArrowClosed, height: 10, width: 6 }
+        }
+        set({ edges: addEdge({ ...connection, ...edgeProps }, edges) })
       }
     }),
     {

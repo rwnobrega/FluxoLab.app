@@ -44,7 +44,7 @@ export default function (props: EdgeProps): JSX.Element {
       onMouseLeave={() => setMouseHover(false)}
       className='react-flow__edge-path'
       d={svgPathString}
-      markerEnd='arrow'
+      markerEnd={props.markerEnd}
     />
   )
 }
