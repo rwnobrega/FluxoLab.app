@@ -43,7 +43,7 @@ const useStoreFlow = create<StoreFlow, any>(
       },
       onConnect: connection => {
         const edges = get().edges
-        _.remove(edges, edge => edge.source === connection.source)
+        _.remove(edges, edge => (edge.source === connection.source && edge.sourceHandle === connection.sourceHandle))
         const edgeProps = {
           type: 'smartEdge',
           markerEnd: { type: MarkerType.ArrowClosed, height: 10, width: 6 }
