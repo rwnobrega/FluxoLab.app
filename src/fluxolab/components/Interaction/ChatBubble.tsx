@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { palette } from 'utils/colors'
+
 interface BubbleProps {
   direction: 'in' | 'out'
   text: string
@@ -25,11 +27,11 @@ const arrowStyle = {
     borderRight: '8px solid transparent'
   },
   in: {
-    borderTop: '8px solid #0d6efd',
+    borderTop: `8px solid ${palette.blue}`,
     transform: 'translateY(16px) translateX(-8px) rotate(45deg)'
   },
   out: {
-    borderTop: '8px solid #198754',
+    borderTop: `8px solid ${palette.green}`,
     transform: 'translateY(16px) translateX(8px) rotate(-45deg)'
   }
 }
