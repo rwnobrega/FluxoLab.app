@@ -60,7 +60,7 @@ const useStoreMachine = create<StoreMachine, any>(
       },
       renameVariable: (id, newId) => {
         const { machine } = get()
-        machine.variables = machine.variables.map(variable => {
+        machine.variables = _.map(machine.variables, variable => {
           if (variable.id === id) {
             variable.id = newId
           }
@@ -70,7 +70,7 @@ const useStoreMachine = create<StoreMachine, any>(
       },
       changeVariableType: (id, type) => {
         const { machine } = get()
-        machine.variables = machine.variables.map(variable => {
+        machine.variables = _.map(machine.variables, variable => {
           if (variable.id === id) {
             variable.type = type
           }
