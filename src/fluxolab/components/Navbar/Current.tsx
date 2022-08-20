@@ -44,15 +44,15 @@ export default function (): JSX.Element {
       </button>
       <ul className='dropdown-menu dropdown-menu-end'>
         <li>
-          <a
-            className='dropdown-item'
-            href='#'
-            onClick={onClickDuplicate}
-          >
+          <button className='dropdown-item' onClick={onClickDuplicate}>
             Duplicar
-          </a>
+          </button>
         </li>
-        <li><a className='dropdown-item' href='#'>Deletar</a></li>
+        <li>
+          <button className='dropdown-item'>
+            Deletar
+          </button>
+        </li>
       </ul>
     </div>
   )
