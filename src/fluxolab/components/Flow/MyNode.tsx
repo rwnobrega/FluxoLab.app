@@ -8,7 +8,8 @@ import { getDropShadow } from 'utils/colors'
 
 import SymbolBox from 'components/SymbolBox'
 import ModalSymbolData from 'components/Modals/SymbolData'
-import { Box, LabelProps } from 'components/Symbols'
+
+import { Box, LabelProps } from 'components/symbols'
 
 import MyHandle from './MyHandle'
 

@@ -5,7 +5,7 @@ import ReactFlow, { Background, Controls, EdgeTypes, NodeTypes } from 'react-flo
 
 import PlayButtons from 'components/PlayButtons'
 import StatusMessage from 'components/StatusMessage'
-import symbols from 'components/Symbols'
+import symbols from 'components/symbols'
 
 import MyEdge from './MyEdge'
 import MyNode from './MyNode'

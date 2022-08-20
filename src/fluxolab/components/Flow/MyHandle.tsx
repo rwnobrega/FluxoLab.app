@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Handle, HandleProps } from 'react-flow-renderer'
 
-import { Box } from 'components/Symbols'
+import { Box } from 'components/symbols'
 
 import { getDarkerColor } from 'utils/colors'
 

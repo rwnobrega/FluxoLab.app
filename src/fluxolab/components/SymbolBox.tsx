@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { getDarkerColor, getStripedBackground } from 'utils/colors'
 
-import { Box } from 'components/Symbols'
+import { Box } from 'components/symbols'
 
 interface Props {
   box: Box

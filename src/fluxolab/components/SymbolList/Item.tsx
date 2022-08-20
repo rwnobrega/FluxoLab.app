@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Box } from 'components/Symbols'
+import { Box } from 'components/symbols'
 import SymbolBox from 'components/SymbolBox'
 
 interface Props {
