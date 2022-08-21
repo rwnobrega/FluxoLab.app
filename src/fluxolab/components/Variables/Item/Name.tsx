@@ -15,7 +15,7 @@ export default function ({ id, disabled }: VariableItemProps): JSX.Element {
         size='sm'
         className='font-monospace'
         style={{ cursor: disabled ? 'default' : 'pointer' }}
-        onClick={() => setShowModal(true)}
+        onClick={() => !disabled && setShowModal(true)}
       >
         {id}
       </Button>
