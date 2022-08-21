@@ -11,6 +11,9 @@ function getSymbolById (flowchart: Symbol[], id: string): Symbol {
 }
 
 export function runMachineStep (machine: Machine, state: MachineState): void {
+  if (state.curSymbolId === null) {
+    state.curSymbolId = machine.startSymbolId
+  }
   const symbol = getSymbolById(machine.flowchart, state.curSymbolId)
   symbol.work(machine, state)
   const nextSymbol = getSymbolById(machine.flowchart, state.curSymbolId)
@@ -24,8 +27,8 @@ export function runMachineStep (machine: Machine, state: MachineState): void {
   state.timeSlot += 1
 }
 
-export function resetMachineState (state: MachineState, machine: Machine): void {
-  state.curSymbolId = machine.startSymbolId
+export function resetMachineState (state: MachineState): void {
+  state.curSymbolId = null
   state.timeSlot = 0
   state.memory = {}
   state.input = null

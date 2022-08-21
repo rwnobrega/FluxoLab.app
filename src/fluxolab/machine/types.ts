@@ -32,7 +32,7 @@ export interface InteractionAtom {
 }
 
 export interface MachineState {
-  curSymbolId: string
+  curSymbolId: string | null
   timeSlot: number
   memory: {[key: string]: VariableValue}
   input: string | null

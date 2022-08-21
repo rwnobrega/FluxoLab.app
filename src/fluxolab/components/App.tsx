@@ -28,7 +28,7 @@ export default function (): JSX.Element {
   }, [nodes, edges, machine.variables])
 
   useEffect(() => {
-    resetMachineState(state, machine)
+    resetMachineState(state)
     setStateHistory([])
     setState(state)
   }, [machine.flowchart, machine.startSymbolId])

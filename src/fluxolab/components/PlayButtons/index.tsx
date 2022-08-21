@@ -21,7 +21,7 @@ export default function (): JSX.Element {
   const onClick = useCallback(
     (id: string): void => {
       if (id === 'reset') {
-        resetMachineState(state, machine)
+        resetMachineState(state)
         setStateHistory([])
         setState(state)
       } else if (id === 'stepBack') {
@@ -46,13 +46,6 @@ export default function (): JSX.Element {
           }
         }
         runAuto().catch(error => console.log(error.message))
-      } else if (id === 'runToEnd') {
-        while (state.status === 'ready') {
-          stateHistory.push(_.cloneDeep(state))
-          runMachineStep(machine, state)
-        }
-        setStateHistory(stateHistory)
-        setState(state)
       }
     },
     [machine, state, stateHistory, startInputText]
