@@ -15,7 +15,7 @@ import { resetMachineState, runMachineStep } from 'machine/machine'
 import buttonList from './buttonList'
 
 export default function (): JSX.Element {
-  const { machine, compileError, startInputText } = useStoreMachine()
+  const { machine, compileError } = useStoreMachine()
   const { state, setState, stateHistory, setStateHistory } = useStoreMachineState()
 
   const onClick = useCallback(
@@ -48,7 +48,7 @@ export default function (): JSX.Element {
         runAuto().catch(error => console.log(error.message))
       }
     },
-    [machine, state, stateHistory, startInputText]
+    [machine, state, stateHistory]
   )
 
   return (
