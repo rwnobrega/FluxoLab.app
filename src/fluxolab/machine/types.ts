@@ -35,8 +35,8 @@ export interface MachineState {
   curSymbolId: string
   timeSlot: number
   memory: {[key: string]: VariableValue}
-  input: string[]
+  input: string | null
   interaction: InteractionAtom[]
-  status: 'ready' | 'halted' | 'error'
+  status: 'ready' | 'waiting' | 'halted' | 'error'
   errorMessage: string | null
 }

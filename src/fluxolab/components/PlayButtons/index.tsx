@@ -21,8 +21,7 @@ export default function (): JSX.Element {
   const onClick = useCallback(
     (id: string): void => {
       if (id === 'reset') {
-        const startInput = startInputText === '' ? [] : startInputText.split('\n')
-        resetMachineState(state, machine, startInput)
+        resetMachineState(state, machine)
         setStateHistory([])
         setState(state)
       } else if (id === 'stepBack') {

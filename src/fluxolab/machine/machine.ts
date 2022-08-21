@@ -16,16 +16,19 @@ export function runMachineStep (machine: Machine, state: MachineState): void {
   const nextSymbol = getSymbolById(machine.flowchart, state.curSymbolId)
   if (nextSymbol.type === 'halt') {
     state.status = 'halted'
-  } else {
-    state.timeSlot += 1
+    return
   }
+  if (nextSymbol.type === 'input') {
+    state.status = 'waiting'
+  }
+  state.timeSlot += 1
 }
 
-export function resetMachineState (state: MachineState, machine: Machine, startInput: string[]): void {
+export function resetMachineState (state: MachineState, machine: Machine): void {
   state.curSymbolId = machine.startSymbolId
   state.timeSlot = 0
   state.memory = {}
-  state.input = startInput
+  state.input = null
   state.interaction = []
   state.errorMessage = null
   state.status = 'ready'

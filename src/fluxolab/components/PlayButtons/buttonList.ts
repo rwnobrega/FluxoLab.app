@@ -18,7 +18,7 @@ function isDisabledForward (state: MachineState, compileError: CompileError | nu
   if (compileError !== null) {
     return true
   }
-  return state.status === 'error' || state.status === 'halted'
+  return state.status === 'waiting' || state.status === 'error' || state.status === 'halted'
 }
 
 const buttonList: PlayButton[] = [

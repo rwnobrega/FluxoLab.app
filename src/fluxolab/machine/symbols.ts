@@ -62,9 +62,8 @@ export function newInputSymbol (params: {id: string, variableId: string, nextId:
     id,
     type: 'input',
     work: (machine, state) => {
-      const textValue: string | undefined = state.input.shift()
-      if (textValue === undefined) {
-        state.errorMessage = 'Não há mais entrada.'
+      if (state.input === null) {
+        state.errorMessage = 'Nodo esperava entrada, mas nenhuma foi fornecida.'
         state.status = 'error'
         return
       }
@@ -74,9 +73,11 @@ export function newInputSymbol (params: {id: string, variableId: string, nextId:
         state.status = 'error'
         return
       }
-      const value: VariableValue = getValue(textValue, variable.type)
+      const value: VariableValue = getValue(state.input, variable.type)
       state.memory[variableId] = value
-      state.interaction.push({ direction: 'in', text: textValue })
+      state.interaction.push({ direction: 'in', text: state.input })
+      state.input = null
+      state.status = 'ready'
       state.curSymbolId = nextId
     }
   }

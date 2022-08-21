@@ -17,7 +17,7 @@ const useStoreMachineState = create<StoreMachineState>(
       curSymbolId: '',
       timeSlot: 0,
       memory: {},
-      input: [],
+      input: null,
       interaction: [],
       errorMessage: null,
       status: 'ready'

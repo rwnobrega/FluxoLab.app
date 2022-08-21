@@ -5,7 +5,6 @@ import Stack from 'react-bootstrap/Stack'
 import Flow from 'components/Flow'
 import Navbar from 'components/Navbar'
 import SymbolList from 'components/SymbolList'
-import StartInput from 'components/StartInput'
 import Variables from 'components/Variables'
 import Interaction from 'components/Interaction'
 
@@ -18,7 +17,7 @@ import { resetMachineState } from 'machine/machine'
 
 export default function (): JSX.Element {
   const { nodes, edges } = useStoreFlow()
-  const { machine, setFlowchart, setStartSymbolId, setCompileError, startInputText } = useStoreMachine()
+  const { machine, setFlowchart, setStartSymbolId, setCompileError } = useStoreMachine()
   const { state, setState, setStateHistory } = useStoreMachineState()
 
   useEffect(() => {
@@ -29,14 +28,13 @@ export default function (): JSX.Element {
   }, [nodes, edges, machine.variables])
 
   useEffect(() => {
-    const startInput = startInputText === '' ? [] : startInputText.split('\n')
-    resetMachineState(state, machine, startInput)
+    resetMachineState(state, machine)
     setStateHistory([])
     setState(state)
-  }, [machine.flowchart, machine.startSymbolId, startInputText])
+  }, [machine.flowchart, machine.startSymbolId])
 
   return (
-    <Stack className='vh-100 h-100'>
+    <Stack className='vh-100 h-100' style={{ userSelect: 'none' }}>
       <Navbar />
       <Stack direction='horizontal' className='flex-fill align-items-stretch'>
         <div className='bg-light p-3'>
@@ -47,7 +45,6 @@ export default function (): JSX.Element {
         </div>
         <Stack style={{ width: '35%' }} className='bg-light p-3' gap={3}>
           <Variables />
-          <StartInput />
           <Interaction />
         </Stack>
       </Stack>
