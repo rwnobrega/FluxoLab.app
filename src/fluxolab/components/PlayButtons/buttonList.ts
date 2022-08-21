@@ -45,12 +45,6 @@ const buttonList: PlayButton[] = [
     tooltipText: 'Executar automaticamente',
     icon: 'bi-fast-forward-fill',
     isDisabled: isDisabledForward
-  },
-  {
-    id: 'runToEnd',
-    tooltipText: 'Executar até o fim',
-    icon: 'bi-skip-forward-fill',
-    isDisabled: isDisabledForward
   }
 ]
 
