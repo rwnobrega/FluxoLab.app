@@ -2,6 +2,8 @@ import _ from 'lodash'
 
 import React, { useCallback } from 'react'
 
+import Table from 'react-bootstrap/Table'
+
 import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
 
@@ -40,13 +42,13 @@ export default function (): JSX.Element {
         </button>
       </div>
       <div className='vstack gap-3 overflow-auto'>
-        <table className='table table-sm table-borderless'>
+        <Table size='sm' variant='borderless'>
           <tbody>
             {_.map(machine.variables, ({ id }, index) => (
               <VariableItem key={index} id={id} disabled={state.timeSlot !== 0} />
             ))}
           </tbody>
-        </table>
+        </Table>
       </div>
     </div>
   )

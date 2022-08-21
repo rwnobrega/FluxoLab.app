@@ -1,5 +1,7 @@
 import React from 'react'
 
+import Alert from 'react-bootstrap/Alert'
+
 import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
 
@@ -52,8 +54,8 @@ export default function (): JSX.Element {
   const { backgroundColor, statusIcon, statusText } = getTriplet()
 
   return (
-    <div role='alert' className='alert' style={{ backgroundColor, color: 'white' }}>
+    <Alert style={{ backgroundColor, color: 'white' }}>
       <i className={`bi ${statusIcon}`} /><span className='ms-2'>{statusText}</span>
-    </div>
+    </Alert>
   )
 }

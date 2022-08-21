@@ -14,7 +14,7 @@ export default function ({ id, disabled }: VariableItemProps): JSX.Element {
   return (
     <Tooltip text='Remover variável'>
       <Button variant='danger' size='sm' onClick={() => removeVariable(id)}>
-        🞪
+        <i className='bi bi-trash-fill' />
       </Button>
     </Tooltip>
   )
