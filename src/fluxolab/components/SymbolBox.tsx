@@ -15,12 +15,16 @@ export default function ({ box, boxFilter, isSelected = false, children }: Props
   const [mouseHover, setMouseHover] = useState<boolean>(false)
 
   function getBackground (): string {
-    if (isSelected) {
-      return getStripedBackground(box.backgroundColor as string)
+    const bgColor = box.backgroundColor as string
+    const bgDarker = getDarkerColor(bgColor)
+    if (isSelected && mouseHover) {
+      return getStripedBackground(bgDarker)
+    } else if (isSelected) {
+      return getStripedBackground(bgColor)
     } else if (mouseHover) {
-      return getDarkerColor(box.backgroundColor as string)
+      return bgDarker
     } else {
-      return box.backgroundColor as string
+      return bgColor
     }
   }
 
