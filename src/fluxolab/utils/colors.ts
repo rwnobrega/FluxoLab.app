@@ -38,12 +38,12 @@ export function getDropShadow (color: string): string {
 }
 
 export function getStripedBackground (color: string): string {
-  const colorBrighter = getDarkerColor(color)
+  const darkerColor = getDarkerColor(color)
   return `repeating-linear-gradient(
     45deg,
     ${color},
     ${color} 10px,
-    ${colorBrighter} 10px,
-    ${colorBrighter} 20px
+    ${darkerColor} 10px,
+    ${darkerColor} 20px
   )`
 }
