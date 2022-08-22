@@ -28,7 +28,7 @@ export default function ({ nodeId, value, showModal, setShowModal }: Props): JSX
     <Modal show={showModal} onHide={() => setShowModal(false)}>
       <Form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
-          <Modal.Title>Modificar valor</Modal.Title>
+          <Modal.Title>Modificar expressão</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Control

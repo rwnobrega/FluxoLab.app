@@ -64,7 +64,7 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
             Cancelar
           </Button>
           <Button variant='primary' type='submit' disabled={problem !== null}>
-            Renomear
+            Confirmar
           </Button>
         </Modal.Footer>
       </Form>
