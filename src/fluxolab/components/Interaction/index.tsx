@@ -38,9 +38,9 @@ export default function (): JSX.Element {
   }, [state])
 
   return (
-    <div>
-      <p className='fw-semibold'>Entrada / Saída</p>
-      <Stack gap={1} className='p-2 overflow-auto mb-3'>
+    <div className='d-flex flex-column h-100'>
+      <p className='fw-semibold'>Entrada/saída</p>
+      <Stack gap={2} style={{ overflowY: 'auto', overflowX: 'clip' }}>
         {_.map(state.interaction, ({ direction, text }, index) => (
           <ChatBubble key={index} direction={direction} text={text} />
         ))}

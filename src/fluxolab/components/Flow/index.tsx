@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid'
 
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import ReactFlow, { Background, Controls, EdgeTypes, NodeTypes } from 'react-flow-renderer'
 
 import PlayButtons from 'components/PlayButtons'
@@ -19,9 +19,12 @@ for (const { type, ...otherProps } of symbols) {
   nodeTypes[type] = ({ id }) => <MyNode nodeId={id} {...otherProps} />
 }
 
-export default function (): JSX.Element {
+interface Props {
+  wrapper: React.RefObject<HTMLDivElement>
+}
+
+export default function ({ wrapper }: Props): JSX.Element {
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null)
-  const reactFlowWrapper = useRef<any>(null)
 
   const { nodes, edges, addNode, onNodesChange, onEdgesChange, onConnect } = useStoreFlow()
 
@@ -35,8 +38,9 @@ export default function (): JSX.Element {
 
   const onDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
+      if (wrapper === null || wrapper.current === null) return
       event.preventDefault()
-      const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect()
+      const reactFlowBounds = wrapper.current.getBoundingClientRect()
       const id = uuid()
       const node = {
         id,
@@ -53,33 +57,31 @@ export default function (): JSX.Element {
   )
 
   return (
-    <div ref={reactFlowWrapper} style={{ height: '100%' }}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        onInit={setReactFlowInstance}
-        onDrop={onDrop}
-        onDragOver={onDragOver}
-        multiSelectionKeyCode='Shift'
-        selectionKeyCode='Control'
-        deleteKeyCode='Delete'
-        snapToGrid
-        snapGrid={[20, 20]}
-      >
-        <div className='position-absolute top-0 start-0 m-3' style={{ zIndex: 5 }}>
-          <PlayButtons />
-        </div>
-        <Controls />
-        <Background gap={20} />
-        <div className='position-absolute bottom-0 end-0 m-3' style={{ zIndex: 5 }}>
-          <StatusMessage />
-        </div>
-      </ReactFlow>
-    </div>
+    <ReactFlow
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
+      onNodesChange={onNodesChange}
+      onEdgesChange={onEdgesChange}
+      onConnect={onConnect}
+      onInit={setReactFlowInstance}
+      onDrop={onDrop}
+      onDragOver={onDragOver}
+      multiSelectionKeyCode='Shift'
+      selectionKeyCode='Control'
+      deleteKeyCode='Delete'
+      snapToGrid
+      snapGrid={[20, 20]}
+    >
+      <div className='position-absolute top-0 start-0 m-3' style={{ zIndex: 5 }}>
+        <PlayButtons />
+      </div>
+      <Controls />
+      <Background gap={20} />
+      <div className='position-absolute bottom-0 end-0 m-3' style={{ zIndex: 5 }}>
+        <StatusMessage />
+      </div>
+    </ReactFlow>
   )
 }

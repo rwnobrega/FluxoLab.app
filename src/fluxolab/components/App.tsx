@@ -16,6 +16,10 @@ import compile from 'machine/compiler'
 import { resetMachineState } from 'machine/machine'
 
 export default function (): JSX.Element {
+  const navbarWrapper = React.useRef<HTMLDivElement>(null)
+  const reactFlowWrapper = React.useRef<HTMLDivElement>(null)
+  const [contentHeight, setContentHeight] = React.useState<string>('100vh')
+
   const { nodes, edges } = useStoreFlow()
   const { machine, setFlowchart, setStartSymbolId, setCompileError } = useStoreMachine()
   const { state, setState, setStateHistory } = useStoreMachineState()
@@ -33,20 +37,31 @@ export default function (): JSX.Element {
     setState(state)
   }, [machine.flowchart, machine.startSymbolId])
 
+  useEffect(() => {
+    const navbarHeight = navbarWrapper.current?.offsetHeight ?? 0
+    setContentHeight(`calc(100vh - ${navbarHeight}px)`)
+  }, [])
+
   return (
     <Stack className='vh-100 h-100' style={{ userSelect: 'none' }}>
-      <Navbar />
+      <div ref={navbarWrapper}>
+        <Navbar />
+      </div>
       <Stack direction='horizontal' className='flex-fill align-items-stretch'>
         <div className='bg-light p-3'>
           <SymbolList />
         </div>
-        <div style={{ width: '100%' }}>
-          <Flow />
+        <div style={{ width: '72%', height: contentHeight }} ref={reactFlowWrapper}>
+          <Flow wrapper={reactFlowWrapper} />
         </div>
-        <Stack style={{ width: '35%' }} className='bg-light p-3' gap={3}>
-          <Variables />
-          <Interaction />
-        </Stack>
+        <div style={{ width: '28%', height: contentHeight }} className='bg-light'>
+          <div style={{ height: '40%' }} className='p-3'>
+            <Variables />
+          </div>
+          <div style={{ height: '60%' }} className='p-3'>
+            <Interaction />
+          </div>
+        </div>
       </Stack>
     </Stack>
   )

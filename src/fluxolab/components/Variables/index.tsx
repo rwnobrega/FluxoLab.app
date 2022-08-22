@@ -30,7 +30,7 @@ export default function (): JSX.Element {
   )
 
   return (
-    <div>
+    <div className='d-flex flex-column h-100'>
       <div className='d-flex flex-row justify-content-between align-items-center mb-2 gap-3'>
         <span className='fw-semibold'>Variáveis</span>
         <Button
@@ -42,13 +42,15 @@ export default function (): JSX.Element {
           Adicionar variável
         </Button>
       </div>
-      <Table size='sm' variant='borderless'>
-        <tbody>
-          {_.map(machine.variables, ({ id }, index) => (
-            <VariableItem key={index} id={id} disabled={state.timeSlot !== 0} />
-          ))}
-        </tbody>
-      </Table>
+      <div style={{ overflowY: 'auto', overflowX: 'clip' }}>
+        <Table size='sm' variant='borderless'>
+          <tbody>
+            {_.map(machine.variables, ({ id }, index) => (
+              <VariableItem key={index} id={id} disabled={state.timeSlot !== 0} />
+            ))}
+          </tbody>
+        </Table>
+      </div>
     </div>
   )
 }
