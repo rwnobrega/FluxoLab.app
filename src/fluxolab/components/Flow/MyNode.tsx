@@ -64,7 +64,7 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
           if (state.status === 'error') {
             return getDropShadow(palette.red)
           } else {
-            return getDropShadow(palette.gray500)
+            return getDropShadow(palette.gray800)
           }
         }
         return ''
