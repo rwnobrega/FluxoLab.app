@@ -7,7 +7,7 @@ import Stack from 'react-bootstrap/Stack'
 
 import ChatBubble from './ChatBubble'
 
-import { runMachineStep } from 'machine/machine'
+import runAction from 'components/PlayButtons/actions'
 
 import useStoreMachineState from 'stores/storeMachineState'
 import useStoreMachine from 'stores/storeMachine'
@@ -24,11 +24,8 @@ export default function ({ refInput }: Props): JSX.Element {
 
   const handleSendInput = useCallback(() => {
     if (inputText.length > 0) {
-      stateHistory.push(state)
-      setStateHistory(stateHistory)
       state.input = inputText
-      runMachineStep(machine, state)
-      setState(state)
+      runAction('nextStep', { machine, state, setState, stateHistory, setStateHistory })
       setInputText('')
     }
   }, [inputText, machine, state, stateHistory])

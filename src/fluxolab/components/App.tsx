@@ -14,8 +14,9 @@ import useStoreFlow from 'stores/storeFlow'
 import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
 
+import runAction from 'components/PlayButtons/actions'
+
 import compile from 'machine/compiler'
-import { resetMachineState } from 'machine/machine'
 
 export default function (): JSX.Element {
   const navbarWrapper = React.useRef<HTMLDivElement>(null)
@@ -26,7 +27,7 @@ export default function (): JSX.Element {
 
   const { nodes, edges } = useStoreFlow()
   const { machine, setFlowchart, setStartSymbolId, setCompileError } = useStoreMachine()
-  const { state, setState, setStateHistory } = useStoreMachineState()
+  const { state, setState, stateHistory, setStateHistory } = useStoreMachineState()
 
   const nodesDep = JSON.stringify(
     _.map(nodes, node => _.pick(node, ['id', 'type', 'data']))
@@ -43,9 +44,7 @@ export default function (): JSX.Element {
   }, [nodesDep, edgesDep, machine.variables])
 
   useEffect(() => {
-    resetMachineState(state)
-    setStateHistory([])
-    setState(state)
+    runAction('reset', { machine, state, setState, stateHistory, setStateHistory })
   }, [machine.flowchart, machine.startSymbolId])
 
   useEffect(() => {
