@@ -44,7 +44,8 @@ export default function (): JSX.Element {
   }, [nodesDep, edgesDep, machine.variables])
 
   useEffect(() => {
-    runAction('reset', { machine, state, setState, stateHistory, setStateHistory })
+    const actionHooks = { machine, state, setState, stateHistory, setStateHistory, refInput }
+    runAction('reset', actionHooks)
   }, [machine.flowchart, machine.startSymbolId])
 
   useEffect(() => {

@@ -23,14 +23,8 @@ export default function ({ refInput }: Props): JSX.Element {
 
   const onClick = useCallback(
     (action: Action) => {
-      if (action === 'nextStep' && state.status === 'waiting') {
-        refInput.current?.focus()
-        return
-      }
-      execAction(action, { machine, state, setState, stateHistory, setStateHistory })
-      if (action === 'runAuto' && state.status === 'waiting') {
-        refInput.current?.focus()
-      }
+      const actionHooks = { machine, state, setState, stateHistory, setStateHistory, refInput }
+      execAction(action, actionHooks)
     }, [machine, state, stateHistory]
   )
 

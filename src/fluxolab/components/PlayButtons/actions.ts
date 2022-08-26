@@ -10,11 +10,12 @@ interface ActionHooks {
   setState: (state: MachineState) => void
   stateHistory: MachineState[]
   setStateHistory: (stateHistory: MachineState[]) => void
+  refInput: React.RefObject<HTMLInputElement>
 }
 
 export type Action = 'reset' | 'stepBack' | 'nextStep' | 'runAuto'
 
-export default function (action: Action, { machine, state, setState, stateHistory, setStateHistory }: ActionHooks): void {
+export default function (action: Action, { machine, state, setState, stateHistory, setStateHistory, refInput }: ActionHooks): void {
   return {
     reset: () => {
       resetMachineState(state)
@@ -25,16 +26,25 @@ export default function (action: Action, { machine, state, setState, stateHistor
       const previousState = stateHistory.pop()
       if (previousState !== undefined) {
         setStateHistory(stateHistory)
+        previousState.input = null
         setState(previousState)
       }
     },
     nextStep: () => {
+      if (state.status === 'waiting' && state.input === null) {
+        refInput.current?.focus()
+        return
+      }
       stateHistory.push(state)
       setStateHistory(stateHistory)
       runMachineStep(machine, state)
       setState(state)
     },
     runAuto: () => {
+      if (state.status === 'waiting') {
+        refInput.current?.focus()
+        return
+      }
       const runAuto = async (): Promise<void> => {
         while (state.status === 'ready') {
           stateHistory.push(_.cloneDeep(state))

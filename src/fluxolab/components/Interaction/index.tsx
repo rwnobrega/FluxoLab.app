@@ -25,7 +25,8 @@ export default function ({ refInput }: Props): JSX.Element {
   const handleSendInput = useCallback(() => {
     if (inputText.length > 0) {
       state.input = inputText
-      runAction('nextStep', { machine, state, setState, stateHistory, setStateHistory })
+      const actionHooks = { machine, state, setState, stateHistory, setStateHistory, refInput }
+      runAction('nextStep', actionHooks)
       setInputText('')
     }
   }, [inputText, machine, state, stateHistory])
