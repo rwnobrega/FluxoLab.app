@@ -1,7 +1,8 @@
 import { MachineState, CompileError } from 'machine/types'
+import { Action } from './actions'
 
 interface PlayButton {
-  id: string
+  action: Action
   tooltipText: string
   icon: string
   variant: (state: MachineState, compileError: CompileError | null) => string
@@ -24,28 +25,28 @@ function isDisabledForward (state: MachineState, compileError: CompileError | nu
 
 const buttonList: PlayButton[] = [
   {
-    id: 'reset',
+    action: 'reset',
     tooltipText: 'Reiniciar',
     icon: 'bi-skip-backward-fill',
     variant: () => 'primary',
     isDisabled: isDisabledBackward
   },
   {
-    id: 'stepBack',
+    action: 'stepBack',
     tooltipText: 'Voltar um passo',
     icon: 'bi-skip-start-fill',
     variant: () => 'primary',
     isDisabled: isDisabledBackward
   },
   {
-    id: 'nextStep',
+    action: 'nextStep',
     tooltipText: 'Executar próximo passo',
     icon: 'bi-skip-end-fill',
     variant: (state) => state.status === 'ready' ? 'primary' : 'secondary',
     isDisabled: isDisabledForward
   },
   {
-    id: 'runAuto',
+    action: 'runAuto',
     tooltipText: 'Executar automaticamente',
     icon: 'bi-fast-forward-fill',
     variant: (state) => state.status === 'ready' ? 'primary' : 'secondary',

@@ -10,7 +10,7 @@ import Tooltip from 'components/Tooltip'
 import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
 
-import execAction from './actions'
+import execAction, { Action } from './actions'
 import buttonList from './buttonList'
 
 interface Props {
@@ -22,7 +22,7 @@ export default function ({ refInput }: Props): JSX.Element {
   const { state, setState, stateHistory, setStateHistory } = useStoreMachineState()
 
   const onClick = useCallback(
-    (action: string) => {
+    (action: Action) => {
       if (action === 'nextStep' && state.status === 'waiting') {
         refInput.current?.focus()
         return
@@ -31,18 +31,17 @@ export default function ({ refInput }: Props): JSX.Element {
       if (action === 'runAuto' && state.status === 'waiting') {
         refInput.current?.focus()
       }
-    }
-    , [machine, state, stateHistory]
+    }, [machine, state, stateHistory]
   )
 
   return (
     <ButtonGroup>
-      {_.map(buttonList, ({ id, tooltipText, icon, variant, isDisabled }) => (
-        <Tooltip key={id} text={isDisabled(state, compileError) ? '' : tooltipText}>
+      {_.map(buttonList, ({ action, tooltipText, icon, variant, isDisabled }) => (
+        <Tooltip key={action} text={isDisabled(state, compileError) ? '' : tooltipText}>
           <Button
             variant={variant(state, compileError)}
             disabled={isDisabled(state, compileError)}
-            onClick={() => onClick(id)}
+            onClick={() => onClick(action)}
           >
             <i className={`bi ${icon}`} />
           </Button>
