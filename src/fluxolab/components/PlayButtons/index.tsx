@@ -10,8 +10,7 @@ import Tooltip from 'components/Tooltip'
 import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
 
-import { resetMachineState, runMachineStep } from 'machine/machine'
-
+import execAction from './actions'
 import buttonList from './buttonList'
 
 interface Props {
@@ -23,43 +22,17 @@ export default function ({ refInput }: Props): JSX.Element {
   const { state, setState, stateHistory, setStateHistory } = useStoreMachineState()
 
   const onClick = useCallback(
-    (id: string): void => {
-      if (id === 'reset') {
-        resetMachineState(state)
-        setStateHistory([])
-        setState(state)
-      } else if (id === 'stepBack') {
-        const previousState = stateHistory.pop()
-        if (previousState !== undefined) {
-          setStateHistory(stateHistory)
-          setState(previousState)
-        }
-      } else if (id === 'nextStep') {
-        if (state.status === 'waiting') {
-          refInput.current?.focus()
-          return
-        }
-        stateHistory.push(state)
-        setStateHistory(stateHistory)
-        runMachineStep(machine, state)
-        setState(state)
-      } else if (id === 'runAuto') {
-        const runAuto = async (): Promise<void> => {
-          while (state.status === 'ready') {
-            stateHistory.push(_.cloneDeep(state))
-            setStateHistory(stateHistory)
-            runMachineStep(machine, state)
-            setState(state)
-            await new Promise(resolve => setTimeout(resolve, 100))
-          }
-          if (state.status === 'waiting') {
-            refInput.current?.focus()
-          }
-        }
-        runAuto().catch(error => console.log(error.message))
+    (action: string) => {
+      if (action === 'nextStep' && state.status === 'waiting') {
+        refInput.current?.focus()
+        return
       }
-    },
-    [machine, state, stateHistory]
+      execAction(action, { machine, state, setState, stateHistory, setStateHistory })
+      if (action === 'runAuto' && state.status === 'waiting') {
+        refInput.current?.focus()
+      }
+    }
+    , [machine, state, stateHistory]
   )
 
   return (
