@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 import React, { useEffect } from 'react'
 
 import Stack from 'react-bootstrap/Stack'
@@ -24,12 +26,19 @@ export default function (): JSX.Element {
   const { machine, setFlowchart, setStartSymbolId, setCompileError } = useStoreMachine()
   const { state, setState, setStateHistory } = useStoreMachineState()
 
+  const nodesDep = JSON.stringify(
+    _.map(nodes, node => _.pick(node, ['id', 'type', 'data']))
+  )
+  const edgesDep = JSON.stringify(
+    _.map(edges, edge => _.pick(edge, ['id', 'source', 'sourceHandle', 'target', 'targetHandle']))
+  )
+
   useEffect(() => {
     const { flowchart, startSymbolId, error } = compile({ nodes, edges, variables: machine.variables })
     setStartSymbolId(startSymbolId)
     setFlowchart(flowchart)
     setCompileError(error)
-  }, [nodes, edges, machine.variables])
+  }, [nodesDep, edgesDep, machine.variables])
 
   useEffect(() => {
     resetMachineState(state)
