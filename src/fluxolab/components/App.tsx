@@ -20,6 +20,8 @@ import { resetMachineState } from 'machine/machine'
 export default function (): JSX.Element {
   const navbarWrapper = React.useRef<HTMLDivElement>(null)
   const reactFlowWrapper = React.useRef<HTMLDivElement>(null)
+  const refInput = React.useRef<HTMLInputElement>(null)
+
   const [contentHeight, setContentHeight] = React.useState<string>('100vh')
 
   const { nodes, edges } = useStoreFlow()
@@ -61,14 +63,14 @@ export default function (): JSX.Element {
           <SymbolList />
         </div>
         <div style={{ width: '72%', height: contentHeight }} ref={reactFlowWrapper}>
-          <Flow wrapper={reactFlowWrapper} />
+          <Flow wrapper={reactFlowWrapper} refInput={refInput} />
         </div>
         <div style={{ width: '28%', height: contentHeight }} className='bg-light'>
           <div style={{ height: '40%' }} className='p-3'>
             <Variables />
           </div>
           <div style={{ height: '60%' }} className='p-3'>
-            <Interaction />
+            <Interaction refInput={refInput} />
           </div>
         </div>
       </Stack>

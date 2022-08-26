@@ -12,9 +12,11 @@ import { runMachineStep } from 'machine/machine'
 import useStoreMachineState from 'stores/storeMachineState'
 import useStoreMachine from 'stores/storeMachine'
 
-export default function (): JSX.Element {
-  const refInput = React.useRef<HTMLInputElement>(null)
+interface Props {
+  refInput: React.RefObject<HTMLInputElement>
+}
 
+export default function ({ refInput }: Props): JSX.Element {
   const [inputText, setInputText] = React.useState('')
 
   const { machine } = useStoreMachine()
