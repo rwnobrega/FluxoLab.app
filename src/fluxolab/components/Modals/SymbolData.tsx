@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
@@ -17,6 +17,10 @@ export default function ({ nodeId, value, showModal, setShowModal }: Props): JSX
   const [textValue, setTextValue] = useState<string>(value)
 
   const { updateNodeProp } = useStoreFlow()
+
+  useEffect(() => {
+    setTextValue(value)
+  }, [showModal])
 
   function handleSubmit (event: any): void {
     event.preventDefault()

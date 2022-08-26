@@ -20,6 +20,10 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
 
   const { machine, renameVariable } = useStoreMachine()
 
+  useEffect(() => {
+    setTextId(id)
+  }, [showModal])
+
   function handleSubmit (event: any): void {
     event.preventDefault()
     setTimeout(() => { renameVariable(id, textId) }, 200)
@@ -27,7 +31,7 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
   }
 
   useEffect(() => {
-    let problem: string|null = null
+    let problem: string | null = null
     if (_.isEmpty(textId)) {
       problem = 'Identificador não pode ser vazio.'
     } else if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(textId)) {
