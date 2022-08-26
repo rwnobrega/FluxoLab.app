@@ -4,7 +4,7 @@ import { runMachineStep, resetMachineState } from 'machine/machine'
 
 import { Machine, MachineState } from 'machine/types'
 
-interface ActionProps {
+interface ActionHooks {
   machine: Machine
   state: MachineState
   setState: (state: MachineState) => void
@@ -14,7 +14,7 @@ interface ActionProps {
 
 export type Action = 'reset' | 'stepBack' | 'nextStep' | 'runAuto'
 
-export default function (action: Action, { machine, state, setState, stateHistory, setStateHistory }: ActionProps): void {
+export default function (action: Action, { machine, state, setState, stateHistory, setStateHistory }: ActionHooks): void {
   return {
     reset: () => {
       resetMachineState(state)
