@@ -2,6 +2,8 @@ import _ from 'lodash'
 
 import React, { useEffect } from 'react'
 
+import { useHotkeys } from 'react-hotkeys-hook'
+
 import Stack from 'react-bootstrap/Stack'
 
 import Flow from 'components/Flow'
@@ -14,7 +16,8 @@ import useStoreFlow from 'stores/storeFlow'
 import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
 
-import runAction from 'components/PlayButtons/actions'
+import buttonList from 'components/PlayButtons/buttonList'
+import execAction from 'components/PlayButtons/actions'
 
 import compile from 'machine/compiler'
 
@@ -26,7 +29,7 @@ export default function (): JSX.Element {
   const [contentHeight, setContentHeight] = React.useState<string>('100vh')
 
   const { nodes, edges } = useStoreFlow()
-  const { machine, setFlowchart, setStartSymbolId, setCompileError } = useStoreMachine()
+  const { machine, setFlowchart, setStartSymbolId, compileError, setCompileError } = useStoreMachine()
   const { state, setState, stateHistory, setStateHistory } = useStoreMachineState()
 
   const nodesDep = JSON.stringify(
@@ -45,13 +48,33 @@ export default function (): JSX.Element {
 
   useEffect(() => {
     const actionHooks = { machine, state, setState, stateHistory, setStateHistory, refInput }
-    runAction('reset', actionHooks)
+    execAction('reset', actionHooks)
   }, [machine.flowchart, machine.startSymbolId])
 
   useEffect(() => {
     const navbarHeight = navbarWrapper.current?.offsetHeight ?? 0
     setContentHeight(`calc(100vh - ${navbarHeight}px)`)
   }, [])
+
+  for (const { action, hotkey } of buttonList) {
+    useHotkeys(
+      hotkey,
+      () => {
+        if (compileError !== null) {
+          return
+        }
+        const actionHooks = { machine, state, setState, stateHistory, setStateHistory, refInput }
+        execAction(action, actionHooks)
+      },
+      {
+        filter: event => {
+          event.preventDefault()
+          return true
+        },
+        enableOnTags: ['INPUT', 'TEXTAREA']
+      }
+    )
+  }
 
   return (
     <Stack className='vh-100 h-100' style={{ userSelect: 'none' }}>

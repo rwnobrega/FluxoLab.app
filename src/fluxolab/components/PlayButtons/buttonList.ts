@@ -3,8 +3,9 @@ import { Action } from './actions'
 
 interface PlayButton {
   action: Action
-  tooltipText: string
+  description: string
   icon: string
+  hotkey: string
   variant: (state: MachineState, compileError: CompileError | null) => string
   isDisabled: (state: MachineState, compileError: CompileError | null) => boolean
 }
@@ -26,29 +27,33 @@ function isDisabledForward (state: MachineState, compileError: CompileError | nu
 const buttonList: PlayButton[] = [
   {
     action: 'reset',
-    tooltipText: 'Reiniciar',
+    description: 'Reiniciar',
     icon: 'bi-skip-backward-fill',
+    hotkey: 'ctrl+F7',
     variant: () => 'primary',
     isDisabled: isDisabledBackward
   },
   {
     action: 'stepBack',
-    tooltipText: 'Voltar um passo',
+    description: 'Voltar um passo',
     icon: 'bi-skip-start-fill',
+    hotkey: 'F7',
     variant: () => 'primary',
     isDisabled: isDisabledBackward
   },
   {
     action: 'nextStep',
-    tooltipText: 'Executar próximo passo',
+    description: 'Executar próximo passo',
     icon: 'bi-skip-end-fill',
+    hotkey: 'F8',
     variant: (state) => state.status === 'ready' ? 'primary' : 'secondary',
     isDisabled: isDisabledForward
   },
   {
     action: 'runAuto',
-    tooltipText: 'Executar automaticamente',
+    description: 'Executar automaticamente',
     icon: 'bi-fast-forward-fill',
+    hotkey: 'ctrl+F8',
     variant: (state) => state.status === 'ready' ? 'primary' : 'secondary',
     isDisabled: isDisabledForward
   }

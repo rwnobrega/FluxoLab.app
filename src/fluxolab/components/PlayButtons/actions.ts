@@ -23,6 +23,9 @@ export default function (action: Action, { machine, state, setState, stateHistor
       setState(state)
     },
     stepBack: () => {
+      if (state.curSymbolId === null) {
+        return
+      }
       const previousState = stateHistory.pop()
       if (previousState !== undefined) {
         setStateHistory(stateHistory)
@@ -31,6 +34,9 @@ export default function (action: Action, { machine, state, setState, stateHistor
       }
     },
     nextStep: () => {
+      if (state.status === 'halted') {
+        return
+      }
       if (state.status === 'waiting' && state.input === null) {
         refInput.current?.focus()
         return

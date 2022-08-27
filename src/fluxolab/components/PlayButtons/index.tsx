@@ -30,17 +30,20 @@ export default function ({ refInput }: Props): JSX.Element {
 
   return (
     <ButtonGroup>
-      {_.map(buttonList, ({ action, tooltipText, icon, variant, isDisabled }) => (
-        <Tooltip key={action} text={isDisabled(state, compileError) ? '' : tooltipText}>
-          <Button
-            variant={variant(state, compileError)}
-            disabled={isDisabled(state, compileError)}
-            onClick={() => onClick(action)}
-          >
-            <i className={`bi ${icon}`} />
-          </Button>
-        </Tooltip>
-      ))}
+      {_.map(buttonList, ({ action, description, hotkey, icon, variant, isDisabled }) => {
+        const tooltipText = isDisabled(state, compileError) ? '' : `${description} (${hotkey})`
+        return (
+          <Tooltip key={action} text={tooltipText}>
+            <Button
+              variant={variant(state, compileError)}
+              disabled={isDisabled(state, compileError)}
+              onClick={() => onClick(action)}
+            >
+              <i className={`bi ${icon}`} />
+            </Button>
+          </Tooltip>
+        )
+      })}
     </ButtonGroup>
   )
 }
