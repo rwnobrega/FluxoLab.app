@@ -61,6 +61,7 @@ export default function (action: Action, { machine, state, setState, stateHistor
           setState(state)
           await new Promise(resolve => setTimeout(resolve, 100))
         }
+        useStoreMachineState.setState({ isRunning: false })
       }
       runAuto().catch(error => console.log(error.message))
     }
