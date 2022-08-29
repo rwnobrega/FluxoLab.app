@@ -66,6 +66,8 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
           } else {
             return getDropShadow(palette.gray800)
           }
+        } else if (node?.type === 'start' && state.curSymbolId === null) {
+          return getDropShadow(palette.gray800)
         }
         return ''
       }
