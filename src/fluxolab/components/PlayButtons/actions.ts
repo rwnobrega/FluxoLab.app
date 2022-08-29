@@ -1,8 +1,9 @@
 import _ from 'lodash'
 
 import { runMachineStep, resetMachineState } from 'machine/machine'
-
 import { Machine, MachineState } from 'machine/types'
+
+import useStoreMachineState from 'stores/storeMachineState'
 
 interface ActionHooks {
   machine: Machine
@@ -51,8 +52,9 @@ export default function (action: Action, { machine, state, setState, stateHistor
         refInput.current?.focus()
         return
       }
+      useStoreMachineState.setState({ isRunning: !useStoreMachineState.getState().isRunning })
       const runAuto = async (): Promise<void> => {
-        while (state.status === 'ready') {
+        while (useStoreMachineState.getState().isRunning && state.status === 'ready') {
           stateHistory.push(_.cloneDeep(state))
           setStateHistory(stateHistory)
           runMachineStep(machine, state)

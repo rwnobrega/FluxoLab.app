@@ -9,6 +9,8 @@ interface StoreMachineState {
   setState: (state: MachineState) => void
   stateHistory: MachineState[]
   setStateHistory: (stateHistory: MachineState[]) => void
+  // Maybe not a good place for this, but...
+  isRunning: boolean
 }
 
 const useStoreMachineState = create<StoreMachineState>(
@@ -28,7 +30,8 @@ const useStoreMachineState = create<StoreMachineState>(
     stateHistory: [],
     setStateHistory: stateHistory => {
       set({ stateHistory: _.cloneDeep(stateHistory) })
-    }
+    },
+    isRunning: false
   })
 )
 

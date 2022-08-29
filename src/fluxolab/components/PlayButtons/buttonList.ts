@@ -1,61 +1,64 @@
 import { MachineState, CompileError } from 'machine/types'
 import { Action } from './actions'
 
-interface PlayButton {
-  action: Action
-  description: string
-  icon: string
-  hotkey: string
-  variant: (state: MachineState, compileError: CompileError | null) => string
-  isDisabled: (state: MachineState, compileError: CompileError | null) => boolean
+interface IsDisabledProps {
+  state: MachineState
+  compileError: CompileError | null
+  isRunning: boolean
 }
 
-function isDisabledBackward (state: MachineState, compileError: CompileError | null): boolean {
-  if (compileError !== null) {
-    return true
-  }
+interface PlayButton {
+  action: Action
+  hotkey: string
+  description: (isRunning: boolean) => string
+  icon: (isRunning: boolean) => string
+  isDisabled: (isDisabledProps: IsDisabledProps) => boolean
+}
+
+function isDisabledBackward (state: MachineState): boolean {
   return state.status === 'ready' && state.timeSlot === 0
 }
 
-function isDisabledForward (state: MachineState, compileError: CompileError | null): boolean {
-  if (compileError !== null) {
-    return true
-  }
+function isDisabledForward (state: MachineState): boolean {
   return state.status === 'error' || state.status === 'halted'
 }
 
 const buttonList: PlayButton[] = [
   {
     action: 'reset',
-    description: 'Reiniciar',
-    icon: 'bi-skip-backward-fill',
     hotkey: 'ctrl+F7',
-    variant: () => 'primary',
-    isDisabled: isDisabledBackward
+    description: () => 'Reiniciar',
+    icon: () => 'bi-skip-backward-fill',
+    isDisabled: ({ state, compileError, isRunning }) => (
+      isRunning || compileError !== null || isDisabledBackward(state)
+    )
   },
   {
     action: 'stepBack',
-    description: 'Voltar um passo',
-    icon: 'bi-skip-start-fill',
     hotkey: 'F7',
-    variant: () => 'primary',
-    isDisabled: isDisabledBackward
-  },
-  {
-    action: 'nextStep',
-    description: 'Executar próximo passo',
-    icon: 'bi-skip-end-fill',
-    hotkey: 'F8',
-    variant: (state) => state.status === 'ready' ? 'primary' : 'secondary',
-    isDisabled: isDisabledForward
+    description: () => 'Voltar um passo',
+    icon: () => 'bi-skip-start-fill',
+    isDisabled: ({ state, compileError, isRunning }) => (
+      isRunning || compileError !== null || isDisabledBackward(state)
+    )
   },
   {
     action: 'runAuto',
-    description: 'Executar automaticamente',
-    icon: 'bi-fast-forward-fill',
     hotkey: 'ctrl+F8',
-    variant: (state) => state.status === 'ready' ? 'primary' : 'secondary',
-    isDisabled: isDisabledForward
+    description: isRunning => isRunning ? 'Pausar' : 'Executar automaticamente',
+    icon: isRunning => isRunning ? 'bi-pause-fill' : 'bi-play-fill',
+    isDisabled: ({ state, compileError }) => (
+      compileError !== null || isDisabledForward(state)
+    )
+  },
+  {
+    action: 'nextStep',
+    hotkey: 'F8',
+    description: () => 'Executar próximo passo',
+    icon: () => 'bi-skip-end-fill',
+    isDisabled: ({ state, compileError, isRunning }) => (
+      isRunning || compileError !== null || isDisabledForward(state)
+    )
   }
 ]
 

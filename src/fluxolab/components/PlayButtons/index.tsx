@@ -19,7 +19,7 @@ interface Props {
 
 export default function ({ refInput }: Props): JSX.Element {
   const { machine, compileError } = useStoreMachine()
-  const { state, setState, stateHistory, setStateHistory } = useStoreMachineState()
+  const { state, setState, stateHistory, setStateHistory, isRunning } = useStoreMachineState()
 
   const onClick = useCallback(
     (action: Action) => {
@@ -30,16 +30,13 @@ export default function ({ refInput }: Props): JSX.Element {
 
   return (
     <ButtonGroup>
-      {_.map(buttonList, ({ action, description, hotkey, icon, variant, isDisabled }) => {
-        const tooltipText = isDisabled(state, compileError) ? '' : `${description} (${hotkey})`
+      {_.map(buttonList, ({ action, description, hotkey, icon, isDisabled }) => {
+        const disabled = isDisabled({ state, compileError, isRunning })
+        const tooltipText = disabled ? '' : `${description(isRunning)} (${hotkey})`
         return (
           <Tooltip key={action} text={tooltipText}>
-            <Button
-              variant={variant(state, compileError)}
-              disabled={isDisabled(state, compileError)}
-              onClick={() => onClick(action)}
-            >
-              <i className={`bi ${icon}`} />
+            <Button disabled={disabled} onClick={() => onClick(action)}>
+              <i className={`bi ${icon(isRunning)}`} />
             </Button>
           </Tooltip>
         )
