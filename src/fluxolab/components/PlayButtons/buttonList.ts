@@ -43,21 +43,21 @@ const buttonList: PlayButton[] = [
     )
   },
   {
-    action: 'runAuto',
-    hotkey: 'ctrl+F8',
-    description: isRunning => isRunning ? 'Pausar' : 'Executar',
-    icon: isRunning => isRunning ? 'bi-pause-fill' : 'bi-play-fill',
-    isDisabled: ({ state, compileError }) => (
-      compileError !== null || isDisabledForward(state)
-    )
-  },
-  {
     action: 'nextStep',
     hotkey: 'F8',
     description: () => 'Executar próximo passo',
     icon: () => 'bi-skip-end-fill',
     isDisabled: ({ state, compileError, isRunning }) => (
       isRunning || compileError !== null || isDisabledForward(state)
+    )
+  },
+  {
+    action: 'runAuto',
+    hotkey: 'ctrl+F8',
+    description: isRunning => isRunning ? 'Pausar' : 'Executar',
+    icon: isRunning => isRunning ? 'bi-pause-fill' : 'bi-play-fill',
+    isDisabled: ({ state, compileError }) => (
+      compileError !== null || isDisabledForward(state)
     )
   }
 ]
