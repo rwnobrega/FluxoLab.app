@@ -15,7 +15,9 @@ interface Triplet {
 
 export default function (): JSX.Element {
   const { compileError } = useStoreMachine()
-  const { state } = useStoreMachineState()
+  const { getState } = useStoreMachineState()
+
+  const state = getState()
 
   function getTriplet (): Triplet {
     if (compileError !== null) {

@@ -33,8 +33,10 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
 
   const { nodes, updateNodeProp } = useStoreFlow()
   const { compileError } = useStoreMachine()
-  const { state } = useStoreMachineState()
+  const { getState } = useStoreMachineState()
   const { getZoom } = useReactFlow()
+
+  const state = getState()
 
   const labelRef = useRef<HTMLInputElement>(null)
 

@@ -27,12 +27,14 @@ export function runMachineStep (machine: Machine, state: MachineState): void {
   state.timeSlot += 1
 }
 
-export function resetMachineState (state: MachineState): void {
-  state.curSymbolId = null
-  state.timeSlot = 0
-  state.memory = {}
-  state.input = null
-  state.interaction = []
-  state.errorMessage = null
-  state.status = 'ready'
+export function getInitialState (): MachineState {
+  return {
+    curSymbolId: null,
+    timeSlot: 0,
+    memory: {},
+    input: null,
+    interaction: [],
+    errorMessage: null,
+    status: 'ready'
+  }
 }

@@ -5,7 +5,8 @@ import { VariableItemProps } from '.'
 import useStoreMachineState from 'stores/storeMachineState'
 
 export default function ({ id }: VariableItemProps): JSX.Element {
-  const { state } = useStoreMachineState()
+  const { getState } = useStoreMachineState()
+  const state = getState()
   const value = state.memory[id]
   const classes = [
     'd-flex',

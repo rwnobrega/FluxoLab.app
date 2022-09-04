@@ -12,12 +12,11 @@ import SymbolList from 'components/SymbolList'
 import Variables from 'components/Variables'
 import Interaction from 'components/Interaction'
 
+import buttonList from 'components/PlayButtons/buttonList'
+
 import useStoreFlow from 'stores/storeFlow'
 import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
-
-import buttonList from 'components/PlayButtons/buttonList'
-import execAction from 'components/PlayButtons/actions'
 
 import compile from 'machine/compiler'
 
@@ -30,7 +29,7 @@ export default function (): JSX.Element {
 
   const { nodes, edges } = useStoreFlow()
   const { machine, setFlowchart, setStartSymbolId, compileError, setCompileError } = useStoreMachine()
-  const { state, setState, stateHistory, setStateHistory } = useStoreMachineState()
+  const { reset, execAction } = useStoreMachineState()
 
   const nodesDep = JSON.stringify(
     _.map(nodes, node => _.pick(node, ['id', 'type', 'data']))
@@ -47,8 +46,7 @@ export default function (): JSX.Element {
   }, [nodesDep, edgesDep, machine.variables])
 
   useEffect(() => {
-    const actionHooks = { machine, state, setState, stateHistory, setStateHistory, refInput }
-    execAction('reset', actionHooks)
+    reset()
   }, [machine.flowchart, machine.startSymbolId])
 
   useEffect(() => {
@@ -60,11 +58,9 @@ export default function (): JSX.Element {
     useHotkeys(
       hotkey,
       () => {
-        if (compileError !== null) {
-          return
+        if (compileError === null) {
+          execAction(action, machine, refInput)
         }
-        const actionHooks = { machine, state, setState, stateHistory, setStateHistory, refInput }
-        execAction(action, actionHooks)
       },
       {
         filter: event => {

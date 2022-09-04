@@ -1,5 +1,5 @@
+import { Action } from 'stores/storeMachineState'
 import { MachineState, CompileError } from 'machine/types'
-import { Action } from './actions'
 
 interface IsDisabledProps {
   state: MachineState

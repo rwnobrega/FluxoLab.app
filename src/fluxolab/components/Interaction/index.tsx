@@ -7,8 +7,6 @@ import Stack from 'react-bootstrap/Stack'
 
 import ChatBubble from './ChatBubble'
 
-import execAction from 'components/PlayButtons/actions'
-
 import useStoreMachineState from 'stores/storeMachineState'
 import useStoreMachine from 'stores/storeMachine'
 
@@ -20,13 +18,14 @@ export default function ({ refInput }: Props): JSX.Element {
   const [inputText, setInputText] = React.useState('')
 
   const { machine } = useStoreMachine()
-  const { state, setState, stateHistory, setStateHistory } = useStoreMachineState()
+  const { getState, nextStep, stateHistory } = useStoreMachineState()
+
+  const state = getState()
 
   const handleSendInput = useCallback(() => {
     if (inputText.length > 0) {
       state.input = inputText
-      const actionHooks = { machine, state, setState, stateHistory, setStateHistory, refInput }
-      execAction('nextStep', actionHooks)
+      nextStep(machine, refInput)
       setInputText('')
     }
   }, [inputText, machine, state, stateHistory])

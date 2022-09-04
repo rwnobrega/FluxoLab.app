@@ -12,7 +12,9 @@ import VariableItem from './Item'
 
 export default function (): JSX.Element {
   const { machine, addVariable } = useStoreMachine()
-  const { state } = useStoreMachineState()
+  const { getState } = useStoreMachineState()
+
+  const state = getState()
 
   const getNextVariableId = useCallback(
     () => {
