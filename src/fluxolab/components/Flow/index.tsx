@@ -41,14 +41,15 @@ export default function ({ wrapper, refInput }: Props): JSX.Element {
     (event: React.DragEvent<HTMLDivElement>) => {
       if (wrapper === null || wrapper.current === null) return
       event.preventDefault()
+      const { type, mouseX, mouseY } = JSON.parse(event.dataTransfer.getData('application/reactflow'))
       const reactFlowBounds = wrapper.current.getBoundingClientRect()
       const id = uuid()
       const node = {
         id,
-        type: event.dataTransfer.getData('application/reactflow'),
+        type,
         position: reactFlowInstance.project({
-          x: event.clientX - reactFlowBounds.left,
-          y: event.clientY - reactFlowBounds.top
+          x: event.clientX - reactFlowBounds.left - mouseX,
+          y: event.clientY - reactFlowBounds.top - mouseY
         }),
         data: { id, value: '' }
       }

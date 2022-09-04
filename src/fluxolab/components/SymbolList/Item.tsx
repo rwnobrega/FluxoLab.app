@@ -11,7 +11,10 @@ interface Props {
 
 export default function ({ type, title, box }: Props): JSX.Element {
   function onDragStart (event: any): void {
-    event.dataTransfer.setData('application/reactflow', type)
+    const mouseX = event.pageX - event.target.offsetLeft
+    const mouseY = event.pageY - event.target.offsetTop
+    const data = JSON.stringify({ type, mouseX, mouseY })
+    event.dataTransfer.setData('application/reactflow', data)
     event.dataTransfer.effectAllowed = 'move'
   }
 
