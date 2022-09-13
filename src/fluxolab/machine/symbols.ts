@@ -1,8 +1,10 @@
 import _ from 'lodash'
 
-import evaluate from 'ts-expression-evaluator'
+import evaluate, { registerFunction } from 'ts-expression-evaluator'
 
 import { Variable, VariableValue, Symbol } from 'machine/types'
+
+registerFunction('mod', (a: any, b: any) => a % b)
 
 function getValue (textValue: string, type: Variable['type']): VariableValue {
   const parseFunction = {
@@ -13,7 +15,7 @@ function getValue (textValue: string, type: Variable['type']): VariableValue {
   return parseFunction(textValue)
 }
 
-export function newStartSymbol (params: {id: string, nextId: string}): Symbol {
+export function newStartSymbol (params: { id: string, nextId: string }): Symbol {
   const { id, nextId } = params
   return {
     id,
@@ -24,7 +26,7 @@ export function newStartSymbol (params: {id: string, nextId: string}): Symbol {
   }
 }
 
-export function newAssignmentSymbol (params: {id: string, variableId: string, expression: string, nextId: string}): Symbol {
+export function newAssignmentSymbol (params: { id: string, variableId: string, expression: string, nextId: string }): Symbol {
   const { id, variableId, expression, nextId } = params
   return {
     id,
@@ -44,7 +46,7 @@ export function newAssignmentSymbol (params: {id: string, variableId: string, ex
   }
 }
 
-export function newConditionalSymbol (params: {id: string, condition: string, nextTrue: string, nextFalse: string}): Symbol {
+export function newConditionalSymbol (params: { id: string, condition: string, nextTrue: string, nextFalse: string }): Symbol {
   const { id, condition, nextTrue, nextFalse } = params
   return {
     id,
@@ -56,7 +58,7 @@ export function newConditionalSymbol (params: {id: string, condition: string, ne
   }
 }
 
-export function newInputSymbol (params: {id: string, variableId: string, nextId: string}): Symbol {
+export function newInputSymbol (params: { id: string, variableId: string, nextId: string }): Symbol {
   const { id, variableId, nextId } = params
   return {
     id,
@@ -83,7 +85,7 @@ export function newInputSymbol (params: {id: string, variableId: string, nextId:
   }
 }
 
-export function newOutputSymbol (params: {id: string, expression: string, nextId: string}): Symbol {
+export function newOutputSymbol (params: { id: string, expression: string, nextId: string }): Symbol {
   const { id, expression, nextId } = params
   return {
     id,
@@ -104,7 +106,7 @@ export function newOutputSymbol (params: {id: string, expression: string, nextId
   }
 }
 
-export function newHaltSymbol (params: {id: string}): Symbol {
+export function newHaltSymbol (params: { id: string }): Symbol {
   const { id } = params
   return {
     id,
