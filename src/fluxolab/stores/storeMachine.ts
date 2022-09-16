@@ -9,7 +9,6 @@ interface StoreMachine {
   machine: Machine
   setFlowchart: (flowchart: Symbol[]) => void
   setStartSymbolId: (startSymbolId: string) => void
-  setVariables: (variables: Variable[]) => void
   getVariable: (variableId: string) => Variable | undefined
   addVariable: (id: string, type: Variable['type']) => void
   removeVariable: (id: string) => void
@@ -35,11 +34,6 @@ const useStoreMachine = create<StoreMachine, any>(
       setStartSymbolId: startSymbolId => {
         const { machine } = get()
         machine.startSymbolId = startSymbolId
-        set({ machine })
-      },
-      setVariables: variables => {
-        const { machine } = get()
-        machine.variables = variables
         set({ machine })
       },
       getVariable: id => {

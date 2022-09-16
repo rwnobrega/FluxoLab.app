@@ -2,9 +2,11 @@ import React from 'react'
 
 import { VariableItemProps } from '.'
 
+import { getVariableType } from 'machine/variables'
+
 import useStoreMachineState from 'stores/storeMachineState'
 
-export default function ({ id }: VariableItemProps): JSX.Element {
+export default function ({ id, type }: VariableItemProps): JSX.Element {
   const { getState } = useStoreMachineState()
   const state = getState()
   const value = state.memory[id]
@@ -16,5 +18,6 @@ export default function ({ id }: VariableItemProps): JSX.Element {
     'bg-opacity-10',
     'border border-success border-opacity-10 rounded-1'
   ].join(' ')
-  return <small className={classes}>{value ?? '\u00A0'}</small>
+  const variableType = getVariableType(type)
+  return <small className={classes}>{variableType.format(value)}</small>
 }

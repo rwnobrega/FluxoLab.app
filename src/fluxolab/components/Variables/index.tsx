@@ -47,8 +47,8 @@ export default function (): JSX.Element {
       <div style={{ overflowY: 'auto', overflowX: 'clip' }}>
         <Table size='sm' variant='borderless'>
           <tbody>
-            {_.map(machine.variables, ({ id }, index) => (
-              <VariableItem key={index} id={id} disabled={state.timeSlot !== 0} />
+            {_.map(machine.variables, ({ id, type }, index) => (
+              <VariableItem key={index} id={id} type={type} disabled={state.timeSlot !== 0} />
             ))}
           </tbody>
         </Table>

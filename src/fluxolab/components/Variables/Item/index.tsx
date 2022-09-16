@@ -7,6 +7,7 @@ import ItemRemove from './Remove'
 
 export interface VariableItemProps {
   id: string
+  type: string
   disabled: boolean
 }
 

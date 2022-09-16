@@ -2,18 +2,11 @@ import _ from 'lodash'
 
 import evaluate, { registerFunction } from 'ts-expression-evaluator'
 
-import { Variable, VariableValue, Symbol } from 'machine/types'
+import { Symbol } from 'machine/types'
+
+import { getVariableType } from 'machine/variables'
 
 registerFunction('mod', (a: any, b: any) => a % b)
-
-function getValue (textValue: string, type: Variable['type']): VariableValue {
-  const parseFunction = {
-    num: Number,
-    str: String,
-    bool: Boolean
-  }[type]
-  return parseFunction(textValue)
-}
 
 export function newStartSymbol (params: { id: string, nextId: string }): Symbol {
   const { id, nextId } = params
@@ -33,13 +26,14 @@ export function newAssignmentSymbol (params: { id: string, variableId: string, e
     type: 'assignment',
     work: (machine, state) => {
       const textValue: string = evaluate(expression, state.memory)
-      const variable: Variable | undefined = _.find(machine.variables, { id: variableId })
+      const variable = _.find(machine.variables, { id: variableId })
       if (variable === undefined) {
         state.errorMessage = `Variável "${variableId}" não existe.`
         state.status = 'error'
         return
       }
-      const value: VariableValue = getValue(textValue, variable.type)
+      const varType = getVariableType(variable.type)
+      const value = varType.parse(textValue)
       state.memory[variableId] = value
       state.curSymbolId = nextId
     }
@@ -69,13 +63,14 @@ export function newInputSymbol (params: { id: string, variableId: string, nextId
         state.status = 'error'
         return
       }
-      const variable: Variable | undefined = _.find(machine.variables, { id: variableId })
+      const variable = _.find(machine.variables, { id: variableId })
       if (variable === undefined) {
         state.errorMessage = `Variável "${variableId}" não existe.`
         state.status = 'error'
         return
       }
-      const value: VariableValue = getValue(state.input, variable.type)
+      const varType = getVariableType(variable.type)
+      const value = varType.parse(state.input)
       state.memory[variableId] = value
       state.interaction.push({ direction: 'in', text: state.input })
       state.input = null
@@ -93,12 +88,19 @@ export function newOutputSymbol (params: { id: string, expression: string, nextI
     work: (_machine, state) => {
       let expressionResult: string = expression
       for (const [variableId, variableValue] of _.toPairs(state.memory)) {
+        const variable = _.find(_machine.variables, { id: variableId })
+        if (variable === undefined) {
+          state.errorMessage = `Variável "${variableId}" não existe.`
+          state.status = 'error'
+          return
+        }
         if (variableValue === null) {
           state.errorMessage = `Variável "${variableId}" não inicializada.`
           state.status = 'error'
           return
         }
-        expressionResult = expressionResult.replace(`{${variableId}}`, variableValue.toString())
+        const varType = getVariableType(variable.type)
+        expressionResult = expressionResult.replace(`{${variableId}}`, varType.format(variableValue))
       }
       state.interaction.push({ direction: 'out', text: expressionResult })
       state.curSymbolId = nextId
