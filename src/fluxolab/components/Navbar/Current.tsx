@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react'
+import useStoreMachine from 'stores/storeMachine'
 
 export default function (): JSX.Element {
   const [editMode, setEditMode] = React.useState(false)
-  const [flowchartTitle, setFlowchartTitle] = React.useState('Fluxograma sem título')
+  const { flowchartTitle, setFlowchartTitle } = useStoreMachine()
 
   const onFocus = useCallback((event: React.FocusEvent<HTMLInputElement>) => {
     event.target.select()

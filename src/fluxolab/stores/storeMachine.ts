@@ -16,6 +16,8 @@ interface StoreMachine {
   changeVariableType: (id: string, type: Variable['type']) => void
   compileError: CompileError | null
   setCompileError: (compileError: CompileError | null) => void
+  flowchartTitle: string
+  setFlowchartTitle: (flowchartTitle: string) => void
 }
 
 const useStoreMachine = create<StoreMachine, any>(
@@ -71,7 +73,9 @@ const useStoreMachine = create<StoreMachine, any>(
         set({ machine })
       },
       compileError: null,
-      setCompileError: compileError => { set({ compileError }) }
+      setCompileError: compileError => { set({ compileError }) },
+      flowchartTitle: 'Fluxograma sem título',
+      setFlowchartTitle: flowchartTitle => { set({ flowchartTitle }) }
     }),
     {
       name: 'fluxolab_machine',
