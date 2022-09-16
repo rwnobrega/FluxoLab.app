@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 
 import { palette } from 'utils/colors'
 
@@ -28,6 +28,18 @@ const spanClasses = {
   out: 'text-bg-success'
 }
 
+const spanStyles: {[key: string]: CSSProperties} = {
+  common: {
+    whiteSpace: 'normal'
+  },
+  in: {
+    textAlign: 'right'
+  },
+  out: {
+    textAlign: 'left'
+  }
+}
+
 const arrowStyles = {
   common: {
     width: 0,
@@ -47,9 +59,17 @@ const arrowStyles = {
 
 export default function ({ direction, text }: BubbleProps): JSX.Element {
   return (
-    <div className={`${divClasses.common} ${divClasses[direction]}`} style={divStyles[direction]}>
+    <div
+      className={`${divClasses.common} ${divClasses[direction]}`}
+      style={divStyles[direction]}
+    >
       {direction === 'out' && <div style={{ ...arrowStyles.common, ...arrowStyles.out }} />}
-      <span className={`${spanClasses.common} ${spanClasses[direction]}`}>{text}</span>
+      <span
+        className={`${spanClasses.common} ${spanClasses[direction]}`}
+        style={{ ...spanStyles.common, ...spanStyles[direction] }}
+      >
+        {text}
+      </span>
       {direction === 'in' && <div style={{ ...arrowStyles.common, ...arrowStyles.in }} />}
     </div>
   )
