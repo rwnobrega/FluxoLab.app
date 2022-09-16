@@ -30,7 +30,8 @@ const spanClasses = {
 
 const spanStyles: {[key: string]: CSSProperties} = {
   common: {
-    whiteSpace: 'normal'
+    whiteSpace: 'normal',
+    wordBreak: 'break-word'
   },
   in: {
     textAlign: 'right'
