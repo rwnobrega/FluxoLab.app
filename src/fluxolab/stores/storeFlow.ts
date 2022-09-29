@@ -19,6 +19,7 @@ import {
 interface StoreFlow {
   nodes: Node[]
   edges: Edge[]
+  clearAll: () => void
   onNodesChange: (changes: NodeChange[]) => void
   onEdgesChange: (changes: EdgeChange[]) => void
   addNode: (node: Node) => void
@@ -31,6 +32,9 @@ const useStoreFlow = create<StoreFlow, any>(
     (set, get) => ({
       nodes: [],
       edges: [],
+      clearAll: () => {
+        set({ nodes: [], edges: [] })
+      },
       onNodesChange: changes => set({ nodes: applyNodeChanges(changes, get().nodes) }),
       onEdgesChange: changes => set({ edges: applyEdgeChanges(changes, get().edges) }),
       addNode: node => set({ nodes: [...get().nodes, node] }),

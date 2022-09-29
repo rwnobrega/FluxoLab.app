@@ -11,6 +11,7 @@ interface StoreMachine {
   setStartSymbolId: (startSymbolId: string) => void
   getVariable: (variableId: string) => Variable | undefined
   addVariable: (id: string, type: Variable['type']) => void
+  clearVariables: () => void
   removeVariable: (id: string) => void
   renameVariable: (id: string, newId: string) => void
   changeVariableType: (id: string, type: Variable['type']) => void
@@ -45,6 +46,11 @@ const useStoreMachine = create<StoreMachine, any>(
       addVariable: (id, type) => {
         const { machine } = get()
         machine.variables.push({ id, type })
+        set({ machine })
+      },
+      clearVariables: () => {
+        const { machine } = get()
+        machine.variables = []
         set({ machine })
       },
       removeVariable: id => {
