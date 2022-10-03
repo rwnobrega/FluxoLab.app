@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Handle, HandleProps } from 'react-flow-renderer'
+import { Handle, HandleProps } from 'reactflow'
 
 import { Box } from 'components/symbols'
 

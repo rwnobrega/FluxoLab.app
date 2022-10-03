@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid'
 
 import React, { useCallback, useState } from 'react'
-import ReactFlow, { Background, Controls, EdgeTypes, NodeTypes } from 'react-flow-renderer'
+import ReactFlow, { Background, Controls, EdgeTypes, NodeTypes } from 'reactflow'
 
 import ClearFlowchartButton from './ClearFlowchartButton'
 import PlayButtons from 'components/PlayButtons'

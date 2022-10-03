@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import { Node, Edge } from 'react-flow-renderer'
+import { Node, Edge } from 'reactflow'
 
 import { Variable, Symbol, CompileError } from 'machine/types'
 

@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 import React, { useEffect, useRef, useState } from 'react'
 
-import { Node, HandleType, Position, useReactFlow } from 'react-flow-renderer'
+import { Node, HandleType, Position, useReactFlow } from 'reactflow'
 
 import { palette, getDropShadow } from 'utils/colors'
 

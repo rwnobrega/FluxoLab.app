@@ -14,7 +14,7 @@ import {
   applyNodeChanges,
   applyEdgeChanges,
   MarkerType
-} from 'react-flow-renderer'
+} from 'reactflow'
 
 interface StoreFlow {
   nodes: Node[]

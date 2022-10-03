@@ -4,7 +4,7 @@ import {
   useNodes,
   SmoothStepEdge,
   EdgeProps
-} from 'react-flow-renderer'
+} from 'reactflow'
 
 import {
   getSmartEdge,

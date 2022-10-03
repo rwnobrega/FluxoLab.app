@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { HandleType, Position } from 'react-flow-renderer'
+import { HandleType, Position } from 'reactflow'
 
 import { palette, getBrighterColor } from 'utils/colors'
 
