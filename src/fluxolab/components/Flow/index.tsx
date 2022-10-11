@@ -3,7 +3,6 @@ import { v4 as uuid } from 'uuid'
 import React, { useCallback, useState } from 'react'
 import ReactFlow, { Background, Controls, EdgeTypes, NodeTypes } from 'reactflow'
 
-import ClearFlowchartButton from './ClearFlowchartButton'
 import PlayButtons from 'components/PlayButtons'
 import StatusMessage from 'components/StatusMessage'
 import symbols from 'components/symbols'
@@ -85,9 +84,6 @@ export default function ({ wrapper, refInput }: Props): JSX.Element {
       <Background gap={20} />
       <div className='position-absolute bottom-0 end-0 m-3' style={{ zIndex: 5 }}>
         <StatusMessage />
-      </div>
-      <div className='position-absolute top-0 end-0 m-3' style={{ zIndex: 5 }}>
-        <ClearFlowchartButton />
       </div>
     </ReactFlow>
   )

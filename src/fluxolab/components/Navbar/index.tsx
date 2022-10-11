@@ -4,8 +4,8 @@ import Navbar from 'react-bootstrap/Navbar'
 import Stack from 'react-bootstrap/Stack'
 
 import NavbarBrand from './Brand'
-import NavbarSaved from './Saved'
 import NavbarCurrent from './Current'
+import NavbarMenu from './Menu'
 
 export default function (): JSX.Element {
   return (
@@ -13,7 +13,7 @@ export default function (): JSX.Element {
       <Stack direction='horizontal' gap={3} className='flex-fill mx-3'>
         <NavbarBrand />
         <NavbarCurrent />
-        <NavbarSaved />
+        <NavbarMenu />
       </Stack>
     </Navbar>
   )
