@@ -11,7 +11,7 @@ export default function (): JSX.Element {
   const [showModal, setShowModal] = useState(false)
 
   const { clearAll } = useStoreFlow()
-  const { clearVariables, setFlowchartTitle } = useStoreMachine()
+  const { clearVariables } = useStoreMachine()
 
   function handleConfirm (): void {
     clearAll()
