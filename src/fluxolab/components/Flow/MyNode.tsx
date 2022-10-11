@@ -79,7 +79,7 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
   }, [state, compileError])
 
   return (
-    <div>
+    <div style={{ cursor: 'grab' }}>
       <ModalSymbolData nodeId={nodeId} value={node?.data.value} showModal={showModal} setShowModal={setShowModal} />
       <SymbolBox box={box} boxFilter={boxFilter} isSelected={node?.selected}>
         <span
