@@ -74,6 +74,7 @@ export default function ({ wrapper, refInput }: Props): JSX.Element {
       multiSelectionKeyCode='Shift'
       selectionKeyCode='Control'
       deleteKeyCode='Delete'
+      disableKeyboardA11y
       snapToGrid
       snapGrid={[20, 20]}
     >
