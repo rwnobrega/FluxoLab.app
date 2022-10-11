@@ -31,14 +31,11 @@ const useStoreMachineState = create<StoreMachineState>(
     },
     stepBack: () => {
       const stateHistory = get().stateHistory
-      if (stateHistory.length === 1) {
+      if (stateHistory.length <= 1) {
         return
       }
-      const state = stateHistory.pop()
-      if (state === undefined) {
-        return
-      }
-      state.input = null
+      stateHistory.pop()
+      stateHistory[stateHistory.length - 1].input = null
       set({ stateHistory })
     },
     nextStep: (machine, refInput) => {
