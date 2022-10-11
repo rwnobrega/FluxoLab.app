@@ -93,6 +93,7 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
             marginLeft: `${margin}px`,
             marginRight: `${margin}px`,
             display: 'inline-block',
+            whiteSpace: 'nowrap',
             overflow: 'hidden',
             verticalAlign: 'middle',
             textOverflow: 'ellipsis',
