@@ -43,10 +43,12 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
   const node: Node | undefined = _.find(nodes, { id: nodeId })
 
   useEffect(() => {
+    const MIN_WIDTH = 120
+    const MAX_WIDTH = 480
     if (labelRef.current !== null) {
       const zoom = getZoom()
       const labelWidth = labelRef.current.getBoundingClientRect().width / zoom
-      const newNodeWidth = Math.max(40 + 40 * Math.ceil(labelWidth / 40), 120)
+      const newNodeWidth = Math.min(Math.max(40 + 40 * Math.ceil(labelWidth / 40), MIN_WIDTH), MAX_WIDTH)
       const marginWidth = (newNodeWidth - labelWidth) / 2
       if (node?.width !== undefined && node.width !== null) {
         updateNodeProp(nodeId, 'position.x', node.position.x - (newNodeWidth - node.width) / 2)
