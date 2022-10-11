@@ -88,9 +88,14 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
           onMouseEnter={() => setMouseHover(editable)}
           onMouseLeave={() => setMouseHover(false)}
           style={{
-            marginLeft: margin,
-            marginRight: margin,
-            whiteSpace: 'nowrap',
+            maxWidth: '392px',
+            minWidth: '80px',
+            marginLeft: `${margin}px`,
+            marginRight: `${margin}px`,
+            display: 'inline-block',
+            overflow: 'hidden',
+            verticalAlign: 'middle',
+            textOverflow: 'ellipsis',
             color: box.textColor,
             textDecoration: mouseHover ? 'underline' : 'none',
             cursor: editable ? 'pointer' : 'grab'
