@@ -11,11 +11,12 @@ export default function (): JSX.Element {
   const [showModal, setShowModal] = useState(false)
 
   const { clearAll } = useStoreFlow()
-  const { clearVariables } = useStoreMachine()
+  const { clearVariables, setFlowchartTitle } = useStoreMachine()
 
   function handleConfirm (): void {
     clearAll()
     clearVariables()
+    setFlowchartTitle('Fluxograma sem título')
   }
 
   return (
