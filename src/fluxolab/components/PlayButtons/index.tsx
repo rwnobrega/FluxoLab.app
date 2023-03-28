@@ -18,7 +18,7 @@ interface Props {
 
 export default function ({ refInput }: Props): JSX.Element {
   const { machine, compileError } = useStoreMachine()
-  const { getState, execAction, isRunning } = useStoreMachineState()
+  const { getState, execAction } = useStoreMachineState()
 
   const state = getState()
 
@@ -29,12 +29,12 @@ export default function ({ refInput }: Props): JSX.Element {
   return (
     <ButtonGroup>
       {_.map(buttonList, ({ action, description, hotkey, icon, isDisabled }) => {
-        const disabled = isDisabled({ state, compileError, isRunning })
-        const tooltipText = disabled ? '' : `${description(isRunning)} (${hotkey})`
+        const disabled = isDisabled({ state, compileError })
+        const tooltipText = disabled ? '' : `${description} (${hotkey})`
         return (
           <Tooltip key={action} text={tooltipText}>
             <Button disabled={disabled} onClick={() => onClick(action)}>
-              <i className={`bi ${icon(isRunning)}`} />
+              <i className={`bi ${icon}`} />
             </Button>
           </Tooltip>
         )

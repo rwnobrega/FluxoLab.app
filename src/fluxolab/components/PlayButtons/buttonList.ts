@@ -4,14 +4,13 @@ import { MachineState, CompileError } from 'machine/types'
 interface IsDisabledProps {
   state: MachineState
   compileError: CompileError | null
-  isRunning: boolean
 }
 
 interface PlayButton {
   action: Action
   hotkey: string
-  description: (isRunning: boolean) => string
-  icon: (isRunning: boolean) => string
+  description: string
+  icon: string
   isDisabled: (isDisabledProps: IsDisabledProps) => boolean
 }
 
@@ -26,36 +25,27 @@ function isDisabledForward (state: MachineState): boolean {
 const buttonList: PlayButton[] = [
   {
     action: 'reset',
-    hotkey: 'ctrl+F7',
-    description: () => 'Reiniciar',
-    icon: () => 'bi-skip-backward-fill',
-    isDisabled: ({ state, compileError, isRunning }) => (
-      isRunning || compileError !== null || isDisabledBackward(state)
+    hotkey: 'F6',
+    description: 'Reiniciar',
+    icon: 'bi-arrow-counterclockwise',
+    isDisabled: ({ state, compileError }) => (
+      compileError !== null || isDisabledBackward(state)
     )
   },
   {
     action: 'stepBack',
     hotkey: 'F7',
-    description: () => 'Voltar um passo',
-    icon: () => 'bi-skip-start-fill',
-    isDisabled: ({ state, compileError, isRunning }) => (
-      isRunning || compileError !== null || isDisabledBackward(state)
+    description: 'Voltar um passo',
+    icon: 'bi-skip-start-fill',
+    isDisabled: ({ state, compileError }) => (
+      compileError !== null || isDisabledBackward(state)
     )
   },
   {
     action: 'nextStep',
     hotkey: 'F8',
-    description: () => 'Executar próximo passo',
-    icon: () => 'bi-skip-end-fill',
-    isDisabled: ({ state, compileError, isRunning }) => (
-      isRunning || compileError !== null || isDisabledForward(state)
-    )
-  },
-  {
-    action: 'runAuto',
-    hotkey: 'ctrl+F8',
-    description: isRunning => isRunning ? 'Pausar' : 'Executar',
-    icon: isRunning => isRunning ? 'bi-pause-fill' : 'bi-play-fill',
+    description: 'Executar próximo passo',
+    icon: 'bi-skip-end-fill',
     isDisabled: ({ state, compileError }) => (
       compileError !== null || isDisabledForward(state)
     )
