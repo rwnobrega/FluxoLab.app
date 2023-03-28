@@ -19,15 +19,14 @@ export default function ({ id, disabled }: VariableItemProps): JSX.Element {
   return (
     <Form.Select
       size='sm'
-      className='font-monospace'
       value={variable?.type}
       onChange={onChange}
-      style={{ width: '6em' }}
+      style={{ minWidth: '7em' }}
       disabled={disabled}
     >
-      <option value='num'>num</option>
-      <option value='str'>str</option>
-      <option value='bool'>bool</option>
+      <option value='num'>Número</option>
+      <option value='str'>Texto</option>
+      <option value='bool'>Lógico</option>
     </Form.Select>
   )
 }

@@ -81,10 +81,10 @@ export default function (): JSX.Element {
         <div className='bg-light p-3'>
           <SymbolList />
         </div>
-        <div style={{ width: '72%', height: contentHeight }} ref={reactFlowWrapper}>
+        <div style={{ width: '70%', height: contentHeight }} ref={reactFlowWrapper}>
           <Flow wrapper={reactFlowWrapper} refInput={refInput} />
         </div>
-        <div style={{ width: '28%', height: contentHeight }} className='bg-light'>
+        <div style={{ width: '30%', height: contentHeight }} className='bg-light'>
           <div style={{ height: '40%' }} className='p-3'>
             <Variables />
           </div>
