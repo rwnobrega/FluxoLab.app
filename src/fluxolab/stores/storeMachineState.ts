@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import create from 'zustand'
+import { create } from 'zustand'
 
 import { Machine, MachineState } from 'machine/types'
 import { runMachineStep, getInitialState } from 'machine/machine'
