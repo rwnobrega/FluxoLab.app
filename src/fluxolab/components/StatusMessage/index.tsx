@@ -56,7 +56,7 @@ export default function (): JSX.Element {
   const { backgroundColor, statusIcon, statusText } = getTriplet()
 
   return (
-    <Alert style={{ backgroundColor, color: 'white' }}>
+    <Alert style={{ backgroundColor, color: 'white', lineHeight: '45px', padding: '0 10px' }}>
       <i className={`bi ${statusIcon}`} /><span className='ms-2'>{statusText}</span>
     </Alert>
   )
