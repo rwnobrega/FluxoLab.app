@@ -8,7 +8,7 @@ import Stack from 'react-bootstrap/Stack'
 
 import Flow from 'components/Flow'
 import Navbar from 'components/Navbar'
-import SymbolList from 'components/SymbolList'
+import SymbolList from 'components/Symbols'
 import Variables from 'components/Variables'
 import Interaction from 'components/Interaction'
 
