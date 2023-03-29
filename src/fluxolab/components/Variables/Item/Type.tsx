@@ -21,7 +21,7 @@ export default function ({ id, disabled }: VariableItemProps): JSX.Element {
       size='sm'
       value={variable?.type}
       onChange={onChange}
-      style={{ minWidth: '7em' }}
+      style={{ minWidth: '7.5em' }}
       disabled={disabled}
     >
       <option value='num'>Número</option>
