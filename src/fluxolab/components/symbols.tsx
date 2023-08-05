@@ -49,7 +49,7 @@ const symbols: Symbol[] = [
       clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 100%, 20px 100%)'
     },
     editable: true,
-    Label: ({ value }) => <span><i>Ler</i>{'\u00A0\u00A0'}<span className='font-monospace'>{value}</span></span>,
+    Label: ({ value }) => <span><i>Leia</i>{'\u00A0\u00A0'}<span className='font-monospace'>{value}</span></span>,
     handles: [
       { id: 'in', type: 'target', position: Position.Top },
       { id: 'out', type: 'source', position: Position.Bottom }
@@ -65,7 +65,7 @@ const symbols: Symbol[] = [
       clipPathBorder: 'polygon(20px 0, calc(100% + 1px) 0, calc(100% - 21px) 100%, -1px calc(100% - 1px))'
     },
     editable: true,
-    Label: ({ value }) => <span><i>Escrever</i>{'\u00A0\u00A0'}"<span className='font-monospace'>{value}</span>"</span>,
+    Label: ({ value }) => <span><i>Escreva</i>{'\u00A0\u00A0'}"<span className='font-monospace'>{value}</span>"</span>,
     handles: [
       { id: 'in', type: 'target', position: Position.Top },
       { id: 'out', type: 'source', position: Position.Bottom }

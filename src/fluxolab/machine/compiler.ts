@@ -58,7 +58,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
         }
         const [variableId, expression] = split
         if (!_.some(variables, { id: variableId })) {
-          throw new CompileError(`Variável ${variableId} não encontrada.`, [id])
+          throw new CompileError(`Variável "${variableId}" não encontrada.`, [id])
         }
         const nextId = getOutgoingNode(id, 'out', edges)
         flowchart.push(newAssignmentSymbol({ id, variableId, expression, nextId }))
@@ -70,7 +70,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
       } else if (type === 'input_') {
         const variableId = data.value
         if (!_.some(variables, { id: variableId })) {
-          throw new CompileError(`Variável ${variableId as string} não encontrada.`, [id])
+          throw new CompileError(`Variável "${variableId as string}" não encontrada.`, [id])
         } const nextId = getOutgoingNode(id, 'out', edges)
         flowchart.push(newInputSymbol({ id, variableId, nextId }))
       } else if (type === 'output_') {
