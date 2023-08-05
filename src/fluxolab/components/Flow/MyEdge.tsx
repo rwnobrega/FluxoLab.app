@@ -36,7 +36,7 @@ export default function (props: EdgeProps): JSX.Element {
   return (
     <path
       style={{
-        strokeWidth: 3,
+        strokeWidth: 2,
         stroke: props.selected === true ? 'black' : 'gray',
         strokeOpacity: mouseHover ? 1 : 0.5
       }}
