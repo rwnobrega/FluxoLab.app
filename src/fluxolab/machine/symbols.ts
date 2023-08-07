@@ -6,6 +6,7 @@ import { Symbol } from 'machine/types'
 
 import { getVariableType } from 'machine/variables'
 
+registerFunction('div', (a: any, b: any) => Math.round(a / b))
 registerFunction('mod', (a: any, b: any) => a % b)
 registerFunction('pow', (a: any, b: any) => Math.pow(a, b))
 registerFunction('sqrt', (a: any) => Math.sqrt(a))
