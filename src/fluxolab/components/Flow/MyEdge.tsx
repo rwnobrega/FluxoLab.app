@@ -8,8 +8,11 @@ import {
 
 import {
   getSmartEdge,
-  svgDrawStraightLinePath,
-  pathfindingAStarNoDiagonal
+  svgDrawSmoothLinePath,
+  // svgDrawStraightLinePath,
+  pathfindingAStarDiagonal
+  // pathfindingAStarNoDiagonal,
+  // pathfindingJumpPointNoDiagonal
 } from '@tisoap/react-flow-smart-edge'
 
 export default function (props: EdgeProps): JSX.Element {
@@ -19,8 +22,8 @@ export default function (props: EdgeProps): JSX.Element {
   const options = {
     nodePadding: 5,
     gridRatio: 5,
-    drawEdge: svgDrawStraightLinePath,
-    generatePath: pathfindingAStarNoDiagonal
+    drawEdge: svgDrawSmoothLinePath,
+    generatePath: pathfindingAStarDiagonal
   }
 
   const getSmartEdgeResponse = getSmartEdge({ ...props, nodes, options })
