@@ -97,7 +97,7 @@ const symbols: Symbol[] = [
     Label: ({ value }) => <span className='font-monospace'>{value === '' ? <i>(vazio)</i> : value}</span>,
     handles: [
       { id: 'in', type: 'target', position: Position.Top },
-      { id: 'true', type: 'source', position: Position.Left, label: 'V' },
+      { id: 'true', type: 'source', position: Position.Bottom, label: 'T' },
       { id: 'false', type: 'source', position: Position.Right, label: 'F' }
     ]
   },
