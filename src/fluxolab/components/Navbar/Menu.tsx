@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import Dropdown from 'react-bootstrap/Dropdown'
 
-import ConfirmModal from 'components/Modals/ConfirmModal'
+import ConfirmModal from 'components/Modals/Confirm'
 
 import useStoreFlow from 'stores/storeFlow'
 import useStoreMachine from 'stores/storeMachine'
