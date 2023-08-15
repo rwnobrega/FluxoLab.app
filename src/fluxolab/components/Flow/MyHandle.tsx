@@ -2,16 +2,16 @@ import React from 'react'
 
 import { Handle, HandleProps } from 'reactflow'
 
-import { Box } from 'components/Symbols'
+import { BoxStyle } from 'components/Symbols'
 
 import { getDarkerColor } from 'utils/colors'
 
 type Props = HandleProps & {
-  box: Box
+  boxStyle: BoxStyle
   label?: string
 }
 
-export default function ({ id, type, position, label, box }: Props): JSX.Element {
+export default function ({ id, type, position, label, boxStyle }: Props): JSX.Element {
   const [mouseHover, setMouseHover] = React.useState<boolean>(false)
 
   const handleStyle = {
@@ -22,14 +22,14 @@ export default function ({ id, type, position, label, box }: Props): JSX.Element
       fontSize: '10px',
       fontWeight: 'bold',
       textAlign: 'center' as 'center',
-      color: box.textColor,
-      borderColor: getDarkerColor(box.backgroundColor as string)
+      color: boxStyle.textColor,
+      borderColor: getDarkerColor(boxStyle.backgroundColor as string)
     },
     'hover-false': {
-      backgroundColor: box.backgroundColor
+      backgroundColor: boxStyle.backgroundColor
     },
     'hover-true': {
-      backgroundColor: getDarkerColor(box.backgroundColor as string)
+      backgroundColor: getDarkerColor(boxStyle.backgroundColor as string)
     }
   }
 

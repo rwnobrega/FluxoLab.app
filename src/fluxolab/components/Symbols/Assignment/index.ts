@@ -10,7 +10,7 @@ import Modal from './Modal'
 const symbol: Symbol = {
   type: 'assignment',
   title: 'Atribuição',
-  box: {
+  boxStyle: {
     backgroundColor: getBrighterColor(palette.orange),
     textColor: 'white'
   },

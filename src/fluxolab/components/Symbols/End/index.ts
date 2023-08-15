@@ -9,7 +9,7 @@ import Label from './Label'
 const symbol: Symbol = {
   type: 'end',
   title: 'Fim',
-  box: {
+  boxStyle: {
     backgroundColor: getBrighterColor(palette.purple),
     textColor: 'white',
     borderRadius: '15px'

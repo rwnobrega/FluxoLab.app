@@ -6,7 +6,7 @@ import { Node, HandleType, Position, useReactFlow } from 'reactflow'
 
 import { palette, getDropShadow } from 'utils/colors'
 
-import { Box, LabelProps, ModalProps } from 'components/Symbols'
+import { BoxStyle, LabelProps, ModalProps } from 'components/Symbols'
 
 import SymbolBox from 'components/Symbols/SymbolBox'
 
@@ -18,13 +18,13 @@ import useStoreMachineState from 'stores/storeMachineState'
 
 interface Props {
   nodeId: string
-  box: Box
+  boxStyle: BoxStyle
   Modal?: (props: ModalProps) => JSX.Element
   Label: (props: LabelProps) => JSX.Element
   handles: Array<{id: string, type: HandleType, position: Position}>
 }
 
-export default function ({ nodeId, box, Modal, Label, handles }: Props): JSX.Element {
+export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JSX.Element {
   const [margin, setMargin] = useState<number>(0)
   const [mouseHover, setMouseHover] = useState<boolean>(false)
   const [boxFilter, setBoxFilter] = useState<string>('')
@@ -85,7 +85,7 @@ export default function ({ nodeId, box, Modal, Label, handles }: Props): JSX.Ele
         Modal !== undefined &&
           <Modal nodeId={nodeId} value={node?.data.value} showModal={showModal} setShowModal={setShowModal} />
       }
-      <SymbolBox box={box} boxFilter={boxFilter} isSelected={node?.selected}>
+      <SymbolBox boxStyle={boxStyle} boxFilter={boxFilter} isSelected={node?.selected}>
         <span
           ref={labelRef}
           onClick={() => setShowModal(editable)}
@@ -101,7 +101,7 @@ export default function ({ nodeId, box, Modal, Label, handles }: Props): JSX.Ele
             overflow: 'hidden',
             verticalAlign: 'middle',
             textOverflow: 'ellipsis',
-            color: box.textColor,
+            color: boxStyle.textColor,
             textDecoration: mouseHover ? 'underline' : 'none',
             cursor: editable ? 'pointer' : 'grab'
           }}
@@ -110,7 +110,7 @@ export default function ({ nodeId, box, Modal, Label, handles }: Props): JSX.Ele
         </span>
       </SymbolBox>
       {_.map(handles, (props, index) => (
-        <MyHandle key={index} box={box} {...props} />
+        <MyHandle key={index} boxStyle={boxStyle} {...props} />
       ))}
     </div>
   )

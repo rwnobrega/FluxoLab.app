@@ -7,7 +7,7 @@ import symbolAssignment from './Assignment'
 import symbolConditional from './Conditional'
 import symbolEnd from './End'
 
-export interface Box {
+export interface BoxStyle {
   backgroundColor?: string
   textColor?: string
   borderRadius?: string
@@ -29,7 +29,7 @@ export interface ModalProps {
 export interface Symbol {
   type: string
   title: string
-  box: Box
+  boxStyle: BoxStyle
   Label: (props: LabelProps) => JSX.Element
   Modal?: (props: ModalProps) => JSX.Element
   handles: Array<{ id: string, label?: string, type: HandleType, position: Position }>

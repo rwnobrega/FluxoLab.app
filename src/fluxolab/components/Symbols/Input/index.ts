@@ -10,7 +10,7 @@ import Modal from './Modal'
 const symbol: Symbol = {
   type: 'input_',
   title: 'Entrada',
-  box: {
+  boxStyle: {
     backgroundColor: getBrighterColor(palette.blue),
     textColor: 'white',
     clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 100%, 20px 100%)'

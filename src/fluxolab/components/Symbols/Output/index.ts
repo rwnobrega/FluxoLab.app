@@ -10,7 +10,7 @@ import Modal from './Modal'
 const symbol: Symbol = {
   type: 'output_',
   title: 'Saída',
-  box: {
+  boxStyle: {
     backgroundColor: getBrighterColor(palette.green),
     textColor: 'white',
     clipPath: 'polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%)',

@@ -10,7 +10,7 @@ import Modal from './Modal'
 const symbol: Symbol = {
   type: 'conditional',
   title: 'Condicional',
-  box: {
+  boxStyle: {
     backgroundColor: getBrighterColor(palette.red),
     textColor: 'white',
     clipPath: 'polygon(20px 0, 0 50%, 20px 100%, calc(100% - 20px) 100%, 100% 50%, calc(100% - 20px) 0)'

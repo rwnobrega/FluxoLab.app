@@ -2,20 +2,20 @@ import React, { useState } from 'react'
 
 import { getDarkerColor, getStripedBackground } from 'utils/colors'
 
-import { Box } from 'components/Symbols'
+import { BoxStyle } from 'components/Symbols'
 
 interface Props {
-  box: Box
+  boxStyle: BoxStyle
   boxFilter?: string
   isSelected?: boolean
   children: JSX.Element
 }
 
-export default function ({ box, boxFilter, isSelected = false, children }: Props): JSX.Element {
+export default function ({ boxStyle, boxFilter, isSelected = false, children }: Props): JSX.Element {
   const [mouseHover, setMouseHover] = useState<boolean>(false)
 
   function getBackground (): string {
-    const bgColor = box.backgroundColor as string
+    const bgColor = boxStyle.backgroundColor as string
     const bgDarker = getDarkerColor(bgColor)
     if (isSelected && mouseHover) {
       return getStripedBackground(bgDarker)
@@ -39,10 +39,10 @@ export default function ({ box, boxFilter, isSelected = false, children }: Props
         style={{
           lineHeight: '40px',
           fontWeight: 'bold',
-          color: box.textColor,
+          color: boxStyle.textColor,
           background: getBackground(),
-          borderRadius: box.borderRadius,
-          clipPath: box.clipPath
+          borderRadius: boxStyle.borderRadius,
+          clipPath: boxStyle.clipPath
         }}
       >
         {children}

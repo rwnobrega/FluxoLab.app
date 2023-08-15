@@ -1,15 +1,15 @@
 import React from 'react'
 
-import { Box } from 'components/Symbols'
+import { BoxStyle } from 'components/Symbols'
 import SymbolBox from 'components/Symbols/SymbolBox'
 
 interface Props {
   type: string
   title: string
-  box: Box
+  boxStyle: BoxStyle
 }
 
-export default function ({ type, title, box }: Props): JSX.Element {
+export default function ({ type, title, boxStyle }: Props): JSX.Element {
   function onDragStart (event: any): void {
     const mouseX = event.pageX - event.target.offsetLeft
     const mouseY = event.pageY - event.target.offsetTop
@@ -20,7 +20,7 @@ export default function ({ type, title, box }: Props): JSX.Element {
 
   return (
     <div draggable onDragStart={onDragStart} style={{ cursor: 'move', width: 120 }}>
-      <SymbolBox box={box}>
+      <SymbolBox boxStyle={boxStyle}>
         <span>{title}</span>
       </SymbolBox>
     </div>
