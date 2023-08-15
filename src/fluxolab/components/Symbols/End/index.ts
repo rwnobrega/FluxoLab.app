@@ -1,16 +1,12 @@
-import React from 'react'
-
 import { Position } from 'reactflow'
 
 import { getBrighterColor, palette } from 'utils/colors'
 
-import { Symbol } from '.'
+import { Symbol } from '..'
 
-function LabelEnd (): JSX.Element {
-  return <span><i>Fim</i></span>
-}
+import Label from './Label'
 
-const symbolEnd: Symbol = {
+const symbol: Symbol = {
   type: 'end',
   title: 'Fim',
   box: {
@@ -18,11 +14,10 @@ const symbolEnd: Symbol = {
     textColor: 'white',
     borderRadius: '15px'
   },
-  editable: false,
-  Label: LabelEnd,
+  Label: Label,
   handles: [
     { id: 'in', type: 'target', position: Position.Top }
   ]
 }
 
-export default symbolEnd
+export default symbol

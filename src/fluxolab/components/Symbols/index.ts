@@ -1,11 +1,11 @@
 import { HandleType, Position } from 'reactflow'
 
-import symbolStart from './symbolStart'
-import symbolInput from './symbolInput'
-import symbolOutput from './symbolOutput'
-import symbolAssignment from './symbolAssignment'
-import symbolConditional from './symbolConditional'
-import symbolEnd from './symbolEnd'
+import symbolStart from './Start'
+import symbolInput from './Input'
+import symbolOutput from './Output'
+import symbolAssignment from './Assignment'
+import symbolConditional from './Conditional'
+import symbolEnd from './End'
 
 export interface Box {
   backgroundColor?: string
@@ -19,12 +19,19 @@ export interface LabelProps {
   value: string
 }
 
+export interface ModalProps {
+  nodeId: string
+  value: string
+  showModal: boolean
+  setShowModal: (showModal: boolean) => void
+}
+
 export interface Symbol {
   type: string
   title: string
   box: Box
-  editable: boolean
   Label: (props: LabelProps) => JSX.Element
+  Modal?: (props: ModalProps) => JSX.Element
   handles: Array<{ id: string, label?: string, type: HandleType, position: Position }>
 }
 

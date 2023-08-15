@@ -6,10 +6,9 @@ import { Node, HandleType, Position, useReactFlow } from 'reactflow'
 
 import { palette, getDropShadow } from 'utils/colors'
 
-import { Box, LabelProps } from 'components/Symbols'
+import { Box, LabelProps, ModalProps } from 'components/Symbols'
 
 import SymbolBox from 'components/Symbols/SymbolBox'
-import ModalSymbolData from 'components/Modals/SymbolData'
 
 import MyHandle from './MyHandle'
 
@@ -20,12 +19,12 @@ import useStoreMachineState from 'stores/storeMachineState'
 interface Props {
   nodeId: string
   box: Box
-  editable: boolean
+  Modal?: (props: ModalProps) => JSX.Element
   Label: (props: LabelProps) => JSX.Element
   handles: Array<{id: string, type: HandleType, position: Position}>
 }
 
-export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.Element {
+export default function ({ nodeId, box, Modal, Label, handles }: Props): JSX.Element {
   const [margin, setMargin] = useState<number>(0)
   const [mouseHover, setMouseHover] = useState<boolean>(false)
   const [boxFilter, setBoxFilter] = useState<string>('')
@@ -41,6 +40,8 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
   const labelRef = useRef<HTMLInputElement>(null)
 
   const node: Node | undefined = _.find(nodes, { id: nodeId })
+
+  const editable = Modal !== undefined
 
   useEffect(() => {
     const MIN_WIDTH = 120
@@ -80,7 +81,10 @@ export default function ({ nodeId, box, editable, Label, handles }: Props): JSX.
 
   return (
     <div style={{ cursor: 'grab' }}>
-      <ModalSymbolData nodeId={nodeId} value={node?.data.value} showModal={showModal} setShowModal={setShowModal} />
+      {
+        Modal !== undefined &&
+          <Modal nodeId={nodeId} value={node?.data.value} showModal={showModal} setShowModal={setShowModal} />
+      }
       <SymbolBox box={box} boxFilter={boxFilter} isSelected={node?.selected}>
         <span
           ref={labelRef}

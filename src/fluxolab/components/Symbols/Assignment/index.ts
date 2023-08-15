@@ -1,32 +1,25 @@
-import React from 'react'
-
 import { Position } from 'reactflow'
 
 import { getBrighterColor, palette } from 'utils/colors'
 
-import { Symbol, LabelProps } from '.'
+import { Symbol } from '..'
 
-function LabelAssignment ({ value }: LabelProps): JSX.Element {
-  return (
-    <span className='font-monospace'>
-      {value === '' ? <i>(vazio)</i> : value}
-    </span>
-  )
-}
+import Label from './Label'
+import Modal from './Modal'
 
-const symbolAssignment: Symbol = {
+const symbol: Symbol = {
   type: 'assignment',
   title: 'Atribuição',
   box: {
     backgroundColor: getBrighterColor(palette.orange),
     textColor: 'white'
   },
-  editable: true,
-  Label: LabelAssignment,
+  Modal: Modal,
+  Label: Label,
   handles: [
     { id: 'in', type: 'target', position: Position.Top },
     { id: 'out', type: 'source', position: Position.Bottom }
   ]
 }
 
-export default symbolAssignment
+export default symbol

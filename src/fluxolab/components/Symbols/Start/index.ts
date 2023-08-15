@@ -1,16 +1,12 @@
-import React from 'react'
-
 import { Position } from 'reactflow'
 
 import { getBrighterColor, palette } from 'utils/colors'
 
-import { Symbol } from '.'
+import { Symbol } from '..'
 
-function LabelStart (): JSX.Element {
-  return <span><i>Início</i></span>
-}
+import Label from './Label'
 
-const symbolStart: Symbol = {
+const symbol: Symbol = {
   type: 'start',
   title: 'Início',
   box: {
@@ -18,11 +14,10 @@ const symbolStart: Symbol = {
     textColor: 'white',
     borderRadius: '15px'
   },
-  editable: false,
-  Label: LabelStart,
+  Label: Label,
   handles: [
     { id: 'out', type: 'source', position: Position.Bottom }
   ]
 }
 
-export default symbolStart
+export default symbol
