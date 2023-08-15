@@ -8,8 +8,8 @@ import Stack from 'react-bootstrap/Stack'
 
 import Flow from 'components/Flow'
 import Navbar from 'components/Navbar'
-import Symbols from 'components/Symbols'
-import Variables from 'components/Variables'
+import SymbolList from 'components/SymbolList'
+import VariableList from 'components/VariableList'
 import Interaction from 'components/Interaction'
 
 import buttonList from 'components/PlayButtons/buttonList'
@@ -79,14 +79,14 @@ export default function (): JSX.Element {
       </div>
       <Stack direction='horizontal' className='flex-fill align-items-stretch'>
         <div className='bg-light p-3'>
-          <Symbols />
+          <SymbolList />
         </div>
         <div style={{ width: '70%', height: contentHeight }} ref={reactFlowWrapper}>
           <Flow wrapper={reactFlowWrapper} refInput={refInput} />
         </div>
         <div style={{ width: '30%', height: contentHeight }} className='bg-light'>
           <div style={{ height: '40%' }} className='p-3'>
-            <Variables />
+            <VariableList />
           </div>
           <div style={{ height: '60%' }} className='p-3'>
             <Interaction refInput={refInput} />
