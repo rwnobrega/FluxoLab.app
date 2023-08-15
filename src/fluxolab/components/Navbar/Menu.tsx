@@ -3,12 +3,14 @@ import React, { useState } from 'react'
 import Dropdown from 'react-bootstrap/Dropdown'
 
 import ConfirmModal from 'components/Modals/Confirm'
+import AboutModal from 'components/Modals/About'
 
 import useStoreFlow from 'stores/storeFlow'
 import useStoreMachine from 'stores/storeMachine'
 
 export default function (): JSX.Element {
-  const [showModal, setShowModal] = useState(false)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [showAboutModal, setShowAboutModal] = useState(false)
 
   const { clearAll } = useStoreFlow()
   const { clearVariables, setFlowchartTitle } = useStoreMachine()
@@ -26,15 +28,20 @@ export default function (): JSX.Element {
           Menu
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item onClick={() => setShowModal(true)}>Limpar fluxograma</Dropdown.Item>
+          <Dropdown.Item onClick={() => setShowConfirmModal(true)}>Limpar fluxograma...</Dropdown.Item>
+          <Dropdown.Item onClick={() => setShowAboutModal(true)}>Sobre...</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
       <ConfirmModal
         title='Limpar fluxograma'
         message='Você tem certeza que deseja limpar o fluxograma?'
         onConfirm={handleConfirm}
-        showModal={showModal}
-        setShowModal={setShowModal}
+        showModal={showConfirmModal}
+        setShowModal={setShowConfirmModal}
+      />
+      <AboutModal
+        showModal={showAboutModal}
+        setShowModal={setShowAboutModal}
       />
     </>
   )

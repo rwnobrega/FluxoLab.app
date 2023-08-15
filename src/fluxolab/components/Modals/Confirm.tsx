@@ -11,9 +11,7 @@ interface Props {
   setShowModal: (showModal: boolean) => void
 }
 
-export default function (props: Props): JSX.Element {
-  const { title, message, onConfirm, showModal, setShowModal } = props
-
+export default function ({ title, message, onConfirm, showModal, setShowModal }: Props): JSX.Element {
   function handleCancel (): void {
     setShowModal(false)
   }
