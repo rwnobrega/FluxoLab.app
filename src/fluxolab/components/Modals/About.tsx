@@ -20,7 +20,7 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
       </Modal.Header>
       <Modal.Body>
         <p>
-          <b>FluxoLab</b> é um aplicativo web para aprender fundamentos de algoritmos e programação através de fluxogramas.
+          <b>FluxoLab</b> é um aplicativo web projetado para ensinar fundamentos de algoritmos e programação usando fluxogramas.
         </p>
         <p>
           O código fonte está disponível no <a href='https://github.com/rwnobrega/FluxoLab.app'>GitHub</a>, sob a licença <a href='https://www.gnu.org/licenses/gpl-3.0.en.html'>GPL 3</a>.

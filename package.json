@@ -2,7 +2,7 @@
   "name": "fluxolab.app",
   "homepage": "https://fluxolab.app",
   "version": "1.0.0",
-  "description": "A web app for learning programming fundamentals through flowcharts.",
+  "description": "A web application designed to teach algorithm and programming fundamentals using flowcharts.",
   "private": true,
   "scripts": {
     "serve": "webpack serve --config webpack.dev.js",
