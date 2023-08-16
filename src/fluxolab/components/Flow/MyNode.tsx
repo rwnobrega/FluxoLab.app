@@ -2,6 +2,7 @@ import _ from 'lodash'
 
 import React, { useEffect, useRef, useState } from 'react'
 
+import Button from 'react-bootstrap/Button'
 import { Node, HandleType, Position, useReactFlow } from 'reactflow'
 
 import { palette, getDropShadow } from 'utils/colors'
@@ -21,7 +22,7 @@ interface Props {
   boxStyle: BoxStyle
   Modal?: (props: ModalProps) => JSX.Element
   Label: (props: LabelProps) => JSX.Element
-  handles: Array<{id: string, type: HandleType, position: Position}>
+  handles: Array<{ id: string, type: HandleType, position: Position }>
 }
 
 export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JSX.Element {
@@ -29,8 +30,9 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
   const [mouseHover, setMouseHover] = useState<boolean>(false)
   const [boxFilter, setBoxFilter] = useState<string>('')
   const [showModal, setShowModal] = useState<boolean>(false)
+  const [deleteIconVisible, setDeleteIconVisible] = useState<boolean>(false)
 
-  const { nodes, updateNodeProp } = useStoreFlow()
+  const { nodes, deleteNode, updateNodeProp } = useStoreFlow()
   const { compileError } = useStoreMachine()
   const { getState } = useStoreMachineState()
   const { getZoom } = useReactFlow()
@@ -80,7 +82,11 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
   }, [state, compileError])
 
   return (
-    <div style={{ cursor: 'grab' }}>
+    <div
+      onMouseEnter={() => setDeleteIconVisible(true)}
+      onMouseLeave={() => setDeleteIconVisible(false)}
+      style={{ cursor: 'grab' }}
+    >
       {
         Modal !== undefined &&
           <Modal nodeId={nodeId} value={node?.data.value} showModal={showModal} setShowModal={setShowModal} />
@@ -109,6 +115,26 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
           <Label value={node?.data.value} />
         </span>
       </SymbolBox>
+      <Button
+        variant='danger'
+        size='sm'
+        onClick={() => deleteNode(nodeId)}
+        style={{
+          position: 'absolute',
+          top: '-8px',
+          right: '-8px',
+          width: '24px',
+          height: '24px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          cursor: 'pointer',
+          opacity: deleteIconVisible ? 1 : 0,
+          transition: 'visibility 0s, opacity 0.2s linear'
+        }}
+      >
+        <i className='bi bi-trash-fill' />
+      </Button>
       {_.map(handles, (props, index) => (
         <MyHandle key={index} boxStyle={boxStyle} {...props} />
       ))}

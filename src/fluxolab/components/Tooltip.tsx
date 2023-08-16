@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 
 import { Tooltip as BsTooltip } from 'bootstrap'
 
-export default function (props: {children: JSX.Element, text: string}): JSX.Element {
+export default function (props: {children: JSX.Element, text: string }): JSX.Element {
   const childRef = useRef(undefined as unknown as Element)
 
   useEffect(() => {

@@ -23,6 +23,7 @@ interface StoreFlow {
   onNodesChange: (changes: NodeChange[]) => void
   onEdgesChange: (changes: EdgeChange[]) => void
   addNode: (node: Node) => void
+  deleteNode: (id: string) => void
   updateNodeProp: (id: string, path: string, value: any) => void
   onConnect: (connection: Connection) => void
 }
@@ -38,6 +39,7 @@ const useStoreFlow = create<StoreFlow, any>(
       onNodesChange: changes => set({ nodes: applyNodeChanges(changes, get().nodes) }),
       onEdgesChange: changes => set({ edges: applyEdgeChanges(changes, get().edges) }),
       addNode: node => set({ nodes: [...get().nodes, node] }),
+      deleteNode: id => set({ nodes: _.filter(get().nodes, node => node.id !== id) }),
       updateNodeProp: (id, path, value) => {
         const nodes = get().nodes
         const node = _.find(nodes, { id })
