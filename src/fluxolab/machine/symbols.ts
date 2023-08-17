@@ -98,24 +98,26 @@ export function newOutputSymbol (params: { id: string, expression: string, nextI
   return {
     id,
     type: 'output',
-    work: (_machine, state) => {
+    work: (machine, state) => {
       let expressionResult: string = expression
-      const variables = expression.match(/{[a-zA-Z0-9]+}/g)
-      if (variables !== null) {
-        for (const variable of variables) {
-          const variableId = variable.substring(1, variable.length - 1)
-          if (state.memory[variableId] === undefined) {
+      const matches = expression.match(/{[a-zA-Z0-9_]+}/g)
+      if (matches !== null) {
+        for (const m of matches) {
+          const variableId = m.substring(1, m.length - 1)
+          const variable = _.find(machine.variables, { id: variableId })
+          if (variable === undefined) {
             state.errorMessage = `Variável "${variableId}" não existe.`
             state.status = 'error'
             return
           }
           const variableValue = state.memory[variableId]
           if (variableValue === null) {
-            state.errorMessage = `Variável "${variableId}" não inicializada.`
+            state.errorMessage = `Variável "${variableId}" não foi inicializada.`
             state.status = 'error'
             return
           }
-          expressionResult = expressionResult.replace(variable, variableValue.toString())
+          const varType = getVariableType(variable.type)
+          expressionResult = expressionResult.replace(m, varType.valueToString(variableValue))
         }
       }
       state.interaction.push({ direction: 'out', text: expressionResult })

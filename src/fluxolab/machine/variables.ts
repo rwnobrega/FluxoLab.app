@@ -20,7 +20,15 @@ const variableTypes: VariableType[] = [
       return parseFloat(str)
     },
     valueToString: (value: number): string => {
-      return value.toPrecision(6).replace(/0+$/, '').replace(/\.$/, '')
+      const p: string = value.toPrecision(6)
+      if (p.includes('e')) {
+        const [mantissa, signal, exponent] = p.split(/e([+-])/)
+        return mantissa.replace(/0+$/, '').replace(/\.$/, '') + 'e' + signal + exponent.padStart(2, '0')
+      }
+      if (p.includes('.')) {
+        return p.replace(/0+$/, '').replace(/\.$/, '')
+      }
+      return p
     }
   },
   {
