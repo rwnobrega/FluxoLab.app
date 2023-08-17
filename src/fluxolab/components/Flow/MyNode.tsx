@@ -94,7 +94,7 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
       <SymbolBox boxStyle={boxStyle} boxFilter={boxFilter} isSelected={node?.selected}>
         <span
           ref={labelRef}
-          onClick={() => setShowModal(editable)}
+          onClick={() => { setShowModal(editable); setDeleteIconVisible(false) }}
           onMouseEnter={() => setMouseHover(editable)}
           onMouseLeave={() => setMouseHover(false)}
           style={{
