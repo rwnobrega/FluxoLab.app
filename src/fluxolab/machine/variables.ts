@@ -1,40 +1,50 @@
 import _ from 'lodash'
 
+import { VarType } from './types'
+
 interface VariableType {
   typeName: string
-  parse: (value: string) => any
-  format: (value: any) => string
+  stringIsValid: (str: string) => boolean
+  stringToValue: (str: string) => VarType
+  valueToString: (value: VarType) => string
 }
 
 const variableTypes: VariableType[] = [
   {
     typeName: 'num',
-    parse: Number,
-    format: (value: any) => {
-      if (value === undefined) {
-        return '\u00A0'
-      }
+    stringIsValid (str: string): boolean {
+      const floatRegex = /^-?\d+(?:[.,]\d*?)?$/
+      return floatRegex.test(str)
+    },
+    stringToValue: (str: string): number => {
+      return parseFloat(str)
+    },
+    valueToString: (value: number): string => {
       return value.toPrecision(6).replace(/0+$/, '').replace(/\.$/, '')
     }
   },
   {
     typeName: 'str',
-    parse: String,
-    format: (value: any) => {
-      if (value === undefined) {
-        return '\u00A0'
-      }
-      return `"${value as string}"`
+    stringIsValid: (str: string): boolean => {
+      return true
+    },
+    stringToValue: (str: string): string => {
+      return str
+    },
+    valueToString: (value: string): string => {
+      return `"${value}"`
     }
   },
   {
     typeName: 'bool',
-    parse: Boolean,
-    format: (value: any) => {
-      if (value === undefined) {
-        return '\u00A0'
-      }
-      return value as boolean ? 'true' : 'false'
+    stringIsValid: (str: string): boolean => {
+      return str === 'true' || str === 'false'
+    },
+    stringToValue: (str: string): boolean => {
+      return str === 'true'
+    },
+    valueToString: (value: boolean): string => {
+      return value ? 'true' : 'false'
     }
   }
 ]

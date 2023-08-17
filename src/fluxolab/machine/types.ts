@@ -3,6 +3,8 @@ export interface Variable {
   type: 'num' | 'bool' | 'str'
 }
 
+export type VarType = number | boolean | string
+
 export interface Symbol {
   id: string
   type: 'start' | 'assignment' | 'conditional' | 'input' | 'output' | 'halt'
@@ -29,10 +31,14 @@ export interface InteractionAtom {
   text: string
 }
 
+export interface Memory {
+  [key: string]: VarType | null
+}
+
 export interface MachineState {
   curSymbolId: string | null
   timeSlot: number
-  memory: {[key: string]: number | boolean | string | null}
+  memory: Memory
   input: string | null
   interaction: InteractionAtom[]
   status: 'ready' | 'waiting' | 'halted' | 'error'

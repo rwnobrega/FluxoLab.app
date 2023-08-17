@@ -12,7 +12,7 @@ import VariableItem from './Item'
 
 export default function (): JSX.Element {
   const { machine, addVariable } = useStoreMachine()
-  const { getState } = useStoreMachineState()
+  const { getState, reset } = useStoreMachineState()
 
   const state = getState()
 
@@ -31,6 +31,11 @@ export default function (): JSX.Element {
     }, [machine]
   )
 
+  function handleAddVariable (): void {
+    addVariable(getNextVariableId(), 'num')
+    reset(machine)
+  }
+
   return (
     <div className='d-flex flex-column h-100'>
       <div className='d-flex flex-row justify-content-between align-items-center mb-2 gap-3'>
@@ -38,7 +43,7 @@ export default function (): JSX.Element {
         <Button
           size='sm'
           className='fw-semibold text-nowrap'
-          onClick={() => addVariable(getNextVariableId(), 'num')}
+          onClick={handleAddVariable}
           disabled={state.timeSlot !== 0}
         >
           Adicionar variável

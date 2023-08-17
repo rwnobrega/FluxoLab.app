@@ -10,7 +10,7 @@ export type Action = 'reset' | 'stepBack' | 'nextStep'
 interface StoreMachineState {
   stateHistory: MachineState[]
   getState: () => MachineState
-  reset: () => void
+  reset: (machine: Machine) => void
   stepBack: () => void
   nextStep: (machine: Machine, refInput: React.RefObject<HTMLInputElement>) => void
   execAction: (action: Action, machine: Machine, refInput: React.RefObject<HTMLInputElement>) => void
@@ -18,13 +18,14 @@ interface StoreMachineState {
 
 const useStoreMachineState = create<StoreMachineState>(
   (set, get) => ({
-    stateHistory: [getInitialState()],
+    stateHistory: [getInitialState([])],
     getState: () => {
       const stateHistory = get().stateHistory
       return stateHistory[stateHistory.length - 1]
     },
-    reset: () => {
-      set({ stateHistory: [getInitialState()] })
+    reset: machine => {
+      const stateHistory = [getInitialState(machine.variables)]
+      set({ stateHistory })
     },
     stepBack: () => {
       const stateHistory = get().stateHistory
@@ -52,7 +53,7 @@ const useStoreMachineState = create<StoreMachineState>(
     execAction: (action, machine, refInput) => {
       switch (action) {
         case 'reset':
-          get().reset()
+          get().reset(machine)
           break
         case 'stepBack':
           get().stepBack()

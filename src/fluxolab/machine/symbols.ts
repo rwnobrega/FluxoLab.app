@@ -1,8 +1,8 @@
-import { Symbol } from 'machine/types'
 import _ from 'lodash'
 
-import evaluate from 'machine/parser'
+import { Symbol } from 'machine/types'
 import { getVariableType } from 'machine/variables'
+import evaluate from 'machine/evaluator'
 
 export function newStartSymbol (params: { id: string, nextId: string }): Symbol {
   const { id, nextId } = params
@@ -21,9 +21,10 @@ export function newAssignmentSymbol (params: { id: string, variableId: string, e
     id,
     type: 'assignment',
     work: (machine, state) => {
-      let textValue: string
       try {
-        textValue = evaluate(expression, state.memory)
+        const value = evaluate(expression, state.memory)
+        state.memory[variableId] = value
+        state.curSymbolId = nextId
       } catch (e) {
         state.errorMessage = e.message
         state.status = 'error'
@@ -33,12 +34,7 @@ export function newAssignmentSymbol (params: { id: string, variableId: string, e
       if (variable === undefined) {
         state.errorMessage = `Variável "${variableId}" não existe.`
         state.status = 'error'
-        return
       }
-      const varType = getVariableType(variable.type)
-      const value = varType.parse(textValue)
-      state.memory[variableId] = value
-      state.curSymbolId = nextId
     }
   }
 }
@@ -49,8 +45,18 @@ export function newConditionalSymbol (params: { id: string, condition: string, n
     id,
     type: 'conditional',
     work: (_machine, state) => {
-      const conditionResult = Boolean(evaluate(condition, state.memory))
-      state.curSymbolId = conditionResult ? nextTrue : nextFalse
+      try {
+        const conditionResult = evaluate(condition, state.memory)
+        if (typeof conditionResult !== 'boolean') {
+          state.errorMessage = 'A condição deve retornar um valor booleano.'
+          state.status = 'error'
+          return
+        }
+        state.curSymbolId = conditionResult ? nextTrue : nextFalse
+      } catch (e) {
+        state.errorMessage = e.message
+        state.status = 'error'
+      }
     }
   }
 }
@@ -73,8 +79,12 @@ export function newInputSymbol (params: { id: string, variableId: string, nextId
         return
       }
       const varType = getVariableType(variable.type)
-      const value = varType.parse(state.input)
-      state.memory[variableId] = value
+      if (!varType.stringIsValid(state.input)) {
+        state.errorMessage = `Entrada "${state.input}" é inválida para o tipo "${variable.type}".`
+        state.status = 'error'
+        return
+      }
+      state.memory[variableId] = varType.stringToValue(state.input)
       state.interaction.push({ direction: 'in', text: state.input })
       state.input = null
       state.status = 'ready'
@@ -90,20 +100,23 @@ export function newOutputSymbol (params: { id: string, expression: string, nextI
     type: 'output',
     work: (_machine, state) => {
       let expressionResult: string = expression
-      for (const [variableId, variableValue] of _.toPairs(state.memory)) {
-        const variable = _.find(_machine.variables, { id: variableId })
-        if (variable === undefined) {
-          state.errorMessage = `Variável "${variableId}" não existe.`
-          state.status = 'error'
-          return
+      const variables = expression.match(/{[a-zA-Z0-9]+}/g)
+      if (variables !== null) {
+        for (const variable of variables) {
+          const variableId = variable.substring(1, variable.length - 1)
+          if (state.memory[variableId] === undefined) {
+            state.errorMessage = `Variável "${variableId}" não existe.`
+            state.status = 'error'
+            return
+          }
+          const variableValue = state.memory[variableId]
+          if (variableValue === null) {
+            state.errorMessage = `Variável "${variableId}" não inicializada.`
+            state.status = 'error'
+            return
+          }
+          expressionResult = expressionResult.replace(variable, variableValue.toString())
         }
-        if (variableValue === null) {
-          state.errorMessage = `Variável "${variableId}" não inicializada.`
-          state.status = 'error'
-          return
-        }
-        const varType = getVariableType(variable.type)
-        expressionResult = expressionResult.replace(`{${variableId}}`, varType.format(variableValue))
       }
       state.interaction.push({ direction: 'out', text: expressionResult })
       state.curSymbolId = nextId

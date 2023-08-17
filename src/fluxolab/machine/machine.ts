@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import { Symbol, Machine, MachineState } from 'machine/types'
+import { Symbol, Machine, MachineState, Memory, Variable } from 'machine/types'
 
 function getSymbolById (flowchart: Symbol[], id: string): Symbol {
   const symbol = _.find(flowchart, { id })
@@ -21,17 +21,25 @@ export function runMachineStep (machine: Machine, state: MachineState): void {
     state.status = 'halted'
     return
   }
-  if (nextSymbol.type === 'input') {
+  if (nextSymbol.type === 'input' && state.status !== 'error') {
     state.status = 'waiting'
   }
   state.timeSlot += 1
 }
 
-export function getInitialState (): MachineState {
+function getInitialMemory (variables: Variable[]): Memory {
+  const memory: Memory = {}
+  for (const variable of variables) {
+    memory[variable.id] = null
+  }
+  return memory
+}
+
+export function getInitialState (variables: Variable[]): MachineState {
   return {
     curSymbolId: null,
     timeSlot: 0,
-    memory: {},
+    memory: getInitialMemory(variables),
     input: null,
     interaction: [],
     errorMessage: null,

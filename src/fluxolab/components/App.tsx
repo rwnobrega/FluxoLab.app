@@ -46,7 +46,7 @@ export default function (): JSX.Element {
   }, [nodesDep, edgesDep, machine.variables])
 
   useEffect(() => {
-    reset()
+    reset(machine)
   }, [machine.flowchart, machine.startSymbolId])
 
   useEffect(() => {

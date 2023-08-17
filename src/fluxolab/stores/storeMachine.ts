@@ -45,7 +45,7 @@ const useStoreMachine = create<StoreMachine, any>(
       },
       addVariable: (id, type) => {
         const { machine } = get()
-        machine.variables.push({ id, type })
+        machine.variables = _.concat(machine.variables, { id, type })
         set({ machine })
       },
       clearVariables: () => {
