@@ -1,31 +1,33 @@
-import evaluate, { registerFunction } from 'ts-expression-evaluator'
+import evaluate, { registerFunctions } from 'ts-expression-evaluator'
 
-registerFunction('div', (a: any, b: any) => Math.round(a / b))
-registerFunction('mod', (a: any, b: any) => a % b)
-registerFunction('pow', (a: any, b: any) => Math.pow(a, b))
-registerFunction('sqrt', (a: any) => Math.sqrt(a))
-registerFunction('log', (a: any) => Math.log(a))
-registerFunction('log10', (a: any) => Math.log10(a))
-registerFunction('log2', (a: any) => Math.log2(a))
-registerFunction('exp', (a: any) => Math.exp(a))
-registerFunction('sin', (a: any) => Math.sin(a))
-registerFunction('cos', (a: any) => Math.cos(a))
-registerFunction('tan', (a: any) => Math.tan(a))
-registerFunction('asin', (a: any) => Math.asin(a))
-registerFunction('acos', (a: any) => Math.acos(a))
-registerFunction('atan', (a: any) => Math.atan(a))
-registerFunction('sinh', (a: any) => Math.sinh(a))
-registerFunction('cosh', (a: any) => Math.cosh(a))
-registerFunction('tanh', (a: any) => Math.tanh(a))
-registerFunction('asinh', (a: any) => Math.asinh(a))
-registerFunction('acosh', (a: any) => Math.acosh(a))
-registerFunction('atanh', (a: any) => Math.atanh(a))
-registerFunction('sign', (a: any) => Math.sign(a))
-registerFunction('abs', (a: any) => Math.abs(a))
-registerFunction('round', (a: any) => Math.round(a))
-registerFunction('floor', (a: any) => Math.floor(a))
-registerFunction('ceil', (a: any) => Math.ceil(a))
-registerFunction('min', (a: any, b: any) => Math.min(a, b))
-registerFunction('max', (a: any, b: any) => Math.max(a, b))
+registerFunctions({
+  div: (a: any, b: any) => Math.round(a / b),
+  mod: (a: any, b: any) => a % b,
+  pow: (a: any, b: any) => Math.pow(a, b),
+  sqrt: (a: any) => Math.sqrt(a),
+  log: (a: any) => Math.log(a),
+  log10: (a: any) => Math.log10(a),
+  log2: (a: any) => Math.log2(a),
+  exp: (a: any) => Math.exp(a),
+  sin: (a: any) => Math.sin(a),
+  cos: (a: any) => Math.cos(a),
+  tan: (a: any) => Math.tan(a),
+  asin: (a: any) => Math.asin(a),
+  acos: (a: any) => Math.acos(a),
+  atan: (a: any) => Math.atan(a),
+  sinh: (a: any) => Math.sinh(a),
+  cosh: (a: any) => Math.cosh(a),
+  tanh: (a: any) => Math.tanh(a),
+  asinh: (a: any) => Math.asinh(a),
+  acosh: (a: any) => Math.acosh(a),
+  atanh: (a: any) => Math.atanh(a),
+  sign: (a: any) => Math.sign(a),
+  abs: (a: any) => Math.abs(a),
+  round: (a: any) => Math.round(a),
+  floor: (a: any) => Math.floor(a),
+  ceil: (a: any) => Math.ceil(a),
+  min: (a: any, b: any) => Math.min(a, b),
+  max: (a: any, b: any) => Math.max(a, b)
+})
 
 export default evaluate
