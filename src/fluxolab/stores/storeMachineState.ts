@@ -58,7 +58,9 @@ const useStoreMachineState = create<StoreMachineState>(
           get().stepBack()
           break
         case 'nextStep':
-          get().nextStep(machine, refInput)
+          if (get().getState().status === 'ready') {
+            get().nextStep(machine, refInput)
+          }
           break
       }
     }
