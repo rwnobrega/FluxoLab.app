@@ -19,7 +19,7 @@ function getOutgoingNode (nodeId: string, handleId: string, edges: Edge[]): stri
       return edge.target
     }
   }
-  throw new CompileError(`Nodo não tem ramo na saída ${handleId}.`, [nodeId])
+  throw new CompileError('Bloco não tem ramo de saída.', [nodeId])
 }
 
 interface CompilerInput {
@@ -38,9 +38,9 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
   function getStartSymbolId (): string {
     const startNodes = _.filter(nodes, { type: 'start' })
     if (startNodes.length === 0) {
-      throw new CompileError('Deve haver um nodo de início.', [])
+      throw new CompileError('Deve haver um bloco de início.', [])
     } else if (startNodes.length > 1) {
-      throw new CompileError('Há mais de um nodo de início.', _.map(startNodes, 'id'))
+      throw new CompileError('Há mais de um bloco de início.', _.map(startNodes, 'id'))
     }
     return startNodes[0].id
   }

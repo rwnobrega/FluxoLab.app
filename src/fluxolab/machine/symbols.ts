@@ -55,7 +55,7 @@ export function newInputSymbol (params: { id: string, variableId: string, nextId
     type: 'input',
     work: (machine, state) => {
       if (state.input === null) {
-        state.errorMessage = 'Nodo esperava entrada, mas nenhuma foi fornecida.'
+        state.errorMessage = 'Bloco esperava entrada, mas nenhuma foi fornecida.'
         state.status = 'error'
         return
       }
