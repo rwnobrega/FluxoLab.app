@@ -40,7 +40,7 @@ const variableTypes: VariableType[] = [
       return str
     },
     valueToString: (value: string): string => {
-      return `"${value}"`
+      return value
     }
   },
   {
