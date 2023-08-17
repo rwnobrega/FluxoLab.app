@@ -25,8 +25,8 @@ export default function ({ id, disabled }: VariableItemProps): JSX.Element {
       disabled={disabled}
     >
       <option value='num'>Número</option>
-      <option value='str'>Texto</option>
-      <option value='bool'>Lógico</option>
+      <option value='str'>String</option>
+      <option value='bool'>Booleano</option>
     </Form.Select>
   )
 }
