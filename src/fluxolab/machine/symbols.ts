@@ -21,7 +21,14 @@ export function newAssignmentSymbol (params: { id: string, variableId: string, e
     id,
     type: 'assignment',
     work: (machine, state) => {
-      const textValue: string = evaluate(expression, state.memory)
+      let textValue: string
+      try {
+        textValue = evaluate(expression, state.memory)
+      } catch (e) {
+        state.errorMessage = e.message
+        state.status = 'error'
+        return
+      }
       const variable = _.find(machine.variables, { id: variableId })
       if (variable === undefined) {
         state.errorMessage = `Variável "${variableId}" não existe.`
