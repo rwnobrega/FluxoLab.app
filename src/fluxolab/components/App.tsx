@@ -27,7 +27,7 @@ export default function (): JSX.Element {
 
   const [contentHeight, setContentHeight] = React.useState<string>('100vh')
 
-  const { nodes, edges } = useStoreFlow()
+  const { nodes, edges, selectAll } = useStoreFlow()
   const { machine, setFlowchart, setStartSymbolId, compileError, setCompileError } = useStoreMachine()
   const { reset, execAction } = useStoreMachineState()
 
@@ -54,6 +54,14 @@ export default function (): JSX.Element {
     setContentHeight(`calc(100vh - ${navbarHeight}px)`)
   }, [])
 
+  const hotkeysOptions: Parameters<typeof useHotkeys>[2] = {
+    filter: event => {
+      event.preventDefault()
+      return true
+    },
+    enableOnTags: ['INPUT', 'TEXTAREA']
+  }
+
   for (const { action, hotkey } of buttonList) {
     useHotkeys(
       hotkey,
@@ -62,15 +70,11 @@ export default function (): JSX.Element {
           execAction(action, machine, refInput)
         }
       },
-      {
-        filter: event => {
-          event.preventDefault()
-          return true
-        },
-        enableOnTags: ['INPUT', 'TEXTAREA']
-      }
+      hotkeysOptions
     )
   }
+
+  useHotkeys('ctrl+a', selectAll, hotkeysOptions)
 
   return (
     <Stack className='vh-100 h-100' style={{ userSelect: 'none' }}>

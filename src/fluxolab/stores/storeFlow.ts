@@ -26,6 +26,7 @@ interface StoreFlow {
   deleteNode: (id: string) => void
   updateNodeProp: (id: string, path: string, value: any) => void
   onConnect: (connection: Connection) => void
+  selectAll: () => void
 }
 
 const useStoreFlow = create<StoreFlow, any>(
@@ -55,6 +56,12 @@ const useStoreFlow = create<StoreFlow, any>(
           markerEnd: { type: MarkerType.ArrowClosed, height: 10, width: 6 }
         }
         set({ edges: addEdge({ ...connection, ...edgeProps }, edges) })
+      },
+      selectAll: () => {
+        const nodes = get().nodes
+        set({ nodes: _.map(nodes, node => ({ ...node, selected: true })) })
+        const edges = get().edges
+        set({ edges: _.map(edges, edge => ({ ...edge, selected: true })) })
       }
     }),
     {
