@@ -4,6 +4,8 @@
 
 A live version of the application can be found at [FluxoLab.app](https://fluxolab.app/).
 
+![FluxoLab](screenshot.png)
+
 ## Running locally
 
 ```bash
