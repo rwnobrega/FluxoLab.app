@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import Dropdown from 'react-bootstrap/Dropdown'
 
 import ConfirmModal from 'components/Modals/Confirm'
+import HelpModal from 'components/Modals/Help'
 import AboutModal from 'components/Modals/About'
 
 import useStoreFlow from 'stores/storeFlow'
@@ -10,6 +11,7 @@ import useStoreMachine from 'stores/storeMachine'
 
 export default function (): JSX.Element {
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [showHelpModal, setShowHelpModal] = useState(false)
   const [showAboutModal, setShowAboutModal] = useState(false)
 
   const { clearAll } = useStoreFlow()
@@ -29,6 +31,7 @@ export default function (): JSX.Element {
         </Dropdown.Toggle>
         <Dropdown.Menu>
           <Dropdown.Item onClick={() => setShowConfirmModal(true)}>Limpar fluxograma...</Dropdown.Item>
+          <Dropdown.Item onClick={() => setShowHelpModal(true)}>Ajuda...</Dropdown.Item>
           <Dropdown.Item onClick={() => setShowAboutModal(true)}>Sobre...</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
@@ -38,6 +41,10 @@ export default function (): JSX.Element {
         onConfirm={handleConfirm}
         showModal={showConfirmModal}
         setShowModal={setShowConfirmModal}
+      />
+      <HelpModal
+        showModal={showHelpModal}
+        setShowModal={setShowHelpModal}
       />
       <AboutModal
         showModal={showAboutModal}
