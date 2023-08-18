@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 
 import Form from 'react-bootstrap/Form'
 import Stack from 'react-bootstrap/Stack'
@@ -15,6 +15,7 @@ interface Props {
 }
 
 export default function ({ refInput }: Props): JSX.Element {
+  const refStackEnd = useRef<HTMLDivElement>(null)
   const [inputText, setInputText] = React.useState('')
 
   const { machine } = useStoreMachine()
@@ -36,13 +37,20 @@ export default function ({ refInput }: Props): JSX.Element {
     }
   }, [state])
 
+  useEffect(() => {
+    if (refStackEnd.current != null) {
+      refStackEnd.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [state])
+
   return (
     <div className='d-flex flex-column h-100'>
       <p className='fw-semibold'>Entrada/saída</p>
-      <Stack gap={2} style={{ overflowY: 'auto', overflowX: 'clip' }}>
+      <Stack gap={2} className='mb-3' style={{ overflowY: 'auto', overflowX: 'clip' }}>
         {_.map(state.interaction, ({ direction, text }, index) => (
           <ChatBubble key={index} direction={direction} text={text} />
         ))}
+        <div ref={refStackEnd} />
       </Stack>
       {state.status === 'waiting' && (
         <Form.Control
