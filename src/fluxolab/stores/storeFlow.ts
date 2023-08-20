@@ -38,7 +38,10 @@ const useStoreFlow = create<StoreFlow, any>(
       onNodesChange: changes => set({ nodes: applyNodeChanges(changes, get().nodes) }),
       onEdgesChange: changes => set({ edges: applyEdgeChanges(changes, get().edges) }),
       addNode: node => set({ nodes: [...get().nodes, node] }),
-      deleteNode: id => set({ nodes: _.reject(get().nodes, { id }) }),
+      deleteNode: id => set({
+        nodes: _.filter(get().nodes, node => node.id !== id),
+        edges: _.filter(get().edges, edge => edge.source !== id && edge.target !== id)
+      }),
       updateNodeProp: (id, path, value) => {
         const nodes = get().nodes
         const node = _.find(nodes, { id })
