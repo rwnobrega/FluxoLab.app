@@ -97,7 +97,7 @@ export default function (): JSX.Element {
       <div ref={navbarWrapper}>
         <Navbar />
       </div>
-      <PanelGroup direction='horizontal' className='flex-fill align-items-stretch'>
+      <PanelGroup direction='horizontal' autoSaveId='fluxolab_main' className='flex-fill align-items-stretch'>
         <div className='bg-light p-3'>
           <SymbolList />
         </div>
