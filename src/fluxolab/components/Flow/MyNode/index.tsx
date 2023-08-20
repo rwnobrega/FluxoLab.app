@@ -2,7 +2,6 @@ import _ from 'lodash'
 
 import React, { useEffect, useRef, useState } from 'react'
 
-import Button from 'react-bootstrap/Button'
 import { Node, HandleType, Position, useReactFlow } from 'reactflow'
 
 import { palette, getDropShadow } from 'utils/colors'
@@ -12,6 +11,8 @@ import { BoxStyle, LabelProps, ModalProps } from 'components/Symbols'
 import SymbolBox from 'components/Symbols/SymbolBox'
 
 import MyHandle from './MyHandle'
+import ButtonDelete from './ButtonDelete'
+import ButtonEdit from './ButtonEdit'
 
 import useStoreFlow from 'stores/storeFlow'
 import useStoreMachine from 'stores/storeMachine'
@@ -27,10 +28,9 @@ interface Props {
 
 export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JSX.Element {
   const [margin, setMargin] = useState<number>(0)
-  const [mouseHover, setMouseHover] = useState<boolean>(false)
   const [boxFilter, setBoxFilter] = useState<string>('')
   const [showModal, setShowModal] = useState<boolean>(false)
-  const [deleteIconVisible, setDeleteIconVisible] = useState<boolean>(false)
+  const [iconsVisible, setIconsVisible] = useState<boolean>(false)
 
   const { nodes, deleteNode, updateNodeProp } = useStoreFlow()
   const { compileError } = useStoreMachine()
@@ -42,8 +42,6 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
   const labelRef = useRef<HTMLInputElement>(null)
 
   const node: Node | undefined = _.find(nodes, { id: nodeId })
-
-  const editable = Modal !== undefined
 
   useEffect(() => {
     const MIN_WIDTH = 120
@@ -81,10 +79,19 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
     )
   }, [state, compileError])
 
+  function handleDelete (): void {
+    deleteNode(nodeId)
+  }
+
+  function handleEdit (): void {
+    setIconsVisible(false)
+    setShowModal(true)
+  }
+
   return (
     <div
-      onMouseEnter={() => setDeleteIconVisible(true)}
-      onMouseLeave={() => setDeleteIconVisible(false)}
+      onMouseEnter={() => { setIconsVisible(true) }}
+      onMouseLeave={() => { setIconsVisible(false) }}
       style={{ cursor: 'grab' }}
     >
       {
@@ -94,9 +101,6 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
       <SymbolBox boxStyle={boxStyle} boxFilter={boxFilter} isSelected={node?.selected}>
         <span
           ref={labelRef}
-          onClick={() => { setShowModal(editable); setDeleteIconVisible(false) }}
-          onMouseEnter={() => setMouseHover(editable)}
-          onMouseLeave={() => setMouseHover(false)}
           style={{
             maxWidth: '392px',
             minWidth: '80px',
@@ -108,33 +112,14 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
             verticalAlign: 'middle',
             textOverflow: 'ellipsis',
             color: boxStyle.textColor,
-            textDecoration: mouseHover ? 'underline' : 'none',
-            cursor: editable ? 'pointer' : 'grab'
+            cursor: 'grab'
           }}
         >
           <Label value={node?.data.value} />
         </span>
       </SymbolBox>
-      <Button
-        variant='danger'
-        size='sm'
-        onClick={() => deleteNode(nodeId)}
-        style={{
-          position: 'absolute',
-          top: '-8px',
-          right: '-8px',
-          width: '24px',
-          height: '24px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          cursor: 'pointer',
-          opacity: deleteIconVisible ? 1 : 0,
-          transition: 'visibility 0s, opacity 0.2s linear'
-        }}
-      >
-        <i className='bi bi-trash-fill' />
-      </Button>
+      <ButtonDelete onClick={handleDelete} visible={iconsVisible} />
+      {(Modal !== undefined) && <ButtonEdit onClick={handleEdit} visible={iconsVisible} />}
       {_.map(handles, (props, index) => (
         <MyHandle key={index} boxStyle={boxStyle} {...props} />
       ))}
