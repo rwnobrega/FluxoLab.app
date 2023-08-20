@@ -4,6 +4,8 @@ import React, { useEffect } from 'react'
 
 import { useHotkeys } from 'react-hotkeys-hook'
 
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
+
 import Stack from 'react-bootstrap/Stack'
 
 import Flow from 'components/Flow'
@@ -19,6 +21,8 @@ import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
 
 import compile from 'machine/compiler'
+
+import { palette } from 'utils/colors'
 
 export default function (): JSX.Element {
   const navbarWrapper = React.useRef<HTMLDivElement>(null)
@@ -76,27 +80,45 @@ export default function (): JSX.Element {
 
   useHotkeys('ctrl+a', selectAll, hotkeysOptions)
 
+  const resizeHandleStyle = {
+    backgroundColor: palette.gray300,
+    background: `repeating-linear-gradient(
+      45deg,
+      ${palette.gray300},
+      ${palette.gray300} 2px,
+      ${palette.gray100} 2px,
+      ${palette.gray100} 4px
+    )`
+
+  }
+
   return (
     <Stack className='vh-100 h-100' style={{ userSelect: 'none' }}>
       <div ref={navbarWrapper}>
         <Navbar />
       </div>
-      <Stack direction='horizontal' className='flex-fill align-items-stretch'>
+      <PanelGroup direction='horizontal' className='flex-fill align-items-stretch'>
         <div className='bg-light p-3'>
           <SymbolList />
         </div>
-        <div style={{ width: '70%', height: contentHeight }} ref={reactFlowWrapper}>
-          <Flow wrapper={reactFlowWrapper} refInput={refInput} />
-        </div>
-        <div style={{ width: '30%', height: contentHeight }} className='bg-light'>
-          <div style={{ height: '40%' }} className='p-3'>
-            <VariableList />
+        <Panel defaultSize={70} minSize={50}>
+          <div ref={reactFlowWrapper} style={{ height: contentHeight }}>
+            <Flow wrapper={reactFlowWrapper} refInput={refInput} />
           </div>
-          <div style={{ height: '60%' }} className='p-3'>
-            <Interaction refInput={refInput} />
-          </div>
-        </div>
-      </Stack>
+        </Panel>
+        <PanelResizeHandle style={{ width: '6px', ...resizeHandleStyle }} />
+        <Panel defaultSize={30} minSize={24}>
+          <PanelGroup direction='vertical' autoSaveId='fluxolab_right' className='bg-light'>
+            <Panel defaultSize={40} minSize={24} className='p-3'>
+              <VariableList />
+            </Panel>
+            <PanelResizeHandle style={{ height: '6px', ...resizeHandleStyle }} />
+            <Panel defaultSize={60} className='p-3'>
+              <Interaction refInput={refInput} />
+            </Panel>
+          </PanelGroup>
+        </Panel>
+      </PanelGroup>
     </Stack>
   )
 }
