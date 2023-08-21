@@ -35,14 +35,14 @@ export default function (): JSX.Element {
     } else if (state.status === 'halted') {
       return {
         backgroundColor: palette.purple,
-        statusIcon: 'bi-check-circle-fill-fill',
+        statusIcon: 'bi-check-circle-fill',
         statusText: 'Execução concluída.'
       }
     } else if (state.timeSlot === 0) {
       return {
         backgroundColor: palette.purple,
         statusIcon: 'bi-check-circle-fill',
-        statusText: 'Pronto para iniciar execução.'
+        statusText: 'Pronto para iniciar a execução.'
       }
     } else {
       return {
@@ -56,7 +56,7 @@ export default function (): JSX.Element {
   const { backgroundColor, statusIcon, statusText } = getTriplet()
 
   return (
-    <Alert style={{ backgroundColor, color: 'white', lineHeight: '45px', padding: '0 10px' }}>
+    <Alert className='m-0 border-0' style={{ backgroundColor, color: 'white', padding: '6px 12px' }}>
       <i className={`bi ${statusIcon}`} /><span className='ms-2'>{statusText}</span>
     </Alert>
   )

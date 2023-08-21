@@ -3,6 +3,8 @@ import { v4 as uuid } from 'uuid'
 import React, { useCallback, useState } from 'react'
 import ReactFlow, { Background, Controls, EdgeTypes, NodeTypes } from 'reactflow'
 
+import Stack from 'react-bootstrap/Stack'
+
 import PlayButtons from 'components/PlayButtons'
 import StatusMessage from 'components/StatusMessage'
 import symbols from 'components/Symbols'
@@ -77,14 +79,12 @@ export default function ({ wrapper, refInput }: Props): JSX.Element {
       snapToGrid
       snapGrid={[20, 20]}
     >
-      <div className='position-absolute top-0 start-0 m-3' style={{ zIndex: 5 }}>
+      <Stack direction='horizontal' gap={3} className='position-absolute top-0 start-0 m-3' style={{ zIndex: 5 }}>
         <PlayButtons refInput={refInput} />
-      </div>
+        <StatusMessage />
+      </Stack>
       <Controls />
       <Background gap={20} />
-      <div className='position-absolute bottom-0 end-0 m-3' style={{ zIndex: 5 }}>
-        <StatusMessage />
-      </div>
     </ReactFlow>
   )
 }
