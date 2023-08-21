@@ -26,8 +26,8 @@ const buttonList: PlayButton[] = [
   {
     action: 'reset',
     hotkey: 'F6',
-    description: 'Reiniciar',
-    icon: 'bi-arrow-counterclockwise',
+    description: 'Encerrar execução',
+    icon: 'bi-stop-fill',
     isDisabled: ({ state, compileError }) => (
       compileError !== null || isDisabledBackward(state)
     )
