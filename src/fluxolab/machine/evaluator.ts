@@ -31,7 +31,7 @@ const unaryOperators: {[key: string]: (a: VarType) => VarType} = {
 }
 
 const functions: {[key: string]: (args: number[]) => number} = {
-  div: (args: number[]) => Math.round(args[0] / args[1]),
+  div: (args: number[]) => Math.floor(args[0] / args[1]),
   mod: (args: number[]) => args[0] % args[1],
   pow: (args: number[]) => Math.pow(args[0], args[1]),
   sqrt: (args: number[]) => Math.sqrt(args[0]),
