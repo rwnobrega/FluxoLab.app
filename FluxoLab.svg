@@ -5,31 +5,8 @@
    viewBox="0 0 65 65"
    version="1.1"
    id="svg21"
-   sodipodi:docname="FluxoLab.svg"
-   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview23"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="12.907692"
-     inkscape:cx="19.949344"
-     inkscape:cy="31.299166"
-     inkscape:window-width="1920"
-     inkscape:window-height="1043"
-     inkscape:window-x="1920"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg21" />
   <defs
      id="defs11">
     <g
@@ -55,21 +32,14 @@
      fill="#6f42c1"
      fill-opacity="1"
      d="m 3.667969,50.343188 c 2.664062,8 3.9860153,9.324781 11.986015,11.988843 8,2.667969 26.679945,2.667969 34.679945,0 8,-2.664062 9.33404,-4.012075 11.998102,-12.012075 2.667969,-8 2.667969,-26.654193 0,-34.654193 C 59.667969,7.6657632 58.334402,6.332031 50.334402,3.667969 42.334402,1 23.671669,1 15.671669,3.667969 7.6716692,6.332031 6.332031,7.6719742 3.667969,15.671974 1,23.671974 1,42.343188 3.667969,50.343188 Z"
-     id="path13"
-     sodipodi:nodetypes="ccccccccc" />
+     id="path13" />
   <a
      id="a303"
      transform="matrix(0.87523379,0,0,0.87523379,6.0549016,3.8224834)">
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:46.6036px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.16509"
-       x="5.2601857"
-       y="49.403034"
-       id="text237"><tspan
-         sodipodi:role="line"
-         id="tspan235"
-         x="5.2601857"
-         y="49.403034"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#ffffff;stroke-width:1.16509">FL</tspan></text>
+    <path
+       style="font-weight:bold;font-size:46.6036px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#ffffff;stroke-width:1.16509"
+       d="M 16.398446,49.403034 H 9.4545097 V 16.128064 H 28.515382 V 21.90691 H 16.398446 v 8.575063 h 11.278071 v 5.778846 H 16.398446 Z m 18.641429,0 v -33.27497 h 7.037144 v 27.44952 h 13.515043 v 5.82545 z"
+       id="text237"
+       aria-label="FL" />
   </a>
 </svg>
