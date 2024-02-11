@@ -63,6 +63,9 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           if (variableId === '') {
             throw new CompileError('Variável não especificada.', [id])
           }
+          if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(variableId)) {
+            throw new CompileError(`Identificador "${variableId}" inválido.`, [id])
+          }
           if (!_.some(variables, { id: variableId })) {
             throw new CompileError(`Variável "${variableId}" não existe.`, [id])
           }
