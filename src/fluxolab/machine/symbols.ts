@@ -22,17 +22,27 @@ export function newAssignmentSymbol (params: { id: string, variableId: string, e
     type: 'assignment',
     work: (machine, state) => {
       try {
+        const variable = _.find(machine.variables, { id: variableId })
+        if (variable === undefined) {
+          state.errorMessage = `Variável "${variableId}" não existe.`
+          state.status = 'error'
+          return
+        }
         const value = evaluate(expression, state.memory)
+        const varType = getVariableType(variable.type)
+        if (
+          (typeof value === 'number' && varType.typeName !== 'num') ||
+          (typeof value === 'string' && varType.typeName !== 'str') ||
+          (typeof value === 'boolean' && varType.typeName !== 'bool')
+        ) {
+          state.errorMessage = `Expressão "${expression}" não retorna um valor ${varType.typeName}.`
+          state.status = 'error'
+          return
+        }
         state.memory[variableId] = value
         state.curSymbolId = nextId
       } catch (e) {
         state.errorMessage = e.message
-        state.status = 'error'
-        return
-      }
-      const variable = _.find(machine.variables, { id: variableId })
-      if (variable === undefined) {
-        state.errorMessage = `Variável "${variableId}" não existe.`
         state.status = 'error'
       }
     }
