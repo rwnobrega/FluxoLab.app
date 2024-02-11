@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 import React from 'react'
 
 import Form from 'react-bootstrap/Form'
@@ -6,6 +8,7 @@ import { VariableItemProps } from '.'
 
 import useStoreMachine from 'stores/storeMachine'
 
+import { variableTypes } from 'machine/variables'
 import { Variable } from 'machine/types'
 
 export default function ({ id, disabled }: VariableItemProps): JSX.Element {
@@ -24,9 +27,11 @@ export default function ({ id, disabled }: VariableItemProps): JSX.Element {
       style={{ minWidth: '7.5em' }}
       disabled={disabled}
     >
-      <option value='num'>Número</option>
-      <option value='str'>String</option>
-      <option value='bool'>Booleano</option>
+      {
+        _.map(variableTypes, ({ typeName, jsName }) => (
+          <option key={typeName} value={typeName}>{jsName.charAt(0).toUpperCase() + jsName.slice(1)}</option>
+        ))
+      }
     </Form.Select>
   )
 }
