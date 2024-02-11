@@ -1,5 +1,9 @@
 import React from 'react'
 
 export default function (): JSX.Element {
-  return <span><i>Fim</i></span>
+  return (
+    <span style={{ position: 'relative', top: '-2.5px' }}>
+      <i>Fim</i>
+    </span>
+  )
 }
