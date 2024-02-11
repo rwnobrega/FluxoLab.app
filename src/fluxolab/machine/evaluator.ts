@@ -18,6 +18,7 @@ const binaryOperators: {[key: string]: (a: VarType, b: VarType) => VarType} = {
   '>=': (a: number, b: number) => a >= b,
   '<': (a: number, b: number) => a < b,
   '<=': (a: number, b: number) => a <= b,
+  '&': (a: VarType, b: VarType): string => `${a as string}${b as string}`,
   '==': (a: VarType, b: VarType) => a === b,
   '!=': (a: VarType, b: VarType) => a !== b
 }
