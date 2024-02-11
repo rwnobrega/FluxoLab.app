@@ -29,13 +29,10 @@ export function newAssignmentSymbol (params: { id: string, variableId: string, e
           return
         }
         const value = evaluate(expression, state.memory)
+        const valueType = typeof value
         const varType = getVariableType(variable.type)
-        if (
-          (typeof value === 'number' && varType.typeName !== 'num') ||
-          (typeof value === 'string' && varType.typeName !== 'str') ||
-          (typeof value === 'boolean' && varType.typeName !== 'bool')
-        ) {
-          state.errorMessage = `Expressão "${expression}" não retorna um valor ${varType.typeName}.`
+        if (valueType !== varType.jsName) {
+          state.errorMessage = `Expressão \`${expression}\` não é do tipo '${varType.jsName}'.`
           state.status = 'error'
           return
         }
