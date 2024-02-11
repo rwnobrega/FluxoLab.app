@@ -28,6 +28,7 @@ const logicalOperators: {[key: string]: (a: boolean, b: boolean) => boolean} = {
 }
 
 const unaryOperators: {[key: string]: (a: VarType) => VarType} = {
+  '+': (a: number) => +a,
   '-': (a: number) => -a,
   '!': (a: boolean) => !a
 }
@@ -124,6 +125,18 @@ function evaluateNode (node: any, memory: Memory): VarType {
       throw new Error(`O operador '${node.operator as string}' não existe`)
     }
     const arg = evaluateNode(node.argument, memory)
+    const argType = typeof arg
+    const operandTypes = {
+      '+': 'number',
+      '-': 'number',
+      '!': 'boolean'
+    }
+    const commonError = `O operador '${node.operator as string}' requer um operando`
+    for (const [operator, type] of Object.entries(operandTypes)) {
+      if (node.operator === operator && argType !== type) {
+        throw new Error(`${commonError} ${type} ('${arg as string}' é do tipo '${argType}')`)
+      }
+    }
     return op(arg)
   }
 
