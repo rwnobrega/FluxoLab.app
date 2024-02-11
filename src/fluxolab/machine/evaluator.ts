@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 import { parse } from 'acorn'
 
 import { Memory, VarType } from 'machine/types'
@@ -12,12 +14,12 @@ const binaryOperators: {[key: string]: (a: VarType, b: VarType) => VarType} = {
   '-': (a: number, b: number) => a - b,
   '*': (a: number, b: number) => a * b,
   '/': (a: number, b: number) => a / b,
-  '==': (a: VarType, b: VarType) => a === b,
-  '!=': (a: VarType, b: VarType) => a !== b,
   '>': (a: number, b: number) => a > b,
   '>=': (a: number, b: number) => a >= b,
   '<': (a: number, b: number) => a < b,
-  '<=': (a: number, b: number) => a <= b
+  '<=': (a: number, b: number) => a <= b,
+  '==': (a: VarType, b: VarType) => a === b,
+  '!=': (a: VarType, b: VarType) => a !== b
 }
 
 const logicalOperators: {[key: string]: (a: boolean, b: boolean) => boolean} = {
@@ -104,6 +106,15 @@ function evaluateNode (node: any, memory: Memory): VarType {
     }
     const left = evaluateNode(node.left, memory)
     const right = evaluateNode(node.right, memory)
+    const commonError = `O operador '${node.operator as string}' requer operandos numéricos`
+    if (_.includes(['+', '-', '*', '/', '>', '>=', '<', '<='], node.operator)) {
+      if (typeof left !== 'number') {
+        throw new Error(`${commonError} ('${left as string}' é do tipo '${typeof left as string}')`)
+      }
+      if (typeof right !== 'number') {
+        throw new Error(`${commonError} ('${right as string}' é do tipo '${typeof right as string}')`)
+      }
+    }
     return op(left, right)
   }
 
