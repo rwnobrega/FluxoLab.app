@@ -38,11 +38,17 @@ export default function (): JSX.Element {
         statusIcon: 'bi-check-circle-fill',
         statusText: 'Execução concluída.'
       }
-    } else if (state.timeSlot === 0) {
+    } else if (state.timeSlot === -1) {
       return {
         backgroundColor: palette.purple,
         statusIcon: 'bi-check-circle-fill',
         statusText: 'Pronto para iniciar a execução.'
+      }
+    } else if (state.timeSlot === 0) {
+      return {
+        backgroundColor: palette.purple,
+        statusIcon: 'bi-play-circle-fill',
+        statusText: 'Execução iniciada.'
       }
     } else {
       return {

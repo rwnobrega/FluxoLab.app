@@ -38,7 +38,7 @@ function getInitialMemory (variables: Variable[]): Memory {
 export function getInitialState (variables: Variable[]): MachineState {
   return {
     curSymbolId: null,
-    timeSlot: 0,
+    timeSlot: -1,
     memory: getInitialMemory(variables),
     input: null,
     interaction: [],

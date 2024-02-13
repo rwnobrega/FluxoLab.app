@@ -44,7 +44,7 @@ export default function (): JSX.Element {
           size='sm'
           className='fw-semibold text-nowrap'
           onClick={handleAddVariable}
-          disabled={state.timeSlot !== 0}
+          disabled={state.timeSlot !== -1}
         >
           Adicionar variável
         </Button>
@@ -53,7 +53,7 @@ export default function (): JSX.Element {
         <Table size='sm' variant='borderless' className='mb-0'>
           <tbody>
             {_.map(machine.variables, ({ id, type }, index) => (
-              <VariableItem key={index} id={id} type={type} disabled={state.timeSlot !== 0} />
+              <VariableItem key={index} id={id} type={type} disabled={state.timeSlot !== -1} />
             ))}
           </tbody>
         </Table>

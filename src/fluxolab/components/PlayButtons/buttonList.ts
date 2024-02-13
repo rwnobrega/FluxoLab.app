@@ -15,7 +15,7 @@ interface PlayButton {
 }
 
 function isDisabledBackward (state: MachineState): boolean {
-  return state.status === 'ready' && state.timeSlot === 0
+  return state.status === 'ready' && state.timeSlot === -1
 }
 
 function isDisabledForward (state: MachineState): boolean {
