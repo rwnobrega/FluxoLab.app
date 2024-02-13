@@ -5,7 +5,7 @@ import { parse } from 'acorn'
 import { Memory, VarType } from 'machine/types'
 
 export default function evaluate (str: string, memory: Memory): VarType {
-  const ast = parse(str, { ecmaVersion: 2020 }) as any
+  const ast = parse(str, { ecmaVersion: 3 }) as any
   return evaluateNode(ast.body[0], memory)
 }
 
@@ -18,7 +18,6 @@ const binaryOperators: {[key: string]: (a: VarType, b: VarType) => VarType} = {
   '>=': (a: number, b: number) => a >= b,
   '<': (a: number, b: number) => a < b,
   '<=': (a: number, b: number) => a <= b,
-  '&': (a: VarType, b: VarType): string => `${a as string}${b as string}`,
   '==': (a: VarType, b: VarType) => a === b,
   '!=': (a: VarType, b: VarType) => a !== b
 }
@@ -148,6 +147,11 @@ function evaluateNode (node: any, memory: Memory): VarType {
     }
     const args = node.arguments.map((arg: any) => evaluateNode(arg, memory))
     return func(args)
+  }
+
+  if (node.type === 'SequenceExpression') {
+    // String concatenation
+    return node.expressions.map((expr: any) => evaluateNode(expr, memory)).join('')
   }
 
   throw new Error(`Erro de sintaxe: ${node.type as string}`)

@@ -101,15 +101,6 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
             </tr>
           </tbody>
         </Table>
-        <h5>Concatenação de strings</h5>
-        <Table striped bordered hover>
-          <tbody>
-            <tr>
-              <td className={classes}>a & b</td>
-              <td>Concatenação</td>
-            </tr>
-          </tbody>
-        </Table>
         <h5>Funções matemáticas</h5>
         <Table striped bordered hover>
           <tbody>
