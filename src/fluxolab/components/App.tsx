@@ -33,7 +33,9 @@ export default function (): JSX.Element {
 
   const { nodes, edges, selectAll } = useStoreFlow()
   const { machine, setFlowchart, setStartSymbolId, compileError, setCompileError } = useStoreMachine()
-  const { reset, execAction } = useStoreMachineState()
+  const { getState, reset, execAction } = useStoreMachineState()
+
+  const state = getState()
 
   const nodesDep = JSON.stringify(
     _.map(nodes, node => _.pick(node, ['id', 'type', 'data']))
@@ -66,11 +68,11 @@ export default function (): JSX.Element {
     enableOnTags: ['INPUT', 'TEXTAREA']
   }
 
-  for (const { action, hotkey } of buttonList) {
+  for (const { action, hotkey, isDisabled } of buttonList) {
     useHotkeys(
       hotkey,
       () => {
-        if (compileError === null) {
+        if (!isDisabled({ state, compileError })) {
           execAction(action, machine, refInput)
         }
       },
