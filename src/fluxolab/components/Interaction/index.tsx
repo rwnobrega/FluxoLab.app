@@ -52,17 +52,16 @@ export default function ({ refInput }: Props): JSX.Element {
         ))}
         <div ref={refStackEnd} />
       </Stack>
-      {state.status === 'waiting' && (
-        <Form.Control
-          ref={refInput}
-          size='sm'
-          value={inputText}
-          onChange={event => setInputText(event.target.value)}
-          onKeyDown={event => {
-            if (event.key === 'Enter') { handleSendInput() }
-          }}
-        />
-      )}
+      <Form.Control
+        ref={refInput}
+        size='sm'
+        value={inputText}
+        disabled={state.status !== 'waiting'}
+        onChange={event => setInputText(event.target.value)}
+        onKeyDown={event => {
+          if (event.key === 'Enter') { handleSendInput() }
+        }}
+      />
     </div>
   )
 }
