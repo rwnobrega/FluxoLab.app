@@ -15,7 +15,7 @@ export const variableTypes: VariableType[] = [
     typeName: 'num',
     jsName: 'number',
     stringIsValid (str: string): boolean {
-      const floatRegex = /^-?\d+(?:[.,]\d*?)?$/
+      const floatRegex = /^-?\d+(?:[.]\d*?)?$/
       return floatRegex.test(str)
     },
     stringToValue: (str: string): number => {
