@@ -107,7 +107,7 @@ export function newOutputSymbol (params: { id: string, expression: string, nextI
     type: 'output',
     work: (_machine, state) => {
       try {
-        const expressionResult = evaluate(expression, state.memory)
+        const expressionResult = evaluate(`"", ${expression}`, state.memory)
         state.interaction.push({ direction: 'out', text: `${expressionResult as string}` })
         state.curSymbolId = nextId
       } catch (e) {

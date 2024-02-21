@@ -2,6 +2,8 @@ import _ from 'lodash'
 
 import { parse } from 'acorn'
 
+import { variableTypes } from 'machine/variables'
+
 import { Memory, VarType } from 'machine/types'
 
 export default function evaluate (str: string, memory: Memory): VarType {
@@ -151,7 +153,17 @@ function evaluateNode (node: any, memory: Memory): VarType {
 
   if (node.type === 'SequenceExpression') {
     // String concatenation
-    return node.expressions.map((expr: any) => evaluateNode(expr, memory)).join('')
+    let result = ''
+    for (const expr of node.expressions) {
+      const value = evaluateNode(expr, memory)
+      const valueType = typeof value
+      const varType = _.find(variableTypes, { jsName: valueType })
+      if (varType === undefined) {
+        throw new Error(`Tipo de variável '${valueType as string}' não existe`)
+      }
+      result += varType.valueToString(value)
+    }
+    return result
   }
 
   throw new Error(`Erro de sintaxe: ${node.type as string}`)
