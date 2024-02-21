@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 import { parse } from 'acorn'
 
-import { variableTypes } from 'machine/variables'
+import { getVariableType } from 'machine/variables'
 
 import { Memory, VarType } from 'machine/types'
 
@@ -156,11 +156,7 @@ function evaluateNode (node: any, memory: Memory): VarType {
     let result = ''
     for (const expr of node.expressions) {
       const value = evaluateNode(expr, memory)
-      const valueType = typeof value
-      const varType = _.find(variableTypes, { typeName: valueType })
-      if (varType === undefined) {
-        throw new Error(`Tipo de variável '${valueType as string}' não existe`)
-      }
+      const varType = getVariableType(typeof value)
       result += varType.valueToString(value)
     }
     return result

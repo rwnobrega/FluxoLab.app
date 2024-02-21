@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
 import { Symbol } from 'machine/types'
-import { getVariableType, variableTypes } from 'machine/variables'
+import { getVariableType } from 'machine/variables'
 import evaluate from 'machine/evaluator'
 
 export function newStartSymbol (params: { id: string, nextId: string }): Symbol {
@@ -108,15 +108,8 @@ export function newOutputSymbol (params: { id: string, expression: string, nextI
     work: (_machine, state) => {
       try {
         const value = evaluate(expression, state.memory)
-        const valueType = typeof value
-        const varType = _.find(variableTypes, { typeName: valueType })
-        if (varType === undefined) {
-          state.errorMessage = `Tipo de variável "${valueType}" não existe.`
-          state.status = 'error'
-          return
-        }
-        const result = varType.valueToString(value)
-        state.interaction.push({ direction: 'out', text: result })
+        const varType = getVariableType(typeof value)
+        state.interaction.push({ direction: 'out', text: varType.valueToString(value) })
         state.curSymbolId = nextId
       } catch (e) {
         state.errorMessage = e.message
