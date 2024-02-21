@@ -157,7 +157,7 @@ function evaluateNode (node: any, memory: Memory): VarType {
     for (const expr of node.expressions) {
       const value = evaluateNode(expr, memory)
       const valueType = typeof value
-      const varType = _.find(variableTypes, { jsName: valueType })
+      const varType = _.find(variableTypes, { typeName: valueType })
       if (varType === undefined) {
         throw new Error(`Tipo de variável '${valueType as string}' não existe`)
       }

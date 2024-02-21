@@ -4,7 +4,6 @@ import { VarType } from './types'
 
 interface VariableType {
   typeName: string
-  jsName: string
   stringIsValid: (str: string) => boolean
   stringToValue: (str: string) => VarType
   valueToString: (value: VarType) => string
@@ -12,8 +11,7 @@ interface VariableType {
 
 export const variableTypes: VariableType[] = [
   {
-    typeName: 'num',
-    jsName: 'number',
+    typeName: 'number',
     stringIsValid (str: string): boolean {
       const floatRegex = /^-?\d+(?:[.]\d*?)?$/
       return floatRegex.test(str)
@@ -34,8 +32,7 @@ export const variableTypes: VariableType[] = [
     }
   },
   {
-    typeName: 'str',
-    jsName: 'string',
+    typeName: 'string',
     stringIsValid: (str: string): boolean => {
       return true
     },
@@ -47,8 +44,7 @@ export const variableTypes: VariableType[] = [
     }
   },
   {
-    typeName: 'bool',
-    jsName: 'boolean',
+    typeName: 'boolean',
     stringIsValid: (str: string): boolean => {
       return str === 'true' || str === 'false'
     },

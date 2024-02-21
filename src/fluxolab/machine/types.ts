@@ -1,6 +1,6 @@
 export interface Variable {
   id: string
-  type: 'num' | 'bool' | 'str'
+  type: 'number' | 'boolean' | 'string'
 }
 
 export type VarType = number | boolean | string

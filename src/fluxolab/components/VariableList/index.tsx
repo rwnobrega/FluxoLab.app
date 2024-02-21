@@ -32,7 +32,7 @@ export default function (): JSX.Element {
   )
 
   function handleAddVariable (): void {
-    addVariable(getNextVariableId(), 'num')
+    addVariable(getNextVariableId(), 'number')
     reset(machine)
   }
 

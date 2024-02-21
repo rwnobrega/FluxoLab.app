@@ -31,8 +31,8 @@ export function newAssignmentSymbol (params: { id: string, variableId: string, e
         const value = evaluate(expression, state.memory)
         const valueType = typeof value
         const varType = getVariableType(variable.type)
-        if (valueType !== varType.jsName) {
-          state.errorMessage = `Expressão \`${expression}\` não é do tipo '${varType.jsName}'.`
+        if (valueType !== varType.typeName) {
+          state.errorMessage = `Expressão \`${expression}\` não é do tipo '${varType.typeName}'.`
           state.status = 'error'
           return
         }
@@ -109,7 +109,7 @@ export function newOutputSymbol (params: { id: string, expression: string, nextI
       try {
         const value = evaluate(expression, state.memory)
         const valueType = typeof value
-        const varType = _.find(variableTypes, { jsName: valueType })
+        const varType = _.find(variableTypes, { typeName: valueType })
         if (varType === undefined) {
           state.errorMessage = `Tipo de variável "${valueType}" não existe.`
           state.status = 'error'

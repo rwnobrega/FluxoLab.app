@@ -28,8 +28,8 @@ export default function ({ id, disabled }: VariableItemProps): JSX.Element {
       disabled={disabled}
     >
       {
-        _.map(variableTypes, ({ typeName, jsName }) => (
-          <option key={typeName} value={typeName}>{jsName.charAt(0).toUpperCase() + jsName.slice(1)}</option>
+        _.map(variableTypes, ({ typeName }) => (
+          <option key={typeName} value={typeName}>{typeName.charAt(0).toUpperCase() + typeName.slice(1)}</option>
         ))
       }
     </Form.Select>
