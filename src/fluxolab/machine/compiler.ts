@@ -94,6 +94,9 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
         }
         case 'output_': {
           const expression = data.value
+          if (expression === '') {
+            throw new CompileError('Expressão não especificada.', [id])
+          }
           const nextId = getOutgoingNode(id, 'out', edges)
           flowchart.push(newOutputSymbol({ id, expression, nextId }))
           break
