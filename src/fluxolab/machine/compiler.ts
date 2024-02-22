@@ -57,11 +57,14 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
         case 'assignment': {
           const split: string[] = _.map(data.value.split('='), _.trim)
           if (split.length !== 2) {
-            throw new CompileError('Expressão inválida', [id])
+            throw new CompileError('Atribuição inválida.', [id])
           }
           const [variableId, expression] = split
           if (variableId === '') {
             throw new CompileError('Variável não especificada.', [id])
+          }
+          if (expression === '') {
+            throw new CompileError('Expressão não especificada.', [id])
           }
           if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(variableId)) {
             throw new CompileError(`Identificador "${variableId}" inválido.`, [id])
