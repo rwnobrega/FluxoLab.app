@@ -212,6 +212,10 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
               <td className={classes}>max(x, y)</td>
               <td>Máximo</td>
             </tr>
+            <tr>
+              <td className={classes}>rand_int(a, b)</td>
+              <td>Número inteiro aleatório entre a e b (inclusive)</td>
+            </tr>
           </tbody>
         </Table>
       </Modal.Body>

@@ -62,7 +62,8 @@ const functions: {[key: string]: (args: number[]) => number} = {
   floor: (args: number[]) => Math.floor(args[0]),
   ceil: (args: number[]) => Math.ceil(args[0]),
   min: (args: number[]) => Math.min(...args),
-  max: (args: number[]) => Math.max(...args)
+  max: (args: number[]) => Math.max(...args),
+  rand_int: (args: number[]) => Math.floor(Math.random() * (args[1] - args[0] + 1)) + args[0]
 }
 
 function evaluateNode (node: any, memory: Memory): VarType {
