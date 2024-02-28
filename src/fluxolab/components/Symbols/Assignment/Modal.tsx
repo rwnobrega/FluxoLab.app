@@ -4,6 +4,8 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
+import TextInput from 'components/TextInput'
+
 import useStoreFlow from 'stores/storeFlow'
 
 interface Props {
@@ -35,15 +37,10 @@ export default function ({ nodeId, value, showModal, setShowModal }: Props): JSX
           <Modal.Title>Atribuição</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Control
-            type='text'
-            className='font-monospace'
+          <TextInput
             placeholder='Digite uma expressão de atribuição'
-            autoFocus
-            autoComplete='off'
             value={textValue}
-            onChange={event => setTextValue(event.target.value)}
-            onFocus={event => event.target.select()}
+            setValue={setTextValue}
           />
         </Modal.Body>
         <Modal.Footer>

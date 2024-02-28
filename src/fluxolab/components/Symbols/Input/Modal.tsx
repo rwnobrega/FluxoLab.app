@@ -6,6 +6,8 @@ import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
+import TextInput from 'components/TextInput'
+
 import useStoreFlow from 'stores/storeFlow'
 
 interface Props {
@@ -42,15 +44,10 @@ export default function ({ nodeId, value, showModal, setShowModal }: Props): JSX
               Leia
             </Form.Label>
             <Col>
-              <Form.Control
-                type='text'
-                className='font-monospace'
+              <TextInput
                 placeholder='Digite o identificador da variável'
-                autoFocus
-                autoComplete='off'
                 value={textValue}
-                onChange={event => setTextValue(event.target.value)}
-                onFocus={event => event.target.select()}
+                setValue={setTextValue}
               />
             </Col>
           </Form.Group>
