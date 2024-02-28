@@ -11,7 +11,7 @@ export default function evaluate (str: string, memory: Memory): VarType {
   return evaluateNode(ast.body[0], memory)
 }
 
-const binaryOperators: {[key: string]: (a: VarType, b: VarType) => VarType} = {
+const binaryOperators: { [key: string]: (a: VarType, b: VarType) => VarType } = {
   '+': (a: number, b: number) => a + b,
   '-': (a: number, b: number) => a - b,
   '*': (a: number, b: number) => a * b,
@@ -24,18 +24,18 @@ const binaryOperators: {[key: string]: (a: VarType, b: VarType) => VarType} = {
   '!=': (a: VarType, b: VarType) => a !== b
 }
 
-const logicalOperators: {[key: string]: (a: boolean, b: boolean) => boolean} = {
+const logicalOperators: { [key: string]: (a: boolean, b: boolean) => boolean } = {
   '&&': (a: boolean, b: boolean) => a && b,
   '||': (a: boolean, b: boolean) => a || b
 }
 
-const unaryOperators: {[key: string]: (a: VarType) => VarType} = {
+const unaryOperators: { [key: string]: (a: VarType) => VarType } = {
   '+': (a: number) => +a,
   '-': (a: number) => -a,
   '!': (a: boolean) => !a
 }
 
-const functions: {[key: string]: (args: number[]) => number} = {
+const functions: { [key: string]: (args: number[]) => number } = {
   div: (args: number[]) => Math.floor(args[0] / args[1]),
   mod: (args: number[]) => args[0] % args[1],
   pow: (args: number[]) => Math.pow(args[0], args[1]),
@@ -110,8 +110,14 @@ function evaluateNode (node: any, memory: Memory): VarType {
     }
     const left = evaluateNode(node.left, memory)
     const right = evaluateNode(node.right, memory)
-    const commonError = `O operador '${node.operator as string}' requer operandos numéricos`
+    if (_.includes(['==', '!='], node.operator)) {
+      const commonError = `O operador '${node.operator as string}' requer operandos de tipos iguais`
+      if (typeof left !== typeof right) {
+        throw new Error(`${commonError} ('${left as string}' é do tipo '${typeof left as string}', '${right as string}' é do tipo '${typeof right as string}')`)
+      }
+    }
     if (_.includes(['+', '-', '*', '/', '>', '>=', '<', '<='], node.operator)) {
+      const commonError = `O operador '${node.operator as string}' requer operandos numéricos`
       if (typeof left !== 'number') {
         throw new Error(`${commonError} ('${left as string}' é do tipo '${typeof left as string}')`)
       }
