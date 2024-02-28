@@ -55,11 +55,12 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           break
         }
         case 'assignment': {
-          const split: string[] = _.map(data.value.split('='), _.trim)
-          if (split.length !== 2) {
+          const equalIndex = parseInt(data.value.indexOf('='))
+          if (equalIndex === -1) {
             throw new CompileError('Atribuição inválida.', [id])
           }
-          const [variableId, expression] = split
+          const variableId = _.trim(data.value.slice(0, equalIndex))
+          const expression = _.trim(data.value.slice(equalIndex + 1))
           if (variableId === '') {
             throw new CompileError('Variável não especificada.', [id])
           }
