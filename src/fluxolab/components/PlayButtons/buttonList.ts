@@ -3,7 +3,7 @@ import { MachineState, CompileError } from 'machine/types'
 
 interface IsDisabledProps {
   state: MachineState
-  compileError: CompileError | null
+  compileErrors: CompileError[]
 }
 
 interface PlayButton {
@@ -28,8 +28,8 @@ const buttonList: PlayButton[] = [
     hotkey: 'F6',
     description: 'Encerrar execução',
     icon: 'bi-stop-fill',
-    isDisabled: ({ state, compileError }) => (
-      compileError !== null || isDisabledBackward(state)
+    isDisabled: ({ state, compileErrors }) => (
+      compileErrors.length > 0 || isDisabledBackward(state)
     )
   },
   {
@@ -37,8 +37,8 @@ const buttonList: PlayButton[] = [
     hotkey: 'F7',
     description: 'Voltar um passo',
     icon: 'bi-skip-start-fill',
-    isDisabled: ({ state, compileError }) => (
-      compileError !== null || isDisabledBackward(state)
+    isDisabled: ({ state, compileErrors }) => (
+      compileErrors.length > 0 || isDisabledBackward(state)
     )
   },
   {
@@ -46,8 +46,8 @@ const buttonList: PlayButton[] = [
     hotkey: 'F8',
     description: 'Executar próximo passo',
     icon: 'bi-skip-end-fill',
-    isDisabled: ({ state, compileError }) => (
-      compileError !== null || isDisabledForward(state)
+    isDisabled: ({ state, compileErrors }) => (
+      compileErrors.length > 0 || isDisabledForward(state)
     )
   }
 ]

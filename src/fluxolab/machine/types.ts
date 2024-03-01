@@ -12,11 +12,11 @@ export interface Symbol {
 }
 
 export class CompileError extends Error {
-  nodeIds: string[]
-  constructor (message: string, nodeIds: string[]) {
+  nodeId: string
+  constructor (message: string, nodeId: string) {
     super(message)
     this.name = 'CompileError'
-    this.nodeIds = nodeIds
+    this.nodeId = nodeId
   }
 }
 

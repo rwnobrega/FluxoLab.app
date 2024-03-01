@@ -17,7 +17,7 @@ interface Props {
 }
 
 export default function ({ refInput }: Props): JSX.Element {
-  const { machine, compileError } = useStoreMachine()
+  const { machine, compileErrors } = useStoreMachine()
   const { getState, execAction } = useStoreMachineState()
 
   const state = getState()
@@ -29,7 +29,7 @@ export default function ({ refInput }: Props): JSX.Element {
   return (
     <ButtonGroup>
       {_.map(buttonList, ({ action, description, hotkey, icon, isDisabled }) => {
-        const disabled = isDisabled({ state, compileError })
+        const disabled = isDisabled({ state, compileErrors })
         const tooltipText = disabled ? '' : `${description} (${hotkey})`
         return (
           <Tooltip key={action} text={tooltipText}>

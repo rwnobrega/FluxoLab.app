@@ -32,7 +32,7 @@ export default function (): JSX.Element {
   const [contentHeight, setContentHeight] = React.useState<string>('100vh')
 
   const { nodes, edges, selectAll } = useStoreFlow()
-  const { machine, setFlowchart, setStartSymbolId, compileError, setCompileError } = useStoreMachine()
+  const { machine, setFlowchart, setStartSymbolId, compileErrors, setCompileErrors } = useStoreMachine()
   const { getState, reset, execAction } = useStoreMachineState()
 
   const state = getState()
@@ -45,10 +45,10 @@ export default function (): JSX.Element {
   )
 
   useEffect(() => {
-    const { flowchart, startSymbolId, error } = compile({ nodes, edges, variables: machine.variables })
+    const { flowchart, startSymbolId, errors } = compile({ nodes, edges, variables: machine.variables })
     setStartSymbolId(startSymbolId)
     setFlowchart(flowchart)
-    setCompileError(error)
+    setCompileErrors(errors)
   }, [nodesDep, edgesDep, machine.variables])
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export default function (): JSX.Element {
     useHotkeys(
       hotkey,
       () => {
-        if (!isDisabled({ state, compileError })) {
+        if (!isDisabled({ state, compileErrors })) {
           execAction(action, machine, refInput)
         }
       },

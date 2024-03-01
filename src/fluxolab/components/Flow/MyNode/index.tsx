@@ -30,10 +30,10 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
   const [margin, setMargin] = useState<number>(0)
   const [boxFilter, setBoxFilter] = useState<string>('')
   const [showModal, setShowModal] = useState<boolean>(false)
-  const [iconsVisible, setIconsVisible] = useState<boolean>(false)
+  const [mouseOver, setMouseOver] = useState<boolean>(false)
 
-  const { nodes, deleteNode, updateNodeProp } = useStoreFlow()
-  const { compileError } = useStoreMachine()
+  const { nodes, deleteNode, updateNodeProp, setMouseOverNodeId } = useStoreFlow()
+  const { compileErrors } = useStoreMachine()
   const { getState } = useStoreMachineState()
   const { getZoom } = useReactFlow()
 
@@ -61,8 +61,8 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
   useEffect(() => {
     setBoxFilter(
       () => {
-        if (compileError !== null) {
-          if (_.includes(compileError.nodeIds, nodeId)) {
+        if (compileErrors.length > 0) {
+          if (_.some(compileErrors, { nodeId })) {
             return getDropShadow(palette.red)
           }
         } else if (nodeId === state.curSymbolId) {
@@ -77,21 +77,34 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
         return ''
       }
     )
-  }, [state, compileError])
+  }, [state, compileErrors])
 
   function handleDelete (): void {
     deleteNode(nodeId)
+    setMouseOver(false)
+    setMouseOverNodeId(null)
   }
 
   function handleEdit (): void {
-    setIconsVisible(false)
+    setMouseOver(false)
+    setMouseOverNodeId(null)
     setShowModal(true)
+  }
+
+  function handleMouseEnter (): void {
+    setMouseOver(true)
+    setMouseOverNodeId(nodeId)
+  }
+
+  function handleMouseLeave (): void {
+    setMouseOver(false)
+    setMouseOverNodeId(null)
   }
 
   return (
     <div
-      onMouseEnter={() => { setIconsVisible(true) }}
-      onMouseLeave={() => { setIconsVisible(false) }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       style={{ cursor: 'grab' }}
     >
       {
@@ -118,8 +131,8 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
           <Label value={node?.data.value} />
         </span>
       </SymbolBox>
-      <ButtonDelete onClick={handleDelete} visible={iconsVisible} />
-      <ButtonEdit onClick={handleEdit} visible={iconsVisible && Modal !== undefined} />
+      <ButtonDelete onClick={handleDelete} visible={mouseOver} />
+      <ButtonEdit onClick={handleEdit} visible={mouseOver && Modal !== undefined} />
       {_.map(handles, (props, index) => (
         <MyHandle key={index} boxStyle={boxStyle} {...props} />
       ))}

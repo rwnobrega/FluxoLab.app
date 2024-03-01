@@ -79,7 +79,10 @@ export default function ({ wrapper, refInput }: Props): JSX.Element {
       snapToGrid
       snapGrid={[20, 20]}
     >
-      <Stack direction='horizontal' gap={3} className='position-absolute top-0 start-0 m-3' style={{ zIndex: 5 }}>
+      <Stack
+        direction='horizontal' gap={3} className='position-absolute top-0 start-0 m-3'
+        style={{ zIndex: 5, alignItems: 'start' }}
+      >
         <PlayButtons refInput={refInput} />
         <StatusMessage />
       </Stack>

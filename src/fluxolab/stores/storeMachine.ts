@@ -15,8 +15,8 @@ interface StoreMachine {
   removeVariable: (id: string) => void
   renameVariable: (id: string, newId: string) => void
   changeVariableType: (id: string, type: Variable['type']) => void
-  compileError: CompileError | null
-  setCompileError: (compileError: CompileError | null) => void
+  compileErrors: CompileError[]
+  setCompileErrors: (compileErrors: CompileError[]) => void
   flowchartTitle: string
   setFlowchartTitle: (flowchartTitle: string) => void
 }
@@ -78,8 +78,8 @@ const useStoreMachine = create<StoreMachine, any>(
         })
         set({ machine })
       },
-      compileError: null,
-      setCompileError: compileError => { set({ compileError }) },
+      compileErrors: [],
+      setCompileErrors: compileErrors => { set({ compileErrors }) },
       flowchartTitle: 'Fluxograma sem título',
       setFlowchartTitle: flowchartTitle => { set({ flowchartTitle }) }
     }),

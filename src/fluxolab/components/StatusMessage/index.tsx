@@ -1,9 +1,13 @@
+import _ from 'lodash'
+
 import React from 'react'
 
 import Alert from 'react-bootstrap/Alert'
+import Stack from 'react-bootstrap/Stack'
 
 import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
+import useStoreFlow from 'stores/storeFlow'
 
 import { palette } from 'utils/colors'
 
@@ -14,17 +18,30 @@ interface Triplet {
 }
 
 export default function (): JSX.Element {
-  const { compileError } = useStoreMachine()
+  const { compileErrors } = useStoreMachine()
   const { getState } = useStoreMachineState()
+  const { mouseOverNodeId } = useStoreFlow()
 
   const state = getState()
 
   function getTriplet (): Triplet {
-    if (compileError !== null) {
+    if (compileErrors.length > 0) {
+      const hoveredNodeErrors = _.filter(compileErrors, { nodeId: mouseOverNodeId })
+      const nonNodeErrors = _.filter(compileErrors, { nodeId: '' })
+      let statusText: string
+      if (mouseOverNodeId === null || hoveredNodeErrors.length === 0) {
+        if (nonNodeErrors.length > 0) {
+          statusText = _.map(nonNodeErrors, 'message').join('\n')
+        } else {
+          statusText = `Há ${compileErrors.length} erro${compileErrors.length > 1 ? 's' : ''} de compilação.`
+        }
+      } else {
+        statusText = _.map(hoveredNodeErrors, 'message').join('\n')
+      }
       return {
         backgroundColor: palette.red,
         statusIcon: 'bi-exclamation-triangle-fill',
-        statusText: `Erro de compilação: ${compileError.message}`
+        statusText: statusText
       }
     } else if (state.status === 'error') {
       return {
@@ -63,7 +80,12 @@ export default function (): JSX.Element {
 
   return (
     <Alert className='m-0 border-0' style={{ backgroundColor, color: 'white', padding: '6px 12px' }}>
-      <i className={`bi ${statusIcon}`} /><span className='ms-2'>{statusText}</span>
+      <Stack direction='horizontal' style={{ alignItems: 'start' }}>
+        <i className={`bi ${statusIcon}`} />
+        <span className='ms-2' style={{ whiteSpace: 'pre-wrap' }}>
+          {statusText}
+        </span>
+      </Stack>
     </Alert>
   )
 }
