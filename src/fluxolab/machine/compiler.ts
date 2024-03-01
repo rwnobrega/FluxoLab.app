@@ -111,8 +111,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           const variableId: string = data.value
           if (variableId === '') {
             errors.push(new CompileError('Variável não especificada.', id))
-          }
-          if (!_.some(variables, { id: variableId })) {
+          } else if (!_.some(variables, { id: variableId })) {
             errors.push(new CompileError(`Variável "${variableId}" não existe.`, id))
           }
           const nextId = getOutgoingNode(id, 'out', edges)
