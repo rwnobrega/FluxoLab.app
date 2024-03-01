@@ -11,13 +11,9 @@ export interface Symbol {
   work: (machine: Machine, state: MachineState) => void
 }
 
-export class CompileError extends Error {
-  nodeId: string
-  constructor (message: string, nodeId: string) {
-    super(message)
-    this.name = 'CompileError'
-    this.nodeId = nodeId
-  }
+export interface CompileError {
+  message: string
+  nodeId: string | null
 }
 
 export interface Machine {

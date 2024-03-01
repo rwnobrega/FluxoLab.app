@@ -27,7 +27,7 @@ export default function (): JSX.Element {
   function getTriplet (): Triplet {
     if (compileErrors.length > 0) {
       const hoveredNodeErrors = _.filter(compileErrors, { nodeId: mouseOverNodeId })
-      const nonNodeErrors = _.filter(compileErrors, { nodeId: '' })
+      const nonNodeErrors = _.filter(compileErrors, { nodeId: null })
       let statusText: string
       if (mouseOverNodeId === null || hoveredNodeErrors.length === 0) {
         if (nonNodeErrors.length > 0) {

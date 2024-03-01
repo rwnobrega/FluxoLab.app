@@ -38,9 +38,9 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
   function getStartSymbolId (): [string, CompileError[]] {
     const startNodes = _.filter(nodes, { type: 'start' })
     if (startNodes.length === 0) {
-      return ['', [new CompileError('Deve haver um bloco de início.', '')]]
+      return ['', [{message: 'Deve haver um bloco de início.', nodeId: null}]]
     } else if (startNodes.length > 1) {
-      return ['', [new CompileError('Há mais de um bloco de início.', '')]]
+      return ['', [{message: 'Há mais de um bloco de início.', nodeId: null}]]
     }
     return [startNodes[0].id, []]
   }
@@ -53,7 +53,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
         case 'start': {
           const nextId = getOutgoingNode(id, 'out', edges)
           if (nextId === null) {
-            errors.push(new CompileError('Bloco não tem ramo de saída.', id))
+            errors.push({message: 'Bloco não tem ramo de saída.', nodeId: id})
           } else {
             flowchart.push(newStartSymbol({ id, nextId }))
           }
@@ -66,24 +66,24 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           if (equalIndex === -1) {
             variableId = ''
             expression = ''
-            errors.push(new CompileError('Atribuição inválida.', id))
+            errors.push({message: 'Atribuição inválida.', nodeId: id})
           } else {
             variableId = _.trim(data.value.slice(0, equalIndex))
             expression = _.trim(data.value.slice(equalIndex + 1))
             if (variableId === '') {
-              errors.push(new CompileError('Variável não especificada.', id))
+              errors.push({message: 'Variável não especificada.', nodeId: id})
             } else if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(variableId)) {
-              errors.push(new CompileError(`Identificador "${variableId}" inválido.`, id))
+              errors.push({message: `Identificador "${variableId}" inválido.`, nodeId: id})
             } else if (!_.some(variables, { id: variableId })) {
-              errors.push(new CompileError(`Variável "${variableId}" não existe.`, id))
+              errors.push({message: `Variável "${variableId}" não existe.`, nodeId: id})
             }
             if (expression === '') {
-              errors.push(new CompileError('Expressão não especificada.', id))
+              errors.push({message: 'Expressão não especificada.', nodeId: id})
             }
           }
           const nextId = getOutgoingNode(id, 'out', edges)
           if (nextId === null) {
-            errors.push(new CompileError('Bloco não tem ramo de saída.', id))
+            errors.push({message: 'Bloco não tem ramo de saída.', nodeId: id})
           } else {
             flowchart.push(newAssignmentSymbol({ id, variableId, expression, nextId }))
           }
@@ -92,15 +92,15 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
         case 'conditional': {
           const condition = data.value
           if (condition === '') {
-            errors.push(new CompileError('Condição não especificada.', id))
+            errors.push({message: 'Condição não especificada.', nodeId: id})
           }
           const nextTrue = getOutgoingNode(id, 'true', edges)
           if (nextTrue === null) {
-            errors.push(new CompileError('Bloco não tem ramo de saída (T).', id))
+            errors.push({message: 'Bloco não tem ramo de saída (T).', nodeId: id})
           }
           const nextFalse = getOutgoingNode(id, 'false', edges)
           if (nextFalse === null) {
-            errors.push(new CompileError('Bloco não tem ramo de saída (F).', id))
+            errors.push({message: 'Bloco não tem ramo de saída (F).', nodeId: id})
           }
           if (nextTrue !== null && nextFalse !== null) {
             flowchart.push(newConditionalSymbol({ id, condition, nextTrue, nextFalse }))
@@ -110,13 +110,13 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
         case 'input_': {
           const variableId: string = data.value
           if (variableId === '') {
-            errors.push(new CompileError('Variável não especificada.', id))
+            errors.push({message: 'Variável não especificada.', nodeId: id})
           } else if (!_.some(variables, { id: variableId })) {
-            errors.push(new CompileError(`Variável "${variableId}" não existe.`, id))
+            errors.push({message: `Variável "${variableId}" não existe.`, nodeId: id})
           }
           const nextId = getOutgoingNode(id, 'out', edges)
           if (nextId === null) {
-            errors.push(new CompileError('Bloco não tem ramo de saída.', id))
+            errors.push({message: 'Bloco não tem ramo de saída.', nodeId: id})
           } else {
             flowchart.push(newInputSymbol({ id, variableId, nextId }))
           }
@@ -125,11 +125,11 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
         case 'output_': {
           const expression = data.value
           if (expression === '') {
-            errors.push(new CompileError('Expressão não especificada.', id))
+            errors.push({message: 'Expressão não especificada.', nodeId: id})
           }
           const nextId = getOutgoingNode(id, 'out', edges)
           if (nextId === null) {
-            errors.push(new CompileError('Bloco não tem ramo de saída.', id))
+            errors.push({message: 'Bloco não tem ramo de saída.', nodeId: id})
           } else {
             flowchart.push(newOutputSymbol({ id, expression, nextId }))
           }
@@ -140,7 +140,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           break
         }
         default: {
-          errors.push(new CompileError(`Tipo de nó desconhecido: ${type as string}`, id))
+          errors.push({message: `Tipo de nó desconhecido: ${type as string}`, nodeId: id})
           break
         }
       }
