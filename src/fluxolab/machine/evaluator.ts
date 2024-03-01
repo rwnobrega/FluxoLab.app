@@ -170,6 +170,9 @@ function evaluateNode (node: any, memory: Memory): VarType {
         throw new Error(`${part1} (${part2}).`)
       }
     }
+    if (_.some(node.arguments, arg => typeof evaluateNode(arg, memory) !== 'number')) {
+      throw new Error(`A função \`${node.callee.name as string}\` requer argumentos do tipo \`number\`.`)
+    }
     const args = node.arguments.map((arg: any) => evaluateNode(arg, memory))
     return func(args)
   }
