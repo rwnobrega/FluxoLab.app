@@ -62,7 +62,7 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
     setBoxFilter(
       () => {
         if (compileError !== null) {
-          if (_.includes(compileError?.nodeIds, nodeId)) {
+          if (_.includes(compileError.nodeIds, nodeId)) {
             return getDropShadow(palette.red)
           }
         } else if (nodeId === state.curSymbolId) {
