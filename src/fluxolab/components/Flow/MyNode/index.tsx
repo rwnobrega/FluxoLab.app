@@ -119,7 +119,7 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
         </span>
       </SymbolBox>
       <ButtonDelete onClick={handleDelete} visible={iconsVisible} />
-      {(Modal !== undefined) && <ButtonEdit onClick={handleEdit} visible={iconsVisible} />}
+      <ButtonEdit onClick={handleEdit} visible={iconsVisible && Modal !== undefined} />
       {_.map(handles, (props, index) => (
         <MyHandle key={index} boxStyle={boxStyle} {...props} />
       ))}
