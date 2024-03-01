@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
-import TextInput from 'components/TextInput'
+import TextInput from 'components/General/TextInput'
 
 import useStoreFlow from 'stores/storeFlow'
 

@@ -5,7 +5,7 @@ import React from 'react'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Button from 'react-bootstrap/Button'
 
-import Tooltip from 'components/Tooltip'
+import Tooltip from 'components/General/Tooltip'
 
 import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState, { Action } from 'stores/storeMachineState'

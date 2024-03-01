@@ -2,7 +2,7 @@ import React from 'react'
 
 import Button from 'react-bootstrap/Button'
 
-import Tooltip from 'components/Tooltip'
+import Tooltip from 'components/General/Tooltip'
 
 import { VariableItemProps } from '.'
 
