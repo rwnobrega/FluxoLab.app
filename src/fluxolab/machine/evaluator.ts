@@ -7,7 +7,12 @@ import { getVariableType } from 'machine/variables'
 import { Memory, VarType } from 'machine/types'
 
 export default function evaluate (str: string, memory: Memory): VarType {
-  const ast = parse(str, { ecmaVersion: 3 }) as any
+  let ast: any
+  try {
+    ast = parse(str, { ecmaVersion: 3 })
+  } catch (error) {
+    throw new Error(`Erro de sintaxe (${error.pos as string}).`)
+  }
   return evaluateNode(ast.body[0], memory)
 }
 
@@ -167,5 +172,5 @@ function evaluateNode (node: any, memory: Memory): VarType {
     return result
   }
 
-  throw new Error(` ${node.type as string}.`)
+  throw new Error(`Erro de sintaxe (${node.start as string}:${node.end as string}).`)
 }
