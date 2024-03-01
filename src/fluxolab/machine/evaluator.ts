@@ -157,6 +157,19 @@ function evaluateNode (node: any, memory: Memory): VarType {
     if (func === undefined) {
       throw new Error(`A função \`${node.callee.name as string}\` não existe.`)
     }
+    if (_.includes(['div', 'mod', 'pow', 'min', 'max', 'rand_int'], node.callee.name)) {
+      if (node.arguments.length !== 2) {
+        const part1 = `A função \`${node.callee.name as string}\` requer exatamente dois argumentos`
+        const part2 = `fornecido${node.arguments.length === 1 ? '' : 's'} ${node.arguments.length as string}`
+        throw new Error(`${part1} (${part2}).`)
+      }
+    } else {
+      if (node.arguments.length !== 1) {
+        const part1 = `A função \`${node.callee.name as string}\` requer exatamente um argumento`
+        const part2 = `fornecidos ${node.arguments.length as string}`
+        throw new Error(`${part1} (${part2}).`)
+      }
+    }
     const args = node.arguments.map((arg: any) => evaluateNode(arg, memory))
     return func(args)
   }
