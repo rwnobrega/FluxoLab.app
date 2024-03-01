@@ -73,9 +73,9 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
             if (variableId === '') {
               errors.push({ message: 'Variável não especificada.', nodeId: id })
             } else if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(variableId)) {
-              errors.push({ message: `Identificador "${variableId}" inválido.`, nodeId: id })
+              errors.push({ message: `Identificador \`${variableId}\` é inválido.`, nodeId: id })
             } else if (!_.some(variables, { id: variableId })) {
-              errors.push({ message: `Variável "${variableId}" não existe.`, nodeId: id })
+              errors.push({ message: `Variável \`${variableId}\` não existe.`, nodeId: id })
             }
             if (expression === '') {
               errors.push({ message: 'Expressão não especificada.', nodeId: id })
@@ -96,11 +96,11 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           }
           const nextTrue = getOutgoingNode(id, 'true', edges)
           if (nextTrue === null) {
-            errors.push({ message: 'Bloco não tem ramo de saída (T).', nodeId: id })
+            errors.push({ message: 'Bloco não tem ramo na saída T.', nodeId: id })
           }
           const nextFalse = getOutgoingNode(id, 'false', edges)
           if (nextFalse === null) {
-            errors.push({ message: 'Bloco não tem ramo de saída (F).', nodeId: id })
+            errors.push({ message: 'Bloco não tem ramo na saída F.', nodeId: id })
           }
           if (nextTrue !== null && nextFalse !== null) {
             flowchart.push(newConditionalSymbol({ id, condition, nextTrue, nextFalse }))
@@ -112,7 +112,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           if (variableId === '') {
             errors.push({ message: 'Variável não especificada.', nodeId: id })
           } else if (!_.some(variables, { id: variableId })) {
-            errors.push({ message: `Variável "${variableId}" não existe.`, nodeId: id })
+            errors.push({ message: `Variável \`${variableId}\` não existe.`, nodeId: id })
           }
           const nextId = getOutgoingNode(id, 'out', edges)
           if (nextId === null) {
@@ -140,8 +140,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           break
         }
         default: {
-          errors.push({ message: `Tipo de nó desconhecido: ${type as string}`, nodeId: id })
-          break
+          throw new Error(`Tipo de bloco desconhecido: ${type as string}`)
         }
       }
     }
