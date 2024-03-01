@@ -32,7 +32,9 @@ export function newAssignmentSymbol (params: { id: string, variableId: string, e
         const valueType = typeof value
         const varType = getVariableType(variable.type)
         if (valueType !== varType.typeName) {
-          state.errorMessage = `Expressão \`${expression}\` não é do tipo '${varType.typeName}'.`
+          const msg1 = `A variável \`${variableId}\` é do tipo \`${variable.type}\``
+          const msg2 = `a expressão \`${expression}\` é do tipo \`${valueType}\``
+          state.errorMessage = `${msg1}, mas ${msg2}.`
           state.status = 'error'
           return
         }

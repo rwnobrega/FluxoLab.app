@@ -78,10 +78,10 @@ function evaluateNode (node: any, memory: Memory): VarType {
   if (node.type === 'Identifier') {
     const value = memory[node.name]
     if (value === undefined) {
-      throw new Error(`A variável '${node.name as string}' não existe`)
+      throw new Error(`A variável \`${node.name as string}\` não existe.`)
     }
     if (value === null) {
-      throw new Error(`A variável '${node.name as string}' não foi inicializada`)
+      throw new Error(`A variável \`${node.name as string}\` não foi inicializada.`)
     }
     return value
   }
@@ -89,16 +89,14 @@ function evaluateNode (node: any, memory: Memory): VarType {
   if (node.type === 'LogicalExpression') {
     const op = logicalOperators[node.operator]
     if (op === undefined) {
-      throw new Error(`O operador '${node.operator as string}' não existe`)
+      throw new Error(`O operador \`${node.operator as string}\` não existe.`)
     }
     const left = evaluateNode(node.left, memory)
     const right = evaluateNode(node.right, memory)
-    const commonError = `O operador '${node.operator as string}' requer operandos booleanos`
-    if (typeof left !== 'boolean') {
-      throw new Error(`${commonError} ('${left as string}' é do tipo '${typeof left as string}')`)
-    }
-    if (typeof right !== 'boolean') {
-      throw new Error(`${commonError} ('${right as string}' é do tipo '${typeof right as string}')`)
+    if (typeof left !== 'boolean' || typeof right !== 'boolean') {
+      const part1 = `O operador \`${node.operator as string}\` requer operandos do tipo \`boolean\``
+      const part2 = `encontrados \`${typeof left as string}\` e \`${typeof right as string}\``
+      throw new Error(`${part1} (${part2}).`)
     }
     return op(left, right)
   }
@@ -106,23 +104,22 @@ function evaluateNode (node: any, memory: Memory): VarType {
   if (node.type === 'BinaryExpression') {
     const op = binaryOperators[node.operator]
     if (op === undefined) {
-      throw new Error(`O operador '${node.operator as string}' não existe`)
+      throw new Error(`O operador \`${node.operator as string}\` não existe.`)
     }
     const left = evaluateNode(node.left, memory)
     const right = evaluateNode(node.right, memory)
     if (_.includes(['==', '!='], node.operator)) {
-      const commonError = `O operador '${node.operator as string}' requer operandos de tipos iguais`
       if (typeof left !== typeof right) {
-        throw new Error(`${commonError} ('${left as string}' é do tipo '${typeof left as string}', '${right as string}' é do tipo '${typeof right as string}')`)
+        const part1 = `O operador \`${node.operator as string}\` requer operandos de tipos iguais`
+        const part2 = `encontrados \`${typeof left as string}\` e \`${typeof right as string}\``
+        throw new Error(`${part1} (${part2}).`)
       }
     }
     if (_.includes(['+', '-', '*', '/', '>', '>=', '<', '<='], node.operator)) {
-      const commonError = `O operador '${node.operator as string}' requer operandos numéricos`
-      if (typeof left !== 'number') {
-        throw new Error(`${commonError} ('${left as string}' é do tipo '${typeof left as string}')`)
-      }
-      if (typeof right !== 'number') {
-        throw new Error(`${commonError} ('${right as string}' é do tipo '${typeof right as string}')`)
+      if (typeof left !== 'number' || typeof right !== 'number') {
+        const part1 = `O operador \`${node.operator as string}\` requer operandos do tipo \`number\``
+        const part2 = `encontrados \`${typeof left as string}\` e \`${typeof right as string}\``
+        throw new Error(`${part1} (${part2}).`)
       }
     }
     return op(left, right)
@@ -131,7 +128,7 @@ function evaluateNode (node: any, memory: Memory): VarType {
   if (node.type === 'UnaryExpression') {
     const op = unaryOperators[node.operator]
     if (op === undefined) {
-      throw new Error(`O operador '${node.operator as string}' não existe`)
+      throw new Error(`O operador \`${node.operator as string}\` não existe.`)
     }
     const arg = evaluateNode(node.argument, memory)
     const argType = typeof arg
@@ -140,10 +137,11 @@ function evaluateNode (node: any, memory: Memory): VarType {
       '-': 'number',
       '!': 'boolean'
     }
-    const commonError = `O operador '${node.operator as string}' requer um operando`
     for (const [operator, type] of Object.entries(operandTypes)) {
       if (node.operator === operator && argType !== type) {
-        throw new Error(`${commonError} ${type} ('${arg as string}' é do tipo '${argType}')`)
+        const part1 = `O operador \`${node.operator as string}\` requer um operando do tipo \`${type}\``
+        const part2 = `encontrado \`${argType as string}\``
+        throw new Error(`${part1} (${part2}).`)
       }
     }
     return op(arg)
@@ -152,7 +150,7 @@ function evaluateNode (node: any, memory: Memory): VarType {
   if (node.type === 'CallExpression') {
     const func = functions[node.callee.name]
     if (func === undefined) {
-      throw new Error(`A função '${node.callee.name as string}' não existe`)
+      throw new Error(`A função \`${node.callee.name as string}\` não existe.`)
     }
     const args = node.arguments.map((arg: any) => evaluateNode(arg, memory))
     return func(args)
@@ -169,5 +167,5 @@ function evaluateNode (node: any, memory: Memory): VarType {
     return result
   }
 
-  throw new Error(`Erro de sintaxe: ${node.type as string}`)
+  throw new Error(` ${node.type as string}.`)
 }
