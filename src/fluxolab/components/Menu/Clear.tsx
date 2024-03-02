@@ -3,30 +3,35 @@ import React from 'react'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 
+import useStoreFlow from 'stores/storeFlow'
+import useStoreMachine from 'stores/storeMachine'
+
 interface Props {
-  title: string
-  message: string
-  onConfirm: () => void
   showModal: boolean
   setShowModal: (showModal: boolean) => void
 }
 
-export default function ({ title, message, onConfirm, showModal, setShowModal }: Props): JSX.Element {
+export default function ({ showModal, setShowModal }: Props): JSX.Element {
+  const { clearAll } = useStoreFlow()
+  const { clearVariables, setFlowchartTitle } = useStoreMachine()
+
   function handleCancel (): void {
     setShowModal(false)
   }
 
   function handleConfirm (): void {
-    onConfirm()
+    clearAll()
+    clearVariables()
+    setFlowchartTitle('Fluxograma sem título')
     setShowModal(false)
   }
 
   return (
     <Modal show={showModal} onHide={handleCancel}>
       <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
+        <Modal.Title>Limpar fluxograma</Modal.Title>
       </Modal.Header>
-      <Modal.Body>{message}</Modal.Body>
+      <Modal.Body>Você tem certeza que deseja limpar o fluxograma?</Modal.Body>
       <Modal.Footer>
         <Button variant='secondary' onClick={handleCancel}>
           Cancelar
