@@ -5,6 +5,8 @@ import React from 'react'
 import Alert from 'react-bootstrap/Alert'
 import Stack from 'react-bootstrap/Stack'
 
+import Minidown from 'components/General/Minidown'
+
 import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
 import useStoreFlow from 'stores/storeFlow'
@@ -47,7 +49,7 @@ export default function (): JSX.Element {
       return {
         backgroundColor: palette.red,
         statusIcon: 'bi-exclamation-circle-fill',
-        statusText: `Erro de execução: ${state.errorMessage as string}`
+        statusText: state.errorMessage as string
       }
     } else if (state.status === 'halted') {
       return {
@@ -83,7 +85,7 @@ export default function (): JSX.Element {
       <Stack direction='horizontal' style={{ alignItems: 'start' }}>
         <i className={`bi ${statusIcon}`} />
         <span className='ms-2' style={{ whiteSpace: 'pre-wrap' }}>
-          {statusText}
+          <Minidown source={statusText} />
         </span>
       </Stack>
     </Alert>
