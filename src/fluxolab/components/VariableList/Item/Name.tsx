@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import Button from 'react-bootstrap/Button'
 
-import VariableModalRename from 'components/Modals/RenameVariable'
+import VariableModalRename from '../RenameVariable'
 
 import { VariableItemProps } from '.'
 
