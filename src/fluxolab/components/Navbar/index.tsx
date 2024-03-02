@@ -5,7 +5,7 @@ import Stack from 'react-bootstrap/Stack'
 
 import Brand from './Brand'
 import Title from './Title'
-import Menu from '../Menu'
+import Menu from './Menu'
 
 export default function (): JSX.Element {
   return (
