@@ -6,6 +6,8 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
+import TextInput from 'components/General/TextInput'
+
 import useStoreMachine from 'stores/storeMachine'
 
 interface Props {
@@ -49,15 +51,11 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
           <Modal.Title>Renomear variável</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Control
-            type='text'
-            className={`font-monospace ${problem !== null ? 'is-invalid' : ''}`}
+          <TextInput
             placeholder='Digite o novo identificador'
-            autoFocus
-            autoComplete='off'
             value={textId}
-            onChange={event => setTextId(event.target.value)}
-            onFocus={event => event.target.select()}
+            setValue={setTextId}
+            valid={problem === null}
           />
           <div className='pt-2 small text-danger'>
             {problem ?? '\u00A0'}
