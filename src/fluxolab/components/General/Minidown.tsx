@@ -21,13 +21,14 @@ const parseText = (text: string): JSX.Element[] => {
   let isBold = false
   let isItalic = false
   let isPre = false
+  let key = 0
 
   const flush = (): void => {
     if (buffer === '') return
 
     const className = `${isBold ? 'fw-bold ' : ''}${isItalic ? 'fst-italic ' : ''}${isPre ? 'font-monospace' : ''}`.trim()
     const style = isPre ? preStyle : undefined
-    parts.push(<span className={className} style={style}>{buffer}</span>)
+    parts.push(<span key={key++} className={className} style={style}>{buffer}</span>)
 
     buffer = ''
   }
