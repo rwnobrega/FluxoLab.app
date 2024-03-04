@@ -89,9 +89,7 @@ export default function (): JSX.Element {
         <i className={`bi ${statusIcon}`} />
         <span className='ms-2' style={{ whiteSpace: 'pre-wrap' }}>
           <Minidown source={mainStatus} />
-          {smallStatus !== ''
-            ? <div className='small'>{smallStatus}</div>
-            : null}
+          <Minidown className='small' source={smallStatus} />
         </span>
       </Stack>
     </Alert>
