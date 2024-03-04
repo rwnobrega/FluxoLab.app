@@ -1,6 +1,6 @@
 import React from 'react'
 
-const preStyle = {
+const preStyle: React.CSSProperties = {
   backgroundColor: 'rgba(0, 0, 0, 0.20)',
   paddingLeft: '4px',
   paddingRight: '4px',
@@ -8,7 +8,9 @@ const preStyle = {
   paddingBottom: '2px',
   marginLeft: '2px',
   marginRight: '2px',
-  borderRadius: '2px'
+  borderRadius: '2px',
+  whiteSpace: 'nowrap',
+  overflow: 'auto'
 }
 
 const parseText = (text: string): JSX.Element[] => {
