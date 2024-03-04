@@ -102,6 +102,7 @@ const numericalFunctions: { [key: string]: (...args: number[]) => number } = {
   ceil: (a: number) => Math.ceil(a),
   min: (a: number, b: number) => Math.min(a, b),
   max: (a: number, b: number) => Math.max(a, b),
+  rand: () => Math.random(),
   rand_int: (a: number, b: number) => Math.floor(Math.random() * (b - a + 1)) + a
 }
 
@@ -114,6 +115,12 @@ function evalNumericalFunction (a: ohm.Node, b: ohm.Node, c: ohm.Node, d: ohm.No
   if (_.includes(['pow', 'min', 'max', 'rand_int'], name)) {
     if (args.length !== 2) {
       const part1 = `A função \`${name}\` requer exatamente dois argumentos`
+      const part2 = `fornecido${args.length === 1 ? '' : 's'} ${args.length}`
+      throw new Error(`${part1} (${part2}).`)
+    }
+  } else if (_.includes(['rand'], name)) {
+    if (args.length !== 0) {
+      const part1 = `A função \`${name}\` não requer argumentos`
       const part2 = `fornecido${args.length === 1 ? '' : 's'} ${args.length}`
       throw new Error(`${part1} (${part2}).`)
     }

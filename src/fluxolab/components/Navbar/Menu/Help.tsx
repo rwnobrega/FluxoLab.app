@@ -213,6 +213,10 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
               <td>Máximo</td>
             </tr>
             <tr>
+              <td className={classes}>rand()</td>
+              <td>Número fracionário aleatório entre 0 e 1</td>
+            </tr>
+            <tr>
               <td className={classes}>rand_int(a, b)</td>
               <td>Número inteiro aleatório entre a e b (inclusive)</td>
             </tr>
