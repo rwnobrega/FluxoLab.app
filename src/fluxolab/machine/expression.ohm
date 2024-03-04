@@ -1,0 +1,58 @@
+SimpleExpression {
+  ExpressionOrPrint = Expression | Print
+
+  Print = print ListOf<Expression, ",">
+
+  Expression
+    = Expression "||" Disjunct  --binary
+    | Disjunct
+
+  Disjunct
+    = Disjunct "&&" Conjunct --binary
+    | Conjunct
+
+  Conjunct
+    = Side ("<=" | "<" | ">=" | ">" | "==" | "!=") Side  --binary
+    | Side
+
+  Side
+  	= Side ("+" | "-") Term  --binary
+  	| Term
+
+  Term
+  	= Term ("*" | "/" | div | mod) Factor  --binary
+    | Factor
+
+  Factor
+    = ("+" | "-" | "!") Factor  --unary
+    | Primary
+
+  FunctionCall = identifier "(" ListOf<Expression, ","> ")"
+
+  Parentheses = "(" Expression ")"
+
+  Primary
+    = stringLiteral  --stringLiteral
+    | numberLiteral  --numberLiteral
+    | booleanLiteral  --booleanLiteral
+    | FunctionCall
+    | identifier  --identifier
+    | Parentheses
+
+  print = "print" ~alnum
+  true = "true" ~alnum
+  false = "false" ~alnum
+  div = "div" ~alnum
+  mod = "mod" ~alnum
+
+  keyword = true | false | div | mod | print
+
+  identifier = ~keyword (letter | "_") (alnum | "_")*
+
+  stringLiteral = "\"" character* "\""
+  character = ~"\"" ~"\n" any
+
+  numberLiteral = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+
+  booleanLiteral = true | false
+}

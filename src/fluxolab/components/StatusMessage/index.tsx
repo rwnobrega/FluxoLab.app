@@ -80,12 +80,18 @@ export default function (): JSX.Element {
 
   const { backgroundColor, statusIcon, statusText } = getTriplet()
 
+  const [mainStatus, ...rest] = statusText.split('\n')
+  const smallStatus = rest.join('\n')
+
   return (
     <Alert className='m-0 border-0' style={{ backgroundColor, color: 'white', padding: '6px 12px' }}>
       <Stack direction='horizontal' style={{ alignItems: 'start' }}>
         <i className={`bi ${statusIcon}`} />
         <span className='ms-2' style={{ whiteSpace: 'pre-wrap' }}>
-          <Minidown source={statusText} />
+          <Minidown source={mainStatus} />
+          {smallStatus !== ''
+            ? <div className='small'>{smallStatus}</div>
+            : null}
         </span>
       </Stack>
     </Alert>
