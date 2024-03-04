@@ -31,19 +31,11 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
           <tbody>
             <tr>
               <td className={classes}>x + y</td>
-              <td>Soma</td>
+              <td>Adição</td>
             </tr>
             <tr>
               <td className={classes}>x - y</td>
               <td>Subtração</td>
-            </tr>
-            <tr>
-              <td className={classes}>+x</td>
-              <td>Identidade</td>
-            </tr>
-            <tr>
-              <td className={classes}>-x</td>
-              <td>Negação</td>
             </tr>
             <tr>
               <td className={classes}>x * y</td>
@@ -52,6 +44,22 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
             <tr>
               <td className={classes}>x / y</td>
               <td>Divisão real</td>
+            </tr>
+            <tr>
+              <td className={classes}>a div b</td>
+              <td>Divisão inteira</td>
+            </tr>
+            <tr>
+              <td className={classes}>a mod b</td>
+              <td>Resto da divisão</td>
+            </tr>
+            <tr>
+              <td className={classes}>+x</td>
+              <td>Identidade</td>
+            </tr>
+            <tr>
+              <td className={classes}>-x</td>
+              <td>Negação</td>
             </tr>
           </tbody>
         </Table>
@@ -104,14 +112,6 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
         <h5>Funções matemáticas</h5>
         <Table striped bordered hover>
           <tbody>
-            <tr>
-              <td className={classes}>div(a, b)</td>
-              <td>Divisão inteira</td>
-            </tr>
-            <tr>
-              <td className={classes}>mod(a, b)</td>
-              <td>Resto da divisão</td>
-            </tr>
             <tr>
               <td className={classes}>pow(x, y)</td>
               <td>Potência (x<sup>y</sup>)</td>
