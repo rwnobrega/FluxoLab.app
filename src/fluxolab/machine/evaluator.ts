@@ -139,6 +139,19 @@ function evalNumericalFunction (a: ohm.Node, b: ohm.Node, c: ohm.Node, d: ohm.No
   return numericalFunctions[name](...args)
 }
 
+const numericalConstants: { [key: string]: number } = {
+  pi: Math.PI,
+  tau: 2 * Math.PI
+}
+
+function evalNumericalConstant (a: ohm.Node): number {
+  const name = a.sourceString
+  if (!_.has(numericalConstants, name)) {
+    throw new Error(`A constante numérica \`${name}\` não existe.`)
+  }
+  return numericalConstants[name]
+}
+
 function evalIdentifier (a: ohm.Node): VarType {
   const name = a.sourceString
   const value = this.args.memory[name]
@@ -173,6 +186,7 @@ semantics.addOperation<VarType>('eval(memory)', {
   Primary_numberLiteral: a => parseFloat(a.sourceString),
   Primary_booleanLiteral: a => a.sourceString === 'true',
   Primary_identifier: evalIdentifier,
+  Primary_constant: evalNumericalConstant,
   Parentheses: evalParentheses,
   Command_write: doWrite,
   Expression_binary: evalBinaryOperator,

@@ -38,6 +38,7 @@ SimpleExpression {
     | numberLiteral  --numberLiteral
     | booleanLiteral  --booleanLiteral
     | FunctionCall
+    | constant  --constant
     | identifier  --identifier
     | Parentheses
 
@@ -48,9 +49,13 @@ SimpleExpression {
   div = "div" ~alnum
   mod = "mod" ~alnum
 
-  keyword = true | false | div | mod | read | write
+  pi = "pi" ~alnum
+  tau = "tau" ~alnum
+
+  keyword = true | false | div | mod | read | write | pi | tau
 
   identifier = ~keyword (letter | "_") (alnum | "_")*
+  constant = pi | tau
 
   stringLiteral = "\"" character* "\""
   character = "\\\""

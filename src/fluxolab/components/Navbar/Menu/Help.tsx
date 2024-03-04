@@ -222,6 +222,19 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
             </tr>
           </tbody>
         </Table>
+        <h5>Constantes numéricas</h5>
+        <Table striped bordered hover>
+          <tbody>
+            <tr>
+              <td className={classes}>pi</td>
+              <td>π ≅ 3.141592653589793</td>
+            </tr>
+            <tr>
+              <td className={classes}>tau</td>
+              <td>τ = 2π ≅ 6.283185307179586</td>
+            </tr>
+          </tbody>
+        </Table>
       </Modal.Body>
       <Modal.Footer>
         <Button variant='secondary' onClick={() => setShowModal(false)}>
