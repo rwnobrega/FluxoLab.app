@@ -38,7 +38,11 @@ export default function (): JSX.Element {
           statusText = `Há ${compileErrors.length} erro${compileErrors.length > 1 ? 's' : ''} de compilação.`
         }
       } else {
-        statusText = _.map(hoveredNodeErrors, 'message').join('\n')
+        if (hoveredNodeErrors.length === 1) {
+          statusText = hoveredNodeErrors[0].message
+        } else {
+          statusText = `Múltiplos erros:\n${_.map(hoveredNodeErrors, 'message').join('\n')}`
+        }
       }
       return {
         backgroundColor: palette.red,
