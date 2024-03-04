@@ -25,7 +25,7 @@ function isDisabledForward (state: MachineState): boolean {
 const buttonList: PlayButton[] = [
   {
     action: 'reset',
-    hotkey: 'ESC',
+    hotkey: 'F6',
     description: 'Encerrar execução',
     icon: 'bi-stop-fill',
     isDisabled: ({ state, compileErrors }) => (
