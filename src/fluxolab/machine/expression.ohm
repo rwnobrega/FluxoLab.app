@@ -1,7 +1,9 @@
 SimpleExpression {
-  ExpressionOrPrint = Expression | Print
+  ExpressionOrCommand = Expression | Command
 
-  Print = print ListOf<Expression, ",">
+  Command
+    = read identifier  --read
+    | write ListOf<Expression, ",">  --write
 
   Expression
     = Expression "||" Disjunct  --binary
@@ -39,13 +41,14 @@ SimpleExpression {
     | identifier  --identifier
     | Parentheses
 
-  print = "print" ~alnum
+  read = "read" ~alnum
+  write = "write" ~alnum
   true = "true" ~alnum
   false = "false" ~alnum
   div = "div" ~alnum
   mod = "mod" ~alnum
 
-  keyword = true | false | div | mod | print
+  keyword = true | false | div | mod | read | write
 
   identifier = ~keyword (letter | "_") (alnum | "_")*
 

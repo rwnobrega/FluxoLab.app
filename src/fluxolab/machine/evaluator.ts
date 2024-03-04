@@ -155,7 +155,7 @@ function evalParentheses (a: ohm.Node, b: ohm.Node, c: ohm.Node): VarType {
   return b.eval(this.args.memory)
 }
 
-function evalPrint (a: ohm.Node, b: ohm.Node): string {
+function doWrite (a: ohm.Node, b: ohm.Node): string {
   const args = b.asIteration().children
   let result = ''
   for (const arg of args) {
@@ -174,7 +174,7 @@ semantics.addOperation<VarType>('eval(memory)', {
   Primary_booleanLiteral: a => a.sourceString === 'true',
   Primary_identifier: evalIdentifier,
   Parentheses: evalParentheses,
-  Print: evalPrint,
+  Command_write: doWrite,
   Expression_binary: evalBinaryOperator,
   Disjunct_binary: evalBinaryOperator,
   Conjunct_binary: evalBinaryOperator,
