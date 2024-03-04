@@ -1,9 +1,5 @@
 import React from 'react'
 
-interface Props {
-  source: string
-}
-
 const preStyle = {
   backgroundColor: 'rgba(0, 0, 0, 0.20)',
   paddingLeft: '4px',
@@ -22,6 +18,7 @@ const parseText = (text: string): JSX.Element[] => {
   let isItalic = false
   let isPre = false
   let key = 0
+  let isEscaped = false
 
   const flush = (): void => {
     if (buffer === '') return
@@ -35,7 +32,15 @@ const parseText = (text: string): JSX.Element[] => {
 
   for (let i = 0; i < text.length; i++) {
     const char = text[i]
-
+    if (char === '\\' && !isEscaped) {
+      isEscaped = true
+      continue
+    }
+    if (isEscaped) {
+      buffer += char
+      isEscaped = false
+      continue
+    }
     if (char === '*' && !isPre) {
       flush()
       isBold = !isBold
@@ -50,8 +55,12 @@ const parseText = (text: string): JSX.Element[] => {
     }
   }
 
-  flush()
+  flush() // Flush remaining text
   return parts
+}
+
+interface Props {
+  source: string
 }
 
 export default function ({ source }: Props): JSX.Element {

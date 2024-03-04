@@ -189,7 +189,8 @@ export default function evaluate (str: string, memory: Memory): VarType {
   if (matchResult.succeeded()) {
     return semantics(matchResult).eval(memory)
   }
+  const escape = (s: string): string => s.replace(/[*_`]/g, '\\$&')
   const matchMessage = matchResult.shortMessage?.replace(/Line 1, col \d+: /, '') as string
   const charIndex = matchResult.getInterval().endIdx
-  throw new Error(`Erro de sintaxe: \`${str}\`\nPos ${charIndex}: ${matchMessage}.`)
+  throw new Error(`Erro de sintaxe: \`${escape(str)}\` na posição ${charIndex}:\n${matchMessage}.`)
 }
