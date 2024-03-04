@@ -22,11 +22,9 @@ const parseText = (text: string): JSX.Element[] => {
 
   const flush = (): void => {
     if (buffer === '') return
-
     const className = `${isBold ? 'fw-bold ' : ''}${isItalic ? 'fst-italic ' : ''}${isPre ? 'font-monospace' : ''}`.trim()
     const style = isPre ? preStyle : undefined
     parts.push(<span key={key++} className={className} style={style}>{buffer}</span>)
-
     buffer = ''
   }
 
@@ -54,15 +52,15 @@ const parseText = (text: string): JSX.Element[] => {
       buffer += char
     }
   }
-
-  flush() // Flush remaining text
+  flush()
   return parts
 }
 
 interface Props {
   source: string
+  className?: string
 }
 
-export default function ({ source }: Props): JSX.Element {
-  return <div>{parseText(source)}</div>
+export default function ({ source, className }: Props): JSX.Element {
+  return <div className={className}>{parseText(source)}</div>
 }
