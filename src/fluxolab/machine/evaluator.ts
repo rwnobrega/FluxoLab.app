@@ -169,7 +169,7 @@ function evalPrint (a: ohm.Node, b: ohm.Node): string {
 const semantics: ohm.Semantics = grammar.createSemantics()
 
 semantics.addOperation<VarType>('eval(memory)', {
-  Primary_stringLiteral: a => a.sourceString.slice(1, -1),
+  Primary_stringLiteral: a => a.sourceString.slice(1, -1).replace(/\\"/g, '"'),
   Primary_numberLiteral: a => parseFloat(a.sourceString),
   Primary_booleanLiteral: a => a.sourceString === 'true',
   Primary_identifier: evalIdentifier,

@@ -50,7 +50,8 @@ SimpleExpression {
   identifier = ~keyword (letter | "_") (alnum | "_")*
 
   stringLiteral = "\"" character* "\""
-  character = ~"\"" ~"\n" any
+  character = "\\\""
+            | ~"\"" ~"\n" any
 
   numberLiteral = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
 
