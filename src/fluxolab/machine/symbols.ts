@@ -77,15 +77,10 @@ export function newInputSymbol (params: { id: string, variableId: string, nextId
         state.status = 'error'
         return
       }
-      const variable = _.find(machine.variables, { id: variableId })
-      if (variable === undefined) {
-        state.errorMessage = `Variável "${variableId}" não existe.`
-        state.status = 'error'
-        return
-      }
+      const variable = _.find(machine.variables, { id: variableId }) as Variable
       const varType = getVariableType(variable.type)
       if (!varType.stringIsValid(state.input)) {
-        state.errorMessage = `Entrada "${state.input}" é inválida para o tipo "${variable.type}".`
+        state.errorMessage = `Entrada \`${state.input}\` é inválida para o tipo \`${variable.type}\`.`
         state.status = 'error'
         return
       }
