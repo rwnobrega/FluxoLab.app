@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { VarType } from './types'
 
 interface VariableType {
-  typeName: string
+  typeName: 'number' | 'string' | 'boolean'
   stringIsValid: (str: string) => boolean
   stringToValue: (str: string) => VarType
   valueToString: (value: VarType) => string
@@ -58,9 +58,5 @@ export const variableTypes: VariableType[] = [
 ]
 
 export function getVariableType (typeName: string): VariableType {
-  const variableType = _.find(variableTypes, { typeName })
-  if (variableType === undefined) {
-    throw new Error(`Tipo de variável "${typeName}" não existe.`)
-  }
-  return variableType
+  return _.find(variableTypes, { typeName }) as VariableType
 }
