@@ -184,7 +184,7 @@ semantics.addOperation<VarType>('eval(memory)', {
 })
 
 export default function (str: string, memory: Memory): VarType {
-  const matchResult = grammar.match(str)
+  const matchResult = grammar.match(str, 'Expression')
   if (matchResult.succeeded()) {
     return semantics(matchResult).eval(memory)
   }

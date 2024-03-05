@@ -1,4 +1,9 @@
 Language {
+  Command
+    = identifier "=" Expression  --assignment
+    | read identifier  --read
+    | write ListOf<Expression, ",">  --write
+
   Expression
     = Expression "||" Expression0  --binary
     | Expression0
