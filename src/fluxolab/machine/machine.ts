@@ -2,21 +2,13 @@ import _ from 'lodash'
 
 import { Symbol, Machine, MachineState, Memory, Variable } from 'machine/types'
 
-function getSymbolById (flowchart: Symbol[], id: string): Symbol {
-  const symbol = _.find(flowchart, { id })
-  if (symbol === undefined) {
-    throw new Error(`Symbol with id "${id}" not found`)
-  }
-  return symbol
-}
-
 export function runMachineStep (machine: Machine, state: MachineState): void {
   if (state.curSymbolId === null) {
     state.curSymbolId = machine.startSymbolId
   }
-  const symbol = getSymbolById(machine.flowchart, state.curSymbolId)
+  const symbol = _.find(machine.flowchart, { id: state.curSymbolId }) as Symbol
   symbol.work(machine, state)
-  const nextSymbol = getSymbolById(machine.flowchart, state.curSymbolId)
+  const nextSymbol = _.find(machine.flowchart, { id: state.curSymbolId }) as Symbol
   if (nextSymbol.type === 'halt') {
     state.status = 'halted'
     return
