@@ -175,11 +175,11 @@ semantics.addOperation<VarType>('eval(memory)', {
   Primary_constant: evalNumericalConstant,
   Parentheses: evalParentheses,
   Expression_binary: evalBinaryOperator,
-  Disjunct_binary: evalBinaryOperator,
-  Conjunct_binary: evalBinaryOperator,
-  Side_binary: evalBinaryOperator,
-  Term_binary: evalBinaryOperator,
-  Factor_unary: evalUnaryOperator,
+  Expression0_binary: evalBinaryOperator,
+  Expression1_binary: evalBinaryOperator,
+  Expression2_binary: evalBinaryOperator,
+  Expression3_binary: evalBinaryOperator,
+  Expression4_unary: evalUnaryOperator,
   FunctionCall: evalNumericalFunction
 })
 

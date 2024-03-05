@@ -1,26 +1,26 @@
 Language {
   Expression
-    = Expression "||" Disjunct  --binary
-    | Disjunct
+    = Expression "||" Expression0  --binary
+    | Expression0
 
-  Disjunct
-    = Disjunct "&&" Conjunct --binary
-    | Conjunct
+  Expression0
+    = Expression0 "&&" Expression1 --binary
+    | Expression1
 
-  Conjunct
-    = Side ("<=" | "<" | ">=" | ">" | "==" | "!=") Side  --binary
-    | Side
+  Expression1
+    = Expression2 ("<=" | "<" | ">=" | ">" | "==" | "!=") Expression2  --binary
+    | Expression2
 
-  Side
-  	= Side ("+" | "-") Term  --binary
-  	| Term
+  Expression2
+  	= Expression2 ("+" | "-") Expression3  --binary
+  	| Expression3
 
-  Term
-  	= Term ("*" | "/" | div | mod) Factor  --binary
-    | Factor
+  Expression3
+  	= Expression3 ("*" | "/" | div | mod) Expression4  --binary
+    | Expression4
 
-  Factor
-    = ("+" | "-" | "!") Factor  --unary
+  Expression4
+    = ("+" | "-" | "!") Expression4  --unary
     | Primary
 
   FunctionCall = identifier "(" ListOf<Expression, ","> ")"
