@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import { Symbol } from 'machine/types'
+import { Symbol, Variable } from 'machine/types'
 import { getVariableType } from 'machine/variables'
 
 import evaluate from 'language/evaluate'
@@ -23,12 +23,7 @@ export function newAssignmentSymbol (params: { id: string, variableId: string, e
     type: 'assignment',
     work: (machine, state) => {
       try {
-        const variable = _.find(machine.variables, { id: variableId })
-        if (variable === undefined) {
-          state.errorMessage = `Variável "${variableId}" não existe.`
-          state.status = 'error'
-          return
-        }
+        const variable = _.find(machine.variables, { id: variableId }) as Variable
         const value = evaluate(expression, state.memory)
         const valueType = typeof value
         const varType = getVariableType(variable.type)
