@@ -2,7 +2,8 @@ import _ from 'lodash'
 
 import { Symbol } from 'machine/types'
 import { getVariableType } from 'machine/variables'
-import evaluate from 'machine/evaluator'
+
+import evaluate from 'language/evaluate'
 
 export function newStartSymbol (params: { id: string, nextId: string }): Symbol {
   const { id, nextId } = params
@@ -109,7 +110,7 @@ export function newOutputSymbol (params: { id: string, expression: string, nextI
     type: 'output',
     work: (_machine, state) => {
       try {
-        const value = evaluate(`write ${expression}`, state.memory)
+        const value = evaluate(expression, state.memory)
         const varType = getVariableType(typeof value)
         state.interaction.push({ direction: 'out', text: varType.valueToString(value) })
         state.curSymbolId = nextId

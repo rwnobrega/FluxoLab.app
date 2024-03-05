@@ -1,10 +1,4 @@
-SimpleExpression {
-  ExpressionOrCommand = Expression | Command
-
-  Command
-    = read identifier  --read
-    | write ListOf<Expression, ",">  --write
-
+Language {
   Expression
     = Expression "||" Disjunct  --binary
     | Disjunct

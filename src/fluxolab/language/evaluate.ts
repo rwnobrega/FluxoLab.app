@@ -2,13 +2,9 @@ import _ from 'lodash'
 
 import * as ohm from 'ohm-js'
 
-import grammarContents from './grammar.ohm'
-
-import { getVariableType } from 'machine/variables'
-
 import { Memory, VarType } from 'machine/types'
 
-const grammar = ohm.grammar(grammarContents)
+import grammar from './grammar'
 
 const unaryOperators: { [key: string]: (a: VarType) => VarType } = {
   '+': (a: number) => a,
@@ -168,18 +164,7 @@ function evalParentheses (a: ohm.Node, b: ohm.Node, c: ohm.Node): VarType {
   return b.eval(this.args.memory)
 }
 
-function doWrite (a: ohm.Node, b: ohm.Node): string {
-  const args = b.asIteration().children
-  let result = ''
-  for (const arg of args) {
-    const value = arg.eval(this.args.memory)
-    const varType = getVariableType(typeof value)
-    result += varType.valueToString(value)
-  }
-  return result
-}
-
-const semantics: ohm.Semantics = grammar.createSemantics()
+const semantics = grammar.createSemantics()
 
 semantics.addOperation<VarType>('eval(memory)', {
   Primary_stringLiteral: a => a.sourceString.slice(1, -1).replace(/\\"/g, '"'),
@@ -188,7 +173,6 @@ semantics.addOperation<VarType>('eval(memory)', {
   Primary_identifier: evalIdentifier,
   Primary_constant: evalNumericalConstant,
   Parentheses: evalParentheses,
-  Command_write: doWrite,
   Expression_binary: evalBinaryOperator,
   Disjunct_binary: evalBinaryOperator,
   Conjunct_binary: evalBinaryOperator,
@@ -198,7 +182,7 @@ semantics.addOperation<VarType>('eval(memory)', {
   FunctionCall: evalNumericalFunction
 })
 
-export default function evaluate (str: string, memory: Memory): VarType {
+export default function (str: string, memory: Memory): VarType {
   const matchResult = grammar.match(str)
   if (matchResult.succeeded()) {
     return semantics(matchResult).eval(memory)
@@ -225,6 +209,8 @@ export default function evaluate (str: string, memory: Memory): VarType {
       failure = 'qualquer caractere'
     } else if (failure === 'end of input') {
       failure = 'o fim'
+    } else if (failure === 'not a keyword') {
+      failure = 'uma não-palavra-chave'
     } else {
       failure = `\`${escape(failure)}\``
     }
