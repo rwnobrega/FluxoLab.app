@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 import * as ohm from 'ohm-js'
 
-import grammarContents from './expression.ohm'
+import grammarContents from './grammar.ohm'
 
 import { getVariableType } from 'machine/variables'
 
