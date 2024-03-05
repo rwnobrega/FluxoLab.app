@@ -10,6 +10,8 @@ import TextInput from 'components/General/TextInput'
 
 import useStoreMachine from 'stores/storeMachine'
 
+import isValidIdentifier from 'language/isValidIdentifier'
+
 interface Props {
   id: string
   showModal: boolean
@@ -36,7 +38,7 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
     let problem: string | null = null
     if (_.isEmpty(textId)) {
       problem = 'Identificador não pode ser vazio.'
-    } else if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(textId)) {
+    } else if (!isValidIdentifier(textId)) {
       problem = 'Identificador inválido.'
     } else if (textId !== id && _.includes(_.map(machine.variables, 'id'), textId)) {
       problem = 'Identificador já existe.'

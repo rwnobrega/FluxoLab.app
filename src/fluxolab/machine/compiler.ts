@@ -4,6 +4,8 @@ import { Node, Edge } from 'reactflow'
 
 import { Variable, Symbol, CompileError } from 'machine/types'
 
+import isValidIdentifier from 'language/isValidIdentifier'
+
 import {
   newStartSymbol,
   newAssignmentSymbol,
@@ -72,7 +74,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
             expression = _.trim(data.value.slice(equalIndex + 1))
             if (variableId === '') {
               errors.push({ message: 'Variável não especificada.', nodeId: id })
-            } else if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(variableId)) {
+            } else if (!isValidIdentifier(variableId)) {
               errors.push({ message: `Identificador \`${variableId}\` é inválido.`, nodeId: id })
             } else if (!_.some(variables, { id: variableId })) {
               errors.push({ message: `Variável \`${variableId}\` não existe.`, nodeId: id })
@@ -111,7 +113,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           const variableId: string = data.value
           if (variableId === '') {
             errors.push({ message: 'Variável não especificada.', nodeId: id })
-          } else if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(variableId)) {
+          } else if (!isValidIdentifier(variableId)) {
             errors.push({ message: `Identificador \`${variableId}\` é inválido.`, nodeId: id })
           } else if (!_.some(variables, { id: variableId })) {
             errors.push({ message: `Variável \`${variableId}\` não existe.`, nodeId: id })
