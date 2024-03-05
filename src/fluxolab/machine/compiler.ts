@@ -111,6 +111,8 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           const variableId: string = data.value
           if (variableId === '') {
             errors.push({ message: 'Variável não especificada.', nodeId: id })
+          } else if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(variableId)) {
+            errors.push({ message: `Identificador \`${variableId}\` é inválido.`, nodeId: id })
           } else if (!_.some(variables, { id: variableId })) {
             errors.push({ message: `Variável \`${variableId}\` não existe.`, nodeId: id })
           }
