@@ -4,6 +4,10 @@ export function evalError (message: string): Error {
   return new Error(message)
 }
 
+function escape (str: string): string {
+  return str.replace(/\\/g, '\\\\').replace(/\*/g, '\\*').replace(/_/g, '\\_').replace(/`/g, '\\`')
+}
+
 export function syntaxError (matchResult: ohm.MatchResult, source: string): Error {
   const charIndex = matchResult.getInterval().endIdx
   // @ts-expect-error  // TODO: Why is this necessary?
@@ -35,5 +39,5 @@ export function syntaxError (matchResult: ohm.MatchResult, source: string): Erro
     }
     failuresText += failure
   }
-  return new Error(`Erro de sintaxe em \`${source}\` na posição ${charIndex}:\nEsperado ${failuresText}`)
+  return new Error(`Erro de sintaxe em \`${escape(source)}\` na posição ${charIndex}:\nEsperado ${failuresText}`)
 }
