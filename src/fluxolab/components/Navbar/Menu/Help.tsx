@@ -97,11 +97,11 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
           <tbody>
             <tr>
               <td className={classes}>a || b</td>
-              <td>Conjunção (ou)</td>
+              <td>Disjunção (ou)</td>
             </tr>
             <tr>
               <td className={classes}>a && b</td>
-              <td>Disjunção (e)</td>
+              <td>Conjunção (e)</td>
             </tr>
             <tr>
               <td className={classes}>!a</td>
