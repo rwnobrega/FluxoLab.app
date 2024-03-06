@@ -5,7 +5,7 @@ import * as ohm from 'ohm-js'
 import { Memory, VarType } from 'machine/types'
 
 import grammar from './grammar'
-import formatError from './formatError'
+import formatSyntaxError from './formatSyntaxError'
 
 const unaryOperators: { [key: string]: (a: VarType) => VarType } = {
   '+': (a: number) => a,
@@ -188,5 +188,5 @@ export default function (str: string, memory: Memory): VarType {
   if (matchResult.succeeded()) {
     return semantics(matchResult).eval(memory)
   }
-  throw new Error(formatError(matchResult))
+  throw new Error(formatSyntaxError(matchResult))
 }

@@ -31,5 +31,5 @@ export default function (matchResult: ohm.MatchResult): string {
     }
     failuresText += failure
   }
-  return `Erro de sintaxe na posição ${charIndex}: esperava-se ${failuresText}`
+  return `Erro de sintaxe (posição ${charIndex}): esperado ${failuresText}`
 }
