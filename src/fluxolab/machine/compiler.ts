@@ -4,6 +4,7 @@ import { Node, Edge } from 'reactflow'
 
 import { Variable, Symbol, CompileError } from 'machine/types'
 
+import match from 'language/match'
 import isValidIdentifier from 'language/isValidIdentifier'
 
 import {
@@ -62,25 +63,21 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           break
         }
         case 'assignment': {
-          const equalIndex = parseInt(data.value.indexOf('='))
+          const matchResult = match(data.value, 'Command_assignment')
           let variableId: string
           let expression: string
-          if (equalIndex === -1) {
+          if (matchResult instanceof Error) {
             variableId = ''
             expression = ''
-            errors.push({ message: 'Atribuição inválida.', nodeId: id })
+            errors.push({ message: matchResult.message, nodeId: id })
           } else {
+            // TODO: Use `matchResult` to get `variableId` and `expression`.
+            const equalIndex = parseInt(data.value.indexOf('='))
             variableId = _.trim(data.value.slice(0, equalIndex))
             expression = _.trim(data.value.slice(equalIndex + 1))
-            if (variableId === '') {
-              errors.push({ message: 'Variável não especificada.', nodeId: id })
-            } else if (!isValidIdentifier(variableId)) {
-              errors.push({ message: `Identificador \`${variableId}\` é inválido.`, nodeId: id })
-            } else if (!_.some(variables, { id: variableId })) {
+            // /TODO
+            if (!_.some(variables, { id: variableId })) {
               errors.push({ message: `Variável \`${variableId}\` não existe.`, nodeId: id })
-            }
-            if (expression === '') {
-              errors.push({ message: 'Expressão não especificada.', nodeId: id })
             }
           }
           const nextId = getOutgoingNode(id, 'out', edges)
