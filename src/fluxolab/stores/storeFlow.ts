@@ -46,8 +46,7 @@ const useStoreFlow = create<StoreFlow, any>(
       }),
       updateNodeProp: (id, path, value) => {
         const nodes = get().nodes
-        const node = _.find(nodes, { id })
-        if (node === undefined) throw new Error('Node not found')
+        const node = _.find(nodes, { id }) as Node
         _.set(node, path, value)
         set({ nodes })
       },

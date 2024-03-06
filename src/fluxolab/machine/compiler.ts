@@ -143,9 +143,6 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           flowchart.push(newHaltSymbol({ id }))
           break
         }
-        default: {
-          throw new Error(`Tipo de bloco desconhecido: ${type as string}`)
-        }
       }
     }
     return [flowchart, errors]
