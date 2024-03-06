@@ -1,6 +1,10 @@
 import * as ohm from 'ohm-js'
 
-export default function (matchResult: ohm.MatchResult): string {
+export function evalError (message: string): Error {
+  return new Error(message)
+}
+
+export function syntaxError (matchResult: ohm.MatchResult): Error {
   const charIndex = matchResult.getInterval().endIdx
   // @ts-expect-error  // TODO: Why is this necessary?
   const failures = matchResult.getRightmostFailures()
@@ -31,5 +35,5 @@ export default function (matchResult: ohm.MatchResult): string {
     }
     failuresText += failure
   }
-  return `Erro de sintaxe (posição ${charIndex}): esperado ${failuresText}`
+  return new Error(`Erro de sintaxe (posição ${charIndex}): esperado ${failuresText}`)
 }

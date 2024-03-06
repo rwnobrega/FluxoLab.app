@@ -3,9 +3,10 @@ import _ from 'lodash'
 import * as ohm from 'ohm-js'
 
 import { Memory, VarType } from 'machine/types'
+import { getVariableType } from 'machine/variables'
 
 import grammar from './grammar'
-import formatSyntaxError from './formatSyntaxError'
+import { evalError } from './errors'
 
 const unaryOperators: { [key: string]: (a: VarType) => VarType } = {
   '+': (a: number) => a,
@@ -165,6 +166,17 @@ function evalParentheses (a: ohm.Node, b: ohm.Node, c: ohm.Node): VarType {
   return b.eval(this.args.memory)
 }
 
+function getOutput (a: ohm.Node, b: ohm.Node): string {
+  const args = b.asIteration().children
+  let result = ''
+  for (const arg of args) {
+    const value = arg.eval(this.args.memory)
+    const varType = getVariableType(typeof value)
+    result += varType.valueToString(value)
+  }
+  return result
+}
+
 const semantics = grammar.createSemantics()
 
 semantics.addOperation<VarType>('eval(memory)', {
@@ -180,13 +192,14 @@ semantics.addOperation<VarType>('eval(memory)', {
   Expression2_binary: evalBinaryOperator,
   Expression3_binary: evalBinaryOperator,
   Expression4_unary: evalUnaryOperator,
-  FunctionCall: evalNumericalFunction
+  FunctionCall: evalNumericalFunction,
+  Command_write: getOutput
 })
 
-export default function (str: string, memory: Memory): VarType {
-  const matchResult = grammar.match(str, 'Expression')
-  if (matchResult.succeeded()) {
+export default function (matchResult: ohm.MatchResult, memory: Memory): VarType | Error {
+  try {
     return semantics(matchResult).eval(memory)
+  } catch (e) {
+    return evalError(e.message)
   }
-  throw new Error(formatSyntaxError(matchResult))
 }
