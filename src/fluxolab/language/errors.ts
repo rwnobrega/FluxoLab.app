@@ -4,7 +4,7 @@ export function evalError (message: string): Error {
   return new Error(message)
 }
 
-export function syntaxError (matchResult: ohm.MatchResult): Error {
+export function syntaxError (matchResult: ohm.MatchResult, source: string): Error {
   const charIndex = matchResult.getInterval().endIdx
   // @ts-expect-error  // TODO: Why is this necessary?
   const failures = matchResult.getRightmostFailures()
@@ -35,5 +35,5 @@ export function syntaxError (matchResult: ohm.MatchResult): Error {
     }
     failuresText += failure
   }
-  return new Error(`Erro de sintaxe (posição ${charIndex}): esperado ${failuresText}`)
+  return new Error(`Erro de sintaxe em \`${source}\` na posição ${charIndex}:\nEsperado ${failuresText}`)
 }
