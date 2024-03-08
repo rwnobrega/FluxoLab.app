@@ -1,7 +1,7 @@
 import React from 'react'
 
 const preStyle: React.CSSProperties = {
-  backgroundColor: 'rgba(0, 0, 0, 0.20)',
+  backgroundColor: 'rgba(0, 0, 0, 0.10)',
   paddingLeft: '4px',
   paddingRight: '4px',
   paddingTop: '2px',

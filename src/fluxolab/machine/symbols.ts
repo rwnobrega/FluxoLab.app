@@ -4,7 +4,8 @@ import { Symbol, Variable } from 'machine/types'
 import { getVariableType } from 'machine/variables'
 
 import evaluate from 'language/evaluate'
-import match from 'language/match'
+import grammar from 'language/grammar'
+import { syntaxErrorMessage } from 'language/errors'
 
 export function newStartSymbol (params: { id: string, nextId: string }): Symbol {
   const { id, nextId } = params
@@ -24,9 +25,9 @@ export function newAssignmentSymbol (params: { id: string, variableId: string, e
     type: 'assignment',
     work: (machine, state) => {
       const variable = _.find(machine.variables, { id: variableId }) as Variable
-      const matchResult = match(expression, 'Expression')
-      if (matchResult instanceof Error) {
-        state.errorMessage = matchResult.message
+      const matchResult = grammar.match(expression, 'Expression')
+      if (matchResult.failed()) {
+        state.errorMessage = syntaxErrorMessage(matchResult)
         state.status = 'error'
         return
       }
@@ -55,9 +56,9 @@ export function newConditionalSymbol (params: { id: string, condition: string, n
     id,
     type: 'conditional',
     work: (_machine, state) => {
-      const matchResult = match(condition, 'Expression')
-      if (matchResult instanceof Error) {
-        state.errorMessage = matchResult.message
+      const matchResult = grammar.match(condition, 'Expression')
+      if (matchResult.failed()) {
+        state.errorMessage = syntaxErrorMessage(matchResult)
         state.status = 'error'
         return
       }
@@ -110,9 +111,9 @@ export function newOutputSymbol (params: { id: string, expression: string, nextI
     id,
     type: 'output',
     work: (_machine, state) => {
-      const matchResult = match(`write ${expression}`, 'Command_write')
-      if (matchResult instanceof Error) {
-        state.errorMessage = matchResult.message
+      const matchResult = grammar.match(`write ${expression}`, 'Command_write')
+      if (matchResult.failed()) {
+        state.errorMessage = syntaxErrorMessage(matchResult)
         state.status = 'error'
         return
       }

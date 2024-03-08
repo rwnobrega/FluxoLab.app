@@ -57,11 +57,8 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
             placeholder='Digite o novo identificador'
             value={textId}
             setValue={setTextId}
-            valid={problem === null}
+            problem={problem}
           />
-          <div className='pt-2 small text-danger'>
-            {problem ?? '\u00A0'}
-          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant='secondary' onClick={() => setShowModal(false)}>

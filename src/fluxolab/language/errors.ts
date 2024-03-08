@@ -4,11 +4,7 @@ export function evalError (message: string): Error {
   return new Error(message)
 }
 
-function escape (str: string): string {
-  return str.replace(/\\/g, '\\\\').replace(/\*/g, '\\*').replace(/_/g, '\\_').replace(/`/g, '\\`')
-}
-
-export function syntaxError (matchResult: ohm.MatchResult, source: string): Error {
+export function syntaxErrorMessage (matchResult: ohm.MatchResult): string {
   // @ts-expect-error  // TODO: Why is this necessary?
   const failures = matchResult.getRightmostFailures()
   let failuresText = ''
@@ -27,6 +23,5 @@ export function syntaxError (matchResult: ohm.MatchResult, source: string): Erro
       failuresText += `\`${failure.text as string}\``
     }
   }
-  const charIndex = matchResult.getInterval().endIdx
-  return new Error(`Erro de sintaxe em \`${escape(source)}\` na posição ${charIndex}:\nEsperado ${failuresText}.`)
+  return `Esperado ${failuresText}`
 }

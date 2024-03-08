@@ -6,6 +6,9 @@ import Form from 'react-bootstrap/Form'
 
 import TextInput from 'components/General/TextInput'
 
+import grammar from 'language/grammar'
+import { syntaxErrorMessage } from 'language/errors'
+
 import useStoreFlow from 'stores/storeFlow'
 
 interface Props {
@@ -17,12 +20,24 @@ interface Props {
 
 export default function ({ nodeId, value, showModal, setShowModal }: Props): JSX.Element {
   const [textValue, setTextValue] = useState<string>(value)
+  const [problem, setProblem] = useState<string | null>(null)
 
   const { updateNodeProp } = useStoreFlow()
 
   useEffect(() => {
     setTextValue(value)
   }, [showModal])
+
+  useEffect(() => {
+    const matchResult = grammar.match(textValue, 'Command_assignment')
+    if (matchResult.failed()) {
+      const posNumber = matchResult.getInterval().startIdx
+      const problem = `Posição ${posNumber}: ${syntaxErrorMessage(matchResult)}`
+      setProblem(problem)
+    } else {
+      setProblem(null)
+    }
+  }, [textValue])
 
   function handleSubmit (event: any): void {
     event.preventDefault()
@@ -41,6 +56,7 @@ export default function ({ nodeId, value, showModal, setShowModal }: Props): JSX
             placeholder='Digite uma expressão de atribuição'
             value={textValue}
             setValue={setTextValue}
+            problem={problem}
           />
         </Modal.Body>
         <Modal.Footer>

@@ -4,7 +4,7 @@ import { Node, Edge } from 'reactflow'
 
 import { Variable, Symbol, CompileError } from 'machine/types'
 
-import match from 'language/match'
+import grammar from 'language/grammar'
 
 import {
   newStartSymbol,
@@ -63,11 +63,13 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
         }
         case 'assignment': {
           const assignment: string = data.value
-          const matchResult = match(assignment, 'Command_assignment')
+          const matchResult = grammar.match(assignment, 'Command_assignment')
           let variableId = ''
           let expression = ''
-          if (matchResult instanceof Error) {
-            errors.push({ message: matchResult.message, nodeId: id })
+          if (assignment === '') {
+            errors.push({ message: 'Atribuição não especificada.', nodeId: id })
+          } else if (matchResult.failed()) {
+            errors.push({ message: 'Erro de sintaxe.', nodeId: id })
           } else {
             // TODO: Use `matchResult` to get `variableId` and `expression`.
             const equalIndex = assignment.indexOf('=')
@@ -88,9 +90,11 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
         }
         case 'conditional': {
           const condition: string = data.value
-          const matchResult = match(condition, 'Expression')
-          if (matchResult instanceof Error) {
-            errors.push({ message: matchResult.message, nodeId: id })
+          const matchResult = grammar.match(condition, 'Expression')
+          if (condition === '') {
+            errors.push({ message: 'Condição não especificada.', nodeId: id })
+          } else if (matchResult.failed()) {
+            errors.push({ message: 'Erro de sintaxe.', nodeId: id })
           }
           const nextTrue = getOutgoingNode(id, 'true', edges)
           if (nextTrue === null) {
@@ -107,9 +111,11 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
         }
         case 'input_': {
           const variableId: string = data.value
-          const matchResult = match(`read ${variableId}`, 'Command_read')
-          if (matchResult instanceof Error) {
-            errors.push({ message: matchResult.message, nodeId: id })
+          const matchResult = grammar.match(`read ${variableId}`, 'Command_read')
+          if (variableId === '') {
+            errors.push({ message: 'Variável não especificada.', nodeId: id })
+          } else if (matchResult.failed()) {
+            errors.push({ message: 'Erro de sintaxe.', nodeId: id })
           } else if (!_.some(variables, { id: variableId })) {
             errors.push({ message: `Variável \`${variableId}\` não existe.`, nodeId: id })
           }
@@ -123,9 +129,11 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
         }
         case 'output_': {
           const expression: string = data.value
-          const matchResult = match(`write ${expression}`, 'Command_write')
-          if (matchResult instanceof Error) {
-            errors.push({ message: matchResult.message, nodeId: id })
+          const matchResult = grammar.match(`write ${expression}`, 'Command_write')
+          if (expression === '') {
+            errors.push({ message: 'Expressão não especificada.', nodeId: id })
+          } else if (matchResult.failed()) {
+            errors.push({ message: 'Erro de sintaxe.', nodeId: id })
           }
           const nextId = getOutgoingNode(id, 'out', edges)
           if (nextId === null) {
