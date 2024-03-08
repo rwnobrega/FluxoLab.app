@@ -2,7 +2,7 @@ Language {
   Command
     = identifier "=" Expression  --assignment
     | read identifier  --read
-    | write ListOf<Expression, ",">  --write
+    | write NonemptyListOf<Expression, ",">  --write
 
   Expression
     = Expression "||" Expression0  --binary
@@ -24,13 +24,15 @@ Language {
   	= Expression3 ("*" | "/" | div | mod) Expression4  --binary
     | Expression4
 
-  Expression4
+  Expression4 (uma expressão)
     = ("+" | "-" | "!") Expression4  --unary
     | Primary
 
-  FunctionCall = identifier "(" ListOf<Expression, ","> ")"
+  FunctionCall (uma chamada de função)
+    = identifier "(" ListOf<Expression, ","> ")"
 
-  Parentheses = "(" Expression ")"
+  Parentheses (uma expressão entre parênteses)
+    = "(" Expression ")"
 
   Primary
     = stringLiteral  --stringLiteral
@@ -47,20 +49,24 @@ Language {
   false = "false" ~alnum
   div = "div" ~alnum
   mod = "mod" ~alnum
-
   pi = "pi" ~alnum
   tau = "tau" ~alnum
 
-  keyword = true | false | div | mod | read | write | pi | tau
+  keyword (uma palavra-chave)
+    = true | false | div | mod | read | write | pi | tau
 
-  identifier = ~keyword (letter | "_") (alnum | "_")*
-  constant = pi | tau
+  identifier (um identificador)
+    = ~keyword (letter | "_") (alnum | "_")*
 
-  stringLiteral = "\"" character* "\""
-  character = "\\\""
-            | ~"\"" ~"\n" any
+  constant (uma constante)
+    = pi | tau
 
-  numberLiteral = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+  stringLiteral (uma string)
+    = "\"" ("\\\"" | ~"\"" ~"\n" any)* "\""
 
-  booleanLiteral = true | false
+  numberLiteral (um número)
+    = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+
+  booleanLiteral (um booleano)
+    = true | false
 }

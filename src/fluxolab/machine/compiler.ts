@@ -5,7 +5,6 @@ import { Node, Edge } from 'reactflow'
 import { Variable, Symbol, CompileError } from 'machine/types'
 
 import match from 'language/match'
-import isValidIdentifier from 'language/isValidIdentifier'
 
 import {
   newStartSymbol,
@@ -67,9 +66,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           const matchResult = match(assignment, 'Command_assignment')
           let variableId = ''
           let expression = ''
-          if (assignment === '') {
-            errors.push({ message: 'Atribuição não especificada.', nodeId: id })
-          } else if (matchResult instanceof Error) {
+          if (matchResult instanceof Error) {
             errors.push({ message: matchResult.message, nodeId: id })
           } else {
             // TODO: Use `matchResult` to get `variableId` and `expression`.
@@ -92,9 +89,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
         case 'conditional': {
           const condition: string = data.value
           const matchResult = match(condition, 'Expression')
-          if (condition === '') {
-            errors.push({ message: 'Condição não especificada.', nodeId: id })
-          } else if (matchResult instanceof Error) {
+          if (matchResult instanceof Error) {
             errors.push({ message: matchResult.message, nodeId: id })
           }
           const nextTrue = getOutgoingNode(id, 'true', edges)
@@ -112,10 +107,9 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
         }
         case 'input_': {
           const variableId: string = data.value
-          if (variableId === '') {
-            errors.push({ message: 'Variável não especificada.', nodeId: id })
-          } else if (!isValidIdentifier(variableId)) {
-            errors.push({ message: `Identificador \`${variableId}\` é inválido.`, nodeId: id })
+          const matchResult = match(`read ${variableId}`, 'Command_read')
+          if (matchResult instanceof Error) {
+            errors.push({ message: matchResult.message, nodeId: id })
           } else if (!_.some(variables, { id: variableId })) {
             errors.push({ message: `Variável \`${variableId}\` não existe.`, nodeId: id })
           }
@@ -130,9 +124,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
         case 'output_': {
           const expression: string = data.value
           const matchResult = match(`write ${expression}`, 'Command_write')
-          if (expression === '') {
-            errors.push({ message: 'Expressão não especificada.', nodeId: id })
-          } else if (matchResult instanceof Error) {
+          if (matchResult instanceof Error) {
             errors.push({ message: matchResult.message, nodeId: id })
           }
           const nextId = getOutgoingNode(id, 'out', edges)

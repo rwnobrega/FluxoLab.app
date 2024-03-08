@@ -9,7 +9,6 @@ function escape (str: string): string {
 }
 
 export function syntaxError (matchResult: ohm.MatchResult, source: string): Error {
-  const charIndex = matchResult.getInterval().endIdx
   // @ts-expect-error  // TODO: Why is this necessary?
   const failures = matchResult.getRightmostFailures()
   let failuresText = ''
@@ -21,23 +20,13 @@ export function syntaxError (matchResult: ohm.MatchResult, source: string): Erro
         failuresText += ', '
       }
     }
-    let failure = failures[i].text as string
-    if (failure === 'a digit') {
-      failure = 'um dígito'
-    } else if (failure === 'a letter') {
-      failure = 'uma letra'
-    } else if (failure === 'any character') {
-      failure = 'qualquer caractere'
-    } else if (failure === 'an alpha-numeric character') {
-      failure = 'um caractere alfanumérico'
-    } else if (failure === 'end of input') {
-      failure = 'fim'
-    } else if (failure === 'not a keyword') {
-      failure = 'uma não-palavra-chave'
+    const failure = failures[i]
+    if (failure.type === 'description') {
+      failuresText += (failure.text as string).replace(/end of input/g, 'fim-de-entrada')
     } else {
-      failure = `\`${failure}\``
+      failuresText += `\`${failure.text as string}\``
     }
-    failuresText += failure
   }
-  return new Error(`Erro de sintaxe em \`${escape(source)}\` na posição ${charIndex}:\nEsperado ${failuresText}`)
+  const charIndex = matchResult.getInterval().endIdx
+  return new Error(`Erro de sintaxe em \`${escape(source)}\` na posição ${charIndex}:\nEsperado ${failuresText}.`)
 }
