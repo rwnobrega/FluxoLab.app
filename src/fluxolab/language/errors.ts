@@ -23,5 +23,5 @@ export function syntaxErrorMessage (matchResult: ohm.MatchResult): string {
       failuresText += `\`${failure.text as string}\``
     }
   }
-  return `Esperado ${failuresText}`
+  return `Esperado ${failuresText}.`
 }
