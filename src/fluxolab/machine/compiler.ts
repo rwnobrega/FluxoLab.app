@@ -63,18 +63,19 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           break
         }
         case 'assignment': {
-          const matchResult = match(data.value, 'Command_assignment')
-          let variableId: string
-          let expression: string
-          if (matchResult instanceof Error) {
-            variableId = ''
-            expression = ''
+          const assignment: string = data.value
+          const matchResult = match(assignment, 'Command_assignment')
+          let variableId = ''
+          let expression = ''
+          if (assignment === '') {
+            errors.push({ message: 'Atribuição não especificada.', nodeId: id })
+          } else if (matchResult instanceof Error) {
             errors.push({ message: matchResult.message, nodeId: id })
           } else {
             // TODO: Use `matchResult` to get `variableId` and `expression`.
-            const equalIndex = parseInt(data.value.indexOf('='))
-            variableId = _.trim(data.value.slice(0, equalIndex))
-            expression = _.trim(data.value.slice(equalIndex + 1))
+            const equalIndex = assignment.indexOf('=')
+            variableId = _.trim(assignment.slice(0, equalIndex))
+            expression = _.trim(assignment.slice(equalIndex + 1))
             // /TODO
             if (!_.some(variables, { id: variableId })) {
               errors.push({ message: `Variável \`${variableId}\` não existe.`, nodeId: id })
@@ -89,9 +90,12 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           break
         }
         case 'conditional': {
-          const condition = data.value
+          const condition: string = data.value
+          const matchResult = match(condition, 'Expression')
           if (condition === '') {
             errors.push({ message: 'Condição não especificada.', nodeId: id })
+          } else if (matchResult instanceof Error) {
+            errors.push({ message: matchResult.message, nodeId: id })
           }
           const nextTrue = getOutgoingNode(id, 'true', edges)
           if (nextTrue === null) {
@@ -124,9 +128,12 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           break
         }
         case 'output_': {
-          const expression = data.value
+          const expression: string = data.value
+          const matchResult = match(`write ${expression}`, 'Command_write')
           if (expression === '') {
             errors.push({ message: 'Expressão não especificada.', nodeId: id })
+          } else if (matchResult instanceof Error) {
+            errors.push({ message: matchResult.message, nodeId: id })
           }
           const nextId = getOutgoingNode(id, 'out', edges)
           if (nextId === null) {
