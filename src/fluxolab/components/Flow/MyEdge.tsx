@@ -59,19 +59,27 @@ export default function (props: EdgeProps): JSX.Element {
   const { svgPathString } = getSmartEdgeResponse
 
   return (
-    <path
-      style={{
-        strokeWidth: 2,
-        stroke: props.selected === true ? 'black' : 'gray',
-        strokeOpacity: mouseHover ? 1 : 0.5,
-        strokeDasharray: animated ? 5 : 0,
-        animation: animated ? 'dashdraw 0.5s linear infinite' : 'none'
-      }}
-      onMouseEnter={() => setMouseHover(true)}
-      onMouseLeave={() => setMouseHover(false)}
-      className='animated react-flow__edge-path'
-      d={svgPathString}
-      markerEnd={props.markerEnd}
-    />
+    <>
+      <path
+        style={{
+          strokeWidth: 2,
+          stroke: props.selected === true ? 'blue' : 'gray',
+          strokeOpacity: mouseHover ? 1 : 0.5,
+          strokeDasharray: animated ? 5 : 0,
+          animation: animated ? 'dashdraw 0.5s linear infinite' : 'none'
+        }}
+        className='react-flow__edge-path'
+        d={svgPathString}
+        markerEnd={props.markerEnd}
+      />
+      {/* This is a hack to make the edge more clickable */}
+      <path
+        style={{ strokeWidth: 16, strokeOpacity: 0 }}
+        onMouseEnter={() => setMouseHover(true)}
+        onMouseLeave={() => setMouseHover(false)}
+        className='react-flow__edge-path'
+        d={svgPathString}
+      />
+    </>
   )
 }
