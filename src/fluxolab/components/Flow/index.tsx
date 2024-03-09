@@ -44,14 +44,13 @@ export default function ({ wrapper, refInput }: Props): JSX.Element {
       if (wrapper === null || wrapper.current === null) return
       event.preventDefault()
       const { type, mouseX, mouseY } = JSON.parse(event.dataTransfer.getData('application/reactflow'))
-      const reactFlowBounds = wrapper.current.getBoundingClientRect()
       const id = uuid()
       const node = {
         id,
         type,
-        position: reactFlowInstance.project({
-          x: event.clientX - reactFlowBounds.left - mouseX,
-          y: event.clientY - reactFlowBounds.top - mouseY
+        position: reactFlowInstance.screenToFlowPosition({
+          x: event.clientX - mouseX,
+          y: event.clientY - mouseY
         }),
         data: { id, value: '' }
       }
