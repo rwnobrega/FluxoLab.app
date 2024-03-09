@@ -41,7 +41,7 @@ export default ({ fromX, fromY, toX, toY, fromPosition, toPosition }: Props): st
   // If the value returned is null, it means "getSmartEdge" was unable to find
   // a valid path, and you should do something else instead
   if (getSmartEdgeResponse === null) {
-    return `M${fromX},${fromY} C ${fromX} ${toY} ${fromX} ${toY} ${toX},${toY}`
+    return `M${fromX},${fromY} L${toX},${toY}`
   } else {
     return getSmartEdgeResponse.svgPathString
   }
