@@ -10,6 +10,7 @@ import StatusMessage from 'components/StatusMessage'
 import symbols from 'components/Symbols'
 
 import MyEdge from './MyEdge'
+import ConnectionLine from './MyEdge/ConnectionLine'
 import MyNode from './MyNode'
 
 import useStoreFlow from 'stores/storeFlow'
@@ -67,6 +68,7 @@ export default function ({ wrapper, refInput }: Props): JSX.Element {
       edgeTypes={edgeTypes}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
+      connectionLineComponent={ConnectionLine}
       onConnect={onConnect}
       onInit={setReactFlowInstance}
       onDrop={onDrop}

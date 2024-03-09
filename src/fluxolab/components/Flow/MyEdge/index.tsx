@@ -2,16 +2,9 @@ import _ from 'lodash'
 
 import React, { useEffect } from 'react'
 
-import { useNodes, SmoothStepEdge, EdgeProps } from 'reactflow'
+import { EdgeProps } from 'reactflow'
 
-import {
-  getSmartEdge,
-  svgDrawSmoothLinePath,
-  // svgDrawStraightLinePath,
-  pathfindingAStarDiagonal
-  // pathfindingAStarNoDiagonal,
-  // pathfindingJumpPointNoDiagonal
-} from '@tisoap/react-flow-smart-edge'
+import getSvgPathString from './getSvgPathString'
 
 import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
@@ -41,25 +34,17 @@ export default function (props: EdgeProps): JSX.Element {
     setAnimated(props.source === sourceSymbolId && props.target === targetSymbolId)
   }, [state, machine])
 
-  const nodes = useNodes()
-  const options = {
-    nodePadding: 5,
-    gridRatio: 5,
-    drawEdge: svgDrawSmoothLinePath,
-    generatePath: pathfindingAStarDiagonal
-  }
-  const getSmartEdgeResponse = getSmartEdge({ ...props, nodes, options })
-
-  // If the value returned is null, it means "getSmartEdge" was unable to find
-  // a valid path, and you should do something else instead
-  if (getSmartEdgeResponse === null) {
-    return <SmoothStepEdge {...props} />
-  }
-
-  const { svgPathString } = getSmartEdgeResponse
+  const svgPathString = getSvgPathString({
+    fromX: props.sourceX,
+    fromY: props.sourceY,
+    toX: props.targetX,
+    toY: props.targetY,
+    fromPosition: props.sourcePosition,
+    toPosition: props.targetPosition
+  })
 
   return (
-    <>
+    <g>
       <path
         style={{
           strokeWidth: 2,
@@ -80,6 +65,6 @@ export default function (props: EdgeProps): JSX.Element {
         className='react-flow__edge-path'
         d={svgPathString}
       />
-    </>
+    </g>
   )
 }
