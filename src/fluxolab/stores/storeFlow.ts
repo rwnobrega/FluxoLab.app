@@ -1,24 +1,15 @@
 import _ from 'lodash'
 
 import { create } from 'zustand'
-
 import { persist } from 'zustand/middleware'
 
-import {
-  Connection,
-  Edge,
-  EdgeChange,
-  Node,
-  NodeChange,
-  addEdge,
-  applyNodeChanges,
-  applyEdgeChanges,
-  MarkerType
-} from 'reactflow'
+import { Connection, Edge, EdgeChange, Node, NodeChange, addEdge, applyNodeChanges, applyEdgeChanges } from 'reactflow'
 
 interface StoreFlow {
   nodes: Node[]
   edges: Edge[]
+  setNodes: (nodes: Node[]) => void
+  setEdges: (edges: Edge[]) => void
   clearAll: () => void
   onNodesChange: (changes: NodeChange[]) => void
   onEdgesChange: (changes: EdgeChange[]) => void
@@ -36,6 +27,8 @@ const useStoreFlow = create<StoreFlow, any>(
     (set, get) => ({
       nodes: [],
       edges: [],
+      setNodes: nodes => set({ nodes }),
+      setEdges: edges => set({ edges }),
       clearAll: () => set({ nodes: [], edges: [] }),
       onNodesChange: changes => set({ nodes: applyNodeChanges(changes, get().nodes) }),
       onEdgesChange: changes => set({ edges: applyEdgeChanges(changes, get().edges) }),
@@ -53,17 +46,11 @@ const useStoreFlow = create<StoreFlow, any>(
       onConnect: connection => {
         const edges = get().edges
         _.remove(edges, edge => (edge.source === connection.source && edge.sourceHandle === connection.sourceHandle))
-        const edgeProps = {
-          type: 'smartEdge',
-          markerEnd: { type: MarkerType.ArrowClosed, height: 10, width: 6 }
-        }
-        set({ edges: addEdge({ ...connection, ...edgeProps }, edges) })
+        set({ edges: addEdge(connection, edges) })
       },
       selectAll: () => {
-        const nodes = get().nodes
-        set({ nodes: _.map(nodes, node => ({ ...node, selected: true })) })
-        const edges = get().edges
-        set({ edges: _.map(edges, edge => ({ ...edge, selected: true })) })
+        set({ nodes: _.map(get().nodes, node => ({ ...node, selected: true })) })
+        set({ edges: _.map(get().edges, edge => ({ ...edge, selected: true })) })
       },
       mouseOverNodeId: null,
       setMouseOverNodeId: id => set({ mouseOverNodeId: id })
