@@ -16,7 +16,6 @@
   "devDependencies": {
     "@types/bootstrap": "^5.2.6",
     "@types/lodash": "^4.14.192",
-    "@types/uuid": "^8.3.4",
     "css-loader": "^6.7.3",
     "gh-pages": "^5.0.0",
     "html-webpack-plugin": "^5.5.0",
@@ -44,7 +43,6 @@
     "react-hotkeys-hook": "^3.4.7",
     "react-resizable-panels": "^0.0.55",
     "reactflow": "^11.10.4",
-    "uuid": "^8.3.2",
     "zustand": "^4.3.6"
   }
 }

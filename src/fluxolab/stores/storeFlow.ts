@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { Connection, Edge, EdgeChange, Node, NodeChange, addEdge, applyNodeChanges, applyEdgeChanges } from 'reactflow'
+import { Connection, Edge, EdgeChange, Node, NodeChange, XYPosition, addEdge, applyNodeChanges, applyEdgeChanges } from 'reactflow'
 
 interface StoreFlow {
   nodes: Node[]
@@ -13,13 +13,20 @@ interface StoreFlow {
   clearAll: () => void
   onNodesChange: (changes: NodeChange[]) => void
   onEdgesChange: (changes: EdgeChange[]) => void
-  addNode: (node: Node) => void
+  addNode: (type: string, position: XYPosition) => void
   deleteNode: (id: string) => void
   updateNodeProp: (id: string, path: string, value: any) => void
   onConnect: (connection: Connection) => void
   selectAll: () => void
   mouseOverNodeId: string | null
   setMouseOverNodeId: (id: string | null) => void
+}
+
+function getNextAvailableId (nodes: Node[]): string {
+  const intIds = _.map(nodes, node => parseInt(node.id))
+  let i = 0
+  while (_.includes(intIds, i)) i++
+  return i.toString()
 }
 
 const useStoreFlow = create<StoreFlow, any>(
@@ -32,7 +39,12 @@ const useStoreFlow = create<StoreFlow, any>(
       clearAll: () => set({ nodes: [], edges: [] }),
       onNodesChange: changes => set({ nodes: applyNodeChanges(changes, get().nodes) }),
       onEdgesChange: changes => set({ edges: applyEdgeChanges(changes, get().edges) }),
-      addNode: node => set({ nodes: [...get().nodes, node] }),
+      addNode: (type, position) => {
+        const nodes = get().nodes
+        const id = getNextAvailableId(nodes)
+        const newNode = { id, type, position, data: { id, value: '' } }
+        set({ nodes: [...nodes, newNode] })
+      },
       deleteNode: id => set({
         nodes: _.filter(get().nodes, node => node.id !== id),
         edges: _.filter(get().edges, edge => edge.source !== id && edge.target !== id)
