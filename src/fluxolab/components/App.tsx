@@ -27,7 +27,6 @@ import { palette } from 'utils/colors'
 export default function (): JSX.Element {
   const navbarWrapper = React.useRef<HTMLDivElement>(null)
   const reactFlowWrapper = React.useRef<HTMLDivElement>(null)
-  const refInput = React.useRef<HTMLInputElement>(null)
 
   const [contentHeight, setContentHeight] = React.useState<string>('100vh')
 
@@ -72,8 +71,8 @@ export default function (): JSX.Element {
     useHotkeys(
       hotkey,
       () => {
-        if (!isDisabled({ state, compileErrors })) {
-          execAction(action, machine, refInput)
+        if (!isDisabled(state, compileErrors)) {
+          execAction(action, machine)
         }
       },
       hotkeysOptions
@@ -105,7 +104,7 @@ export default function (): JSX.Element {
         </div>
         <Panel defaultSize={70} minSize={50}>
           <div ref={reactFlowWrapper} style={{ height: contentHeight }}>
-            <Flow wrapper={reactFlowWrapper} refInput={refInput} />
+            <Flow wrapper={reactFlowWrapper} />
           </div>
         </Panel>
         <PanelResizeHandle style={{ width: '6px', ...resizeHandleStyle }} />
@@ -116,7 +115,7 @@ export default function (): JSX.Element {
             </Panel>
             <PanelResizeHandle style={{ height: '6px', ...resizeHandleStyle }} />
             <Panel defaultSize={60} className='p-3'>
-              <Interaction refInput={refInput} />
+              <Interaction />
             </Panel>
           </PanelGroup>
         </Panel>

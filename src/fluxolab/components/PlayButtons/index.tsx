@@ -12,24 +12,20 @@ import useStoreMachineState, { Action } from 'stores/storeMachineState'
 
 import buttonList from './buttonList'
 
-interface Props {
-  refInput: React.RefObject<HTMLInputElement>
-}
-
-export default function ({ refInput }: Props): JSX.Element {
+export default function (): JSX.Element {
   const { machine, compileErrors } = useStoreMachine()
   const { getState, execAction } = useStoreMachineState()
 
   const state = getState()
 
   const onClick = (action: Action): void => {
-    execAction(action, machine, refInput)
+    execAction(action, machine)
   }
 
   return (
     <ButtonGroup>
       {_.map(buttonList, ({ action, description, hotkey, icon, isDisabled }) => {
-        const disabled = isDisabled({ state, compileErrors })
+        const disabled = isDisabled(state, compileErrors)
         const tooltipText = disabled ? '' : `${description} (${hotkey})`
         return (
           <Tooltip key={action} text={tooltipText}>

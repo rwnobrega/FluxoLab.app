@@ -1,17 +1,12 @@
 import { Action } from 'stores/storeMachineState'
 import { MachineState, CompileError } from 'machine/types'
 
-interface IsDisabledProps {
-  state: MachineState
-  compileErrors: CompileError[]
-}
-
 interface PlayButton {
   action: Action
   hotkey: string
   description: string
   icon: string
-  isDisabled: (isDisabledProps: IsDisabledProps) => boolean
+  isDisabled: (state: MachineState, compileErrors: CompileError[]) => boolean
 }
 
 function isDisabledBackward (state: MachineState): boolean {
@@ -28,7 +23,7 @@ const buttonList: PlayButton[] = [
     hotkey: 'F6',
     description: 'Encerrar execução',
     icon: 'bi-stop-fill',
-    isDisabled: ({ state, compileErrors }) => (
+    isDisabled: (state, compileErrors) => (
       compileErrors.length > 0 || isDisabledBackward(state)
     )
   },
@@ -37,7 +32,7 @@ const buttonList: PlayButton[] = [
     hotkey: 'F7',
     description: 'Voltar um passo',
     icon: 'bi-skip-start-fill',
-    isDisabled: ({ state, compileErrors }) => (
+    isDisabled: (state, compileErrors) => (
       compileErrors.length > 0 || isDisabledBackward(state)
     )
   },
@@ -46,8 +41,8 @@ const buttonList: PlayButton[] = [
     hotkey: 'F8',
     description: 'Executar próximo passo',
     icon: 'bi-skip-end-fill',
-    isDisabled: ({ state, compileErrors }) => (
-      compileErrors.length > 0 || isDisabledForward(state)
+    isDisabled: (state, compileErrors) => (
+      compileErrors.length > 0 || isDisabledForward(state) || state.status === 'waiting'
     )
   }
 ]

@@ -10,11 +10,8 @@ import ChatBubble from './ChatBubble'
 import useStoreMachineState from 'stores/storeMachineState'
 import useStoreMachine from 'stores/storeMachine'
 
-interface Props {
-  refInput: React.RefObject<HTMLInputElement>
-}
-
-export default function ({ refInput }: Props): JSX.Element {
+export default function (): JSX.Element {
+  const refInput = useRef<HTMLInputElement>(null)
   const refStackEnd = useRef<HTMLDivElement>(null)
   const [inputText, setInputText] = React.useState('')
 
@@ -26,7 +23,7 @@ export default function ({ refInput }: Props): JSX.Element {
   const handleSendInput = useCallback(() => {
     if (inputText.length > 0) {
       state.input = inputText
-      nextStep(machine, refInput)
+      nextStep(machine)
       setInputText('')
     }
   }, [inputText, machine, state, stateHistory])

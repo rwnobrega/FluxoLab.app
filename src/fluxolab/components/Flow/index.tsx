@@ -22,10 +22,9 @@ for (const { type, ...otherProps } of symbols) {
 
 interface Props {
   wrapper: React.RefObject<HTMLDivElement>
-  refInput: React.RefObject<HTMLInputElement>
 }
 
-export default function ({ wrapper, refInput }: Props): JSX.Element {
+export default function ({ wrapper }: Props): JSX.Element {
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null)
 
   const { nodes, edges, addNode, onNodesChange, onEdgesChange, onConnect } = useStoreFlow()
@@ -79,7 +78,7 @@ export default function ({ wrapper, refInput }: Props): JSX.Element {
         direction='horizontal' gap={3} className='position-absolute top-0 start-0 m-3'
         style={{ zIndex: 5, alignItems: 'start' }}
       >
-        <PlayButtons refInput={refInput} />
+        <PlayButtons />
         <StatusMessage />
       </Stack>
       <Controls />
