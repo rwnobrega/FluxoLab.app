@@ -27,7 +27,8 @@ export default function (): JSX.Element {
       edges: edges0
     }
     const lz = lzString.compressToEncodedURIComponent(JSON.stringify(state))
-    void navigator.clipboard.writeText(`${window.location.origin}/?lzs=${lz}`)
+    const baseUrl = window.location.href.split('?')[0]
+    void navigator.clipboard.writeText(`${baseUrl}?lzs=${lz}`)
     setCopyLinkToast(true)
   }, [flowchartTitle, machine.variables, nodes, edges])
 
