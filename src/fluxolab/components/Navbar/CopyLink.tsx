@@ -15,7 +15,7 @@ import useStoreEphemeral from 'stores/useStoreEphemeral'
 export default function (): JSX.Element {
   const { nodes, edges } = useStoreFlow()
   const { machine, flowchartTitle } = useStoreMachine()
-  const { setCopyLinkToast } = useStoreEphemeral()
+  const { setToastContent } = useStoreEphemeral()
 
   const handleCopyLink = useCallback(() => {
     const nodes0 = _.map(nodes, node => _.pick(node, ['id', 'type', 'position', 'data']))
@@ -29,7 +29,7 @@ export default function (): JSX.Element {
     const lz = lzString.compressToEncodedURIComponent(JSON.stringify(state))
     const baseUrl = window.location.href.split('?')[0]
     void navigator.clipboard.writeText(`${baseUrl}?lzs=${lz}`)
-    setCopyLinkToast(true)
+    setToastContent({ message: 'Link copiado para a área de transferência.', icon: 'bi-clipboard-check' })
   }, [flowchartTitle, machine.variables, nodes, edges])
 
   return (

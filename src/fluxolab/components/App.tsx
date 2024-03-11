@@ -12,7 +12,7 @@ import Stack from 'react-bootstrap/Stack'
 
 import Flow from 'components/Flow'
 import Navbar from 'components/Navbar'
-import CopyLinkToast from 'components/Navbar/CopyLinkToast'
+import Toast from 'components/Toast'
 import SymbolList from 'components/SymbolList'
 import VariableList from 'components/VariableList'
 import Interaction from 'components/Interaction'
@@ -111,7 +111,7 @@ export default function (): JSX.Element {
 
   return (
     <Stack className='vh-100 h-100' style={{ userSelect: 'none' }}>
-      <CopyLinkToast />
+      <Toast />
       <div ref={navbarWrapper}>
         <Navbar />
       </div>
