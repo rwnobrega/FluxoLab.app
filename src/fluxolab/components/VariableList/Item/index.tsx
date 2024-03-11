@@ -5,13 +5,13 @@ import ItemType from './Type'
 import ItemValue from './Value'
 import ItemRemove from './Remove'
 
-export interface VariableItemProps {
+export interface Props {
   id: string
   type: string
   disabled: boolean
 }
 
-export default function (props: VariableItemProps): JSX.Element {
+export default function (props: Props): JSX.Element {
   return (
     <tr key={props.id}>
       <td><ItemName {...props} /></td>

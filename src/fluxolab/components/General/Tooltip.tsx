@@ -2,17 +2,22 @@ import React, { useEffect, useRef } from 'react'
 
 import { Tooltip as BsTooltip } from 'bootstrap'
 
-export default function (props: {children: JSX.Element, text: string }): JSX.Element {
+interface Props {
+  children: JSX.Element
+  text: string
+}
+
+export default function ({ children, text }: Props): JSX.Element {
   const childRef = useRef(undefined as unknown as Element)
 
   useEffect(() => {
-    const t = new BsTooltip(childRef.current, {
-      title: props.text,
+    const t = new BsTooltip(childRef?.current, {
+      title: text,
       placement: 'bottom',
       trigger: 'hover'
     })
     return () => t.dispose()
-  }, [props.text])
+  }, [text])
 
-  return React.cloneElement(props.children, { ref: childRef })
+  return React.cloneElement(children, { ref: childRef })
 }

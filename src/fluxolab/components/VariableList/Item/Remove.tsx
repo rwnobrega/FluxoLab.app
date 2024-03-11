@@ -4,11 +4,11 @@ import Button from 'react-bootstrap/Button'
 
 import Tooltip from 'components/General/Tooltip'
 
-import { VariableItemProps } from '.'
+import { Props } from '.'
 
 import useStoreMachine from 'stores/useStoreMachine'
 
-export default function ({ id, disabled }: VariableItemProps): JSX.Element {
+export default function ({ id, disabled }: Props): JSX.Element {
   const { removeVariable } = useStoreMachine()
   if (disabled) return <></>
   return (

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { VariableItemProps } from '.'
+import { Props } from '.'
 
 import { getVariableType } from 'machine/variables'
 
@@ -15,7 +15,7 @@ const classes = [
   'border border-success border-opacity-10 rounded-1'
 ].join(' ')
 
-export default function ({ id, type }: VariableItemProps): JSX.Element {
+export default function ({ id, type }: Props): JSX.Element {
   const { getState } = useStoreMachineState()
   const state = getState()
   const value = state.memory[id]

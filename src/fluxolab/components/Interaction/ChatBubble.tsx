@@ -2,11 +2,6 @@ import React, { CSSProperties } from 'react'
 
 import { palette } from 'utils/colors'
 
-interface BubbleProps {
-  direction: 'in' | 'out'
-  text: string
-}
-
 const divClasses = {
   common: 'd-flex',
   in: 'align-self-end',
@@ -58,7 +53,12 @@ const arrowStyles = {
   }
 }
 
-export default function ({ direction, text }: BubbleProps): JSX.Element {
+interface Props {
+  direction: 'in' | 'out'
+  text: string
+}
+
+export default function ({ direction, text }: Props): JSX.Element {
   return (
     <div
       className={`${divClasses.common} ${divClasses[direction]}`}

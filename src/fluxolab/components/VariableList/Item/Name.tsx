@@ -4,9 +4,9 @@ import Button from 'react-bootstrap/Button'
 
 import VariableModalRename from '../RenameVariable'
 
-import { VariableItemProps } from '.'
+import { Props } from '.'
 
-export default function ({ id, disabled }: VariableItemProps): JSX.Element {
+export default function ({ id, disabled }: Props): JSX.Element {
   const [showModal, setShowModal] = useState<boolean>(false)
   return (
     <>

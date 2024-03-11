@@ -4,14 +4,14 @@ import React from 'react'
 
 import Form from 'react-bootstrap/Form'
 
-import { VariableItemProps } from '.'
+import { Props } from '.'
 
 import useStoreMachine from 'stores/useStoreMachine'
 
 import { variableTypes } from 'machine/variables'
 import { Variable } from 'machine/types'
 
-export default function ({ id, disabled }: VariableItemProps): JSX.Element {
+export default function ({ id, disabled }: Props): JSX.Element {
   const { getVariable, changeVariableType } = useStoreMachine()
   const variable = getVariable(id)
 
