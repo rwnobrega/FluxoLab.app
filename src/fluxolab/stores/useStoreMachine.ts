@@ -7,6 +7,8 @@ import { Variable, Symbol, CompileError, Machine } from 'machine/types'
 
 interface StoreMachine {
   machine: Machine
+  clearMachine: () => void
+  setTitle: (title: string) => void
   setFlowchart: (flowchart: Symbol[]) => void
   setStartSymbolId: (startSymbolId: string) => void
   setVariables: (variables: Variable[]) => void
@@ -18,17 +20,26 @@ interface StoreMachine {
   changeVariableType: (id: string, type: Variable['type']) => void
   compileErrors: CompileError[]
   setCompileErrors: (compileErrors: CompileError[]) => void
-  flowchartTitle: string
-  setFlowchartTitle: (flowchartTitle: string) => void
+}
+
+const emptyMachine: Machine = {
+  title: 'Fluxograma sem título',
+  flowchart: [],
+  startSymbolId: '',
+  variables: []
 }
 
 const useStoreMachine = create<StoreMachine>()(
   persist(
     (set, get) => ({
-      machine: {
-        flowchart: [],
-        startSymbolId: '',
-        variables: []
+      machine: _.cloneDeep(emptyMachine),
+      clearMachine: () => {
+        set({ machine: _.cloneDeep(emptyMachine) })
+      },
+      setTitle: title => {
+        const { machine } = get()
+        machine.title = title
+        set({ machine })
       },
       setFlowchart: flowchart => {
         const { machine } = get()
@@ -85,13 +96,11 @@ const useStoreMachine = create<StoreMachine>()(
         set({ machine })
       },
       compileErrors: [],
-      setCompileErrors: compileErrors => { set({ compileErrors }) },
-      flowchartTitle: 'Fluxograma sem título',
-      setFlowchartTitle: flowchartTitle => { set({ flowchartTitle }) }
+      setCompileErrors: compileErrors => { set({ compileErrors }) }
     }),
     {
       name: 'fluxolab_machine',
-      version: 3
+      version: 4
     }
   )
 )

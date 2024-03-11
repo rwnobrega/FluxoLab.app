@@ -3,7 +3,7 @@ import useStoreMachine from 'stores/useStoreMachine'
 
 export default function (): JSX.Element {
   const [editMode, setEditMode] = useState(false)
-  const { flowchartTitle, setFlowchartTitle } = useStoreMachine()
+  const { machine, setTitle } = useStoreMachine()
 
   const onFocus = useCallback((event: React.FocusEvent<HTMLInputElement>) => {
     event.target.select()
@@ -15,7 +15,7 @@ export default function (): JSX.Element {
   }, [])
 
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setFlowchartTitle(event.target.value)
+    setTitle(event.target.value)
   }, [])
 
   const onKeyDown = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -29,7 +29,7 @@ export default function (): JSX.Element {
     <input
       type='text'
       className='form-control bg-dark text-white fs-4'
-      value={flowchartTitle}
+      value={machine.title}
       onFocus={onFocus}
       onBlur={onBlur}
       onChange={onChange}

@@ -17,6 +17,7 @@ export interface CompileError {
 }
 
 export interface Machine {
+  title: string
   flowchart: Symbol[]
   startSymbolId: string
   variables: Variable[]

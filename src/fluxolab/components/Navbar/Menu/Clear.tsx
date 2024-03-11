@@ -13,7 +13,7 @@ interface Props {
 
 export default function ({ showModal, setShowModal }: Props): JSX.Element {
   const { clearAll } = useStoreFlow()
-  const { clearVariables, setFlowchartTitle } = useStoreMachine()
+  const { clearMachine } = useStoreMachine()
 
   const handleCancel = useCallback(() => {
     setShowModal(false)
@@ -21,10 +21,9 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
 
   const handleConfirm = useCallback(() => {
     clearAll()
-    clearVariables()
-    setFlowchartTitle('Fluxograma sem título')
+    clearMachine()
     setShowModal(false)
-  }, [clearAll, clearVariables, setFlowchartTitle, setShowModal])
+  }, [clearAll, clearMachine, setShowModal])
 
   return (
     <Modal show={showModal} onHide={handleCancel}>

@@ -2,8 +2,6 @@ import _ from 'lodash'
 
 import React, { useEffect, useRef, useState } from 'react'
 
-import lzString from 'lz-string'
-
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
@@ -19,6 +17,7 @@ import Interaction from 'components/Interaction'
 
 import buttonList from 'components/PlayButtons/buttonList'
 
+import { deserialize } from 'stores/serialize'
 import useStoreFlow from 'stores/useStoreFlow'
 import useStoreMachine from 'stores/useStoreMachine'
 import useStoreMachineState from 'stores/useStoreMachineState'
@@ -35,7 +34,7 @@ export default function (): JSX.Element {
   const [contentHeight, setContentHeight] = useState<string>('100vh')
 
   const { nodes, edges, setNodes, makeConnections: setEdges, selectAll } = useStoreFlow()
-  const { machine, setVariables, setFlowchart, setFlowchartTitle, setStartSymbolId, compileErrors, setCompileErrors } = useStoreMachine()
+  const { machine, setTitle, setFlowchart, setVariables, setStartSymbolId, compileErrors, setCompileErrors } = useStoreMachine()
   const { getState, reset, execAction } = useStoreMachineState()
   const { setToastContent } = useStoreEphemeral()
 
@@ -53,11 +52,11 @@ export default function (): JSX.Element {
     const lzs = url.searchParams.get('lzs')
     if (lzs !== null) {
       try {
-        const { nodes, edges, variables, title } = JSON.parse(lzString.decompressFromEncodedURIComponent(lzs))
+        const { nodes, edges, variables, title } = deserialize(lzs)
         setNodes(nodes)
         setEdges(edges)
         setVariables(variables)
-        setFlowchartTitle(title)
+        setTitle(title)
         url.searchParams.delete('lzs')
         window.history.replaceState({}, '', url.toString())
         setToastContent({ message: 'Fluxograma carregado com sucesso.', icon: 'bi-check-circle' })
