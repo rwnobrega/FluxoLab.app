@@ -109,7 +109,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           }
           break
         }
-        case 'input_': {
+        case 'read': {
           const variableId: string = data
           const matchResult = grammar.match(`read ${variableId}`, 'Command_read')
           if (variableId === '') {
@@ -127,7 +127,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           }
           break
         }
-        case 'output_': {
+        case 'write': {
           const expression: string = data
           const matchResult = grammar.match(`write ${expression}`, 'Command_write')
           if (expression === '') {

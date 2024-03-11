@@ -8,7 +8,7 @@ import Label from './Label'
 import Modal from './Modal'
 
 const symbol: Symbol = {
-  type: 'input_',
+  type: 'read',
   title: 'Entrada',
   boxStyle: {
     backgroundColor: getBrighterColor(palette.blue),

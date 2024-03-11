@@ -100,7 +100,7 @@ const useStoreMachine = create<StoreMachine>()(
     }),
     {
       name: 'fluxolab_machine',
-      version: 4
+      version: 5
     }
   )
 )
