@@ -22,6 +22,7 @@ import buttonList from 'components/PlayButtons/buttonList'
 import useStoreFlow from 'stores/useStoreFlow'
 import useStoreMachine from 'stores/useStoreMachine'
 import useStoreMachineState from 'stores/useStoreMachineState'
+import useStoreEphemeral from 'stores/useStoreEphemeral'
 
 import compile from 'machine/compiler'
 
@@ -36,6 +37,7 @@ export default function (): JSX.Element {
   const { nodes, edges, setNodes, makeConnections: setEdges, selectAll } = useStoreFlow()
   const { machine, setVariables, setFlowchart, setFlowchartTitle, setStartSymbolId, compileErrors, setCompileErrors } = useStoreMachine()
   const { getState, reset, execAction } = useStoreMachineState()
+  const { setToastContent } = useStoreEphemeral()
 
   const state = getState()
 
@@ -50,13 +52,18 @@ export default function (): JSX.Element {
     const url = new URL(window.location.href)
     const lzs = url.searchParams.get('lzs')
     if (lzs !== null) {
-      const { nodes, edges, variables, title } = JSON.parse(lzString.decompressFromEncodedURIComponent(lzs))
-      setNodes(nodes)
-      setEdges(edges)
-      setVariables(variables)
-      setFlowchartTitle(title)
-      url.searchParams.delete('lzs')
-      window.history.replaceState({}, '', url.toString())
+      try {
+        const { nodes, edges, variables, title } = JSON.parse(lzString.decompressFromEncodedURIComponent(lzs))
+        setNodes(nodes)
+        setEdges(edges)
+        setVariables(variables)
+        setFlowchartTitle(title)
+        url.searchParams.delete('lzs')
+        window.history.replaceState({}, '', url.toString())
+        setToastContent({ message: 'Fluxograma carregado com sucesso.', icon: 'bi-check-circle' })
+      } catch {
+        setToastContent({ message: 'Erro ao carregar o fluxograma.', icon: 'bi-exclamation-triangle' })
+      }
     }
   }, [])
 
