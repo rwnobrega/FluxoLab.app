@@ -14,6 +14,7 @@ import MyHandle from './MyHandle'
 import ButtonDelete from './ButtonDelete'
 import ButtonEdit from './ButtonEdit'
 
+import useStoreEphemeral from 'stores/storeEphemeral'
 import useStoreFlow from 'stores/storeFlow'
 import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
@@ -30,9 +31,9 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
   const [margin, setMargin] = useState<number>(0)
   const [boxFilter, setBoxFilter] = useState<string>('')
   const [showModal, setShowModal] = useState<boolean>(false)
-  const [mouseOver, setMouseOver] = useState<boolean>(false)
 
-  const { nodes, deleteNode, updateNodeProp, setMouseOverNodeId } = useStoreFlow()
+  const { nodes, deleteNode, updateNodeProp } = useStoreFlow()
+  const { mouseOverNodeId, setMouseOverNodeId } = useStoreEphemeral()
   const { compileErrors } = useStoreMachine()
   const { getState } = useStoreMachineState()
   const { getZoom } = useReactFlow()
@@ -81,23 +82,19 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
 
   function handleDelete (): void {
     deleteNode(nodeId)
-    setMouseOver(false)
     setMouseOverNodeId(null)
   }
 
   function handleEdit (): void {
-    setMouseOver(false)
     setMouseOverNodeId(null)
     setShowModal(true)
   }
 
   function handleMouseEnter (): void {
-    setMouseOver(true)
     setMouseOverNodeId(nodeId)
   }
 
   function handleMouseLeave (): void {
-    setMouseOver(false)
     setMouseOverNodeId(null)
   }
 
@@ -131,8 +128,8 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
           <Label value={node?.data} />
         </span>
       </SymbolBox>
-      <ButtonDelete onClick={handleDelete} visible={mouseOver} />
-      <ButtonEdit onClick={handleEdit} visible={mouseOver && Modal !== undefined} />
+      <ButtonDelete onClick={handleDelete} visible={mouseOverNodeId === nodeId} />
+      <ButtonEdit onClick={handleEdit} visible={mouseOverNodeId === nodeId} />
       {_.map(handles, (props, index) => (
         <MyHandle key={index} boxStyle={boxStyle} {...props} />
       ))}

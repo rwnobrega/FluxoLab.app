@@ -7,9 +7,9 @@ import Stack from 'react-bootstrap/Stack'
 
 import Minidown from 'components/General/Minidown'
 
+import useStoreEphemeral from 'stores/storeEphemeral'
 import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
-import useStoreFlow from 'stores/storeFlow'
 
 import { palette } from 'utils/colors'
 
@@ -22,7 +22,7 @@ interface Triplet {
 export default function (): JSX.Element {
   const { compileErrors } = useStoreMachine()
   const { getState } = useStoreMachineState()
-  const { mouseOverNodeId } = useStoreFlow()
+  const { mouseOverNodeId } = useStoreEphemeral()
 
   const state = getState()
 

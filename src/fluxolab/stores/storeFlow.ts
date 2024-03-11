@@ -18,8 +18,6 @@ interface StoreFlow {
   updateNodeProp: (id: string, path: string, value: any) => void
   onConnect: (connection: Connection) => void
   selectAll: () => void
-  mouseOverNodeId: string | null
-  setMouseOverNodeId: (id: string | null) => void
 }
 
 function getNextAvailableId (nodes: Node[]): string {
@@ -63,9 +61,7 @@ const useStoreFlow = create<StoreFlow, any>(
       selectAll: () => {
         set({ nodes: _.map(get().nodes, node => ({ ...node, selected: true })) })
         set({ edges: _.map(get().edges, edge => ({ ...edge, selected: true })) })
-      },
-      mouseOverNodeId: null,
-      setMouseOverNodeId: id => set({ mouseOverNodeId: id })
+      }
     }),
     {
       name: 'fluxolab_flow',
