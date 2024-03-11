@@ -27,7 +27,7 @@ function getNextAvailableId (nodes: Node[]): string {
   return i.toString()
 }
 
-const useStoreFlow = create<StoreFlow, any>(
+const useStoreFlow = create<StoreFlow>()(
   persist(
     (set, get) => ({
       nodes: [],

@@ -21,7 +21,7 @@ interface StoreMachine {
   setFlowchartTitle: (flowchartTitle: string) => void
 }
 
-const useStoreMachine = create<StoreMachine, any>(
+const useStoreMachine = create<StoreMachine>()(
   persist(
     (set, get) => ({
       machine: {

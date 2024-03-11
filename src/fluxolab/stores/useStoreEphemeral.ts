@@ -5,7 +5,7 @@ interface StoreEphemeral {
   setMouseOverNodeId: (id: string | null) => void
 }
 
-const useStoreEphemeral = create<StoreEphemeral>(
+const useStoreEphemeral = create<StoreEphemeral>()(
   (set, get) => ({
     mouseOverNodeId: null,
     setMouseOverNodeId: id => set({ mouseOverNodeId: id })

@@ -16,7 +16,7 @@ interface StoreMachineState {
   execAction: (action: Action, machine: Machine) => void
 }
 
-const useStoreMachineState = create<StoreMachineState>(
+const useStoreMachineState = create<StoreMachineState>()(
   (set, get) => ({
     stateHistory: [getInitialState([])],
     getState: () => {
