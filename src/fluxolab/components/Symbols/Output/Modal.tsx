@@ -43,7 +43,7 @@ export default function ({ nodeId, value, showModal, setShowModal }: Props): JSX
 
   function handleSubmit (event: any): void {
     event.preventDefault()
-    setTimeout(() => { updateNodeProp(nodeId, 'data.value', textValue) }, 200)
+    setTimeout(() => { updateNodeProp(nodeId, 'data', textValue) }, 200)
     setShowModal(false)
   }
 

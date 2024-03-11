@@ -56,7 +56,7 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
       }
       setMargin(marginWidth)
     }
-  }, [node?.data.value])
+  }, [node?.data])
 
   useEffect(() => {
     setBoxFilter(
@@ -109,7 +109,7 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
     >
       {
         Modal !== undefined &&
-          <Modal nodeId={nodeId} value={node?.data.value} showModal={showModal} setShowModal={setShowModal} />
+          <Modal nodeId={nodeId} value={node?.data} showModal={showModal} setShowModal={setShowModal} />
       }
       <SymbolBox boxStyle={boxStyle} boxFilter={boxFilter} isSelected={node?.selected}>
         <span
@@ -128,7 +128,7 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
             cursor: 'grab'
           }}
         >
-          <Label value={node?.data.value} />
+          <Label value={node?.data} />
         </span>
       </SymbolBox>
       <ButtonDelete onClick={handleDelete} visible={mouseOver} />

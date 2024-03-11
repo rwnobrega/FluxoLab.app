@@ -62,7 +62,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           break
         }
         case 'assignment': {
-          const assignment: string = data.value
+          const assignment: string = data
           const matchResult = grammar.match(assignment, 'Command_assignment')
           let variableId = ''
           let expression = ''
@@ -89,7 +89,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           break
         }
         case 'conditional': {
-          const condition: string = data.value
+          const condition: string = data
           const matchResult = grammar.match(condition, 'Expression')
           if (condition === '') {
             errors.push({ message: 'Condição não especificada.', nodeId: id })
@@ -110,7 +110,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           break
         }
         case 'input_': {
-          const variableId: string = data.value
+          const variableId: string = data
           const matchResult = grammar.match(`read ${variableId}`, 'Command_read')
           if (variableId === '') {
             errors.push({ message: 'Variável não especificada.', nodeId: id })
@@ -128,7 +128,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           break
         }
         case 'output_': {
-          const expression: string = data.value
+          const expression: string = data
           const matchResult = grammar.match(`write ${expression}`, 'Command_write')
           if (expression === '') {
             errors.push({ message: 'Expressão não especificada.', nodeId: id })

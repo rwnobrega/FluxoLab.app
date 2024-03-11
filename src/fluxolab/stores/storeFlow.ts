@@ -42,7 +42,7 @@ const useStoreFlow = create<StoreFlow, any>(
       addNode: (type, position) => {
         const nodes = get().nodes
         const id = getNextAvailableId(nodes)
-        const newNode = { id, type, position, data: { id, value: '' } }
+        const newNode = { id, type, position, data: '' }
         set({ nodes: [...nodes, newNode] })
       },
       deleteNode: id => set({
@@ -69,7 +69,7 @@ const useStoreFlow = create<StoreFlow, any>(
     }),
     {
       name: 'fluxolab_flow',
-      version: 2
+      version: 3
     }
   )
 )
