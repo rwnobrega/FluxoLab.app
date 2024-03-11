@@ -11,7 +11,7 @@ import MyEdge from './MyEdge'
 import ConnectionLine from './MyEdge/ConnectionLine'
 import MyNode from './MyNode'
 
-import useStoreFlow from 'stores/storeFlow'
+import useStoreFlow from 'stores/useStoreFlow'
 
 const edgeTypes: EdgeTypes = { smartEdge: MyEdge }
 

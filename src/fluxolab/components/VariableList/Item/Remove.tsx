@@ -6,7 +6,7 @@ import Tooltip from 'components/General/Tooltip'
 
 import { VariableItemProps } from '.'
 
-import useStoreMachine from 'stores/storeMachine'
+import useStoreMachine from 'stores/useStoreMachine'
 
 export default function ({ id, disabled }: VariableItemProps): JSX.Element {
   const { removeVariable } = useStoreMachine()

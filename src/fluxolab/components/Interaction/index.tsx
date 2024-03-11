@@ -7,8 +7,8 @@ import Stack from 'react-bootstrap/Stack'
 
 import ChatBubble from './ChatBubble'
 
-import useStoreMachineState from 'stores/storeMachineState'
-import useStoreMachine from 'stores/storeMachine'
+import useStoreMachineState from 'stores/useStoreMachineState'
+import useStoreMachine from 'stores/useStoreMachine'
 
 export default function (): JSX.Element {
   const refInput = useRef<HTMLInputElement>(null)

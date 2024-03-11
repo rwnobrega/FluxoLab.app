@@ -7,9 +7,9 @@ import Stack from 'react-bootstrap/Stack'
 
 import Minidown from 'components/General/Minidown'
 
-import useStoreEphemeral from 'stores/storeEphemeral'
-import useStoreMachine from 'stores/storeMachine'
-import useStoreMachineState from 'stores/storeMachineState'
+import useStoreEphemeral from 'stores/useStoreEphemeral'
+import useStoreMachine from 'stores/useStoreMachine'
+import useStoreMachineState from 'stores/useStoreMachineState'
 
 import { palette } from 'utils/colors'
 

@@ -5,8 +5,8 @@ import React, { useCallback } from 'react'
 import Button from 'react-bootstrap/Button'
 import Table from 'react-bootstrap/Table'
 
-import useStoreMachine from 'stores/storeMachine'
-import useStoreMachineState from 'stores/storeMachineState'
+import useStoreMachine from 'stores/useStoreMachine'
+import useStoreMachineState from 'stores/useStoreMachineState'
 
 import VariableItem from './Item'
 

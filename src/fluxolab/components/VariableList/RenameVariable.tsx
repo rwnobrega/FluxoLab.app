@@ -8,7 +8,7 @@ import Form from 'react-bootstrap/Form'
 
 import TextInput from 'components/General/TextInput'
 
-import useStoreMachine from 'stores/storeMachine'
+import useStoreMachine from 'stores/useStoreMachine'
 
 import isValidIdentifier from 'language/isValidIdentifier'
 

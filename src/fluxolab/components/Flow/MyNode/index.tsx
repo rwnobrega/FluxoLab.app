@@ -14,10 +14,10 @@ import MyHandle from './MyHandle'
 import ButtonDelete from './ButtonDelete'
 import ButtonEdit from './ButtonEdit'
 
-import useStoreEphemeral from 'stores/storeEphemeral'
-import useStoreFlow from 'stores/storeFlow'
-import useStoreMachine from 'stores/storeMachine'
-import useStoreMachineState from 'stores/storeMachineState'
+import useStoreEphemeral from 'stores/useStoreEphemeral'
+import useStoreFlow from 'stores/useStoreFlow'
+import useStoreMachine from 'stores/useStoreMachine'
+import useStoreMachineState from 'stores/useStoreMachineState'
 
 interface Props {
   nodeId: string

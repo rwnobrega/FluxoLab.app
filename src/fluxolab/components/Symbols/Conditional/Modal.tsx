@@ -9,7 +9,7 @@ import { syntaxErrorMessage } from 'language/errors'
 
 import TextInput from 'components/General/TextInput'
 
-import useStoreFlow from 'stores/storeFlow'
+import useStoreFlow from 'stores/useStoreFlow'
 
 interface Props {
   nodeId: string

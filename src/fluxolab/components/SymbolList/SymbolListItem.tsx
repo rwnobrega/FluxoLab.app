@@ -3,7 +3,7 @@ import React from 'react'
 import { BoxStyle } from 'components/Symbols'
 import SymbolBox from 'components/Symbols/SymbolBox'
 
-import useStoreMachineState from 'stores/storeMachineState'
+import useStoreMachineState from 'stores/useStoreMachineState'
 
 interface Props {
   type: string

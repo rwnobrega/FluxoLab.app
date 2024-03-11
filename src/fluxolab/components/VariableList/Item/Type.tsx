@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form'
 
 import { VariableItemProps } from '.'
 
-import useStoreMachine from 'stores/storeMachine'
+import useStoreMachine from 'stores/useStoreMachine'
 
 import { variableTypes } from 'machine/variables'
 import { Variable } from 'machine/types'

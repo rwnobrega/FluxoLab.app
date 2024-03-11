@@ -6,8 +6,8 @@ import { EdgeProps } from 'reactflow'
 
 import getSvgPathString from './getSvgPathString'
 
-import useStoreMachine from 'stores/storeMachine'
-import useStoreMachineState from 'stores/storeMachineState'
+import useStoreMachine from 'stores/useStoreMachine'
+import useStoreMachineState from 'stores/useStoreMachineState'
 
 export default function (props: EdgeProps): JSX.Element {
   const [mouseHover, setMouseHover] = useState<boolean>(false)

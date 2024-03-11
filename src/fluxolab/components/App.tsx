@@ -16,9 +16,9 @@ import Interaction from 'components/Interaction'
 
 import buttonList from 'components/PlayButtons/buttonList'
 
-import useStoreFlow from 'stores/storeFlow'
-import useStoreMachine from 'stores/storeMachine'
-import useStoreMachineState from 'stores/storeMachineState'
+import useStoreFlow from 'stores/useStoreFlow'
+import useStoreMachine from 'stores/useStoreMachine'
+import useStoreMachineState from 'stores/useStoreMachineState'
 
 import compile from 'machine/compiler'
 

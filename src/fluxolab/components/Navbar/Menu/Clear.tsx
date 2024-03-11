@@ -3,8 +3,8 @@ import React, { useCallback } from 'react'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 
-import useStoreFlow from 'stores/storeFlow'
-import useStoreMachine from 'stores/storeMachine'
+import useStoreFlow from 'stores/useStoreFlow'
+import useStoreMachine from 'stores/useStoreMachine'
 
 interface Props {
   showModal: boolean

@@ -4,7 +4,7 @@ import { VariableItemProps } from '.'
 
 import { getVariableType } from 'machine/variables'
 
-import useStoreMachineState from 'stores/storeMachineState'
+import useStoreMachineState from 'stores/useStoreMachineState'
 
 const classes = [
   'd-flex',

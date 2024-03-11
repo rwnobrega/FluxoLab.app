@@ -7,8 +7,8 @@ import Button from 'react-bootstrap/Button'
 
 import Tooltip from 'components/General/Tooltip'
 
-import useStoreMachine from 'stores/storeMachine'
-import useStoreMachineState, { Action } from 'stores/storeMachineState'
+import useStoreMachine from 'stores/useStoreMachine'
+import useStoreMachineState, { Action } from 'stores/useStoreMachineState'
 
 import buttonList from './buttonList'
 

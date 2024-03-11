@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import useStoreMachine from 'stores/storeMachine'
+import useStoreMachine from 'stores/useStoreMachine'
 
 export default function (): JSX.Element {
   const [editMode, setEditMode] = useState(false)

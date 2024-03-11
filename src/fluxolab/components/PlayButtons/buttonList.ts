@@ -1,4 +1,4 @@
-import { Action } from 'stores/storeMachineState'
+import { Action } from 'stores/useStoreMachineState'
 import { MachineState, CompileError } from 'machine/types'
 
 interface PlayButton {
