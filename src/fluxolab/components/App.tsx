@@ -2,6 +2,8 @@ import _ from 'lodash'
 
 import React, { useEffect, useRef, useState } from 'react'
 
+import lzString from 'lz-string'
+
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
@@ -10,6 +12,7 @@ import Stack from 'react-bootstrap/Stack'
 
 import Flow from 'components/Flow'
 import Navbar from 'components/Navbar'
+import CopyLinkToast from 'components/Navbar/CopyLinkToast'
 import SymbolList from 'components/SymbolList'
 import VariableList from 'components/VariableList'
 import Interaction from 'components/Interaction'
@@ -30,8 +33,8 @@ export default function (): JSX.Element {
 
   const [contentHeight, setContentHeight] = useState<string>('100vh')
 
-  const { nodes, edges, selectAll } = useStoreFlow()
-  const { machine, setFlowchart, setStartSymbolId, compileErrors, setCompileErrors } = useStoreMachine()
+  const { nodes, edges, setNodes, makeConnections: setEdges, selectAll } = useStoreFlow()
+  const { machine, setVariables, setFlowchart, setFlowchartTitle, setStartSymbolId, compileErrors, setCompileErrors } = useStoreMachine()
   const { getState, reset, execAction } = useStoreMachineState()
 
   const state = getState()
@@ -42,6 +45,20 @@ export default function (): JSX.Element {
   const edgesDep = JSON.stringify(
     _.map(edges, edge => _.pick(edge, ['id', 'source', 'sourceHandle', 'target', 'targetHandle']))
   )
+
+  useEffect(() => {
+    const url = new URL(window.location.href)
+    const lzs = url.searchParams.get('lzs')
+    if (lzs !== null) {
+      const { nodes, edges, variables, title } = JSON.parse(lzString.decompressFromEncodedURIComponent(lzs))
+      setNodes(nodes)
+      setEdges(edges)
+      setVariables(variables)
+      setFlowchartTitle(title)
+      url.searchParams.delete('lzs')
+      window.history.replaceState({}, '', url.toString())
+    }
+  }, [])
 
   useEffect(() => {
     const { flowchart, startSymbolId, errors } = compile({ nodes, edges, variables: machine.variables })
@@ -90,11 +107,11 @@ export default function (): JSX.Element {
       ${palette.gray100} 2px,
       ${palette.gray100} 4px
     )`
-
   }
 
   return (
     <Stack className='vh-100 h-100' style={{ userSelect: 'none' }}>
+      <CopyLinkToast />
       <div ref={navbarWrapper}>
         <Navbar />
       </div>

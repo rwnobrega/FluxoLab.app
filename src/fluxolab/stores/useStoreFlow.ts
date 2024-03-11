@@ -9,7 +9,7 @@ interface StoreFlow {
   nodes: Node[]
   edges: Edge[]
   setNodes: (nodes: Node[]) => void
-  setEdges: (edges: Edge[]) => void
+  makeConnections: (connections: Connection[]) => void
   clearAll: () => void
   onNodesChange: (changes: NodeChange[]) => void
   onEdgesChange: (changes: EdgeChange[]) => void
@@ -33,7 +33,11 @@ const useStoreFlow = create<StoreFlow>()(
       nodes: [],
       edges: [],
       setNodes: nodes => set({ nodes }),
-      setEdges: edges => set({ edges }),
+      makeConnections: connections => {
+        for (const connection of connections) {
+          set({ edges: addEdge(connection, get().edges) })
+        }
+      },
       clearAll: () => set({ nodes: [], edges: [] }),
       onNodesChange: changes => set({ nodes: applyNodeChanges(changes, get().nodes) }),
       onEdgesChange: changes => set({ edges: applyEdgeChanges(changes, get().edges) }),
