@@ -34,24 +34,18 @@ export default function ({ wrapper }: Props): JSX.Element {
     markerEnd: { type: MarkerType.ArrowClosed, height: 10, width: 6 }
   }
 
-  const onDragOver = useCallback(
-    (event: React.DragEvent<HTMLDivElement>) => {
-      event.preventDefault()
-      event.dataTransfer.dropEffect = 'move'
-    },
-    []
-  )
+  const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    event.dataTransfer.dropEffect = 'move'
+  }, [])
 
-  const onDrop = useCallback(
-    (event: React.DragEvent<HTMLDivElement>) => {
-      if (wrapper === null || wrapper.current === null) return
-      event.preventDefault()
-      const { type, mouseX, mouseY } = JSON.parse(event.dataTransfer.getData('application/reactflow'))
-      const position = reactFlowInstance.screenToFlowPosition({ x: event.clientX - mouseX, y: event.clientY - mouseY })
-      addNode(type, position)
-    },
-    [reactFlowInstance]
-  )
+  const onDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    if (wrapper === null || wrapper.current === null) return
+    event.preventDefault()
+    const { type, mouseX, mouseY } = JSON.parse(event.dataTransfer.getData('application/reactflow'))
+    const position = reactFlowInstance.screenToFlowPosition({ x: event.clientX - mouseX, y: event.clientY - mouseY })
+    addNode(type, position)
+  }, [reactFlowInstance])
 
   return (
     <ReactFlow

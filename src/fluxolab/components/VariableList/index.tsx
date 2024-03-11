@@ -16,20 +16,18 @@ export default function (): JSX.Element {
 
   const state = getState()
 
-  const getNextVariableId = useCallback(
-    () => {
-      const prefix = 'var'
-      let i = 1
-      while (true) {
-        const id = `${prefix}${i}`
-        const allIds = _.map(machine.variables, 'id')
-        if (!_.includes(allIds, id)) {
-          return id
-        }
-        i++
+  const getNextVariableId = useCallback(() => {
+    const prefix = 'var'
+    let i = 1
+    while (true) {
+      const id = `${prefix}${i}`
+      const allIds = _.map(machine.variables, 'id')
+      if (!_.includes(allIds, id)) {
+        return id
       }
-    }, [machine]
-  )
+      i++
+    }
+  }, [machine])
 
   function handleAddVariable (): void {
     addVariable(getNextVariableId(), 'number')
