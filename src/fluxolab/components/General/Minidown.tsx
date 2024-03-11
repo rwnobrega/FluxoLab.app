@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 
-const preStyle: React.CSSProperties = {
+const preStyle: CSSProperties = {
   backgroundColor: 'rgba(0, 0, 0, 0.10)',
   paddingLeft: '4px',
   paddingRight: '4px',

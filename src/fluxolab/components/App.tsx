@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { useHotkeys } from 'react-hotkeys-hook'
 
@@ -25,10 +25,10 @@ import compile from 'machine/compiler'
 import { palette } from 'utils/colors'
 
 export default function (): JSX.Element {
-  const navbarWrapper = React.useRef<HTMLDivElement>(null)
-  const reactFlowWrapper = React.useRef<HTMLDivElement>(null)
+  const navbarWrapper = useRef<HTMLDivElement>(null)
+  const reactFlowWrapper = useRef<HTMLDivElement>(null)
 
-  const [contentHeight, setContentHeight] = React.useState<string>('100vh')
+  const [contentHeight, setContentHeight] = useState<string>('100vh')
 
   const { nodes, edges, selectAll } = useStoreFlow()
   const { machine, setFlowchart, setStartSymbolId, compileErrors, setCompileErrors } = useStoreMachine()

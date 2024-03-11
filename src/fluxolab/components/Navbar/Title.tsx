@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import useStoreMachine from 'stores/storeMachine'
 
 export default function (): JSX.Element {
-  const [editMode, setEditMode] = React.useState(false)
+  const [editMode, setEditMode] = useState(false)
   const { flowchartTitle, setFlowchartTitle } = useStoreMachine()
 
   const onFocus = useCallback((event: React.FocusEvent<HTMLInputElement>) => {

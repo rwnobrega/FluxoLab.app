@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Handle, HandleProps } from 'reactflow'
 
@@ -12,7 +12,7 @@ type Props = HandleProps & {
 }
 
 export default function ({ id, type, position, label, boxStyle }: Props): JSX.Element {
-  const [mouseHover, setMouseHover] = React.useState<boolean>(false)
+  const [mouseHover, setMouseHover] = useState<boolean>(false)
 
   const handleStyle = {
     all: {

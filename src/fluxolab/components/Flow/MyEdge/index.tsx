@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { EdgeProps } from 'reactflow'
 
@@ -10,8 +10,8 @@ import useStoreMachine from 'stores/storeMachine'
 import useStoreMachineState from 'stores/storeMachineState'
 
 export default function (props: EdgeProps): JSX.Element {
-  const [mouseHover, setMouseHover] = React.useState<boolean>(false)
-  const [animated, setAnimated] = React.useState<boolean>(false)
+  const [mouseHover, setMouseHover] = useState<boolean>(false)
+  const [animated, setAnimated] = useState<boolean>(false)
   const { machine, compileErrors } = useStoreMachine()
   const { getState } = useStoreMachineState()
   const state = getState()

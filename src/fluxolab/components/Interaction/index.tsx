@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import Form from 'react-bootstrap/Form'
 import Stack from 'react-bootstrap/Stack'
@@ -13,7 +13,7 @@ import useStoreMachine from 'stores/storeMachine'
 export default function (): JSX.Element {
   const refInput = useRef<HTMLInputElement>(null)
   const refStackEnd = useRef<HTMLDivElement>(null)
-  const [inputText, setInputText] = React.useState('')
+  const [inputText, setInputText] = useState('')
 
   const { machine } = useStoreMachine()
   const { getState, nextStep, stateHistory } = useStoreMachineState()
