@@ -29,10 +29,10 @@ export default function (): JSX.Element {
     }
   }, [machine])
 
-  function handleAddVariable (): void {
+  const handleAddVariable = useCallback(() => {
     addVariable(getNextVariableId(), 'number')
     reset(machine)
-  }
+  }, [addVariable, getNextVariableId, reset, machine])
 
   return (
     <div className='d-flex flex-column h-100'>

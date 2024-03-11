@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
@@ -28,12 +28,6 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
     setTextId(id)
   }, [showModal])
 
-  function handleSubmit (event: any): void {
-    event.preventDefault()
-    setTimeout(() => { renameVariable(id, textId) }, 200)
-    setShowModal(false)
-  }
-
   useEffect(() => {
     let problem: string | null = null
     if (_.isEmpty(textId)) {
@@ -45,6 +39,12 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
     }
     setProblem(problem)
   }, [textId])
+
+  const handleSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setTimeout(() => { renameVariable(id, textId) }, 200)
+    setShowModal(false)
+  }, [id, textId, renameVariable, setShowModal])
 
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)}>

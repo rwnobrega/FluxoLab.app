@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
@@ -39,11 +39,11 @@ export default function ({ nodeId, value, showModal, setShowModal }: Props): JSX
     }
   }, [textValue])
 
-  function handleSubmit (event: any): void {
+  const handleSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setTimeout(() => { updateNodeProp(nodeId, 'data', textValue) }, 200)
     setShowModal(false)
-  }
+  }, [nodeId, textValue, updateNodeProp, setShowModal])
 
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)}>

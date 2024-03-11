@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { Node, HandleType, Position, useReactFlow } from 'reactflow'
 
@@ -80,23 +80,23 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
     )
   }, [state, compileErrors])
 
-  function handleDelete (): void {
+  const handleDelete = useCallback(() => {
     deleteNode(nodeId)
     setMouseOverNodeId(null)
-  }
+  }, [deleteNode, nodeId, setMouseOverNodeId])
 
-  function handleEdit (): void {
+  const handleEdit = useCallback(() => {
     setMouseOverNodeId(null)
     setShowModal(true)
-  }
+  }, [setMouseOverNodeId, setShowModal])
 
-  function handleMouseEnter (): void {
+  const handleMouseEnter = useCallback(() => {
     setMouseOverNodeId(nodeId)
-  }
+  }, [setMouseOverNodeId, nodeId])
 
-  function handleMouseLeave (): void {
+  const handleMouseLeave = useCallback(() => {
     setMouseOverNodeId(null)
-  }
+  }, [setMouseOverNodeId])
 
   return (
     <div

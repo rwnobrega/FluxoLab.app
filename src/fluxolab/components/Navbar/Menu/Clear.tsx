@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
@@ -15,16 +15,16 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
   const { clearAll } = useStoreFlow()
   const { clearVariables, setFlowchartTitle } = useStoreMachine()
 
-  function handleCancel (): void {
+  const handleCancel = useCallback(() => {
     setShowModal(false)
-  }
+  }, [setShowModal])
 
-  function handleConfirm (): void {
+  const handleConfirm = useCallback(() => {
     clearAll()
     clearVariables()
     setFlowchartTitle('Fluxograma sem título')
     setShowModal(false)
-  }
+  }, [clearAll, clearVariables, setFlowchartTitle, setShowModal])
 
   return (
     <Modal show={showModal} onHide={handleCancel}>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import Form from 'react-bootstrap/Form'
 
 import Minidown from 'components/General/Minidown'
@@ -11,9 +11,9 @@ interface Props {
 }
 
 export default function ({ placeholder, value, setValue, problem = null }: Props): JSX.Element {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>): void => {
     setValue(event.target.value)
-  }
+  }, [setValue])
 
   return (
     <>
