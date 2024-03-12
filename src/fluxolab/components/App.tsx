@@ -59,9 +59,17 @@ export default function (): JSX.Element {
         setTitle(title)
         url.searchParams.delete('lzs')
         window.history.replaceState({}, '', url.toString())
-        setToastContent({ message: 'Fluxograma carregado com sucesso.', icon: 'bi-check-circle' })
+        setToastContent({
+          message: 'Fluxograma carregado com sucesso.',
+          icon: 'bi-check-circle',
+          background: 'success'
+        })
       } catch {
-        setToastContent({ message: 'Erro ao carregar o fluxograma.', icon: 'bi-exclamation-triangle' })
+        setToastContent({
+          message: 'Erro ao carregar o fluxograma.',
+          icon: 'bi-exclamation-triangle',
+          background: 'danger'
+        })
       }
     }
   }, [])

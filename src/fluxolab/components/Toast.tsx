@@ -11,6 +11,8 @@ export default function (): JSX.Element {
     return <></>
   }
 
+  const { message, icon, background } = toastContent
+
   return (
     <Toast
       bg='dark'
@@ -20,8 +22,8 @@ export default function (): JSX.Element {
       show={toastContent !== null}
       onClose={() => setToastContent(null)}
     >
-      <Toast.Body>
-        <i className={`bi ${toastContent.icon} me-2`} /> {toastContent.message}
+      <Toast.Body className={`bg-${background}`}>
+        <i className={`bi ${icon} me-2`} /> {message}
       </Toast.Body>
     </Toast>
   )

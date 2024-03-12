@@ -3,6 +3,7 @@ import { create } from 'zustand'
 interface ToastContent {
   message: string
   icon: string
+  background: string
 }
 
 interface StoreEphemeral {

@@ -18,7 +18,11 @@ export default function (): JSX.Element {
     const lzs = serialize({ machine, nodes, edges })
     const baseUrl = window.location.href.split('?')[0]
     void navigator.clipboard.writeText(`${baseUrl}?lzs=${lzs}`)
-    setToastContent({ message: 'Link copiado para a área de transferência.', icon: 'bi-clipboard-check' })
+    setToastContent({
+      message: 'Link copiado para a área de transferência.',
+      icon: 'bi-clipboard-check',
+      background: 'secondary'
+    })
   }, [machine, nodes, edges])
 
   return (
