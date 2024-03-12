@@ -4,12 +4,14 @@ import React, { useEffect, useState } from 'react'
 
 import { EdgeProps } from 'reactflow'
 
+import { getDarkerColor, palette } from 'utils/colors'
+
 import getSvgPathString from './getSvgPathString'
 
 import useStoreMachine from 'stores/useStoreMachine'
 import useStoreMachineState from 'stores/useStoreMachineState'
 
-export default function (props: EdgeProps): JSX.Element {
+export default function ({ source, target, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, selected }: EdgeProps): JSX.Element {
   const [mouseHover, setMouseHover] = useState<boolean>(false)
   const [animated, setAnimated] = useState<boolean>(false)
   const { machine, compileErrors } = useStoreMachine()
@@ -17,7 +19,7 @@ export default function (props: EdgeProps): JSX.Element {
   const state = getState()
 
   useEffect(() => {
-    const sourceNode = _.find(machine.flowchart, { id: props.source })
+    const sourceNode = _.find(machine.flowchart, { id: source })
     if (sourceNode === undefined || compileErrors.length > 0) {
       setAnimated(false)
       return
@@ -31,16 +33,16 @@ export default function (props: EdgeProps): JSX.Element {
     const sourceSymbolId = stateClone.curSymbolId
     sourceNode.work(machine, stateClone)
     const targetSymbolId = stateClone.curSymbolId
-    setAnimated(props.source === sourceSymbolId && props.target === targetSymbolId)
+    setAnimated(source === sourceSymbolId && target === targetSymbolId)
   }, [state, machine])
 
   const svgPathString = getSvgPathString({
-    fromX: props.sourceX,
-    fromY: props.sourceY,
-    toX: props.targetX,
-    toY: props.targetY,
-    fromPosition: props.sourcePosition,
-    toPosition: props.targetPosition
+    fromX: sourceX,
+    fromY: sourceY,
+    toX: targetX,
+    toY: targetY,
+    fromPosition: sourcePosition,
+    toPosition: targetPosition
   })
 
   return (
@@ -48,14 +50,17 @@ export default function (props: EdgeProps): JSX.Element {
       <path
         style={{
           strokeWidth: 2,
-          stroke: props.selected === true ? 'blue' : 'gray',
-          strokeOpacity: mouseHover ? 1 : 0.5,
+          stroke: getDarkerColor(selected === true ? palette.blue : palette.gray500, mouseHover ? 48 : 0),
           strokeDasharray: animated ? 5 : 0,
           animation: animated ? 'dashdraw 0.5s linear infinite' : 'none'
         }}
         className='react-flow__edge-path'
         d={svgPathString}
-        markerEnd={props.markerEnd}
+      />
+      <path
+        d={`M${targetX},${targetY} L${targetX - 2},${targetY - 4} L${targetX + 2},${targetY - 4} Z`}
+        fill={getDarkerColor(selected === true ? palette.blue : palette.gray500, mouseHover ? 48 : 0)}
+        stroke={getDarkerColor(selected === true ? palette.blue : palette.gray500, mouseHover ? 48 : 0)}
       />
       {/* This is a hack to make the edge more clickable */}
       <path

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import ReactFlow, { Background, Controls, EdgeTypes, MarkerType, NodeTypes } from 'reactflow'
+import ReactFlow, { Background, Controls, EdgeTypes, NodeTypes } from 'reactflow'
 
 import Stack from 'react-bootstrap/Stack'
 
@@ -29,11 +29,6 @@ export default function ({ wrapper }: Props): JSX.Element {
 
   const { nodes, edges, addNode, onNodesChange, onEdgesChange, onConnect } = useStoreFlow()
 
-  const defaultEdgeOptions = {
-    type: 'smartEdge',
-    markerEnd: { type: MarkerType.ArrowClosed, height: 10, width: 6 }
-  }
-
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
     event.dataTransfer.dropEffect = 'move'
@@ -55,7 +50,7 @@ export default function ({ wrapper }: Props): JSX.Element {
       edgeTypes={edgeTypes}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
-      defaultEdgeOptions={defaultEdgeOptions}
+      defaultEdgeOptions={{ type: 'smartEdge' }}
       connectionLineComponent={ConnectionLine}
       onConnect={onConnect}
       onInit={setReactFlowInstance}
