@@ -22,8 +22,7 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
           <tbody>
             <tr>
               <td className={classes}>var = expr</td>
-              <td className='col-7'>Atribuição</td>
-              <td className='col-2'>Precedência 0</td>
+              <td>Atribuição</td>
             </tr>
           </tbody>
         </Table>
@@ -32,43 +31,35 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
           <tbody>
             <tr>
               <td className={classes}>x + y</td>
-              <td className='col-7'>Adição</td>
-              <td className='col-2'>Precedência 4</td>
+              <td>Adição</td>
             </tr>
             <tr>
               <td className={classes}>x - y</td>
               <td>Subtração</td>
-              <td>Precedência 4</td>
             </tr>
             <tr>
               <td className={classes}>x * y</td>
               <td>Multiplicação</td>
-              <td>Precedência 5</td>
             </tr>
             <tr>
               <td className={classes}>x / y</td>
               <td>Divisão real</td>
-              <td>Precedência 5</td>
             </tr>
             <tr>
               <td className={classes}>a div b</td>
               <td>Divisão inteira</td>
-              <td>Precedência 5</td>
             </tr>
             <tr>
               <td className={classes}>a mod b</td>
               <td>Resto da divisão</td>
-              <td>Precedência 5</td>
             </tr>
             <tr>
               <td className={classes}>+x</td>
               <td>Identidade</td>
-              <td>Precedência 6</td>
             </tr>
             <tr>
               <td className={classes}>-x</td>
               <td>Negação</td>
-              <td>Precedência 6</td>
             </tr>
           </tbody>
         </Table>
@@ -77,33 +68,27 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
           <tbody>
             <tr>
               <td className={classes}>x == y</td>
-              <td className='col-7'>Igual</td>
-              <td className='col-2'>Precedência 3</td>
+              <td>Igual</td>
             </tr>
             <tr>
               <td className={classes}>x != y</td>
               <td>Diferente</td>
-              <td>Precedência 3</td>
             </tr>
             <tr>
               <td className={classes}>x &gt; y</td>
               <td>Maior</td>
-              <td>Precedência 3</td>
             </tr>
             <tr>
               <td className={classes}>x &gt;= y</td>
               <td>Maior ou igual</td>
-              <td>Precedência 3</td>
             </tr>
             <tr>
               <td className={classes}>x &lt; y</td>
               <td>Menor</td>
-              <td>Precedência 3</td>
             </tr>
             <tr>
               <td className={classes}>x &lt;= y</td>
               <td>Menor ou igual</td>
-              <td>Precedência 3</td>
             </tr>
           </tbody>
         </Table>
@@ -112,18 +97,15 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
           <tbody>
             <tr>
               <td className={classes}>a || b</td>
-              <td className='col-7'>Disjunção (ou)</td>
-              <td className='col-2'>Precedência 1</td>
+              <td>Disjunção (ou)</td>
             </tr>
             <tr>
               <td className={classes}>a && b</td>
               <td>Conjunção (e)</td>
-              <td>Precedência 2</td>
             </tr>
             <tr>
               <td className={classes}>!a</td>
               <td>Negação</td>
-              <td>Precedência 6</td>
             </tr>
           </tbody>
         </Table>
