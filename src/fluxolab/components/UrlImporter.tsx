@@ -6,7 +6,7 @@ import useStoreMachine from 'stores/useStoreMachine'
 import useStoreEphemeral from 'stores/useStoreEphemeral'
 
 export default function UrlImporter (): JSX.Element {
-  const { setNodes, makeConnections } = useStoreFlow()
+  const { clearAll, setNodes, makeConnections } = useStoreFlow()
   const { setTitle, setVariables } = useStoreMachine()
   const { setToastContent } = useStoreEphemeral()
 
@@ -16,6 +16,7 @@ export default function UrlImporter (): JSX.Element {
     if (lzs !== null) {
       try {
         const { nodes, edges, variables, title } = deserialize(lzs)
+        clearAll()
         setNodes(nodes)
         makeConnections(edges)
         setVariables(variables)
