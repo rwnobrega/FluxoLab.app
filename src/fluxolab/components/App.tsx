@@ -2,20 +2,17 @@ import _ from 'lodash'
 
 import React, { useEffect, useRef, useState } from 'react'
 
-import { useHotkeys } from 'react-hotkeys-hook'
-
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 
 import Stack from 'react-bootstrap/Stack'
 
+import Hotkeys from 'components/Hotkeys'
+import Toast from 'components/Toast'
 import Flow from 'components/Flow'
 import Navbar from 'components/Navbar'
-import Toast from 'components/Toast'
 import SymbolList from 'components/SymbolList'
 import VariableList from 'components/VariableList'
 import Interaction from 'components/Interaction'
-
-import buttonList from 'components/PlayButtons/buttonList'
 
 import { deserialize } from 'stores/serialize'
 import useStoreFlow from 'stores/useStoreFlow'
@@ -33,12 +30,10 @@ export default function (): JSX.Element {
 
   const [contentHeight, setContentHeight] = useState<string>('100vh')
 
-  const { nodes, edges, setNodes, makeConnections: setEdges, selectAll } = useStoreFlow()
-  const { machine, setTitle, setFlowchart, setVariables, setStartSymbolId, compileErrors, setCompileErrors } = useStoreMachine()
-  const { getState, reset, execAction } = useStoreMachineState()
+  const { nodes, edges, setNodes, makeConnections } = useStoreFlow()
+  const { machine, setTitle, setFlowchart, setVariables, setStartSymbolId, setCompileErrors } = useStoreMachine()
+  const { reset } = useStoreMachineState()
   const { setToastContent } = useStoreEphemeral()
-
-  const state = getState()
 
   const nodesDep = JSON.stringify(
     _.map(nodes, node => _.pick(node, ['id', 'type', 'data']))
@@ -54,7 +49,7 @@ export default function (): JSX.Element {
       try {
         const { nodes, edges, variables, title } = deserialize(lzs)
         setNodes(nodes)
-        setEdges(edges)
+        makeConnections(edges)
         setVariables(variables)
         setTitle(title)
         url.searchParams.delete('lzs')
@@ -90,28 +85,6 @@ export default function (): JSX.Element {
     setContentHeight(`calc(100vh - ${navbarHeight}px)`)
   }, [])
 
-  const hotkeysOptions: Parameters<typeof useHotkeys>[2] = {
-    filter: event => {
-      event.preventDefault()
-      return true
-    },
-    enableOnTags: ['INPUT', 'TEXTAREA']
-  }
-
-  for (const { action, hotkey, isDisabled } of buttonList) {
-    useHotkeys(
-      hotkey,
-      () => {
-        if (!isDisabled(state, compileErrors)) {
-          execAction(action, machine)
-        }
-      },
-      hotkeysOptions
-    )
-  }
-
-  useHotkeys('ctrl+a', selectAll, hotkeysOptions)
-
   const resizeHandleStyle = {
     backgroundColor: palette.gray300,
     background: `repeating-linear-gradient(
@@ -125,6 +98,7 @@ export default function (): JSX.Element {
 
   return (
     <Stack className='vh-100 h-100' style={{ userSelect: 'none' }}>
+      <Hotkeys />
       <Toast />
       <div ref={navbarWrapper}>
         <Navbar />
