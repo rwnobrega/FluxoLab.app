@@ -6,6 +6,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 
 import Stack from 'react-bootstrap/Stack'
 
+import UrlImporter from 'components/UrlImporter'
 import Hotkeys from 'components/Hotkeys'
 import Toast from 'components/Toast'
 import Flow from 'components/Flow'
@@ -14,11 +15,9 @@ import SymbolList from 'components/SymbolList'
 import VariableList from 'components/VariableList'
 import Interaction from 'components/Interaction'
 
-import { deserialize } from 'stores/serialize'
 import useStoreFlow from 'stores/useStoreFlow'
 import useStoreMachine from 'stores/useStoreMachine'
 import useStoreMachineState from 'stores/useStoreMachineState'
-import useStoreEphemeral from 'stores/useStoreEphemeral'
 
 import compile from 'machine/compiler'
 
@@ -30,10 +29,9 @@ export default function (): JSX.Element {
 
   const [contentHeight, setContentHeight] = useState<string>('100vh')
 
-  const { nodes, edges, setNodes, makeConnections } = useStoreFlow()
-  const { machine, setTitle, setFlowchart, setVariables, setStartSymbolId, setCompileErrors } = useStoreMachine()
+  const { nodes, edges } = useStoreFlow()
+  const { machine, setFlowchart, setStartSymbolId, setCompileErrors } = useStoreMachine()
   const { reset } = useStoreMachineState()
-  const { setToastContent } = useStoreEphemeral()
 
   const nodesDep = JSON.stringify(
     _.map(nodes, node => _.pick(node, ['id', 'type', 'data']))
@@ -41,33 +39,6 @@ export default function (): JSX.Element {
   const edgesDep = JSON.stringify(
     _.map(edges, edge => _.pick(edge, ['id', 'source', 'sourceHandle', 'target', 'targetHandle']))
   )
-
-  useEffect(() => {
-    const url = new URL(window.location.href)
-    const lzs = url.searchParams.get('lzs')
-    if (lzs !== null) {
-      try {
-        const { nodes, edges, variables, title } = deserialize(lzs)
-        setNodes(nodes)
-        makeConnections(edges)
-        setVariables(variables)
-        setTitle(title)
-        url.searchParams.delete('lzs')
-        window.history.replaceState({}, '', url.toString())
-        setToastContent({
-          message: 'Fluxograma carregado com sucesso.',
-          icon: 'bi-check-circle',
-          background: 'success'
-        })
-      } catch {
-        setToastContent({
-          message: 'Erro ao carregar o fluxograma.',
-          icon: 'bi-exclamation-triangle',
-          background: 'danger'
-        })
-      }
-    }
-  }, [])
 
   useEffect(() => {
     const { flowchart, startSymbolId, errors } = compile({ nodes, edges, variables: machine.variables })
@@ -98,6 +69,7 @@ export default function (): JSX.Element {
 
   return (
     <Stack className='vh-100 h-100' style={{ userSelect: 'none' }}>
+      <UrlImporter />
       <Hotkeys />
       <Toast />
       <div ref={navbarWrapper}>
