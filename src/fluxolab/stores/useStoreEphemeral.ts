@@ -11,6 +11,8 @@ interface StoreEphemeral {
   setMouseOverNodeId: (id: string | null) => void
   toastContent: ToastContent | null
   setToastContent: (content: ToastContent | null) => void
+  refInput: React.RefObject<HTMLInputElement>
+  setRefInput: (ref: React.RefObject<HTMLInputElement>) => void
 }
 
 const useStoreEphemeral = create<StoreEphemeral>()(
@@ -18,7 +20,9 @@ const useStoreEphemeral = create<StoreEphemeral>()(
     mouseOverNodeId: null,
     setMouseOverNodeId: id => set({ mouseOverNodeId: id }),
     toastContent: null,
-    setToastContent: content => set({ toastContent: content })
+    setToastContent: content => set({ toastContent: content }),
+    refInput: { current: null },
+    setRefInput: ref => set({ refInput: ref })
   })
 )
 

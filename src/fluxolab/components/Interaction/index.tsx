@@ -9,6 +9,7 @@ import ChatBubble from './ChatBubble'
 
 import useStoreMachineState from 'stores/useStoreMachineState'
 import useStoreMachine from 'stores/useStoreMachine'
+import useStoreEphemeral from 'stores/useStoreEphemeral'
 
 export default function (): JSX.Element {
   const refInput = useRef<HTMLInputElement>(null)
@@ -17,8 +18,13 @@ export default function (): JSX.Element {
 
   const { machine } = useStoreMachine()
   const { getState, nextStep, stateHistory } = useStoreMachineState()
+  const { setRefInput } = useStoreEphemeral()
 
   const state = getState()
+
+  useEffect(() => {
+    setRefInput(refInput)
+  }, [refInput])
 
   const handleSendInput = useCallback(() => {
     if (inputText.length > 0) {
