@@ -10,7 +10,8 @@ const preStyle: CSSProperties = {
   marginRight: '2px',
   borderRadius: '2px',
   whiteSpace: 'nowrap',
-  overflow: 'auto'
+  overflow: 'auto',
+  lineHeight: '1.2'
 }
 
 const parseText = (text: string): JSX.Element[] => {
