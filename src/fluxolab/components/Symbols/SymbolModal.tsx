@@ -3,6 +3,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 import TextInput from 'components/General/TextInput'
 
@@ -13,8 +15,9 @@ import useStoreFlow from 'stores/useStoreFlow'
 
 interface Props {
   title: string
+  prefixLabel?: string
+  prefixCommand?: string
   matchStartRule: string
-  prefix?: string
   placeholder: string
   nodeId: string
   value: string
@@ -22,7 +25,7 @@ interface Props {
   setShowModal: (modal: boolean) => void
 }
 
-export default function ({ title, matchStartRule, prefix = '', placeholder, nodeId, value, showModal, setShowModal }: Props): JSX.Element {
+export default function ({ title, prefixLabel, matchStartRule, prefixCommand: prefix = '', placeholder, nodeId, value, showModal, setShowModal }: Props): JSX.Element {
   const [textValue, setTextValue] = useState<string>(value)
   const [problem, setProblem] = useState<string | null>(null)
 
@@ -56,12 +59,20 @@ export default function ({ title, matchStartRule, prefix = '', placeholder, node
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <TextInput
-            placeholder={placeholder}
-            value={textValue}
-            setValue={setTextValue}
-            problem={problem}
-          />
+          <Form.Group as={Row}>
+            {prefixLabel !== undefined &&
+              <Form.Label column className='fw-bold fst-italic' md='auto'>
+                {prefixLabel}
+              </Form.Label>}
+            <Col>
+              <TextInput
+                placeholder={placeholder}
+                value={textValue}
+                setValue={setTextValue}
+                problem={problem}
+              />
+            </Col>
+          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant='secondary' onClick={() => setShowModal(false)}>

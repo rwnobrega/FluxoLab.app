@@ -7,8 +7,9 @@ export default function (otherProps: ModalProps): JSX.Element {
   return (
     <SymbolModal
       title='Saída'
+      prefixLabel='Escreva'
+      prefixCommand='write '
       matchStartRule='Command_write'
-      prefix='write '
       placeholder='Digite expressões separadas por vírgula'
       {...otherProps}
     />
