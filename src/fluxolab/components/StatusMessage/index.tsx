@@ -22,7 +22,9 @@ interface Triplet {
 export default function (): JSX.Element {
   const { compileErrors } = useStoreMachine()
   const { getState } = useStoreMachineState()
-  const { mouseOverNodeId } = useStoreEphemeral()
+  const { isDraggingNode, isConnectingEdge, mouseOverNodeId } = useStoreEphemeral()
+
+  if (isDraggingNode || isConnectingEdge) return <></>
 
   const state = getState()
 

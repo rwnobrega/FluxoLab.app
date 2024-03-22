@@ -13,6 +13,7 @@ type Props = HandleProps & {
 
 export default function ({ id, type, position, label, boxStyle }: Props): JSX.Element {
   const [mouseHover, setMouseHover] = useState<boolean>(false)
+  const { textColor, backgroundColor } = boxStyle
 
   const handleStyle = {
     all: {
@@ -22,14 +23,14 @@ export default function ({ id, type, position, label, boxStyle }: Props): JSX.El
       fontSize: '10px',
       fontWeight: 'bold',
       textAlign: 'center' as 'center',
-      color: boxStyle.textColor,
-      borderColor: getDarkerColor(boxStyle.backgroundColor as string)
+      color: textColor,
+      borderColor: getDarkerColor(backgroundColor as string)
     },
     'hover-false': {
-      backgroundColor: boxStyle.backgroundColor
+      backgroundColor: backgroundColor
     },
     'hover-true': {
-      backgroundColor: getDarkerColor(boxStyle.backgroundColor as string)
+      backgroundColor: getDarkerColor(backgroundColor as string)
     }
   }
 

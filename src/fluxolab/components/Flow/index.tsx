@@ -12,8 +12,9 @@ import ConnectionLine from './MyEdge/ConnectionLine'
 import MyNode from './MyNode'
 
 import useStoreFlow from 'stores/useStoreFlow'
+import useStoreEphemeral from 'stores/useStoreEphemeral'
 
-const edgeTypes: EdgeTypes = { smartEdge: MyEdge }
+const edgeTypes: EdgeTypes = { edge: MyEdge }
 
 const nodeTypes: NodeTypes = {}
 for (const { type, ...otherProps } of symbols) {
@@ -28,6 +29,7 @@ export default function ({ wrapper }: Props): JSX.Element {
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null)
 
   const { nodes, edges, addNode, onNodesChange, onEdgesChange, onConnect } = useStoreFlow()
+  const { setIsDraggingNode, setIsConnectingEdge } = useStoreEphemeral()
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
@@ -50,9 +52,13 @@ export default function ({ wrapper }: Props): JSX.Element {
       edgeTypes={edgeTypes}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
-      defaultEdgeOptions={{ type: 'smartEdge' }}
+      defaultEdgeOptions={{ type: 'edge' }}
       connectionLineComponent={ConnectionLine}
       onConnect={onConnect}
+      onConnectStart={() => setIsConnectingEdge(true)}
+      onConnectEnd={() => setIsConnectingEdge(false)}
+      onNodeDragStart={() => setIsDraggingNode(true)}
+      onNodeDragStop={() => setIsDraggingNode(false)}
       onInit={setReactFlowInstance}
       onDrop={onDrop}
       onDragOver={onDragOver}

@@ -7,6 +7,10 @@ interface ToastContent {
 }
 
 interface StoreEphemeral {
+  isDraggingNode: boolean
+  setIsDraggingNode: (isDraggingNode: boolean) => void
+  isConnectingEdge: boolean
+  setIsConnectingEdge: (isConnectingEdge: boolean) => void
   mouseOverNodeId: string | null
   setMouseOverNodeId: (id: string | null) => void
   toastContent: ToastContent | null
@@ -17,6 +21,10 @@ interface StoreEphemeral {
 
 const useStoreEphemeral = create<StoreEphemeral>()(
   (set, get) => ({
+    isDraggingNode: false,
+    setIsDraggingNode: isDraggingNode => set({ isDraggingNode }),
+    isConnectingEdge: false,
+    setIsConnectingEdge: isConnectingEdge => set({ isConnectingEdge }),
     mouseOverNodeId: null,
     setMouseOverNodeId: id => set({ mouseOverNodeId: id }),
     toastContent: null,

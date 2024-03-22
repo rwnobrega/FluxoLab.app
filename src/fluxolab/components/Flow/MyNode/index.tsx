@@ -10,7 +10,8 @@ import { BoxStyle, LabelProps, ModalProps } from 'components/Symbols'
 
 import SymbolBox from 'components/Symbols/SymbolBox'
 
-import MyHandle from './MyHandle'
+import MyHandleSource from './MyHandleSource'
+import MyHandleTarget from './MyHandleTarget'
 import ButtonDelete from './ButtonDelete'
 import ButtonEdit from './ButtonEdit'
 
@@ -33,7 +34,7 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
   const [showModal, setShowModal] = useState<boolean>(false)
 
   const { nodes, deleteNode, updateNodeProp } = useStoreFlow()
-  const { mouseOverNodeId, setMouseOverNodeId } = useStoreEphemeral()
+  const { isDraggingNode, isConnectingEdge, mouseOverNodeId, setMouseOverNodeId } = useStoreEphemeral()
   const { compileErrors } = useStoreMachine()
   const { getState } = useStoreMachineState()
   const { getZoom } = useReactFlow()
@@ -45,12 +46,11 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
   const node: Node | undefined = _.find(nodes, { id: nodeId })
 
   useEffect(() => {
-    const MIN_WIDTH = 120
     const MAX_WIDTH = 480
     if (labelRef.current !== null) {
       const zoom = getZoom()
       const labelWidth = labelRef.current.getBoundingClientRect().width / zoom
-      const newNodeWidth = Math.min(Math.max(40 + 40 * Math.ceil(labelWidth / 40), MIN_WIDTH), MAX_WIDTH)
+      const newNodeWidth = Math.min(40 + 40 * Math.ceil(labelWidth / 40), MAX_WIDTH)
       const marginWidth = (newNodeWidth - labelWidth) / 2
       if (node?.width !== undefined && node.width !== null) {
         updateNodeProp(nodeId, 'position.x', node.position.x - (newNodeWidth - node.width) / 2)
@@ -90,18 +90,20 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
     setShowModal(true)
   }, [setMouseOverNodeId, setShowModal])
 
-  const handleMouseEnter = useCallback(() => {
+  const onMouseEnter = useCallback(() => {
     setMouseOverNodeId(nodeId)
   }, [setMouseOverNodeId, nodeId])
 
-  const handleMouseLeave = useCallback(() => {
+  const onMouseLeave = useCallback(() => {
     setMouseOverNodeId(null)
   }, [setMouseOverNodeId])
 
+  const buttonsVisible = mouseOverNodeId === nodeId && !isDraggingNode && !isConnectingEdge && Modal !== undefined
+
   return (
     <div
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       style={{ cursor: 'grab' }}
     >
       {
@@ -113,7 +115,6 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
           ref={labelRef}
           style={{
             maxWidth: '392px',
-            minWidth: '80px',
             marginLeft: `${margin}px`,
             marginRight: `${margin}px`,
             display: 'inline-block',
@@ -128,10 +129,12 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
           <Label value={node?.data} />
         </span>
       </SymbolBox>
-      <ButtonDelete onClick={handleDelete} visible={mouseOverNodeId === nodeId} />
-      <ButtonEdit onClick={handleEdit} visible={mouseOverNodeId === nodeId && Modal !== undefined} />
+      <ButtonDelete onClick={handleDelete} visible={buttonsVisible} />
+      <ButtonEdit onClick={handleEdit} visible={buttonsVisible} />
       {_.map(handles, (props, index) => (
-        <MyHandle key={index} boxStyle={boxStyle} {...props} />
+        props.type === 'source'
+          ? <MyHandleSource key={index} boxStyle={boxStyle} {...props} />
+          : <MyHandleTarget key={index} boxStyle={boxStyle} {...props} />
       ))}
     </div>
   )
