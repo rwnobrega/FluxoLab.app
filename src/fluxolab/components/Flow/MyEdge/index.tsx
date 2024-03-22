@@ -1,18 +1,17 @@
 import _ from 'lodash'
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
-import { EdgeProps } from 'reactflow'
+import { useStore, EdgeProps } from 'reactflow'
 
-import { getDarkerColor, palette } from 'utils/colors'
-
-import getSvgPathString from './getSvgPathString'
+import generateSvgRoundedPath from './generateSvgRoundedPath'
+import getBestPath from './getBestPath'
+import SvgEdge from './SvgEdge'
 
 import useStoreMachine from 'stores/useStoreMachine'
 import useStoreMachineState from 'stores/useStoreMachineState'
 
-export default function ({ source, target, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, selected }: EdgeProps): JSX.Element {
-  const [mouseHover, setMouseHover] = useState<boolean>(false)
+export default function ({ source, target, sourcePosition, selected }: EdgeProps): JSX.Element {
   const [animated, setAnimated] = useState<boolean>(false)
   const { machine, compileErrors } = useStoreMachine()
   const { getState } = useStoreMachineState()
@@ -36,40 +35,32 @@ export default function ({ source, target, sourceX, sourceY, targetX, targetY, s
     setAnimated(source === sourceSymbolId && target === targetSymbolId)
   }, [state, machine])
 
-  const svgPathString = getSvgPathString({
-    fromX: sourceX,
-    fromY: sourceY,
-    toX: targetX,
-    toY: targetY,
-    fromPosition: sourcePosition,
-    toPosition: targetPosition
-  })
+  const sourceNode = useStore(useCallback(store => store.nodeInternals.get(source), [source]))
+  const targetNode = useStore(useCallback(store => store.nodeInternals.get(target), [target]))
+
+  if (sourceNode === undefined || targetNode === undefined) return <></>
+
+  const [path, targetPosition] = getBestPath(sourceNode, targetNode, sourcePosition)
+
+  if (_.includes(['read', 'write'], targetNode.type)) {
+    if (targetPosition === 'left') {
+      path[path.length - 1][0] += 10
+    } else if (targetPosition === 'right') {
+      path[path.length - 1][0] -= 10
+    }
+  }
+
+  const svgPathString = generateSvgRoundedPath(path, 10)
+  const [targetX, targetY] = path[path.length - 1]
 
   return (
-    <g>
-      <path
-        style={{
-          strokeWidth: 2,
-          stroke: getDarkerColor(selected === true ? palette.blue : palette.gray500, mouseHover ? 48 : 0),
-          strokeDasharray: animated ? 5 : 0,
-          animation: animated ? 'dashdraw 0.5s linear infinite' : 'none'
-        }}
-        className='react-flow__edge-path'
-        d={svgPathString}
-      />
-      <path
-        d={`M${targetX},${targetY} L${targetX - 2},${targetY - 4} L${targetX + 2},${targetY - 4} Z`}
-        fill={getDarkerColor(selected === true ? palette.blue : palette.gray500, mouseHover ? 48 : 0)}
-        stroke={getDarkerColor(selected === true ? palette.blue : palette.gray500, mouseHover ? 48 : 0)}
-      />
-      {/* This is a hack to make the edge more clickable */}
-      <path
-        style={{ strokeWidth: 16, strokeOpacity: 0 }}
-        onMouseEnter={() => setMouseHover(true)}
-        onMouseLeave={() => setMouseHover(false)}
-        className='react-flow__edge-path'
-        d={svgPathString}
-      />
-    </g>
+    <SvgEdge
+      svgPathString={svgPathString}
+      selected={selected ?? false}
+      animated={animated}
+      targetX={targetX}
+      targetY={targetY}
+      targetPosition={targetPosition}
+    />
   )
 }
