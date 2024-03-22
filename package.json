@@ -1,21 +1,22 @@
 {
   "name": "fluxolab.app",
   "homepage": "https://fluxolab.app",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A web application designed to teach algorithm and programming fundamentals using flowcharts.",
   "private": true,
   "scripts": {
     "serve": "webpack serve --config webpack.dev.js",
     "build": "webpack build --config webpack.prod.js",
-    "preview": "webpack build -o dist_preview --config webpack.prod.js",
     "deploy": "npm run build && echo 'fluxolab.app' > ./dist/CNAME && npx gh-pages -d dist"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0-only",
   "devDependencies": {
-    "@types/bootstrap": "^5.2.6",
-    "@types/lodash": "^4.14.192",
+    "@types/bootstrap": "^5.2.10",
+    "@types/lodash": "^4.17.0",
+    "@types/react": "^18.2.68",
+    "@types/react-dom": "^18.2.22",
     "css-loader": "^6.7.3",
     "gh-pages": "^5.0.0",
     "html-webpack-plugin": "^5.5.0",
@@ -29,8 +30,6 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@types/react": "^18.0.30",
-    "@types/react-dom": "^18.0.11",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.3",
     "colvertize": "^0.1.0",
