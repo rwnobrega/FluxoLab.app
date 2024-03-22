@@ -1,6 +1,6 @@
 # FluxoLab
 
-**FluxoLab** is a web application designed to teach algorithm and programming fundamentals using flowcharts. It is written in [TypeScript](https://www.typescriptlang.org/) and [React](https://reactjs.org/).
+**FluxoLab** is a web application designed to teach algorithm and programming fundamentals using flowcharts. It is written in [TypeScript](https://www.typescriptlang.org/) and [React](https://react.dev/).
 
 A live version of the application can be found at [FluxoLab.app](https://fluxolab.app/).
 
