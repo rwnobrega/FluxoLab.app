@@ -98,7 +98,7 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
     setMouseOverNodeId(null)
   }, [setMouseOverNodeId])
 
-  const buttonsVisible = mouseOverNodeId === nodeId && !isDraggingNode && !isConnectingEdge && Modal !== undefined
+  const buttonsVisible = mouseOverNodeId === nodeId && !isDraggingNode && !isConnectingEdge
 
   return (
     <div
@@ -130,7 +130,7 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
         </span>
       </SymbolBox>
       <ButtonDelete onClick={handleDelete} visible={buttonsVisible} />
-      <ButtonEdit onClick={handleEdit} visible={buttonsVisible} />
+      <ButtonEdit onClick={handleEdit} visible={buttonsVisible && Modal !== undefined} />
       {_.map(handles, (props, index) => (
         props.type === 'source'
           ? <MyHandleSource key={index} boxStyle={boxStyle} {...props} />
