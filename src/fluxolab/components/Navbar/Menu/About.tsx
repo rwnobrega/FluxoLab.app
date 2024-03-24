@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
 import Modal from 'react-bootstrap/Modal'
 
-import Minidown from 'components/General/Minidown'
+import Markdown from 'components/General/Markdown'
 
 import Logo from 'assets/FluxoLab.svg'
 
@@ -26,10 +26,10 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
       </Modal.Header>
       <Modal.Body>
         <p>
-          <Minidown source={getString('About_Body1')} />
+          <Markdown source={getString('About_Body1')} />
         </p>
         <p>
-          <Minidown source={getString(
+          <Markdown source={getString(
             'About_Body2',
             {
               GitHub: '[GitHub](https://github.com/rwnobrega/FluxoLab.app)',

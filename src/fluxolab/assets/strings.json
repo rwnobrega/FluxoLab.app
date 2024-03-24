@@ -1,6 +1,6 @@
 {
     "en": {
-        "About_Body1": "*FluxoLab* is a web application designed to teach algorithm and programming fundamentals using flowcharts.",
+        "About_Body1": "**FluxoLab** is a web application designed to teach algorithm and programming fundamentals using flowcharts.",
         "About_Body2": "The source code is available on {{GitHub}}, under the {{GPL 3}} license.",
         "About_Title": "About FluxoLab",
         "Clear_Body": "Are you sure you want to clear the flowchart?",
@@ -12,7 +12,7 @@
         "PlayButton_StepBack": "Step back"
     },
     "pt-BR": {
-        "About_Body1": "*FluxoLab* é um aplicativo web projetado para ensinar fundamentos de algoritmos e programação usando fluxogramas.",
+        "About_Body1": "**FluxoLab** é um aplicativo web projetado para ensinar fundamentos de algoritmos e programação usando fluxogramas.",
         "About_Body2": "O código fonte está disponível no {{GitHub}}, sob a licença {{GPL 3}}.",
         "About_Title": "Sobre o FluxoLab",
         "About": "Sobre",
