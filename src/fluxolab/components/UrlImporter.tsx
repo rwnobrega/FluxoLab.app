@@ -4,11 +4,13 @@ import { deserialize } from 'stores/serialize'
 import useStoreFlow from 'stores/useStoreFlow'
 import useStoreMachine from 'stores/useStoreMachine'
 import useStoreEphemeral from 'stores/useStoreEphemeral'
+import useStoreStrings from 'stores/useStoreStrings'
 
 export default function UrlImporter (): JSX.Element {
   const { clearAll, setNodes, makeConnections } = useStoreFlow()
   const { setTitle, setVariables } = useStoreMachine()
   const { setToastContent } = useStoreEphemeral()
+  const { getString } = useStoreStrings()
 
   useEffect(() => {
     const url = new URL(window.location.href)
@@ -24,13 +26,13 @@ export default function UrlImporter (): JSX.Element {
         url.searchParams.delete('lzs')
         window.history.replaceState({}, '', url.toString())
         setToastContent({
-          message: 'Fluxograma carregado com sucesso.',
+          message: getString('ToastMessage_ImportSuccess'),
           icon: 'bi-check-circle',
           background: 'success'
         })
       } catch {
         setToastContent({
-          message: 'Erro ao carregar o fluxograma.',
+          message: getString('ToastMessage_ImportError'),
           icon: 'bi-exclamation-triangle',
           background: 'danger'
         })
