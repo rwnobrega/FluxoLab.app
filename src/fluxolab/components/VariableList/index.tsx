@@ -7,12 +7,14 @@ import Table from 'react-bootstrap/Table'
 
 import useStoreMachine from 'stores/useStoreMachine'
 import useStoreMachineState from 'stores/useStoreMachineState'
+import useStoreStrings from 'stores/useStoreStrings'
 
 import VariableItem from './Item'
 
 export default function (): JSX.Element {
   const { machine, addVariable } = useStoreMachine()
   const { getState, reset } = useStoreMachineState()
+  const { getString } = useStoreStrings()
 
   const state = getState()
 
@@ -37,14 +39,16 @@ export default function (): JSX.Element {
   return (
     <div className='d-flex flex-column h-100'>
       <div className='d-flex flex-row justify-content-between align-items-center mb-2 gap-3'>
-        <span className='fw-semibold'>Variáveis</span>
+        <span className='fw-semibold'>
+          {getString('VariableList_Title')}
+        </span>
         <Button
           size='sm'
           className='fw-semibold text-nowrap'
           onClick={handleAddVariable}
           disabled={state.timeSlot !== -1}
         >
-          Adicionar variável
+          {getString('VariableList_Add')}
         </Button>
       </div>
       <div style={{ overflowY: 'auto', overflowX: 'clip' }}>

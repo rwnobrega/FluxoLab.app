@@ -9,9 +9,12 @@ import { Props } from '.'
 import { variableTypes, Variable } from 'machine/variables'
 
 import useStoreMachine from 'stores/useStoreMachine'
+import useStoreStrings from 'stores/useStoreStrings'
 
 export default function ({ id, disabled }: Props): JSX.Element {
   const { getVariable, changeVariableType } = useStoreMachine()
+  const { getString } = useStoreStrings()
+
   const variable = getVariable(id)
 
   const onChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
@@ -28,7 +31,9 @@ export default function ({ id, disabled }: Props): JSX.Element {
     >
       {
         _.map(variableTypes, ({ typeName }) => (
-          <option key={typeName} value={typeName}>{typeName.charAt(0).toUpperCase() + typeName.slice(1)}</option>
+          <option key={typeName} value={typeName}>
+            {getString(`VariableType_${typeName}`)}
+          </option>
         ))
       }
     </Form.Select>

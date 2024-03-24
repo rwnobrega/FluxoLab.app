@@ -10,6 +10,7 @@ import ChatBubble from './ChatBubble'
 import useStoreMachineState from 'stores/useStoreMachineState'
 import useStoreMachine from 'stores/useStoreMachine'
 import useStoreEphemeral from 'stores/useStoreEphemeral'
+import useStoreStrings from 'stores/useStoreStrings'
 
 export default function (): JSX.Element {
   const refInput = useRef<HTMLInputElement>(null)
@@ -19,6 +20,7 @@ export default function (): JSX.Element {
   const { machine } = useStoreMachine()
   const { getState, nextStep, stateHistory } = useStoreMachineState()
   const { setRefInput } = useStoreEphemeral()
+  const { getString } = useStoreStrings()
 
   const state = getState()
 
@@ -48,7 +50,9 @@ export default function (): JSX.Element {
 
   return (
     <div className='d-flex flex-column h-100'>
-      <p className='fw-semibold'>Entrada/saída</p>
+      <p className='fw-semibold'>
+        {getString('Interaction_Title')}
+      </p>
       <Stack gap={2} className='mb-3' style={{ overflowY: 'auto', overflowX: 'clip' }}>
         {_.map(state.interaction, ({ direction, text }, index) => (
           <ChatBubble key={index} direction={direction} text={text} />

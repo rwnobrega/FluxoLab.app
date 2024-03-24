@@ -25,7 +25,7 @@ export default function (): JSX.Element {
     const baseUrl = window.location.href.split('?')[0]
     void navigator.clipboard.writeText(`${baseUrl}?lzs=${lzs}`)
     setToastContent({
-      message: getString('CopyLink_ToastMessage'),
+      message: getString('ToastMessage_CopyLink'),
       icon: 'bi-clipboard-check',
       background: 'secondary'
     })

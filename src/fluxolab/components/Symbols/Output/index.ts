@@ -9,7 +9,7 @@ import Modal from './Modal'
 
 const symbol: Symbol = {
   type: 'write',
-  title: 'Output',
+  title: 'Symbol_Output',
   boxStyle: {
     backgroundColor: getBrighterColor(palette.green),
     textColor: 'white',

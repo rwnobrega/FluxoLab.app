@@ -9,6 +9,7 @@ import Form from 'react-bootstrap/Form'
 import TextInput from 'components/General/TextInput'
 
 import useStoreMachine from 'stores/useStoreMachine'
+import useStoreStrings from 'stores/useStoreStrings'
 
 import isValidIdentifier from 'language/isValidIdentifier'
 
@@ -23,6 +24,7 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
   const [problem, setProblem] = useState<string | null>(null)
 
   const { machine, renameVariable } = useStoreMachine()
+  const { getString } = useStoreStrings()
 
   useEffect(() => {
     setTextId(id)
@@ -31,11 +33,11 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
   useEffect(() => {
     let problem: string | null = null
     if (_.isEmpty(textId)) {
-      problem = 'Identificador não pode ser vazio.'
+      problem = getString('IdentifierError_Empty')
     } else if (!isValidIdentifier(textId)) {
-      problem = 'Identificador inválido.'
+      problem = getString('IdentifierError_Invalid')
     } else if (textId !== id && _.includes(_.map(machine.variables, 'id'), textId)) {
-      problem = 'Identificador já existe.'
+      problem = getString('IdentifierError_Duplicate')
     }
     setProblem(problem)
   }, [textId])
@@ -50,22 +52,24 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
     <Modal show={showModal} onHide={() => setShowModal(false)}>
       <Form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
-          <Modal.Title>Renomear variável</Modal.Title>
+          <Modal.Title>
+            {getString('ModalRenameVariable_Title')}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <TextInput
-            placeholder='Digite o novo identificador'
+            placeholder={getString('ModalRenameVariable_Placeholder')}
             value={textId}
             setValue={setTextId}
-            problem={problem}
+            problem={problem !== null ? getString(problem) : null}
           />
         </Modal.Body>
         <Modal.Footer>
           <Button variant='secondary' onClick={() => setShowModal(false)}>
-            Cancelar
+            {getString('Button_Cancel')}
           </Button>
           <Button variant='primary' type='submit' disabled={problem !== null}>
-            Confirmar
+            {getString('Button_Rename')}
           </Button>
         </Modal.Footer>
       </Form>

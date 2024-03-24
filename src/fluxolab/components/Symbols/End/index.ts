@@ -8,7 +8,7 @@ import Label from './Label'
 
 const symbol: Symbol = {
   type: 'end',
-  title: 'End',
+  title: 'Symbol_End',
   boxStyle: {
     backgroundColor: getBrighterColor(palette.purple),
     textColor: 'white',

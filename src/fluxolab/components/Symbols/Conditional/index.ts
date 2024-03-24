@@ -9,7 +9,7 @@ import Modal from './Modal'
 
 const symbol: Symbol = {
   type: 'conditional',
-  title: 'Conditional',
+  title: 'Symbol_Conditional',
   boxStyle: {
     backgroundColor: getBrighterColor(palette.red),
     textColor: 'white',
