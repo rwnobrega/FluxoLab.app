@@ -18,7 +18,7 @@ export default function (): JSX.Element {
 
   return (
     <Dropdown align='end'>
-      <Tooltip text={getString('Change language')}>
+      <Tooltip text={getString('MenuLanguage_Tooltip')}>
         <Dropdown.Toggle>
           <i className='bi bi-globe' />
         </Dropdown.Toggle>

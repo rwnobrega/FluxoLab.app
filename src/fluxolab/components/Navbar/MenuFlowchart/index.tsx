@@ -1,8 +1,10 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 
-import Button from 'react-bootstrap/Button'
+import Dropdown from 'react-bootstrap/Dropdown'
 
 import Tooltip from 'components/General/Tooltip'
+
+import Clear from './Clear'
 
 import { serialize } from 'stores/serialize'
 import useStoreFlow from 'stores/useStoreFlow'
@@ -11,6 +13,8 @@ import useStoreEphemeral from 'stores/useStoreEphemeral'
 import useStoreStrings from 'stores/useStoreStrings'
 
 export default function (): JSX.Element {
+  const [showClear, setShowClear] = useState(false)
+
   const { nodes, edges } = useStoreFlow()
   const { machine } = useStoreMachine()
   const { setToastContent } = useStoreEphemeral()
@@ -28,10 +32,20 @@ export default function (): JSX.Element {
   }, [machine, nodes, edges])
 
   return (
-    <Tooltip text={getString('CopyLink_Tooltip')}>
-      <Button variant='secondary' onClick={handleCopyLink}>
-        <i className='bi bi-link' />
-      </Button>
-    </Tooltip>
+    <>
+      <Dropdown align='end'>
+        <Tooltip text={getString('MenuFlowchart_Tooltip')}>
+          <Dropdown.Toggle>
+            <i className='bi bi-bounding-box-circles' />
+          </Dropdown.Toggle>
+        </Tooltip>
+        <Dropdown.Menu>
+          <Dropdown.Item onClick={() => setShowClear(true)}>{`${getString('MenuFlowchart_Clear')}...`}</Dropdown.Item>
+          <Dropdown.Item onClick={handleCopyLink}>{`${getString('MenuFlowchart_CopyLink')}`}</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+      <Clear showModal={showClear} setShowModal={setShowClear} />
+    </>
+
   )
 }

@@ -30,17 +30,17 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
   return (
     <Modal show={showModal} onHide={handleCancel}>
       <Modal.Header closeButton>
-        <Modal.Title>{getString('Clear_Title')}</Modal.Title>
+        <Modal.Title>{getString('ModalClear_Title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>{getString('Clear_Body')}</p>
+        <p>{getString('ModalClear_Body')}</p>
       </Modal.Body>
       <Modal.Footer>
         <Button variant='secondary' onClick={handleCancel}>
-          {getString('Cancel')}
+          {getString('Button_Cancel')}
         </Button>
         <Button variant='primary' onClick={handleConfirm}>
-          {getString('Clear')}
+          {getString('Button_Clear')}
         </Button>
       </Modal.Footer>
     </Modal>

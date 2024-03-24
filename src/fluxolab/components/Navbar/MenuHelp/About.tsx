@@ -22,15 +22,15 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
     <Modal show={showModal} onHide={() => setShowModal(false)}>
       <Modal.Header closeButton>
         <Image src={Logo} alt='Logo' width='32' height='32' className='me-3' />
-        <Modal.Title>{getString('About_Title')}</Modal.Title>
+        <Modal.Title>{getString('ModalAbout_Title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p>
-          <Markdown source={getString('About_Body1')} />
+          <Markdown source={getString('ModalAbout_Body1')} />
         </p>
         <p>
           <Markdown source={getString(
-            'About_Body2',
+            'ModalAbout_Body2',
             {
               GitHub: '[GitHub](https://github.com/rwnobrega/FluxoLab.app)',
               'GPL 3': '[GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html)'
@@ -40,7 +40,7 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
       </Modal.Body>
       <Modal.Footer>
         <Button variant='secondary' onClick={() => setShowModal(false)}>
-          {getString('Close')}
+          {getString('Button_Close')}
         </Button>
       </Modal.Footer>
     </Modal>

@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 
 import Dropdown from 'react-bootstrap/Dropdown'
 
-import Clear from './Clear'
+import Tooltip from 'components/General/Tooltip'
+
 import Help from './Help'
 import About from './About'
 
@@ -11,23 +12,22 @@ import useStoreStrings from 'stores/useStoreStrings'
 export default function (): JSX.Element {
   const { getString } = useStoreStrings()
 
-  const [showClear, setShowClear] = useState(false)
   const [showHelp, setShowHelp] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
 
   return (
     <>
       <Dropdown align='end'>
-        <Dropdown.Toggle>
-          Menu
-        </Dropdown.Toggle>
+        <Tooltip text={getString('MenuHelp_Tooltip')}>
+          <Dropdown.Toggle>
+            <i className='bi bi-list' />
+          </Dropdown.Toggle>
+        </Tooltip>
         <Dropdown.Menu>
-          <Dropdown.Item onClick={() => setShowClear(true)}>{`${getString('Clear flowchart')}...`}</Dropdown.Item>
-          <Dropdown.Item onClick={() => setShowHelp(true)}>{`${getString('Help')}...`}</Dropdown.Item>
-          <Dropdown.Item onClick={() => setShowAbout(true)}>{`${getString('About')}...`}</Dropdown.Item>
+          <Dropdown.Item onClick={() => setShowHelp(true)}>{`${getString('MenuHelp_Help')}...`}</Dropdown.Item>
+          <Dropdown.Item onClick={() => setShowAbout(true)}>{`${getString('MenuHelp_About')}...`}</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
-      <Clear showModal={showClear} setShowModal={setShowClear} />
       <Help showModal={showHelp} setShowModal={setShowHelp} />
       <About showModal={showAbout} setShowModal={setShowAbout} />
     </>
