@@ -6,7 +6,10 @@
         "Clear_Body": "Are you sure you want to clear the flowchart?",
         "Clear_Title": "Clear flowchart",
         "CopyLink_ToastMessage": "Link copied to clipboard.",
-        "CopyLink_Tooltip": "Copy link"
+        "CopyLink_Tooltip": "Copy link",
+        "PlayButton_NextStep": "Next step",
+        "PlayButton_Reset": "Reset execution",
+        "PlayButton_StepBack": "Step back"
     },
     "pt-BR": {
         "About_Body1": "*FluxoLab* é um aplicativo web projetado para ensinar fundamentos de algoritmos e programação usando fluxogramas.",
@@ -28,6 +31,9 @@
         "Help": "Ajuda",
         "Input": "Entrada",
         "Output": "Saída",
+        "PlayButton_NextStep": "Executar próximo passo",
+        "PlayButton_Reset": "Reiniciar execução",
+        "PlayButton_StepBack": "Voltar um passo",
         "Start": "Início"
     }
 }

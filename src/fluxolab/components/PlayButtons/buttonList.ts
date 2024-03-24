@@ -21,7 +21,7 @@ const buttonList: PlayButton[] = [
   {
     action: 'reset',
     hotkey: 'F6',
-    description: 'Encerrar execução',
+    description: 'PlayButton_Reset',
     icon: 'bi-stop-fill',
     isDisabled: (state, compileErrors) => (
       compileErrors.length > 0 || isDisabledBackward(state)
@@ -30,7 +30,7 @@ const buttonList: PlayButton[] = [
   {
     action: 'stepBack',
     hotkey: 'F7',
-    description: 'Voltar um passo',
+    description: 'PlayButton_StepBack',
     icon: 'bi-skip-start-fill',
     isDisabled: (state, compileErrors) => (
       compileErrors.length > 0 || isDisabledBackward(state)
@@ -39,7 +39,7 @@ const buttonList: PlayButton[] = [
   {
     action: 'nextStep',
     hotkey: 'F8',
-    description: 'Executar próximo passo',
+    description: 'PlayButton_NextStep',
     icon: 'bi-skip-end-fill',
     isDisabled: (state, compileErrors) => (
       compileErrors.length > 0 || isDisabledForward(state) || state.status === 'waiting'

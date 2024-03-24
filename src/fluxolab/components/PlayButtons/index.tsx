@@ -9,12 +9,14 @@ import Tooltip from 'components/General/Tooltip'
 
 import useStoreMachine from 'stores/useStoreMachine'
 import useStoreMachineState, { Action } from 'stores/useStoreMachineState'
+import useStoreStrings from 'stores/useStoreStrings'
 
 import buttonList from './buttonList'
 
 export default function (): JSX.Element {
   const { machine, compileErrors } = useStoreMachine()
   const { getState, execAction } = useStoreMachineState()
+  const { getString } = useStoreStrings()
 
   const state = getState()
 
@@ -26,7 +28,7 @@ export default function (): JSX.Element {
     <ButtonGroup>
       {_.map(buttonList, ({ action, description, hotkey, icon, isDisabled }) => {
         const disabled = isDisabled(state, compileErrors)
-        const tooltipText = disabled ? '' : `${description} (${hotkey})`
+        const tooltipText = disabled ? '' : `${getString(description)} (${hotkey})`
         return (
           <Tooltip key={action} text={tooltipText}>
             <Button disabled={disabled} onClick={() => onClick(action)}>
