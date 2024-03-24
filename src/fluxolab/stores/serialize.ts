@@ -3,7 +3,9 @@ import _ from 'lodash'
 import { compressToEncodedURIComponent as compress, decompressFromEncodedURIComponent as decompress } from 'lz-string'
 
 import { Node, Edge } from 'reactflow'
-import { Machine, Variable } from 'machine/types'
+
+import { Machine } from 'machine/machine'
+import { Variable } from 'machine/variables'
 
 const revAlias = ['number', 'string', 'boolean', 'start', 'read', 'write', 'assignment', 'conditional', 'end', 'in', 'out', 'true', 'false']
 const dirAlias = _.fromPairs(_.map(revAlias, (item, index) => [item, index]))

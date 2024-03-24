@@ -2,8 +2,8 @@ import _ from 'lodash'
 
 import * as ohm from 'ohm-js'
 
-import { Memory, VarType } from 'machine/types'
-import { getVariableType } from 'machine/variables'
+import { MachineState } from 'machine/machine'
+import { getVariableType, VarType } from 'machine/variables'
 
 import grammar from './grammar'
 import { evalError } from './errors'
@@ -196,7 +196,7 @@ semantics.addOperation<VarType>('eval(memory)', {
   Command_write: getOutput
 })
 
-export default function (matchResult: ohm.MatchResult, memory: Memory): VarType | Error {
+export default function (matchResult: ohm.MatchResult, memory: MachineState['memory']): VarType | Error {
   try {
     return semantics(matchResult).eval(memory)
   } catch (e) {

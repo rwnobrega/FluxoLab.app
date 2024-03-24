@@ -1,5 +1,7 @@
+import { CompileError } from 'machine/compiler'
+import { MachineState } from 'machine/machine'
+
 import { Action } from 'stores/useStoreMachineState'
-import { MachineState, CompileError } from 'machine/types'
 
 interface PlayButton {
   action: Action

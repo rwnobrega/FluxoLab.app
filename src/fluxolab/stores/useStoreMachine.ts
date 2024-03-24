@@ -3,7 +3,10 @@ import _ from 'lodash'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { Variable, Symbol, CompileError, Machine } from 'machine/types'
+import { CompileError } from 'machine/compiler'
+import { Machine } from 'machine/machine'
+import { Symbol } from 'machine/symbols'
+import { Variable } from 'machine/variables'
 
 interface StoreMachine {
   machine: Machine

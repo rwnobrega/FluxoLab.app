@@ -1,6 +1,24 @@
 import _ from 'lodash'
 
-import { Symbol, Machine, MachineState, Memory, Variable } from 'machine/types'
+import { VarType, Variable } from './variables'
+import { Symbol } from './symbols'
+
+export interface Machine {
+  title: string
+  flowchart: Symbol[]
+  startSymbolId: string
+  variables: Variable[]
+}
+
+export interface MachineState {
+  curSymbolId: string | null
+  timeSlot: number
+  memory: Record<string, VarType | null>
+  input: string | null
+  interaction: Array<{ direction: 'in' | 'out', text: string }>
+  status: 'ready' | 'waiting' | 'halted' | 'error'
+  errorMessage: string | null
+}
 
 export function runMachineStep (machine: Machine, state: MachineState): void {
   if (state.curSymbolId === null) {
@@ -19,19 +37,11 @@ export function runMachineStep (machine: Machine, state: MachineState): void {
   state.timeSlot += 1
 }
 
-function getInitialMemory (variables: Variable[]): Memory {
-  const memory: Memory = {}
-  for (const variable of variables) {
-    memory[variable.id] = null
-  }
-  return memory
-}
-
 export function getInitialState (variables: Variable[]): MachineState {
   return {
     curSymbolId: null,
     timeSlot: -1,
-    memory: getInitialMemory(variables),
+    memory: _.fromPairs(variables.map(variable => [variable.id, null])),
     input: null,
     interaction: [],
     errorMessage: null,

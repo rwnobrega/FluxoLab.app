@@ -1,9 +1,14 @@
 import _ from 'lodash'
 
-import { VarType } from './types'
+export interface Variable {
+  id: string
+  type: 'number' | 'boolean' | 'string'
+}
+
+export type VarType = number | boolean | string
 
 interface VariableType {
-  typeName: 'number' | 'string' | 'boolean'
+  typeName: Variable['type']
   stringIsValid: (str: string) => boolean
   stringToValue: (str: string) => VarType
   valueToString: (value: VarType) => string
@@ -32,18 +37,6 @@ export const variableTypes: VariableType[] = [
     }
   },
   {
-    typeName: 'string',
-    stringIsValid: (str: string): boolean => {
-      return true
-    },
-    stringToValue: (str: string): string => {
-      return str
-    },
-    valueToString: (value: string): string => {
-      return value
-    }
-  },
-  {
     typeName: 'boolean',
     stringIsValid: (str: string): boolean => {
       return str === 'true' || str === 'false'
@@ -53,6 +46,18 @@ export const variableTypes: VariableType[] = [
     },
     valueToString: (value: boolean): string => {
       return value ? 'true' : 'false'
+    }
+  },
+  {
+    typeName: 'string',
+    stringIsValid: (str: string): boolean => {
+      return true
+    },
+    stringToValue: (str: string): string => {
+      return str
+    },
+    valueToString: (value: string): string => {
+      return value
     }
   }
 ]

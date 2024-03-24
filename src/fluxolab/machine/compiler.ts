@@ -2,9 +2,7 @@ import _ from 'lodash'
 
 import { Node, Edge } from 'reactflow'
 
-import { Variable, Symbol, CompileError } from 'machine/types'
-
-import grammar from 'language/grammar'
+import { Variable } from './variables'
 
 import {
   newStartSymbol,
@@ -12,8 +10,11 @@ import {
   newConditionalSymbol,
   newHaltSymbol,
   newInputSymbol,
-  newOutputSymbol
-} from 'machine/symbols'
+  newOutputSymbol,
+  Symbol
+} from './symbols'
+
+import grammar from 'language/grammar'
 
 function getOutgoingNode (nodeId: string, handleId: string, edges: Edge[]): string | null {
   for (const edge of edges) {
@@ -22,6 +23,11 @@ function getOutgoingNode (nodeId: string, handleId: string, edges: Edge[]): stri
     }
   }
   return null
+}
+
+export interface CompileError {
+  message: string
+  nodeId: string | null
 }
 
 interface CompilerInput {
