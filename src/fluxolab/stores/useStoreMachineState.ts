@@ -2,8 +2,7 @@ import _ from 'lodash'
 
 import { create } from 'zustand'
 
-import { Machine, MachineState } from 'machine/types'
-import { runMachineStep, getInitialState } from 'machine/machine'
+import { runMachineStep, getInitialState, Machine, MachineState } from 'machine/machine'
 
 export type Action = 'reset' | 'stepBack' | 'nextStep'
 

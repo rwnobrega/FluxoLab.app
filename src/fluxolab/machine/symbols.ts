@@ -1,11 +1,17 @@
 import _ from 'lodash'
 
-import { Symbol, Variable } from 'machine/types'
-import { getVariableType } from 'machine/variables'
+import { getVariableType, Variable } from './variables'
+import { Machine, MachineState } from './machine'
 
 import evaluate from 'language/evaluate'
 import grammar from 'language/grammar'
 import { syntaxErrorMessage } from 'language/errors'
+
+export interface Symbol {
+  id: string
+  type: 'start' | 'assignment' | 'conditional' | 'input' | 'output' | 'halt'
+  work: (machine: Machine, state: MachineState) => void
+}
 
 export function newStartSymbol (params: { id: string, nextId: string }): Symbol {
   const { id, nextId } = params
