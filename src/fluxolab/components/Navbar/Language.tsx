@@ -9,7 +9,7 @@ import Tooltip from 'components/General/Tooltip'
 import useStoreStrings from 'stores/useStoreStrings'
 
 export default function (): JSX.Element {
-  const { language: currentLanguage, setLanguage } = useStoreStrings()
+  const { getString, language: currentLanguage, setLanguage } = useStoreStrings()
 
   const languages: Record<string, string> = {
     en: 'English',
@@ -18,7 +18,7 @@ export default function (): JSX.Element {
 
   return (
     <Dropdown align='end'>
-      <Tooltip text='Change language'>
+      <Tooltip text={getString('Change language')}>
         <Dropdown.Toggle>
           <i className='bi bi-globe' />
         </Dropdown.Toggle>

@@ -5,6 +5,7 @@ import Modal from 'react-bootstrap/Modal'
 
 import useStoreFlow from 'stores/useStoreFlow'
 import useStoreMachine from 'stores/useStoreMachine'
+import useStoreStrings from 'stores/useStoreStrings'
 
 interface Props {
   showModal: boolean
@@ -14,6 +15,7 @@ interface Props {
 export default function ({ showModal, setShowModal }: Props): JSX.Element {
   const { clearAll } = useStoreFlow()
   const { clearMachine } = useStoreMachine()
+  const { getString } = useStoreStrings()
 
   const handleCancel = useCallback(() => {
     setShowModal(false)
@@ -28,15 +30,17 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
   return (
     <Modal show={showModal} onHide={handleCancel}>
       <Modal.Header closeButton>
-        <Modal.Title>Limpar fluxograma</Modal.Title>
+        <Modal.Title>{getString('Clear_Title')}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>Você tem certeza que deseja limpar o fluxograma?</Modal.Body>
+      <Modal.Body>
+        <p>{getString('Clear_Body')}</p>
+      </Modal.Body>
       <Modal.Footer>
         <Button variant='secondary' onClick={handleCancel}>
-          Cancelar
+          {getString('Cancel')}
         </Button>
         <Button variant='primary' onClick={handleConfirm}>
-          Confirmar
+          {getString('Clear')}
         </Button>
       </Modal.Footer>
     </Modal>

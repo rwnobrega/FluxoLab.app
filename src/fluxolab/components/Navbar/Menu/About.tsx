@@ -4,7 +4,11 @@ import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
 import Modal from 'react-bootstrap/Modal'
 
+import Minidown from 'components/General/Minidown'
+
 import Logo from 'assets/FluxoLab.svg'
+
+import useStoreStrings from 'stores/useStoreStrings'
 
 interface Props {
   showModal: boolean
@@ -12,23 +16,31 @@ interface Props {
 }
 
 export default function ({ showModal, setShowModal }: Props): JSX.Element {
+  const { getString } = useStoreStrings()
+
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)}>
       <Modal.Header closeButton>
         <Image src={Logo} alt='Logo' width='32' height='32' className='me-3' />
-        <Modal.Title>Sobre o FluxoLab</Modal.Title>
+        <Modal.Title>{getString('About_Title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p>
-          <b>FluxoLab</b> é um aplicativo web projetado para ensinar fundamentos de algoritmos e programação usando fluxogramas.
+          <Minidown source={getString('About_Body1')} />
         </p>
         <p>
-          O código fonte está disponível no <a href='https://github.com/rwnobrega/FluxoLab.app'>GitHub</a>, sob a licença <a href='https://www.gnu.org/licenses/gpl-3.0.en.html'>GPL 3</a>.
+          <Minidown source={getString(
+            'About_Body2',
+            {
+              GitHub: '[GitHub](https://github.com/rwnobrega/FluxoLab.app)',
+              'GPL 3': '[GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html)'
+            })}
+          />
         </p>
       </Modal.Body>
       <Modal.Footer>
         <Button variant='secondary' onClick={() => setShowModal(false)}>
-          Fechar
+          {getString('Close')}
         </Button>
       </Modal.Footer>
     </Modal>

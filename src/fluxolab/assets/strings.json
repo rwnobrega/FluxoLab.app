@@ -1,18 +1,33 @@
 {
     "en": {
-        "Start": "Start",
-        "Input": "Input",
-        "Output": "Output",
-        "Assignment": "Assignment",
-        "Conditional": "Conditional",
-        "End": "End"
+        "About_Body1": "*FluxoLab* is a web application designed to teach algorithm and programming fundamentals using flowcharts.",
+        "About_Body2": "The source code is available on {{GitHub}}, under the {{GPL 3}} license.",
+        "About_Title": "About FluxoLab",
+        "Clear_Body": "Are you sure you want to clear the flowchart?",
+        "Clear_Title": "Clear flowchart",
+        "CopyLink_ToastMessage": "Link copied to clipboard.",
+        "CopyLink_Tooltip": "Copy link"
     },
     "pt-BR": {
-        "Start": "Início",
+        "About_Body1": "*FluxoLab* é um aplicativo web projetado para ensinar fundamentos de algoritmos e programação usando fluxogramas.",
+        "About_Body2": "O código fonte está disponível no {{GitHub}}, sob a licença {{GPL 3}}.",
+        "About_Title": "Sobre o FluxoLab",
+        "About": "Sobre",
+        "Assignment": "Atribuição",
+        "Cancel": "Cancelar",
+        "Change language": "Mudar idioma",
+        "Clear flowchart": "Limpar fluxograma",
+        "Clear_Body": "Tem certeza de que deseja limpar o fluxograma?",
+        "Clear_Title": "Limpar fluxograma",
+        "Clear": "Limpar",
+        "Close": "Fechar",
+        "Conditional": "Condicional",
+        "CopyLink_ToastMessage": "Link copiado para a área de transferência.",
+        "CopyLink_Tooltip": "Copiar link",
+        "End": "Fim",
+        "Help": "Ajuda",
         "Input": "Entrada",
         "Output": "Saída",
-        "Assignment": "Atribuição",
-        "Conditional": "Condicional",
-        "End": "Fim"
+        "Start": "Início"
     }
 }

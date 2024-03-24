@@ -8,7 +8,7 @@ const strings: Record<string, Record<string, string>> = stringsJson
 interface StoreStrings {
   language: string
   setLanguage: (language: string) => void
-  getString: (key: string) => string
+  getString: (key: string, replacements?: Record<string, string>) => string
 }
 
 const useStoreStrings = create<StoreStrings>()(
@@ -16,7 +16,13 @@ const useStoreStrings = create<StoreStrings>()(
     (set, get) => ({
       language: navigator.language,
       setLanguage: language => set({ language }),
-      getString: key => strings[get().language][key] ?? strings.en[key] ?? key
+      getString: (key, replacements = {}) => {
+        let string = strings[get().language][key] ?? strings.en[key] ?? key
+        for (const [key, value] of Object.entries(replacements)) {
+          string = string.replace(new RegExp(`{{${key}}}`, 'g'), value)
+        }
+        return string
+      }
     })
     ,
     {
