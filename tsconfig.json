@@ -8,6 +8,7 @@
         "jsx": "react",
         "allowJs": false,
         "moduleResolution": "node",
+        "resolveJsonModule": true,
         "esModuleInterop": true,
         "strictNullChecks": true,
         "baseUrl": "./src/fluxolab",

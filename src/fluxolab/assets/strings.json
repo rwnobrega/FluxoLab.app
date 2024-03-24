@@ -1,0 +1,18 @@
+{
+    "en": {
+        "Start": "Start",
+        "Input": "Input",
+        "Output": "Output",
+        "Assignment": "Assignment",
+        "Conditional": "Conditional",
+        "End": "End"
+    },
+    "pt-BR": {
+        "Start": "Início",
+        "Input": "Entrada",
+        "Output": "Saída",
+        "Assignment": "Atribuição",
+        "Conditional": "Condicional",
+        "End": "Fim"
+    }
+}

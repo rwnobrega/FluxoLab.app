@@ -4,6 +4,7 @@ import { BoxStyle } from 'components/Symbols'
 import SymbolBox from 'components/Symbols/SymbolBox'
 
 import useStoreMachineState from 'stores/useStoreMachineState'
+import useStoreStrings from 'stores/useStoreStrings'
 
 interface Props {
   type: string
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export default function ({ type, title, boxStyle }: Props): JSX.Element {
+  const { getString } = useStoreStrings()
   const { getState } = useStoreMachineState()
 
   const state = getState()
@@ -35,7 +37,7 @@ export default function ({ type, title, boxStyle }: Props): JSX.Element {
       }}
     >
       <SymbolBox boxStyle={boxStyle} isDisabled={disabled}>
-        <span>{title}</span>
+        <span>{getString(title)}</span>
       </SymbolBox>
     </div>
   )

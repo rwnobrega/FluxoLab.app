@@ -7,6 +7,7 @@ import Brand from './Brand'
 import Title from './Title'
 import CopyLink from './CopyLink'
 import Menu from './Menu'
+import Language from './Language'
 
 export default function (): JSX.Element {
   return (
@@ -16,6 +17,7 @@ export default function (): JSX.Element {
         <Title />
         <CopyLink />
         <Menu />
+        <Language />
       </Stack>
     </Navbar>
   )
