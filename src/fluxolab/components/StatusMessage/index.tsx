@@ -5,7 +5,7 @@ import React from 'react'
 import Alert from 'react-bootstrap/Alert'
 import Stack from 'react-bootstrap/Stack'
 
-import Minidown from 'components/General/Minidown'
+import Markdown from 'components/General/Markdown'
 
 import useStoreEphemeral from 'stores/useStoreEphemeral'
 import useStoreMachine from 'stores/useStoreMachine'
@@ -94,8 +94,8 @@ export default function (): JSX.Element {
       <Stack direction='horizontal' style={{ alignItems: 'start' }}>
         <i className={`bi ${statusIcon}`} />
         <span className='ms-2' style={{ whiteSpace: 'pre-wrap' }}>
-          <Minidown source={mainStatus} />
-          <Minidown className='small' source={smallStatus} />
+          <Markdown source={mainStatus} />
+          <Markdown className='small' source={smallStatus} />
         </span>
       </Stack>
     </Alert>

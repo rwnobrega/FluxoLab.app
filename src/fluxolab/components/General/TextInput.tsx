@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import Form from 'react-bootstrap/Form'
 
-import Minidown from 'components/General/Minidown'
+import Markdown from 'components/General/Markdown'
 
 interface Props {
   placeholder: string
@@ -27,7 +27,7 @@ export default function ({ placeholder, value, setValue, problem = null }: Props
         onChange={handleChange}
         onFocus={event => event.target.select()}
       />
-      <Minidown className='pt-2 small text-danger' source={problem === null ? '\u00A0' : problem} />
+      <Markdown className='pt-2 small text-danger' source={problem === null ? '\u00A0' : problem} />
     </>
   )
 }
