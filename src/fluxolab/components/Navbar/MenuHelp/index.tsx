@@ -20,7 +20,7 @@ export default function (): JSX.Element {
       <Dropdown align='end'>
         <Tooltip text={getString('MenuHelp_Tooltip')}>
           <Dropdown.Toggle>
-            <i className='bi bi-list' />
+            <i className='bi bi-question-circle' />
           </Dropdown.Toggle>
         </Tooltip>
         <Dropdown.Menu>
