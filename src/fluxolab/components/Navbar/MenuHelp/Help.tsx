@@ -4,225 +4,228 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Table from 'react-bootstrap/Table'
 
+import useStoreStrings from 'stores/useStoreStrings'
+
 interface Props {
   showModal: boolean
   setShowModal: (showModal: boolean) => void
 }
 
 export default function ({ showModal, setShowModal }: Props): JSX.Element {
+  const { getString } = useStoreStrings()
   const classes = 'font-monospace col-3'
   return (
     <Modal size='lg' show={showModal} onHide={() => setShowModal(false)}>
       <Modal.Header closeButton>
-        <Modal.Title>Ajuda</Modal.Title>
+        <Modal.Title>{getString('ModalHelp_Title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ overflowY: 'auto', maxHeight: '67vh' }}>
-        <h5>Operador de atribuição</h5>
+        <h5>{getString('ModalHelp_SubtitleAssignment')}</h5>
         <Table striped bordered hover>
           <tbody>
             <tr>
               <td className={classes}>var = expr</td>
-              <td>Atribuição</td>
+              <td>{getString('ModalHelp_Assignment')}</td>
             </tr>
           </tbody>
         </Table>
-        <h5>Operadores aritméticos</h5>
+        <h5>{getString('ModalHelp_SubtitleArithmetic')}</h5>
         <Table striped bordered hover>
           <tbody>
             <tr>
               <td className={classes}>x + y</td>
-              <td>Adição</td>
+              <td>{getString('ModalHelp_Addition')}</td>
             </tr>
             <tr>
               <td className={classes}>x - y</td>
-              <td>Subtração</td>
+              <td>{getString('ModalHelp_Subtraction')}</td>
             </tr>
             <tr>
               <td className={classes}>x * y</td>
-              <td>Multiplicação</td>
+              <td>{getString('ModalHelp_Multiplication')}</td>
             </tr>
             <tr>
               <td className={classes}>x / y</td>
-              <td>Divisão real</td>
+              <td>{getString('ModalHelp_RealDivision')}</td>
             </tr>
             <tr>
               <td className={classes}>a div b</td>
-              <td>Divisão inteira</td>
+              <td>{getString('ModalHelp_IntegerDivision')}</td>
             </tr>
             <tr>
               <td className={classes}>a mod b</td>
-              <td>Resto da divisão</td>
+              <td>{getString('ModalHelp_Modulus')}</td>
             </tr>
             <tr>
               <td className={classes}>+x</td>
-              <td>Identidade</td>
+              <td>{getString('ModalHelp_Positive')}</td>
             </tr>
             <tr>
               <td className={classes}>-x</td>
-              <td>Negação</td>
+              <td>{getString('ModalHelp_Negative')}</td>
             </tr>
           </tbody>
         </Table>
-        <h5>Operadores de comparação</h5>
+        <h5>{getString('ModalHelp_SubtitleComparison')}</h5>
         <Table striped bordered hover>
           <tbody>
             <tr>
               <td className={classes}>x == y</td>
-              <td>Igual</td>
+              <td>{getString('ModalHelp_Equal')}</td>
             </tr>
             <tr>
               <td className={classes}>x != y</td>
-              <td>Diferente</td>
+              <td>{getString('ModalHelp_NotEqual')}</td>
             </tr>
             <tr>
               <td className={classes}>x &gt; y</td>
-              <td>Maior</td>
+              <td>{getString('ModalHelp_Greater')}</td>
             </tr>
             <tr>
               <td className={classes}>x &gt;= y</td>
-              <td>Maior ou igual</td>
+              <td>{getString('ModalHelp_GreaterOrEqual')}</td>
             </tr>
             <tr>
               <td className={classes}>x &lt; y</td>
-              <td>Menor</td>
+              <td>{getString('ModalHelp_Less')}</td>
             </tr>
             <tr>
               <td className={classes}>x &lt;= y</td>
-              <td>Menor ou igual</td>
+              <td>{getString('ModalHelp_LessOrEqual')}</td>
             </tr>
           </tbody>
         </Table>
-        <h5>Operadores lógicos</h5>
+        <h5>{getString('ModalHelp_SubtitleLogical')}</h5>
         <Table striped bordered hover>
           <tbody>
             <tr>
               <td className={classes}>a || b</td>
-              <td>Disjunção (ou)</td>
+              <td>{getString('ModalHelp_Disjunction')}</td>
             </tr>
             <tr>
               <td className={classes}>a && b</td>
-              <td>Conjunção (e)</td>
+              <td>{getString('ModalHelp_Conjunction')}</td>
             </tr>
             <tr>
               <td className={classes}>!a</td>
-              <td>Negação</td>
+              <td>{getString('ModalHelp_Negation')}</td>
             </tr>
           </tbody>
         </Table>
-        <h5>Funções matemáticas</h5>
+        <h5>{getString('ModalHelp_SubtitleFunctions')}</h5>
         <Table striped bordered hover>
           <tbody>
             <tr>
               <td className={classes}>pow(x, y)</td>
-              <td>Potência (x<sup>y</sup>)</td>
+              <td>{getString('ModalHelp_Power')}</td>
             </tr>
             <tr>
               <td className={classes}>sqrt(x)</td>
-              <td>Raiz quadrada</td>
+              <td>{getString('ModalHelp_SquareRoot')}</td>
             </tr>
             <tr>
               <td className={classes}>log(x)</td>
-              <td>Logaritmo natural</td>
+              <td>{getString('ModalHelp_NaturalLogarithm')}</td>
             </tr>
             <tr>
               <td className={classes}>log10(x)</td>
-              <td>Logaritmo na base 10</td>
+              <td>{getString('ModalHelp_CommonLogarithm')}</td>
             </tr>
             <tr>
               <td className={classes}>log2(x)</td>
-              <td>Logaritmo na base 2</td>
+              <td>{getString('ModalHelp_BinaryLogarithm')}</td>
             </tr>
             <tr>
               <td className={classes}>exp(x)</td>
-              <td>Exponencial</td>
+              <td>{getString('ModalHelp_Exponential')}</td>
             </tr>
             <tr>
               <td className={classes}>sin(x)</td>
-              <td>Seno</td>
+              <td>{getString('ModalHelp_Sine')}</td>
             </tr>
             <tr>
               <td className={classes}>cos(x)</td>
-              <td>Cosseno</td>
+              <td>{getString('ModalHelp_Cosine')}</td>
             </tr>
             <tr>
               <td className={classes}>tan(x)</td>
-              <td>Tangente</td>
+              <td>{getString('ModalHelp_Tangent')}</td>
             </tr>
             <tr>
               <td className={classes}>asin(x)</td>
-              <td>Arco seno</td>
+              <td>{getString('ModalHelp_ArcSine')}</td>
             </tr>
             <tr>
               <td className={classes}>acos(x)</td>
-              <td>Arco cosseno</td>
+              <td>{getString('ModalHelp_ArcCosine')}</td>
             </tr>
             <tr>
               <td className={classes}>atan(x)</td>
-              <td>Arco tangente</td>
+              <td>{getString('ModalHelp_ArcTangent')}</td>
             </tr>
             <tr>
               <td className={classes}>sinh(x)</td>
-              <td>Seno hiperbólico</td>
+              <td>{getString('ModalHelp_HyperbolicSine')}</td>
             </tr>
             <tr>
               <td className={classes}>cosh(x)</td>
-              <td>Cosseno hiperbólico</td>
+              <td>{getString('ModalHelp_HyperbolicCosine')}</td>
             </tr>
             <tr>
               <td className={classes}>tanh(x)</td>
-              <td>Tangente hiperbólica</td>
+              <td>{getString('ModalHelp_HyperbolicTangent')}</td>
             </tr>
             <tr>
               <td className={classes}>asinh(x)</td>
-              <td>Arco seno hiperbólico</td>
+              <td>{getString('ModalHelp_ArcSineHyperbolic')}</td>
             </tr>
             <tr>
               <td className={classes}>acosh(x)</td>
-              <td>Arco cosseno hiperbólico</td>
+              <td>{getString('ModalHelp_ArcCosineHyperbolic')}</td>
             </tr>
             <tr>
               <td className={classes}>atanh(x)</td>
-              <td>Arco tangente hiperbólico</td>
+              <td>{getString('ModalHelp_ArcTangentHyperbolic')}</td>
             </tr>
             <tr>
               <td className={classes}>sign(x)</td>
-              <td>Sinal</td>
+              <td>{getString('ModalHelp_Sign')}</td>
             </tr>
             <tr>
               <td className={classes}>abs(x)</td>
-              <td>Valor absoluto</td>
+              <td>{getString('ModalHelp_AbsoluteValue')}</td>
             </tr>
             <tr>
               <td className={classes}>round(x)</td>
-              <td>Arredondamento para o inteiro mais próximo</td>
+              <td>{getString('ModalHelp_Round')}</td>
             </tr>
             <tr>
               <td className={classes}>floor(x)</td>
-              <td>Arredondamento para baixo</td>
+              <td>{getString('ModalHelp_Floor')}</td>
             </tr>
             <tr>
               <td className={classes}>ceil(x)</td>
-              <td>Arredondamento para cima</td>
+              <td>{getString('ModalHelp_Ceil')}</td>
             </tr>
             <tr>
               <td className={classes}>min(x, y)</td>
-              <td>Mínimo</td>
+              <td>{getString('ModalHelp_Minimum')}</td>
             </tr>
             <tr>
               <td className={classes}>max(x, y)</td>
-              <td>Máximo</td>
+              <td>{getString('ModalHelp_Maximum')}</td>
             </tr>
             <tr>
               <td className={classes}>rand()</td>
-              <td>Número fracionário aleatório entre 0 e 1</td>
+              <td>{getString('ModalHelp_Rand')}</td>
             </tr>
             <tr>
               <td className={classes}>rand_int(a, b)</td>
-              <td>Número inteiro aleatório entre a e b (inclusive)</td>
+              <td>{getString('ModalHelp_RandInt')}</td>
             </tr>
           </tbody>
         </Table>
-        <h5>Constantes numéricas</h5>
+        <h5>{getString('ModalHelp_SubtitleConstants')}</h5>
         <Table striped bordered hover>
           <tbody>
             <tr>
@@ -238,7 +241,7 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
       </Modal.Body>
       <Modal.Footer>
         <Button variant='secondary' onClick={() => setShowModal(false)}>
-          Fechar
+          {getString('Button_Close')}
         </Button>
       </Modal.Footer>
     </Modal>
