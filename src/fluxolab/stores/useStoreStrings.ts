@@ -21,6 +21,15 @@ const useStoreStrings = create<StoreStrings>()(
         for (const [key, value] of Object.entries(replacements)) {
           string = string.replace(new RegExp(`{{${key}}}`, 'g'), value)
         }
+        while (true) {
+          const pluralMatch = string.match(/\[\[(.*?)\|(.*?)\]\]/)
+          if (pluralMatch != null) {
+            const [blob, singular, plural] = pluralMatch
+            string = string.replace(blob, replacements.count === '1' ? singular : plural)
+          } else {
+            break
+          }
+        }
         return string
       }
     })
