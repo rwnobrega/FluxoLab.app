@@ -31,7 +31,7 @@ export default function ({ className = '', source }: Props): JSX.Element {
       className={className}
       components={{
         p: ({ children }) => <span style={pStyle}>{children}</span>,
-        code: ({ children }) => <span style={codeStyle}>{children}</span>
+        code: ({ children }) => <span className='font-monospace' style={codeStyle}>{children}</span>
       }}
     >
       {source}
