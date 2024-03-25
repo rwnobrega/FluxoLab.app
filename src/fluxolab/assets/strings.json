@@ -115,7 +115,12 @@
         "VariableList_Title": "Variables",
         "VariableType_boolean": "boolean",
         "VariableType_number": "number",
-        "VariableType_string": "string"
+        "VariableType_string": "string",
+        "RuntimeError_ConditionNotBoolean": "The condition must return a boolean value.",
+        "RuntimeError_NoInput": "Block expected input, but none was provided.",
+        "RuntimeError_MachineIsHalted": "The machine is halted.",
+        "RuntimeError_InvalidInput": "Input `{{input}}` is invalid for type `{{type}}`.",
+        "RuntimeError_AssignmentTypeMismatch": "Variable `{{id}}` is of type `{{left}}`, but expression is of type `{{right}}`."
     },
     "pt-BR": {
         "Button_Cancel": "Cancelar",
@@ -233,6 +238,11 @@
         "VariableList_Title": "Variáveis",
         "VariableType_boolean": "booleano",
         "VariableType_number": "número",
-        "VariableType_string": "string"
+        "VariableType_string": "string",
+        "RuntimeError_ConditionNotBoolean": "A condição deve retornar um valor booleano.",
+        "RuntimeError_NoInput": "Bloco esperava entrada, mas nenhuma foi fornecida.",
+        "RuntimeError_MachineIsHalted": "A máquina está parada.",
+        "RuntimeError_InvalidInput": "Entrada `{{input}}` é inválida para o tipo `[[VariableType_{{type}}]]`.",
+        "RuntimeError_AssignmentTypeMismatch": "Variável `{{id}}` é do tipo `[[VariableType_{{left}}]]`, mas expressão é do tipo `[[VariableType_{{right}}]]`."
     }
 }

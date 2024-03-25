@@ -17,7 +17,7 @@ export interface MachineState {
   input: string | null
   interaction: Array<{ direction: 'in' | 'out', text: string }>
   status: 'ready' | 'waiting' | 'halted' | 'error'
-  errorMessage: string | null
+  error: { message: string, payload?: Record<string, string> } | null
 }
 
 export function runMachineStep (machine: Machine, state: MachineState): void {
@@ -44,7 +44,7 @@ export function getInitialState (variables: Variable[]): MachineState {
     memory: _.fromPairs(variables.map(variable => [variable.id, null])),
     input: null,
     interaction: [],
-    errorMessage: null,
+    error: null,
     status: 'ready'
   }
 }

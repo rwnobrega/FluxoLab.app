@@ -55,10 +55,13 @@ export default function (): JSX.Element {
         statusText: statusText
       }
     } else if (state.status === 'error') {
+      if (state.error === null) {
+        throw new Error('Machine state is in error status but error is null.')
+      }
       return {
         backgroundColor: palette.red,
         statusIcon: 'bi-exclamation-circle-fill',
-        statusText: state.errorMessage as string
+        statusText: getString(state.error.message, state.error.payload)
       }
     } else if (state.status === 'halted') {
       return {

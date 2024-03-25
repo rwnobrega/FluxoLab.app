@@ -33,20 +33,21 @@ export function newAssignmentSymbol (params: { id: string, variableId: string, e
       const variable = _.find(machine.variables, { id: variableId }) as Variable
       const matchResult = grammar.match(expression, 'Expression')
       if (matchResult.failed()) {
-        state.errorMessage = syntaxErrorMessage(matchResult)
+        state.error = { message: syntaxErrorMessage(matchResult) }
         state.status = 'error'
         return
       }
       const value = evaluate(matchResult, state.memory)
       if (value instanceof Error) {
-        state.errorMessage = value.message
+        state.error = { message: value.message }
         state.status = 'error'
         return
       }
       if (variable.type !== typeof value as string) {
-        const msg1 = `A variável \`${variableId}\` é do tipo \`${variable.type}\``
-        const msg2 = `a expressão \`${expression}\` é do tipo \`${typeof value}\``
-        state.errorMessage = `${msg1}, mas ${msg2}.`
+        state.error = {
+          message: 'RuntimeError_AssignmentTypeMismatch',
+          payload: { id: variableId, left: variable.type, right: typeof value }
+        }
         state.status = 'error'
         return
       }
@@ -64,18 +65,18 @@ export function newConditionalSymbol (params: { id: string, condition: string, n
     work: (_machine, state) => {
       const matchResult = grammar.match(condition, 'Expression')
       if (matchResult.failed()) {
-        state.errorMessage = syntaxErrorMessage(matchResult)
+        state.error = { message: syntaxErrorMessage(matchResult) }
         state.status = 'error'
         return
       }
       const conditionValue = evaluate(matchResult, state.memory)
       if (conditionValue instanceof Error) {
-        state.errorMessage = conditionValue.message
+        state.error = { message: conditionValue.message }
         state.status = 'error'
         return
       }
       if (typeof conditionValue !== 'boolean') {
-        state.errorMessage = 'A condição deve retornar um valor booleano.'
+        state.error = { message: 'RuntimeError_ConditionNotBoolean' }
         state.status = 'error'
         return
       }
@@ -91,14 +92,14 @@ export function newInputSymbol (params: { id: string, variableId: string, nextId
     type: 'input',
     work: (machine, state) => {
       if (state.input === null) {
-        state.errorMessage = 'Bloco esperava entrada, mas nenhuma foi fornecida.'
+        state.error = { message: 'RuntimeError_NoInput' }
         state.status = 'error'
         return
       }
       const variable = _.find(machine.variables, { id: variableId }) as Variable
       const varType = getVariableType(variable.type)
       if (!varType.stringIsValid(state.input)) {
-        state.errorMessage = `Entrada \`${state.input}\` é inválida para o tipo \`${variable.type}\`.`
+        state.error = { message: 'RuntimeError_InvalidInput', payload: { input: state.input, type: variable.type } }
         state.status = 'error'
         return
       }
@@ -119,13 +120,13 @@ export function newOutputSymbol (params: { id: string, expression: string, nextI
     work: (_machine, state) => {
       const matchResult = grammar.match(`write ${expression}`, 'Command_write')
       if (matchResult.failed()) {
-        state.errorMessage = syntaxErrorMessage(matchResult)
+        state.error = { message: syntaxErrorMessage(matchResult) }
         state.status = 'error'
         return
       }
       const value = evaluate(matchResult, state.memory) as string | Error
       if (value instanceof Error) {
-        state.errorMessage = value.message
+        state.error = { message: value.message }
         state.status = 'error'
         return
       }
@@ -141,7 +142,7 @@ export function newHaltSymbol (params: { id: string }): Symbol {
     id,
     type: 'halt',
     work: (_machine, state) => {
-      state.errorMessage = 'A máquina foi parada.'
+      state.error = { message: 'RuntimeError_MachineIsHalted' }
       state.status = 'error'
     }
   }
