@@ -13,8 +13,8 @@ interface StoreEphemeral {
   setIsConnectingEdge: (isConnectingEdge: boolean) => void
   mouseOverNodeId: string | null
   setMouseOverNodeId: (id: string | null) => void
-  toastContent: ToastContent | null
-  setToastContent: (content: ToastContent | null) => void
+  toasts: ToastContent[]
+  triggerToast: (content: ToastContent) => void
   refInput: React.RefObject<HTMLInputElement>
   setRefInput: (ref: React.RefObject<HTMLInputElement>) => void
 }
@@ -27,8 +27,11 @@ const useStoreEphemeral = create<StoreEphemeral>()(
     setIsConnectingEdge: isConnectingEdge => set({ isConnectingEdge }),
     mouseOverNodeId: null,
     setMouseOverNodeId: id => set({ mouseOverNodeId: id }),
-    toastContent: null,
-    setToastContent: content => set({ toastContent: content }),
+    toasts: [],
+    triggerToast: content => {
+      set({ toasts: [...get().toasts, content] })
+      setTimeout(() => set({ toasts: get().toasts.slice(1) }), 5000)
+    },
     refInput: { current: null },
     setRefInput: ref => set({ refInput: ref })
   })

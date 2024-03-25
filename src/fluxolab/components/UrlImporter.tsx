@@ -9,7 +9,7 @@ import useStoreStrings from 'stores/useStoreStrings'
 export default function UrlImporter (): JSX.Element {
   const { clearAll, setNodes, makeConnections } = useStoreFlow()
   const { setTitle, setVariables } = useStoreMachine()
-  const { setToastContent } = useStoreEphemeral()
+  const { triggerToast } = useStoreEphemeral()
   const { getString } = useStoreStrings()
 
   useEffect(() => {
@@ -25,13 +25,13 @@ export default function UrlImporter (): JSX.Element {
         setTitle(title)
         url.searchParams.delete('lzs')
         window.history.replaceState({}, '', url.toString())
-        setToastContent({
+        triggerToast({
           message: getString('ToastMessage_ImportSuccess'),
           icon: 'bi-check-circle',
           background: 'success'
         })
       } catch {
-        setToastContent({
+        triggerToast({
           message: getString('ToastMessage_ImportError'),
           icon: 'bi-exclamation-triangle',
           background: 'danger'

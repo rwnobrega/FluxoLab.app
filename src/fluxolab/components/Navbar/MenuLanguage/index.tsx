@@ -11,7 +11,7 @@ import useStoreStrings from 'stores/useStoreStrings'
 
 export default function (): JSX.Element {
   const { getString, language: currentLanguage, setLanguage } = useStoreStrings()
-  const { setToastContent } = useStoreEphemeral()
+  const { triggerToast } = useStoreEphemeral()
 
   const languages: Record<string, string> = {
     en: 'English',
@@ -19,7 +19,7 @@ export default function (): JSX.Element {
   }
   const handleClick = useCallback((language: string) => {
     setLanguage(language)
-    setToastContent({
+    triggerToast({
       message: getString('ToastMessage_LanguageChanged', { language: languages[language] }),
       icon: 'bi-check2-circle',
       background: 'success'

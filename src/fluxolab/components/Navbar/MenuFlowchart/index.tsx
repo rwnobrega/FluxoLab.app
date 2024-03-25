@@ -17,14 +17,14 @@ export default function (): JSX.Element {
 
   const { nodes, edges } = useStoreFlow()
   const { machine } = useStoreMachine()
-  const { setToastContent } = useStoreEphemeral()
+  const { triggerToast } = useStoreEphemeral()
   const { getString } = useStoreStrings()
 
   const handleCopyLink = useCallback(() => {
     const lzs = serialize({ machine, nodes, edges })
     const baseUrl = window.location.href.split('?')[0]
     void navigator.clipboard.writeText(`${baseUrl}?lzs=${lzs}`)
-    setToastContent({
+    triggerToast({
       message: getString('ToastMessage_CopyLink'),
       icon: 'bi-clipboard-check',
       background: 'secondary'

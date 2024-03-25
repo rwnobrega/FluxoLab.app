@@ -8,7 +8,7 @@ import Stack from 'react-bootstrap/Stack'
 
 import UrlImporter from 'components/UrlImporter'
 import Hotkeys from 'components/Hotkeys'
-import Toast from 'components/Toast'
+import Toaster from 'components/Toaster'
 import Flow from 'components/Flow'
 import Navbar from 'components/Navbar'
 import SymbolList from 'components/SymbolList'
@@ -71,7 +71,7 @@ export default function (): JSX.Element {
     <Stack className='vh-100 h-100' style={{ userSelect: 'none' }}>
       <UrlImporter />
       <Hotkeys />
-      <Toast />
+      <Toaster />
       <div ref={navbarWrapper}>
         <Navbar />
       </div>
