@@ -10,6 +10,7 @@ import Markdown from 'components/General/Markdown'
 import useStoreEphemeral from 'stores/useStoreEphemeral'
 import useStoreMachine from 'stores/useStoreMachine'
 import useStoreMachineState from 'stores/useStoreMachineState'
+import useStoreStrings from 'stores/useStoreStrings'
 
 import { palette } from 'utils/colors'
 
@@ -23,6 +24,7 @@ export default function (): JSX.Element {
   const { compileErrors } = useStoreMachine()
   const { getState } = useStoreMachineState()
   const { isDraggingNode, isConnectingEdge, mouseOverNodeId } = useStoreEphemeral()
+  const { getString } = useStoreStrings()
 
   if (isDraggingNode || isConnectingEdge) return <></>
 
@@ -35,15 +37,16 @@ export default function (): JSX.Element {
       let statusText: string
       if (mouseOverNodeId === null || hoveredNodeErrors.length === 0) {
         if (nonNodeErrors.length > 0) {
-          statusText = _.map(nonNodeErrors, 'message').join('\n')
+          statusText = _.map(nonNodeErrors, error => getString(error.message, error.payload)).join('\n')
         } else {
-          statusText = `Há ${compileErrors.length} erro${compileErrors.length > 1 ? 's' : ''} de compilação.`
+          statusText = getString('Status_CompileErrors', { count: String(compileErrors.length) })
         }
       } else {
         if (hoveredNodeErrors.length === 1) {
-          statusText = hoveredNodeErrors[0].message
+          statusText = getString(hoveredNodeErrors[0].message, hoveredNodeErrors[0].payload)
         } else {
-          statusText = `Múltiplos erros:\n${_.map(hoveredNodeErrors, 'message').join('\n')}`
+          statusText = `${getString('Status_MultipleErrors')}\n`
+          statusText += _.map(hoveredNodeErrors, error => getString(error.message, error.payload)).join('\n')
         }
       }
       return {
@@ -61,25 +64,25 @@ export default function (): JSX.Element {
       return {
         backgroundColor: palette.purple,
         statusIcon: 'bi-check-circle-fill',
-        statusText: 'Execução concluída.'
+        statusText: getString('Status_Halted')
       }
     } else if (state.timeSlot === -1) {
       return {
         backgroundColor: palette.purple,
         statusIcon: 'bi-check-circle-fill',
-        statusText: 'Pronto para iniciar a execução.'
+        statusText: getString('Status_Ready')
       }
     } else if (state.timeSlot === 0) {
       return {
         backgroundColor: palette.purple,
         statusIcon: 'bi-play-circle-fill',
-        statusText: 'Execução iniciada.'
+        statusText: getString('Status_Started')
       }
     } else {
       return {
         backgroundColor: palette.green,
         statusIcon: 'bi-check-circle-fill',
-        statusText: `Executado passo ${state.timeSlot}.`
+        statusText: getString('Status_Step', { step: String(state.timeSlot) })
       }
     }
   }

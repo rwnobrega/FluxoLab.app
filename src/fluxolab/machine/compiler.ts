@@ -28,6 +28,7 @@ function getOutgoingNode (nodeId: string, handleId: string, edges: Edge[]): stri
 export interface CompileError {
   message: string
   nodeId: string | null
+  payload?: Record<string, string>
 }
 
 interface CompilerInput {
@@ -46,9 +47,9 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
   function getStartSymbolId (): [string, CompileError[]] {
     const startNodes = _.filter(nodes, { type: 'start' })
     if (startNodes.length === 0) {
-      return ['', [{ message: 'Deve haver um bloco de início.', nodeId: null }]]
+      return ['', [{ message: 'CompileError_NoStart', nodeId: null }]]
     } else if (startNodes.length > 1) {
-      return ['', [{ message: 'Há mais de um bloco de início.', nodeId: null }]]
+      return ['', [{ message: 'CompileError_MultipleStart', nodeId: null }]]
     }
     return [startNodes[0].id, []]
   }
@@ -61,7 +62,7 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
         case 'start': {
           const nextId = getOutgoingNode(id, 'out', edges)
           if (nextId === null) {
-            errors.push({ message: 'Bloco não tem ramo de saída.', nodeId: id })
+            errors.push({ message: 'CompileError_NoOutgoing', nodeId: id })
           } else {
             flowchart.push(newStartSymbol({ id, nextId }))
           }
@@ -73,9 +74,9 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           let variableId = ''
           let expression = ''
           if (assignment === '') {
-            errors.push({ message: 'Atribuição não especificada.', nodeId: id })
+            errors.push({ message: 'CompileError_EmptyAssignment', nodeId: id })
           } else if (matchResult.failed()) {
-            errors.push({ message: 'Erro de sintaxe.', nodeId: id })
+            errors.push({ message: 'CompileError_SyntaxError', nodeId: id })
           } else {
             // TODO: Use `matchResult` to get `variableId` and `expression`.
             const equalIndex = assignment.indexOf('=')
@@ -83,12 +84,12 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
             expression = _.trim(assignment.slice(equalIndex + 1))
             // /TODO
             if (!_.some(variables, { id: variableId })) {
-              errors.push({ message: `Variável \`${variableId}\` não existe.`, nodeId: id })
+              errors.push({ message: 'CompileError_VariableNotFound', nodeId: id, payload: { id: variableId } })
             }
           }
           const nextId = getOutgoingNode(id, 'out', edges)
           if (nextId === null) {
-            errors.push({ message: 'Bloco não tem ramo de saída.', nodeId: id })
+            errors.push({ message: 'CompileError_NoOutgoing', nodeId: id })
           } else {
             flowchart.push(newAssignmentSymbol({ id, variableId, expression, nextId }))
           }
@@ -98,17 +99,17 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           const condition: string = data
           const matchResult = grammar.match(condition, 'Expression')
           if (condition === '') {
-            errors.push({ message: 'Condição não especificada.', nodeId: id })
+            errors.push({ message: 'CompileError_EmptyConditional', nodeId: id })
           } else if (matchResult.failed()) {
-            errors.push({ message: 'Erro de sintaxe.', nodeId: id })
+            errors.push({ message: 'CompileError_SyntaxError', nodeId: id })
           }
           const nextTrue = getOutgoingNode(id, 'true', edges)
           if (nextTrue === null) {
-            errors.push({ message: 'Bloco não tem ramo na saída T.', nodeId: id })
+            errors.push({ message: 'CompileError_NoOutgoingOnOutput', nodeId: id, payload: { output: 'T' } })
           }
           const nextFalse = getOutgoingNode(id, 'false', edges)
           if (nextFalse === null) {
-            errors.push({ message: 'Bloco não tem ramo na saída F.', nodeId: id })
+            errors.push({ message: 'CompileError_NoOutgoingOnOutput', nodeId: id, payload: { output: 'F' } })
           }
           if (nextTrue !== null && nextFalse !== null) {
             flowchart.push(newConditionalSymbol({ id, condition, nextTrue, nextFalse }))
@@ -119,15 +120,15 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           const variableId: string = data
           const matchResult = grammar.match(`read ${variableId}`, 'Command_read')
           if (variableId === '') {
-            errors.push({ message: 'Variável não especificada.', nodeId: id })
+            errors.push({ message: 'CompileError_EmptyRead', nodeId: id })
           } else if (matchResult.failed()) {
-            errors.push({ message: 'Erro de sintaxe.', nodeId: id })
+            errors.push({ message: 'CompileError_SyntaxError', nodeId: id })
           } else if (!_.some(variables, { id: variableId })) {
-            errors.push({ message: `Variável \`${variableId}\` não existe.`, nodeId: id })
+            errors.push({ message: 'CompileError_VariableNotFound', nodeId: id, payload: { id: variableId } })
           }
           const nextId = getOutgoingNode(id, 'out', edges)
           if (nextId === null) {
-            errors.push({ message: 'Bloco não tem ramo de saída.', nodeId: id })
+            errors.push({ message: 'CompileError_NoOutgoing', nodeId: id })
           } else {
             flowchart.push(newInputSymbol({ id, variableId, nextId }))
           }
@@ -137,13 +138,13 @@ export default function compile ({ nodes, edges, variables }: CompilerInput): Co
           const expression: string = data
           const matchResult = grammar.match(`write ${expression}`, 'Command_write')
           if (expression === '') {
-            errors.push({ message: 'Expressão não especificada.', nodeId: id })
+            errors.push({ message: 'CompileError_EmptyWrite', nodeId: id })
           } else if (matchResult.failed()) {
-            errors.push({ message: 'Erro de sintaxe.', nodeId: id })
+            errors.push({ message: 'CompileError_SyntaxError', nodeId: id })
           }
           const nextId = getOutgoingNode(id, 'out', edges)
           if (nextId === null) {
-            errors.push({ message: 'Bloco não tem ramo de saída.', nodeId: id })
+            errors.push({ message: 'CompileError_NoOutgoing', nodeId: id })
           } else {
             flowchart.push(newOutputSymbol({ id, expression, nextId }))
           }
