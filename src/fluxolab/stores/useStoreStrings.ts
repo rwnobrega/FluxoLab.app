@@ -32,8 +32,7 @@ const useStoreStrings = create<StoreStrings>()(
         }
         return string
       }
-    })
-    ,
+    }),
     {
       name: 'fluxolab_strings',
       version: 5
