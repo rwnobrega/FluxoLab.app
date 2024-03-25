@@ -51,7 +51,10 @@ export default function (sourceNode: Node, targetNode: Node, sourcePosition: Pos
     )
   )
 
-  const bestPath = _.minBy(paths, path => 100 * pathTurns(path) + manhattanLength(path)) ?? paths[0]
+  // Prioritize paths with fewer turns, then shorter paths
+  const maxManhattanLength = _.max(_.map(paths, manhattanLength)) ?? 0
+  const multiplier = maxManhattanLength + 1
+  const bestPath = _.minBy(paths, path => multiplier * pathTurns(path) + manhattanLength(path)) ?? paths[0]
   const bestPathIndex = _.indexOf(paths, bestPath)
 
   return [bestPath, positions[bestPathIndex]]
