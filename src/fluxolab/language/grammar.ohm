@@ -24,14 +24,14 @@ Language {
   	= Expression3 ("*" | "/" | div | mod) Expression4  --binary
     | Expression4
 
-  Expression4 (uma expressão)
+  Expression4 ([[Syntax_Expression]])
     = ("+" | "-" | "!") Expression4  --unary
     | Primary
 
-  FunctionCall (uma chamada de função)
+  FunctionCall (([[Syntax_FunctionCall]])
     = identifier "(" ListOf<Expression, ","> ")"
 
-  Parentheses (uma expressão entre parênteses)
+  Parentheses ([[Syntax_Parentheses]])
     = "(" Expression ")"
 
   Primary
@@ -52,21 +52,21 @@ Language {
   pi = "pi" ~alnum
   tau = "tau" ~alnum
 
-  keyword (uma palavra-chave)
+  keyword ([[Syntax_Keyword]])
     = true | false | div | mod | read | write | pi | tau
 
-  identifier (um identificador)
+  identifier ([[Syntax_Identifier]])
     = ~keyword (letter | "_") (alnum | "_")*
 
-  constant (uma constante)
+  constant ([[Syntax_Constant]])
     = pi | tau
 
-  stringLiteral (uma string)
+  stringLiteral ([[Syntax_StringLiteral]])
     = "\"" ("\\\"" | ~"\"" ~"\n" any)* "\""
 
-  numberLiteral (um número)
+  numberLiteral ([[Syntax_NumberLiteral]])
     = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
 
-  booleanLiteral (um booleano)
+  booleanLiteral ([[Syntax_BooleanLiteral]])
     = true | false
 }

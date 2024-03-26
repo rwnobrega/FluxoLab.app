@@ -9,7 +9,7 @@ import Col from 'react-bootstrap/Col'
 import TextInput from 'components/General/TextInput'
 
 import grammar from 'language/grammar'
-import { syntaxErrorMessage } from 'language/errors'
+import { getExpectedText } from 'language/errors'
 
 import useStoreFlow from 'stores/useStoreFlow'
 import useStoreStrings from 'stores/useStoreStrings'
@@ -31,7 +31,7 @@ export default function ({ title, prefixLabel, matchStartRule, prefixCommand: pr
   const [problem, setProblem] = useState<string | null>(null)
 
   const { updateNodeProp } = useStoreFlow()
-  const { getString } = useStoreStrings()
+  const { language, getString } = useStoreStrings()
 
   useEffect(() => {
     setTextValue(value)
@@ -41,12 +41,12 @@ export default function ({ title, prefixLabel, matchStartRule, prefixCommand: pr
     const matchResult = grammar.match(`${prefix}${textValue}`, matchStartRule)
     if (matchResult.failed()) {
       const posNumber = matchResult.getInterval().startIdx - prefix.length
-      const problem = getString('SyntaxError', { pos: String(posNumber), message: syntaxErrorMessage(matchResult) })
+      const problem = getString('SyntaxError', { pos: String(posNumber), expected: getExpectedText(matchResult) })
       setProblem(problem)
     } else {
       setProblem(null)
     }
-  }, [textValue])
+  }, [textValue, language])
 
   const handleSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()

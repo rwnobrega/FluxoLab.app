@@ -5,7 +5,7 @@ import { Machine, MachineState } from './machine'
 
 import evaluate from 'language/evaluate'
 import grammar from 'language/grammar'
-import { syntaxErrorMessage } from 'language/errors'
+import { getExpectedText } from 'language/errors'
 
 export interface Symbol {
   id: string
@@ -33,7 +33,7 @@ export function newAssignmentSymbol (params: { id: string, variableId: string, e
       const variable = _.find(machine.variables, { id: variableId }) as Variable
       const matchResult = grammar.match(expression, 'Expression')
       if (matchResult.failed()) {
-        state.error = { message: syntaxErrorMessage(matchResult) }
+        state.error = { message: getExpectedText(matchResult) }
         state.status = 'error'
         return
       }
@@ -65,7 +65,7 @@ export function newConditionalSymbol (params: { id: string, condition: string, n
     work: (_machine, state) => {
       const matchResult = grammar.match(condition, 'Expression')
       if (matchResult.failed()) {
-        state.error = { message: syntaxErrorMessage(matchResult) }
+        state.error = { message: getExpectedText(matchResult) }
         state.status = 'error'
         return
       }
@@ -120,17 +120,17 @@ export function newOutputSymbol (params: { id: string, expression: string, nextI
     work: (_machine, state) => {
       const matchResult = grammar.match(`write ${expression}`, 'Command_write')
       if (matchResult.failed()) {
-        state.error = { message: syntaxErrorMessage(matchResult) }
+        state.error = { message: getExpectedText(matchResult) }
         state.status = 'error'
         return
       }
-      const value = evaluate(matchResult, state.memory) as string | Error
+      const value = evaluate(matchResult, state.memory)
       if (value instanceof Error) {
         state.error = value
         state.status = 'error'
         return
       }
-      state.interaction.push({ direction: 'out', text: value })
+      state.interaction.push({ direction: 'out', text: String(value) })
       state.curSymbolId = nextId
     }
   }

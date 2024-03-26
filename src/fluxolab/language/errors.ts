@@ -1,23 +1,19 @@
 import * as ohm from 'ohm-js'
 
-export function syntaxErrorMessage (matchResult: ohm.MatchResult): string {
+export function getExpectedText (matchResult: ohm.MatchResult): string {
   // @ts-expect-error  // TODO: Why is this necessary?
   const failures = matchResult.getRightmostFailures()
-  let failuresText = ''
+  let expectedText = ''
   for (let i = 0; i < failures.length; i++) {
     if (i > 0) {
-      if (i === failures.length - 1) {
-        failuresText += ' ou '
-      } else {
-        failuresText += ', '
-      }
+      expectedText += ', '
     }
     const failure = failures[i]
     if (failure.type === 'description') {
-      failuresText += (failure.text as string).replace(/end of input/g, 'fim-de-entrada')
+      expectedText += (failure.text as string).replace(/end of input/g, '[[Syntax_EndOfInput]]')
     } else {
-      failuresText += `\`${failure.text as string}\``
+      expectedText += `\`${failure.text as string}\``
     }
   }
-  return `Esperado ${failuresText}.`
+  return expectedText
 }
