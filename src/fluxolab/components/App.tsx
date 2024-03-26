@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
+import { ReactFlowProvider } from "reactflow";
+
 import Stack from "react-bootstrap/Stack";
 
 import UrlImporter from "components/UrlImporter";
@@ -25,7 +27,6 @@ import { palette } from "utils/colors";
 
 export default function (): JSX.Element {
   const navbarWrapper = useRef<HTMLDivElement>(null);
-  const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
   const [contentHeight, setContentHeight] = useState<string>("100vh");
 
@@ -87,9 +88,9 @@ export default function (): JSX.Element {
           <SymbolList />
         </div>
         <Panel defaultSize={70} minSize={50}>
-          <div ref={reactFlowWrapper} style={{ height: contentHeight }}>
-            <Flow wrapper={reactFlowWrapper} />
-          </div>
+          <ReactFlowProvider>
+            <Flow />
+          </ReactFlowProvider>
         </Panel>
         <PanelResizeHandle style={{ width: "6px", ...resizeHandleStyle }} />
         <Panel defaultSize={30} minSize={24}>

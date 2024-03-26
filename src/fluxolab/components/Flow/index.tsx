@@ -26,11 +26,7 @@ for (const { type, ...otherProps } of symbols) {
   nodeTypes[type] = ({ id }) => <MyNode nodeId={id} {...otherProps} />;
 }
 
-interface Props {
-  wrapper: React.RefObject<HTMLDivElement>;
-}
-
-export default function ({ wrapper }: Props): JSX.Element {
+export default function (): JSX.Element {
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
 
   const { nodes, edges, addNode, onNodesChange, onEdgesChange, onConnect } =
@@ -44,7 +40,6 @@ export default function ({ wrapper }: Props): JSX.Element {
 
   const onDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
-      if (wrapper === null || wrapper.current === null) return;
       event.preventDefault();
       const { type, mouseX, mouseY } = JSON.parse(
         event.dataTransfer.getData("application/reactflow"),
