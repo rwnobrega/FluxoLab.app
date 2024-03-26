@@ -6,7 +6,6 @@ import { MachineState } from 'machine/machine'
 import { getVariableType, VarType } from 'machine/variables'
 
 import grammar from './grammar'
-import { evalError } from './errors'
 
 const unaryOperators: { [key: string]: (a: VarType) => VarType } = {
   '+': (a: number) => a,
@@ -200,6 +199,6 @@ export default function (matchResult: ohm.MatchResult, memory: MachineState['mem
   try {
     return semantics(matchResult).eval(memory)
   } catch (e) {
-    return evalError(e.message)
+    return new Error(e.message)
   }
 }

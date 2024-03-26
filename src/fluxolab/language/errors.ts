@@ -1,9 +1,5 @@
 import * as ohm from 'ohm-js'
 
-export function evalError (message: string): Error {
-  return new Error(message)
-}
-
 export function syntaxErrorMessage (matchResult: ohm.MatchResult): string {
   // @ts-expect-error  // TODO: Why is this necessary?
   const failures = matchResult.getRightmostFailures()
