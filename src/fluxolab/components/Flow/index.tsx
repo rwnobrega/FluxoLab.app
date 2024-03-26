@@ -1,9 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import ReactFlow, {
   Background,
   Controls,
   EdgeTypes,
   NodeTypes,
+  useReactFlow,
 } from "reactflow";
 
 import Stack from "react-bootstrap/Stack";
@@ -27,11 +28,10 @@ for (const { type, ...otherProps } of symbols) {
 }
 
 export default function (): JSX.Element {
-  const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
-
   const { nodes, edges, addNode, onNodesChange, onEdgesChange, onConnect } =
     useStoreFlow();
   const { setIsDraggingNode, setIsConnectingEdge } = useStoreEphemeral();
+  const { screenToFlowPosition } = useReactFlow();
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -44,13 +44,13 @@ export default function (): JSX.Element {
       const { type, mouseX, mouseY } = JSON.parse(
         event.dataTransfer.getData("application/reactflow"),
       );
-      const position = reactFlowInstance.screenToFlowPosition({
+      const position = screenToFlowPosition({
         x: event.clientX - mouseX,
         y: event.clientY - mouseY,
       });
       addNode(type, position);
     },
-    [reactFlowInstance],
+    [addNode, screenToFlowPosition],
   );
 
   return (
@@ -64,13 +64,12 @@ export default function (): JSX.Element {
       defaultEdgeOptions={{ type: "edge" }}
       connectionLineComponent={ConnectionLine}
       onConnect={onConnect}
-      onConnectStart={() => setIsConnectingEdge(true)}
       onConnectEnd={() => setIsConnectingEdge(false)}
+      onConnectStart={() => setIsConnectingEdge(true)}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
       onNodeDragStart={() => setIsDraggingNode(true)}
       onNodeDragStop={() => setIsDraggingNode(false)}
-      onInit={setReactFlowInstance}
-      onDrop={onDrop}
-      onDragOver={onDragOver}
       multiSelectionKeyCode="Shift"
       selectionKeyCode="Control"
       deleteKeyCode="Delete"
