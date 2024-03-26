@@ -114,6 +114,7 @@ export default function ({ nodeId, boxStyle, Modal, Label, handles }: Props): JS
         <span
           ref={labelRef}
           style={{
+            minWidth: '40px',
             maxWidth: '392px',
             marginLeft: `${margin}px`,
             marginRight: `${margin}px`,
