@@ -19,6 +19,7 @@ import useStoreEphemeral from "stores/useStoreEphemeral";
 import useStoreFlow from "stores/useStoreFlow";
 import useStoreMachine from "stores/useStoreMachine";
 import useStoreMachineState from "stores/useStoreMachineState";
+import useStoreStrings from "stores/useStoreStrings";
 
 interface Props {
   nodeId: string;
@@ -48,6 +49,7 @@ export default function ({
   } = useStoreEphemeral();
   const { compileErrors } = useStoreMachine();
   const { getState } = useStoreMachineState();
+  const { language } = useStoreStrings();
   const { getZoom } = useReactFlow();
 
   const state = getState();
@@ -75,7 +77,7 @@ export default function ({
       }
       setMargin(marginWidth);
     }
-  }, [node?.data]);
+  }, [node?.data, language]);
 
   useEffect(() => {
     setBoxFilter(() => {
