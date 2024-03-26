@@ -1,22 +1,22 @@
-import React from 'react'
+import React from "react";
 
-import { Handle, HandleProps, Position } from 'reactflow'
+import { Handle, HandleProps, Position } from "reactflow";
 
-import { BoxStyle } from 'components/Symbols'
+import { BoxStyle } from "components/Symbols";
 
-import { getDarkerColor } from 'utils/colors'
+import { getDarkerColor } from "utils/colors";
 
-import useStoreEphemeral from 'stores/useStoreEphemeral'
+import useStoreEphemeral from "stores/useStoreEphemeral";
 
 type Props = HandleProps & {
-  boxStyle: BoxStyle
-  label?: string
-}
+  boxStyle: BoxStyle;
+  label?: string;
+};
 
 export default function ({ id, type, boxStyle }: Props): JSX.Element {
-  const { textColor, backgroundColor } = boxStyle
+  const { textColor, backgroundColor } = boxStyle;
 
-  const { isConnectingEdge } = useStoreEphemeral()
+  const { isConnectingEdge } = useStoreEphemeral();
 
   return (
     <Handle
@@ -24,15 +24,15 @@ export default function ({ id, type, boxStyle }: Props): JSX.Element {
       type={type}
       position={Position.Top}
       isConnectableStart={false}
-      className='react-flow__handle'
+      className="react-flow__handle"
       style={{
         background: backgroundColor,
-        width: '15px',
-        height: '15px',
+        width: "15px",
+        height: "15px",
         borderColor: getDarkerColor(backgroundColor as string),
         color: textColor,
-        opacity: isConnectingEdge ? 1 : 0
+        opacity: isConnectingEdge ? 1 : 0,
       }}
     />
-  )
+  );
 }

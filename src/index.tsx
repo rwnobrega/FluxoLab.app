@@ -1,15 +1,15 @@
-import React from 'react'
-import { createRoot } from 'react-dom/client'
+import React from "react";
+import { createRoot } from "react-dom/client";
 
-import App from 'components/App'
+import App from "components/App";
 
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import 'reactflow/dist/style.css'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import "reactflow/dist/style.css";
 
-const container = document.createElement('div')
-const root = createRoot(container)
+const container = document.createElement("div");
+const root = createRoot(container);
 
-root.render(<App />)
+root.render(<App />);
 
-document.body.appendChild(container)
+document.body.appendChild(container);

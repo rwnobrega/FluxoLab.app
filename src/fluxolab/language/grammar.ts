@@ -1,7 +1,7 @@
-import * as ohm from 'ohm-js'
+import * as ohm from "ohm-js";
 
-import grammarContents from './grammar.ohm'
+import grammarContents from "./grammar.ohm";
 
-const grammar = ohm.grammar(grammarContents)
+const grammar = ohm.grammar(grammarContents);
 
-export default grammar
+export default grammar;

@@ -1,38 +1,43 @@
-import { HandleType, Position } from 'reactflow'
+import { HandleType, Position } from "reactflow";
 
-import symbolStart from './Start'
-import symbolInput from './Input'
-import symbolOutput from './Output'
-import symbolAssignment from './Assignment'
-import symbolConditional from './Conditional'
-import symbolEnd from './End'
+import symbolStart from "./Start";
+import symbolInput from "./Input";
+import symbolOutput from "./Output";
+import symbolAssignment from "./Assignment";
+import symbolConditional from "./Conditional";
+import symbolEnd from "./End";
 
 export interface BoxStyle {
-  backgroundColor?: string
-  textColor?: string
-  borderRadius?: string
-  clipPath?: string
-  clipPathBorder?: string
+  backgroundColor?: string;
+  textColor?: string;
+  borderRadius?: string;
+  clipPath?: string;
+  clipPathBorder?: string;
 }
 
 export interface LabelProps {
-  value: string
+  value: string;
 }
 
 export interface ModalProps {
-  nodeId: string
-  value: string
-  showModal: boolean
-  setShowModal: (showModal: boolean) => void
+  nodeId: string;
+  value: string;
+  showModal: boolean;
+  setShowModal: (showModal: boolean) => void;
 }
 
 export interface Symbol {
-  type: string
-  title: string
-  boxStyle: BoxStyle
-  Label: (props: LabelProps) => JSX.Element
-  Modal?: (props: ModalProps) => JSX.Element
-  handles: Array<{ id: string, label?: string, type: HandleType, position: Position }>
+  type: string;
+  title: string;
+  boxStyle: BoxStyle;
+  Label: (props: LabelProps) => JSX.Element;
+  Modal?: (props: ModalProps) => JSX.Element;
+  handles: Array<{
+    id: string;
+    label?: string;
+    type: HandleType;
+    position: Position;
+  }>;
 }
 
 const symbols: Symbol[] = [
@@ -41,7 +46,7 @@ const symbols: Symbol[] = [
   symbolOutput,
   symbolAssignment,
   symbolConditional,
-  symbolEnd
-]
+  symbolEnd,
+];
 
-export default symbols
+export default symbols;
