@@ -9,6 +9,7 @@ import {
   EdgeChange,
   Node,
   NodeChange,
+  Viewport,
   XYPosition,
   addEdge,
   applyNodeChanges,
@@ -28,6 +29,8 @@ interface StoreFlow {
   updateNodeProp: (id: string, path: string, value: any) => void;
   onConnect: (connection: Connection) => void;
   selectAll: () => void;
+  viewport: Viewport;
+  setViewport: (viewport: Viewport) => void;
 }
 
 function getNextAvailableId(nodes: Node[]): string {
@@ -48,7 +51,8 @@ const useStoreFlow = create<StoreFlow>()(
           set({ edges: addEdge(connection, get().edges) });
         }
       },
-      clearAll: () => set({ nodes: [], edges: [] }),
+      clearAll: () =>
+        set({ nodes: [], edges: [], viewport: { x: 0, y: 0, zoom: 1 } }),
       onNodesChange: (changes) =>
         set({ nodes: applyNodeChanges(changes, get().nodes) }),
       onEdgesChange: (changes) =>
@@ -91,6 +95,8 @@ const useStoreFlow = create<StoreFlow>()(
           edges: _.map(get().edges, (edge) => ({ ...edge, selected: true })),
         });
       },
+      viewport: { x: 0, y: 0, zoom: 1 },
+      setViewport: (viewport) => set({ viewport }),
     }),
     {
       name: "fluxolab_flow",

@@ -76,41 +76,41 @@ export default function (): JSX.Element {
   };
 
   return (
-    <Stack className="vh-100 h-100" style={{ userSelect: "none" }}>
-      <UrlImporter />
-      <Hotkeys />
-      <Toaster />
-      <div ref={navbarWrapper}>
-        <Navbar />
-      </div>
-      <PanelGroup direction="horizontal" autoSaveId="fluxolab_main">
-        <div className="bg-light p-3">
-          <SymbolList />
+    <ReactFlowProvider>
+      <Stack className="vh-100 h-100" style={{ userSelect: "none" }}>
+        <UrlImporter />
+        <Hotkeys />
+        <Toaster />
+        <div ref={navbarWrapper}>
+          <Navbar />
         </div>
-        <Panel defaultSize={70} minSize={50}>
-          <ReactFlowProvider>
+        <PanelGroup direction="horizontal" autoSaveId="fluxolab_main">
+          <div className="bg-light p-3">
+            <SymbolList />
+          </div>
+          <Panel defaultSize={70} minSize={50}>
             <Flow />
-          </ReactFlowProvider>
-        </Panel>
-        <PanelResizeHandle style={{ width: "6px", ...resizeHandleStyle }} />
-        <Panel defaultSize={30} minSize={24}>
-          <PanelGroup
-            direction="vertical"
-            autoSaveId="fluxolab_right"
-            className="bg-light"
-          >
-            <Panel defaultSize={40} minSize={24} className="p-3">
-              <VariableList />
-            </Panel>
-            <PanelResizeHandle
-              style={{ height: "6px", ...resizeHandleStyle }}
-            />
-            <Panel defaultSize={60} className="p-3">
-              <Interaction />
-            </Panel>
-          </PanelGroup>
-        </Panel>
-      </PanelGroup>
-    </Stack>
+          </Panel>
+          <PanelResizeHandle style={{ width: "6px", ...resizeHandleStyle }} />
+          <Panel defaultSize={30} minSize={24}>
+            <PanelGroup
+              direction="vertical"
+              autoSaveId="fluxolab_right"
+              className="bg-light"
+            >
+              <Panel defaultSize={40} minSize={24} className="p-3">
+                <VariableList />
+              </Panel>
+              <PanelResizeHandle
+                style={{ height: "6px", ...resizeHandleStyle }}
+              />
+              <Panel defaultSize={60} className="p-3">
+                <Interaction />
+              </Panel>
+            </PanelGroup>
+          </Panel>
+        </PanelGroup>
+      </Stack>
+    </ReactFlowProvider>
   );
 }

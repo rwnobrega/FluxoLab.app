@@ -28,10 +28,18 @@ for (const { type, ...otherProps } of symbols) {
 }
 
 export default function (): JSX.Element {
-  const { nodes, edges, addNode, onNodesChange, onEdgesChange, onConnect } =
-    useStoreFlow();
+  const {
+    nodes,
+    edges,
+    addNode,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    viewport,
+    setViewport,
+  } = useStoreFlow();
   const { setIsDraggingNode, setIsConnectingEdge } = useStoreEphemeral();
-  const { screenToFlowPosition } = useReactFlow();
+  const { getViewport, screenToFlowPosition } = useReactFlow();
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -68,8 +76,10 @@ export default function (): JSX.Element {
       onConnectStart={() => setIsConnectingEdge(true)}
       onDragOver={onDragOver}
       onDrop={onDrop}
+      onMoveEnd={() => setViewport(getViewport())}
       onNodeDragStart={() => setIsDraggingNode(true)}
       onNodeDragStop={() => setIsDraggingNode(false)}
+      defaultViewport={viewport}
       multiSelectionKeyCode="Shift"
       selectionKeyCode="Control"
       deleteKeyCode="Delete"

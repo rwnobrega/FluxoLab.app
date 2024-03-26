@@ -3,6 +3,8 @@ import React, { useCallback } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
+import { useReactFlow } from "reactflow";
+
 import useStoreFlow from "stores/useStoreFlow";
 import useStoreMachine from "stores/useStoreMachine";
 import useStoreStrings from "stores/useStoreStrings";
@@ -17,15 +19,18 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
   const { clearMachine } = useStoreMachine();
   const { getString } = useStoreStrings();
 
+  const { setViewport } = useReactFlow();
+
   const handleCancel = useCallback(() => {
     setShowModal(false);
   }, [setShowModal]);
 
   const handleConfirm = useCallback(() => {
     clearAll();
+    setViewport({ x: 0, y: 0, zoom: 1 });
     clearMachine();
     setShowModal(false);
-  }, [clearAll, clearMachine, setShowModal]);
+  }, [clearAll, clearMachine, setViewport, setShowModal]);
 
   return (
     <Modal show={showModal} onHide={handleCancel}>
