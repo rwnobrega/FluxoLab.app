@@ -20,9 +20,10 @@ function evalUnaryOperator (a: ohm.Node, b: ohm.Node): VarType {
   const operandTypes = { '+': 'number', '-': 'number', '!': 'boolean' }
   for (const [operator, type] of _.toPairs(operandTypes)) {
     if (name === operator && argType !== type) {
-      const part1 = `O operador \`${name}\` requer um operando do tipo \`${type}\``
-      const part2 = `encontrado \`${argType as string}\``
-      throw new Error(`${part1} (${part2}).`)
+      throw new EvaluateError({
+        message: 'RuntimeError_UnaryOperatorTypeMismatch',
+        payload: { operator: name, expected: type, found: argType }
+      })
     }
   }
   return unaryOperators[name](arg)
@@ -51,23 +52,26 @@ function evalBinaryOperator (a: ohm.Node, b: ohm.Node, c: ohm.Node): VarType {
   const right = c.eval(this.args.memory)
   if (_.includes(['||', '&&'], name)) {
     if (typeof left !== 'boolean' || typeof right !== 'boolean') {
-      const part1 = `O operador \`${name}\` requer operandos do tipo \`boolean\``
-      const part2 = `encontrados \`${typeof left as string}\` e \`${typeof right as string}\``
-      throw new Error(`${part1} (${part2}).`)
+      throw new EvaluateError({
+        message: 'RuntimeError_BinaryOperatorTypeMismatch',
+        payload: { operator: name, expected: 'boolean', left: typeof left, right: typeof right }
+      })
     }
   }
   if (_.includes(['<=', '<', '>=', '>', '+', '-', '*', '/', 'div', 'mod'], name)) {
     if (typeof left !== 'number' || typeof right !== 'number') {
-      const part1 = `O operador \`${name}\` requer operandos do tipo \`number\``
-      const part2 = `encontrados \`${typeof left as string}\` e \`${typeof right as string}\``
-      throw new Error(`${part1} (${part2}).`)
+      throw new EvaluateError({
+        message: 'RuntimeError_BinaryOperatorTypeMismatch',
+        payload: { operator: name, expected: 'number', left: typeof left, right: typeof right }
+      })
     }
   }
   if (_.includes(['==', '!='], name)) {
     if (typeof left !== typeof right) {
-      const part1 = `O operador \`${name}\` requer operandos de tipos iguais`
-      const part2 = `encontrados \`${typeof left as string}\` e \`${typeof right as string}\``
-      throw new Error(`${part1} (${part2}).`)
+      throw new EvaluateError({
+        message: 'RuntimeError_BinaryOperatorTypeMismatchEqual',
+        payload: { operator: name, left: typeof left, right: typeof right }
+      })
     }
   }
   return binaryOperators[name](left, right)
@@ -106,32 +110,37 @@ const numericalFunctions: { [key: string]: (...args: number[]) => number } = {
 function evalNumericalFunction (a: ohm.Node, b: ohm.Node, c: ohm.Node, d: ohm.Node): number {
   const name = a.sourceString
   if (!_.has(numericalFunctions, name)) {
-    throw new Error(`A função \`${name}\` não existe.`)
+    throw new EvaluateError({
+      message: 'RuntimeError_FunctionNotExists',
+      payload: { id: name }
+    })
   }
   const args = _.map(c.asIteration().children, (child: ohm.Node) => child.eval(this.args.memory))
   if (_.includes(['pow', 'min', 'max', 'rand_int'], name)) {
     if (args.length !== 2) {
-      const part1 = `A função \`${name}\` requer exatamente dois argumentos`
-      const part2 = `fornecido${args.length === 1 ? '' : 's'} ${args.length}`
-      throw new Error(`${part1} (${part2}).`)
+      throw new EvaluateError({
+        message: 'RuntimeError_FunctionArityMismatch2',
+        payload: { id: name, count: String(args.length) }
+      })
     }
   } else if (_.includes(['rand'], name)) {
     if (args.length !== 0) {
-      const part1 = `A função \`${name}\` não requer argumentos`
-      const part2 = `fornecido${args.length === 1 ? '' : 's'} ${args.length}`
-      throw new Error(`${part1} (${part2}).`)
+      throw new EvaluateError({
+        message: 'RuntimeError_FunctionArityMismatch0',
+        payload: { id: name, count: String(args.length) }
+      })
     }
   } else if (args.length !== 1) {
-    const part1 = `A função \`${name}\` requer exatamente um argumento`
-    const part2 = `fornecidos ${args.length}`
-    throw new Error(`${part1} (${part2}).`)
+    throw new EvaluateError({
+      message: 'RuntimeError_FunctionArityMismatch1',
+      payload: { id: name, count: String(args.length) }
+    })
   }
   if (_.some(args, arg => typeof arg !== 'number')) {
-    const argWord = args.length === 1 ? 'um argumento' : `${args.length} argumentos`
-    const part1 = `A função \`${name}\` requer ${argWord} do tipo \`number\``
-    const tickedArgTypes = _.map(args, arg => `\`${typeof arg as string}\``)
-    const part2 = `encontrado${args.length === 1 ? '' : 's'} ${tickedArgTypes.join(', ')}`
-    throw new Error(`${part1} (${part2}).`)
+    throw new EvaluateError({
+      message: 'RuntimeError_FunctionArgumentTypeMismatchNumber',
+      payload: { id: name, count: String(args.length) }
+    })
   }
   return numericalFunctions[name](...args)
 }
@@ -144,7 +153,10 @@ const numericalConstants: { [key: string]: number } = {
 function evalNumericalConstant (a: ohm.Node): number {
   const name = a.sourceString
   if (!_.has(numericalConstants, name)) {
-    throw new Error(`A constante numérica \`${name}\` não existe.`)
+    throw new EvaluateError({
+      message: 'RuntimeError_ConstantNotExists',
+      payload: { id: name }
+    })
   }
   return numericalConstants[name]
 }
@@ -153,10 +165,16 @@ function evalIdentifier (a: ohm.Node): VarType {
   const name = a.sourceString
   const value = this.args.memory[name]
   if (value === undefined) {
-    throw new Error(`A variável \`${name}\` não existe.`)
+    throw new EvaluateError({
+      message: 'RuntimeError_VariableNotFound',
+      payload: { id: name }
+    })
   }
   if (value === null) {
-    throw new Error(`A variável \`${name}\` não foi inicializada.`)
+    throw new EvaluateError({
+      message: 'RuntimeError_VariableNotInitialized',
+      payload: { id: name }
+    })
   }
   return value
 }
@@ -195,10 +213,19 @@ semantics.addOperation<VarType>('eval(memory)', {
   Command_write: getOutput
 })
 
-export default function (matchResult: ohm.MatchResult, memory: MachineState['memory']): VarType | Error {
+class EvaluateError extends Error {
+  payload?: Record<string, string>
+
+  constructor ({ message, payload }: {message: string, payload?: Record<string, string>}) {
+    super(message)
+    this.payload = payload
+  }
+}
+
+export default function (matchResult: ohm.MatchResult, memory: MachineState['memory']): VarType | EvaluateError {
   try {
     return semantics(matchResult).eval(memory)
-  } catch (e) {
-    return new Error(e.message)
+  } catch (evaluateError) {
+    return evaluateError
   }
 }

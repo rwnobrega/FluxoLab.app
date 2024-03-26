@@ -39,7 +39,7 @@ export function newAssignmentSymbol (params: { id: string, variableId: string, e
       }
       const value = evaluate(matchResult, state.memory)
       if (value instanceof Error) {
-        state.error = { message: value.message }
+        state.error = value
         state.status = 'error'
         return
       }
@@ -71,7 +71,7 @@ export function newConditionalSymbol (params: { id: string, condition: string, n
       }
       const conditionValue = evaluate(matchResult, state.memory)
       if (conditionValue instanceof Error) {
-        state.error = { message: conditionValue.message }
+        state.error = conditionValue
         state.status = 'error'
         return
       }
@@ -126,7 +126,7 @@ export function newOutputSymbol (params: { id: string, expression: string, nextI
       }
       const value = evaluate(matchResult, state.memory) as string | Error
       if (value instanceof Error) {
-        state.error = { message: value.message }
+        state.error = value
         state.status = 'error'
         return
       }
