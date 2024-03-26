@@ -12,6 +12,7 @@ import grammar from 'language/grammar'
 import { syntaxErrorMessage } from 'language/errors'
 
 import useStoreFlow from 'stores/useStoreFlow'
+import useStoreStrings from 'stores/useStoreStrings'
 
 interface Props {
   title: string
@@ -30,6 +31,7 @@ export default function ({ title, prefixLabel, matchStartRule, prefixCommand: pr
   const [problem, setProblem] = useState<string | null>(null)
 
   const { updateNodeProp } = useStoreFlow()
+  const { getString } = useStoreStrings()
 
   useEffect(() => {
     setTextValue(value)
@@ -39,7 +41,7 @@ export default function ({ title, prefixLabel, matchStartRule, prefixCommand: pr
     const matchResult = grammar.match(`${prefix}${textValue}`, matchStartRule)
     if (matchResult.failed()) {
       const posNumber = matchResult.getInterval().startIdx - prefix.length
-      const problem = `Posição ${posNumber}: ${syntaxErrorMessage(matchResult)}`
+      const problem = getString('SyntaxError', { pos: String(posNumber), message: syntaxErrorMessage(matchResult) })
       setProblem(problem)
     } else {
       setProblem(null)
@@ -76,10 +78,10 @@ export default function ({ title, prefixLabel, matchStartRule, prefixCommand: pr
         </Modal.Body>
         <Modal.Footer>
           <Button variant='secondary' onClick={() => setShowModal(false)}>
-            Cancelar
+            {getString('Button_Cancel')}
           </Button>
           <Button variant='primary' type='submit'>
-            Confirmar
+            {getString('Button_Save')}
           </Button>
         </Modal.Footer>
       </Form>

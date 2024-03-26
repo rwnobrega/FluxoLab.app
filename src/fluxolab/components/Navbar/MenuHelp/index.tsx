@@ -24,8 +24,8 @@ export default function (): JSX.Element {
           </Dropdown.Toggle>
         </Tooltip>
         <Dropdown.Menu>
-          <Dropdown.Item onClick={() => setShowHelp(true)}>{`${getString('MenuHelp_Help')}...`}</Dropdown.Item>
-          <Dropdown.Item onClick={() => setShowAbout(true)}>{`${getString('MenuHelp_About')}...`}</Dropdown.Item>
+          <Dropdown.Item onClick={() => setShowHelp(true)}>{getString('MenuHelp_Help')}</Dropdown.Item>
+          <Dropdown.Item onClick={() => setShowAbout(true)}>{getString('MenuHelp_About')}</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
       <Help showModal={showHelp} setShowModal={setShowHelp} />

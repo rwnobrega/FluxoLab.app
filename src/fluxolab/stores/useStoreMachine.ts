@@ -26,7 +26,7 @@ interface StoreMachine {
 }
 
 const emptyMachine: Machine = {
-  title: 'Fluxograma sem título',
+  title: '',
   flowchart: [],
   startSymbolId: '',
   variables: []

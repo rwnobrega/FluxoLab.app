@@ -1,9 +1,12 @@
 import React, { useCallback, useState } from 'react'
+
 import useStoreMachine from 'stores/useStoreMachine'
+import useStoreStrings from 'stores/useStoreStrings'
 
 export default function (): JSX.Element {
   const [editMode, setEditMode] = useState(false)
   const { machine, setTitle } = useStoreMachine()
+  const { getString } = useStoreStrings()
 
   const onFocus = useCallback((event: React.FocusEvent<HTMLInputElement>) => {
     event.target.select()
@@ -29,6 +32,7 @@ export default function (): JSX.Element {
     <input
       type='text'
       className='form-control bg-dark text-white fs-4'
+      placeholder={getString('FlowchartTitle_Placeholder')}
       value={machine.title}
       onFocus={onFocus}
       onBlur={onBlur}

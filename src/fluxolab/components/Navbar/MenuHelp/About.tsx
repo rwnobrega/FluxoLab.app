@@ -33,7 +33,7 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
             'ModalAbout_Body2',
             {
               GitHub: '[GitHub](https://github.com/rwnobrega/FluxoLab.app)',
-              'GPL 3': '[GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html)'
+              GPL3: '[GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html)'
             })}
           />
         </p>
