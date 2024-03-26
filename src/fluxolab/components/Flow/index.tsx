@@ -96,7 +96,11 @@ export default function (): JSX.Element {
         <PlayButtons />
         <StatusMessage />
       </Stack>
-      <Controls />
+      <Controls
+        onZoomIn={() => setViewport(getViewport())}
+        onZoomOut={() => setViewport(getViewport())}
+        onFitView={() => setViewport(getViewport())}
+      />
       <Background gap={20} />
     </ReactFlow>
   );
