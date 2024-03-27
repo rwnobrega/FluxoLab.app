@@ -90,7 +90,7 @@ export default function (): JSX.Element {
       <Stack
         direction="horizontal"
         gap={3}
-        className="m-3 justify-content-between align-items-startD"
+        className="m-3 justify-content-between align-items-start"
         style={{ zIndex: 5 }}
       >
         <PlayButtons />
