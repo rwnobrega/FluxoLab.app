@@ -90,8 +90,8 @@ export default function (): JSX.Element {
       <Stack
         direction="horizontal"
         gap={3}
-        className="position-absolute top-0 start-0 m-3"
-        style={{ zIndex: 5, alignItems: "start" }}
+        className="m-3 justify-content-between"
+        style={{ zIndex: 5 }}
       >
         <PlayButtons />
         <StatusMessage />
