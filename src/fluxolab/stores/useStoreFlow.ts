@@ -100,7 +100,7 @@ const useStoreFlow = create<StoreFlow>()(
     }),
     {
       name: "fluxolab_flow",
-      version: 5,
+      version: 6,
     },
   ),
 );
