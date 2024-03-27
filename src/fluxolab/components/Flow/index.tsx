@@ -87,15 +87,16 @@ export default function (): JSX.Element {
       snapToGrid
       snapGrid={[20, 20]}
     >
-      <Stack
-        direction="horizontal"
-        gap={3}
-        className="m-3 justify-content-between align-items-start"
-        style={{ zIndex: 5 }}
-      >
-        <PlayButtons />
-        <StatusMessage />
-      </Stack>
+      <div className="position-relative m-3" style={{ zIndex: 5 }}>
+        <Stack
+          direction="horizontal"
+          gap={3}
+          className="justify-content-between align-items-start"
+        >
+          <PlayButtons />
+          <StatusMessage />
+        </Stack>
+      </div>
       <Controls
         onZoomIn={() => setViewport(getViewport())}
         onZoomOut={() => setViewport(getViewport())}
