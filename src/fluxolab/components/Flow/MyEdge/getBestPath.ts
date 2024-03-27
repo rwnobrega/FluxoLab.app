@@ -45,7 +45,7 @@ export default function (
   const symbol = _.find(symbols, { type: targetNode.type });
   if (!symbol) throw new Error(`Symbol not found for type ${targetNode.type}`);
 
-  const takenPositions = [];
+  const takenPositions = [Position.Bottom];
   for (const handle of symbol.handles) {
     if (handle.id !== "in") {
       takenPositions.push(handle.position);
