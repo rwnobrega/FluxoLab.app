@@ -4,6 +4,8 @@ import { Node, Position, XYPosition } from "reactflow";
 
 import getPath from "./getPath";
 
+import symbols from "components/Symbols";
+
 const pathTurns = (path: Array<[number, number]>): number => {
   return path.length - 1;
 };
@@ -40,9 +42,20 @@ export default function (
     y: targetNode.position.y + targetDimensions.height / 2,
   };
 
-  const positions = [Position.Top, Position.Left, Position.Right];
+  const symbol = _.find(symbols, { type: targetNode.type });
+  if (!symbol) throw new Error(`Symbol not found for type ${targetNode.type}`);
 
-  // TODO: Not all positions are valid for all nodes --- filter out invalid positions
+  const takenPositions = [];
+  for (const handle of symbol.handles) {
+    if (handle.id !== "in") {
+      takenPositions.push(handle.position);
+    }
+  }
+
+  const positions = _.difference(
+    [Position.Top, Position.Right, Position.Bottom, Position.Left],
+    takenPositions,
+  );
 
   const paths = _.map(positions, (targetPosition) =>
     getPath(
