@@ -2,14 +2,15 @@ import _ from "lodash";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { Node, HandleType, Position, useReactFlow } from "reactflow";
+import { Node, useReactFlow } from "reactflow";
 
 import { palette, getDropShadow } from "utils/colors";
 
-import { BoxStyle, LabelProps, Symbol } from "components/Symbols";
+import { Symbol } from "components/Symbols";
 
 import SymbolBox from "components/Symbols/SymbolBox";
 import SymbolModal from "components/Symbols/SymbolModal";
+import SymbolLabel from "components/Symbols/SymbolLabel";
 
 import MyHandleSource from "./MyHandleSource";
 import MyHandleTarget from "./MyHandleTarget";
@@ -24,22 +25,15 @@ import useStoreStrings from "stores/useStoreStrings";
 
 interface Props {
   nodeId: string;
-  boxStyle: BoxStyle;
-  modal?: Symbol["modal"];
-  Label: (props: LabelProps) => JSX.Element;
-  handles: Array<{ id: string; type: HandleType; position: Position }>;
+  symbol: Symbol;
 }
 
-export default function ({
-  nodeId,
-  boxStyle,
-  modal,
-  Label,
-  handles,
-}: Props): JSX.Element {
+export default function ({ nodeId, symbol }: Props): JSX.Element {
   const [margin, setMargin] = useState<number>(0);
   const [boxFilter, setBoxFilter] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  const { title, prefixLabel, boxStyle, modal, handles } = symbol;
 
   const { nodes, deleteNode, updateNodeProp } = useStoreFlow();
   const {
@@ -128,11 +122,9 @@ export default function ({
     >
       {modal !== undefined && (
         <SymbolModal
-          title={getString(modal.title)}
+          title={getString(title)}
           prefixLabel={
-            modal.prefixLabel !== undefined
-              ? getString(modal.prefixLabel)
-              : undefined
+            prefixLabel !== undefined ? getString(prefixLabel) : undefined
           }
           prefixCommand={modal.prefixCommand}
           matchStartRule={modal.matchStartRule}
@@ -164,7 +156,12 @@ export default function ({
             cursor: "grab",
           }}
         >
-          <Label value={node?.data} />
+          <SymbolLabel
+            prefixLabel={
+              prefixLabel !== undefined ? getString(prefixLabel) : ""
+            }
+            value={node?.data}
+          />
         </span>
       </SymbolBox>
       <ButtonDelete onClick={handleDelete} visible={buttonsVisible} />

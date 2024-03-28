@@ -23,8 +23,8 @@ import useStoreEphemeral from "stores/useStoreEphemeral";
 const edgeTypes: EdgeTypes = { edge: MyEdge };
 
 const nodeTypes: NodeTypes = {};
-for (const { type, ...otherProps } of symbols) {
-  nodeTypes[type] = ({ id }) => <MyNode nodeId={id} {...otherProps} />;
+for (const symbol of symbols) {
+  nodeTypes[symbol.type] = ({ id }) => <MyNode nodeId={id} symbol={symbol} />;
 }
 
 export default function (): JSX.Element {

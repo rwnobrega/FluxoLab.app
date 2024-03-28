@@ -1,11 +1,11 @@
 import { HandleType, Position } from "reactflow";
 
-import symbolStart from "./Start";
-import symbolInput from "./Input";
-import symbolOutput from "./Output";
-import symbolAssignment from "./Assignment";
-import symbolConditional from "./Conditional";
-import symbolEnd from "./End";
+import symbolStart from "./start";
+import symbolInput from "./input";
+import symbolOutput from "./output";
+import symbolAssignment from "./assignment";
+import symbolConditional from "./conditional";
+import symbolEnd from "./end";
 
 export interface BoxStyle {
   backgroundColor?: string;
@@ -15,18 +15,12 @@ export interface BoxStyle {
   clipPathBorder?: string;
 }
 
-export interface LabelProps {
-  value: string;
-}
-
 export interface Symbol {
   type: string;
   title: string;
+  prefixLabel?: string;
   boxStyle: BoxStyle;
-  Label: (props: LabelProps) => JSX.Element;
   modal?: {
-    title: string;
-    prefixLabel?: string;
     prefixCommand?: string;
     matchStartRule: string;
     placeholder: string;

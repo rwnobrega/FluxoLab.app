@@ -2,9 +2,7 @@ import { Position } from "reactflow";
 
 import { getBrighterColor, palette } from "utils/colors";
 
-import { Symbol } from "..";
-
-import Label from "./Label";
+import { Symbol } from ".";
 
 const symbol: Symbol = {
   type: "conditional",
@@ -15,9 +13,7 @@ const symbol: Symbol = {
     clipPath:
       "polygon(20px 0, 0 50%, 20px 100%, calc(100% - 20px) 100%, 100% 50%, calc(100% - 20px) 0)",
   },
-  Label: Label,
   modal: {
-    title: "Symbol_Conditional",
     matchStartRule: "Expression",
     placeholder: "Symbol_ConditionalPlaceholder",
   },

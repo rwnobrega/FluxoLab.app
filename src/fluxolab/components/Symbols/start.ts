@@ -2,20 +2,18 @@ import { Position } from "reactflow";
 
 import { getBrighterColor, palette } from "utils/colors";
 
-import { Symbol } from "..";
-
-import Label from "./Label";
+import { Symbol } from ".";
 
 const symbol: Symbol = {
-  type: "end",
-  title: "Symbol_End",
+  type: "start",
+  title: "Symbol_Start",
+  prefixLabel: "Symbol_Start",
   boxStyle: {
     backgroundColor: getBrighterColor(palette.purple),
     textColor: "white",
     borderRadius: "15px",
   },
-  Label: Label,
-  handles: [{ id: "in", type: "target", position: Position.Top }],
+  handles: [{ id: "out", type: "source", position: Position.Bottom }],
 };
 
 export default symbol;
