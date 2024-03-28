@@ -11,11 +11,11 @@ import Stack from "react-bootstrap/Stack";
 import UrlImporter from "components/UrlImporter";
 import Hotkeys from "components/Hotkeys";
 import Toaster from "components/Toaster";
-import Flow from "components/Flow";
 import Navbar from "components/Navbar";
-import SymbolList from "components/SymbolList";
-import VariableList from "components/VariableList";
-import Interaction from "components/Interaction";
+import Flow from "components/Flow";
+import Symbols from "components/Panels/Symbols";
+import Variables from "components/Panels/Variables";
+import InputOutput from "components/Panels/InputOutput";
 
 import useStoreFlow from "stores/useStoreFlow";
 import useStoreMachine from "stores/useStoreMachine";
@@ -75,7 +75,7 @@ export default function (): JSX.Element {
         <Navbar />
         <PanelGroup direction="horizontal" autoSaveId="fluxolab_main">
           <div className="bg-light p-3">
-            <SymbolList />
+            <Symbols />
           </div>
           <Panel defaultSize={70} minSize={50}>
             <Flow />
@@ -88,13 +88,13 @@ export default function (): JSX.Element {
               className="bg-light"
             >
               <Panel defaultSize={40} minSize={24} className="p-3">
-                <VariableList />
+                <Variables />
               </Panel>
               <PanelResizeHandle
                 style={{ height: "6px", ...resizeHandleStyle }}
               />
               <Panel defaultSize={60} className="p-3">
-                <Interaction />
+                <InputOutput />
               </Panel>
             </PanelGroup>
           </Panel>
