@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
@@ -26,10 +26,6 @@ import compile from "machine/compiler";
 import { palette } from "utils/colors";
 
 export default function (): JSX.Element {
-  const navbarWrapper = useRef<HTMLDivElement>(null);
-
-  const [contentHeight, setContentHeight] = useState<string>("100vh");
-
   const { nodes, edges } = useStoreFlow();
   const { machine, setFlowchart, setStartSymbolId, setCompileErrors } =
     useStoreMachine();
@@ -59,11 +55,6 @@ export default function (): JSX.Element {
     reset(machine);
   }, [machine.flowchart, machine.startSymbolId]);
 
-  useEffect(() => {
-    const navbarHeight = navbarWrapper.current?.offsetHeight ?? 0;
-    setContentHeight(`calc(100vh - ${navbarHeight}px)`);
-  }, []);
-
   const resizeHandleStyle = {
     backgroundColor: palette.gray300,
     background: `repeating-linear-gradient(
@@ -81,9 +72,7 @@ export default function (): JSX.Element {
         <UrlImporter />
         <Hotkeys />
         <Toaster />
-        <div ref={navbarWrapper}>
-          <Navbar />
-        </div>
+        <Navbar />
         <PanelGroup direction="horizontal" autoSaveId="fluxolab_main">
           <div className="bg-light p-3">
             <SymbolList />
