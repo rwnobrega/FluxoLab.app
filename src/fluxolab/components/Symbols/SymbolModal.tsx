@@ -30,7 +30,7 @@ export default function ({
   title,
   prefixLabel,
   matchStartRule,
-  prefixCommand: prefix = "",
+  prefixCommand = "",
   placeholder,
   nodeId,
   value,
@@ -48,9 +48,13 @@ export default function ({
   }, [showModal]);
 
   useEffect(() => {
-    const matchResult = grammar.match(`${prefix}${textValue}`, matchStartRule);
+    const matchResult = grammar.match(
+      `${prefixCommand}${textValue}`,
+      matchStartRule,
+    );
     if (matchResult.failed()) {
-      const posNumber = matchResult.getInterval().startIdx - prefix.length;
+      const posNumber =
+        matchResult.getInterval().startIdx - prefixCommand.length;
       const problem = getString("SyntaxError", {
         pos: String(posNumber),
         expected: getExpectedText(matchResult),

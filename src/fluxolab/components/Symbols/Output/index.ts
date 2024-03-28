@@ -5,7 +5,6 @@ import { getBrighterColor, palette } from "utils/colors";
 import { Symbol } from "..";
 
 import Label from "./Label";
-import Modal from "./Modal";
 
 const symbol: Symbol = {
   type: "write",
@@ -18,7 +17,13 @@ const symbol: Symbol = {
       "polygon(20px 0, calc(100% + 1px) 0, calc(100% - 21px) 100%, -1px calc(100% - 1px))",
   },
   Label: Label,
-  Modal: Modal,
+  modal: {
+    title: "Symbol_Output",
+    prefixLabel: "Symbol_Write",
+    prefixCommand: "write ",
+    matchStartRule: "Command_write",
+    placeholder: "Symbol_OutputPlaceholder",
+  },
   handles: [
     { id: "in", type: "target", position: Position.Top },
     { id: "out", type: "source", position: Position.Bottom },

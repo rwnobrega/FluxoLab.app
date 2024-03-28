@@ -5,7 +5,6 @@ import { getBrighterColor, palette } from "utils/colors";
 import { Symbol } from "..";
 
 import Label from "./Label";
-import Modal from "./Modal";
 
 const symbol: Symbol = {
   type: "assignment",
@@ -14,7 +13,11 @@ const symbol: Symbol = {
     backgroundColor: getBrighterColor(palette.orange),
     textColor: "white",
   },
-  Modal: Modal,
+  modal: {
+    title: "Symbol_Assignment",
+    matchStartRule: "Command_assignment",
+    placeholder: "Symbol_AssignmentPlaceholder",
+  },
   Label: Label,
   handles: [
     { id: "in", type: "target", position: Position.Top },

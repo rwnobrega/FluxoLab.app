@@ -6,9 +6,10 @@ import { Node, HandleType, Position, useReactFlow } from "reactflow";
 
 import { palette, getDropShadow } from "utils/colors";
 
-import { BoxStyle, LabelProps, ModalProps } from "components/Symbols";
+import { BoxStyle, LabelProps, Symbol } from "components/Symbols";
 
 import SymbolBox from "components/Symbols/SymbolBox";
+import SymbolModal from "components/Symbols/SymbolModal";
 
 import MyHandleSource from "./MyHandleSource";
 import MyHandleTarget from "./MyHandleTarget";
@@ -24,7 +25,7 @@ import useStoreStrings from "stores/useStoreStrings";
 interface Props {
   nodeId: string;
   boxStyle: BoxStyle;
-  Modal?: (props: ModalProps) => JSX.Element;
+  modal?: Symbol["modal"];
   Label: (props: LabelProps) => JSX.Element;
   handles: Array<{ id: string; type: HandleType; position: Position }>;
 }
@@ -32,7 +33,7 @@ interface Props {
 export default function ({
   nodeId,
   boxStyle,
-  Modal,
+  modal,
   Label,
   handles,
 }: Props): JSX.Element {
@@ -49,7 +50,7 @@ export default function ({
   } = useStoreEphemeral();
   const { compileErrors } = useStoreMachine();
   const { getState } = useStoreMachineState();
-  const { language } = useStoreStrings();
+  const { getString, language } = useStoreStrings();
   const { getZoom } = useReactFlow();
 
   const state = getState();
@@ -125,8 +126,17 @@ export default function ({
       onMouseLeave={onMouseLeave}
       style={{ cursor: "grab" }}
     >
-      {Modal !== undefined && (
-        <Modal
+      {modal !== undefined && (
+        <SymbolModal
+          title={getString(modal.title)}
+          prefixLabel={
+            modal.prefixLabel !== undefined
+              ? getString(modal.prefixLabel)
+              : undefined
+          }
+          prefixCommand={modal.prefixCommand}
+          matchStartRule={modal.matchStartRule}
+          placeholder={getString(modal.placeholder)}
           nodeId={nodeId}
           value={node?.data}
           showModal={showModal}
@@ -160,7 +170,7 @@ export default function ({
       <ButtonDelete onClick={handleDelete} visible={buttonsVisible} />
       <ButtonEdit
         onClick={handleEdit}
-        visible={buttonsVisible && Modal !== undefined}
+        visible={buttonsVisible && modal !== undefined}
       />
       {_.map(handles, (props, index) =>
         props.type === "source" ? (

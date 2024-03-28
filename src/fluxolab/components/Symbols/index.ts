@@ -19,19 +19,18 @@ export interface LabelProps {
   value: string;
 }
 
-export interface ModalProps {
-  nodeId: string;
-  value: string;
-  showModal: boolean;
-  setShowModal: (showModal: boolean) => void;
-}
-
 export interface Symbol {
   type: string;
   title: string;
   boxStyle: BoxStyle;
   Label: (props: LabelProps) => JSX.Element;
-  Modal?: (props: ModalProps) => JSX.Element;
+  modal?: {
+    title: string;
+    prefixLabel?: string;
+    prefixCommand?: string;
+    matchStartRule: string;
+    placeholder: string;
+  };
   handles: Array<{
     id: string;
     label?: string;

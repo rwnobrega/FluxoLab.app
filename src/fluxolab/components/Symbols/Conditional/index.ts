@@ -5,7 +5,6 @@ import { getBrighterColor, palette } from "utils/colors";
 import { Symbol } from "..";
 
 import Label from "./Label";
-import Modal from "./Modal";
 
 const symbol: Symbol = {
   type: "conditional",
@@ -17,7 +16,11 @@ const symbol: Symbol = {
       "polygon(20px 0, 0 50%, 20px 100%, calc(100% - 20px) 100%, 100% 50%, calc(100% - 20px) 0)",
   },
   Label: Label,
-  Modal: Modal,
+  modal: {
+    title: "Symbol_Conditional",
+    matchStartRule: "Expression",
+    placeholder: "Symbol_ConditionalPlaceholder",
+  },
   handles: [
     { id: "in", type: "target", position: Position.Top },
     { id: "true", type: "source", position: Position.Bottom, label: "T" },
