@@ -7,14 +7,14 @@ interface Props {
   placeholder: string;
   value: string;
   setValue: (value: string) => void;
-  problem?: string | null;
+  problem: string;
 }
 
 export default function ({
   placeholder,
   value,
   setValue,
-  problem = null,
+  problem = "",
 }: Props): JSX.Element {
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -27,7 +27,7 @@ export default function ({
     <>
       <Form.Control
         type="text"
-        className={`font-monospace ${problem === null ? "" : "is-invalid"}`}
+        className={`font-monospace ${problem === "" ? "" : "is-invalid"}`}
         autoFocus
         autoComplete="off"
         placeholder={placeholder}
@@ -37,7 +37,7 @@ export default function ({
       />
       <Markdown
         className="pt-2 small text-danger"
-        source={problem === null ? "\u00A0" : problem}
+        source={problem === "" ? "\u00A0" : problem}
       />
     </>
   );

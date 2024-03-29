@@ -21,7 +21,7 @@ interface Props {
 
 export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
   const [textId, setTextId] = useState<string>(id);
-  const [problem, setProblem] = useState<string | null>(null);
+  const [problem, setProblem] = useState<string>("");
 
   const { machine, renameVariable } = useStoreMachine();
   const { getString } = useStoreStrings();
@@ -31,18 +31,18 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
   }, [showModal]);
 
   useEffect(() => {
-    let problem: string | null = null;
     if (_.isEmpty(textId)) {
-      problem = getString("IdentifierError_Empty");
+      setProblem(getString("IdentifierError_Empty"));
     } else if (!isValidIdentifier(textId)) {
-      problem = getString("IdentifierError_Invalid");
+      setProblem(getString("IdentifierError_Invalid"));
     } else if (
       textId !== id &&
       _.includes(_.map(machine.variables, "id"), textId)
     ) {
-      problem = getString("IdentifierError_Duplicate");
+      setProblem(getString("IdentifierError_Duplicate"));
+    } else {
+      setProblem("");
     }
-    setProblem(problem);
   }, [textId]);
 
   const handleSubmit = useCallback(
@@ -67,14 +67,14 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
             placeholder={getString("ModalRenameVariable_Placeholder")}
             value={textId}
             setValue={setTextId}
-            problem={problem !== null ? getString(problem) : null}
+            problem={getString(problem)}
           />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             {getString("Button_Cancel")}
           </Button>
-          <Button variant="primary" type="submit" disabled={problem !== null}>
+          <Button variant="primary" type="submit" disabled={problem !== ""}>
             {getString("Button_Rename")}
           </Button>
         </Modal.Footer>

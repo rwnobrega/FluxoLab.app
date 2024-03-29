@@ -38,7 +38,7 @@ export default function ({
   setShowModal,
 }: Props): JSX.Element {
   const [textValue, setTextValue] = useState<string>(value);
-  const [problem, setProblem] = useState<string | null>(null);
+  const [problem, setProblem] = useState<string>("");
 
   const { updateNodeProp } = useStoreFlow();
   const { language, getString } = useStoreStrings();
@@ -61,7 +61,7 @@ export default function ({
       });
       setProblem(problem);
     } else {
-      setProblem(null);
+      setProblem("");
     }
   }, [textValue, language]);
 
