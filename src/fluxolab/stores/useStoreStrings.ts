@@ -18,8 +18,9 @@ const useStoreStrings = create<StoreStrings>()(
     (set, get) => ({
       language: navigator.language,
       setLanguage: (language) => set({ language }),
-      getString: (key, replacements = {}) => {
-        let string = strings[get().language][key] ?? strings.en[key] ?? key;
+      getString: (key: string, replacements = {}) => {
+        const stringsLanguage = strings[get().language] ?? strings.en;
+        let string = stringsLanguage[key] ?? key;
         // Replace all occurrences of {{key}} with value from replacements
         for (const [key, value] of _.toPairs(replacements)) {
           string = string.replace(new RegExp(`{{${key}}}`, "g"), value);
