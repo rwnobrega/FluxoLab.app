@@ -2,18 +2,18 @@ import { Position } from "reactflow";
 
 import { getBrighterColor, palette } from "utils/colors";
 
-import { Symbol } from ".";
+import { Block } from ".";
 
-const symbol: Symbol = {
+const block: Block = {
   type: "assignment",
-  title: "Symbol_Assignment",
+  title: "Block_Assignment",
   boxStyle: {
     backgroundColor: getBrighterColor(palette.orange),
     textColor: "white",
   },
   modal: {
     matchStartRule: "Command_assignment",
-    placeholder: "Symbol_AssignmentPlaceholder",
+    placeholder: "Block_AssignmentPlaceholder",
   },
   handles: [
     { id: "in", type: "target", position: Position.Top },
@@ -21,4 +21,4 @@ const symbol: Symbol = {
   ],
 };
 
-export default symbol;
+export default block;

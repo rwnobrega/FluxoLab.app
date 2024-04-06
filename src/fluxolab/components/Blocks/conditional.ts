@@ -2,11 +2,11 @@ import { Position } from "reactflow";
 
 import { getBrighterColor, palette } from "utils/colors";
 
-import { Symbol } from ".";
+import { Block } from ".";
 
-const symbol: Symbol = {
+const block: Block = {
   type: "conditional",
-  title: "Symbol_Conditional",
+  title: "Block_Conditional",
   boxStyle: {
     backgroundColor: getBrighterColor(palette.red),
     textColor: "white",
@@ -15,7 +15,7 @@ const symbol: Symbol = {
   },
   modal: {
     matchStartRule: "Expression",
-    placeholder: "Symbol_ConditionalPlaceholder",
+    placeholder: "Block_ConditionalPlaceholder",
   },
   handles: [
     { id: "in", type: "target", position: Position.Top },
@@ -24,4 +24,4 @@ const symbol: Symbol = {
   ],
 };
 
-export default symbol;
+export default block;

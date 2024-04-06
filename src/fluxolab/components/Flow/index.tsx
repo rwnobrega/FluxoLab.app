@@ -11,7 +11,7 @@ import Stack from "react-bootstrap/Stack";
 
 import PlayButtons from "components/PlayButtons";
 import StatusMessage from "components/StatusMessage";
-import symbols from "components/Symbols";
+import blocks from "components/Blocks";
 
 import MyEdge from "./MyEdge";
 import ConnectionLine from "./MyEdge/ConnectionLine";
@@ -23,8 +23,8 @@ import useStoreEphemeral from "stores/useStoreEphemeral";
 const edgeTypes: EdgeTypes = { edge: MyEdge };
 
 const nodeTypes: NodeTypes = {};
-for (const symbol of symbols) {
-  nodeTypes[symbol.type] = ({ id }) => <MyNode nodeId={id} symbol={symbol} />;
+for (const block of blocks) {
+  nodeTypes[block.type] = ({ id }) => <MyNode nodeId={id} block={block} />;
 }
 
 export default function (): JSX.Element {

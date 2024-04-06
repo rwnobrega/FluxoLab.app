@@ -28,16 +28,16 @@ export default function ({
       setAnimated(false);
       return;
     }
-    if (sourceNode.id === machine.startSymbolId) {
+    if (sourceNode.id === machine.startBlockId) {
       setAnimated(state.timeSlot === -1);
       return;
     }
     // Peek the future --- TODO: What if `rand` or `rand_int` is used?
     const stateClone = _.cloneDeep(state);
-    const sourceSymbolId = stateClone.curSymbolId;
+    const sourceBlockId = stateClone.curBlockId;
     sourceNode.work(machine, stateClone);
-    const targetSymbolId = stateClone.curSymbolId;
-    setAnimated(source === sourceSymbolId && target === targetSymbolId);
+    const targetBlockId = stateClone.curBlockId;
+    setAnimated(source === sourceBlockId && target === targetBlockId);
   }, [state, machine]);
 
   const sourceNode = useStore(

@@ -7,29 +7,29 @@ import evaluate from "language/evaluate";
 import grammar from "language/grammar";
 import { getExpectedText } from "language/errors";
 
-export interface Symbol {
+export interface Block {
   id: string;
   type: "start" | "assignment" | "conditional" | "input" | "output" | "halt";
   work: (machine: Machine, state: MachineState) => void;
 }
 
-export function newStartSymbol(params: { id: string; nextId: string }): Symbol {
+export function newStartBlock(params: { id: string; nextId: string }): Block {
   const { id, nextId } = params;
   return {
     id,
     type: "start",
     work: (_machine, state) => {
-      state.curSymbolId = nextId;
+      state.curBlockId = nextId;
     },
   };
 }
 
-export function newAssignmentSymbol(params: {
+export function newAssignmentBlock(params: {
   id: string;
   variableId: string;
   expression: string;
   nextId: string;
-}): Symbol {
+}): Block {
   const { id, variableId, expression, nextId } = params;
   return {
     id,
@@ -59,17 +59,17 @@ export function newAssignmentSymbol(params: {
         return;
       }
       state.memory[variableId] = value;
-      state.curSymbolId = nextId;
+      state.curBlockId = nextId;
     },
   };
 }
 
-export function newConditionalSymbol(params: {
+export function newConditionalBlock(params: {
   id: string;
   condition: string;
   nextTrue: string;
   nextFalse: string;
-}): Symbol {
+}): Block {
   const { id, condition, nextTrue, nextFalse } = params;
   return {
     id,
@@ -92,16 +92,16 @@ export function newConditionalSymbol(params: {
         state.status = "error";
         return;
       }
-      state.curSymbolId = conditionValue ? nextTrue : nextFalse;
+      state.curBlockId = conditionValue ? nextTrue : nextFalse;
     },
   };
 }
 
-export function newInputSymbol(params: {
+export function newInputBlock(params: {
   id: string;
   variableId: string;
   nextId: string;
-}): Symbol {
+}): Block {
   const { id, variableId, nextId } = params;
   return {
     id,
@@ -128,16 +128,16 @@ export function newInputSymbol(params: {
       state.interaction.push({ direction: "in", text: state.input });
       state.input = null;
       state.status = "ready";
-      state.curSymbolId = nextId;
+      state.curBlockId = nextId;
     },
   };
 }
 
-export function newOutputSymbol(params: {
+export function newOutputBlock(params: {
   id: string;
   expression: string;
   nextId: string;
-}): Symbol {
+}): Block {
   const { id, expression, nextId } = params;
   return {
     id,
@@ -156,12 +156,12 @@ export function newOutputSymbol(params: {
         return;
       }
       state.interaction.push({ direction: "out", text: String(value) });
-      state.curSymbolId = nextId;
+      state.curBlockId = nextId;
     },
   };
 }
 
-export function newHaltSymbol(params: { id: string }): Symbol {
+export function newHaltBlock(params: { id: string }): Block {
   const { id } = params;
   return {
     id,

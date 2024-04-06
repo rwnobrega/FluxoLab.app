@@ -2,23 +2,23 @@ import { Position } from "reactflow";
 
 import { getBrighterColor, palette } from "utils/colors";
 
-import { Symbol } from ".";
+import { Block } from ".";
 
-const symbol: Symbol = {
-  type: "write",
-  title: "Symbol_Output",
-  prefixLabel: "Symbol_Write",
+const block: Block = {
+  type: "read",
+  title: "Block_Input",
+  prefixLabel: "Block_Read",
   boxStyle: {
-    backgroundColor: getBrighterColor(palette.green),
+    backgroundColor: getBrighterColor(palette.blue),
     textColor: "white",
     clipPath: "polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%)",
     clipPathBorder:
       "polygon(20px 0, calc(100% + 1px) 0, calc(100% - 21px) 100%, -1px calc(100% - 1px))",
   },
   modal: {
-    prefixCommand: "write ",
-    matchStartRule: "Command_write",
-    placeholder: "Symbol_OutputPlaceholder",
+    prefixCommand: "read ",
+    matchStartRule: "Command_read",
+    placeholder: "Block_InputPlaceholder",
   },
   handles: [
     { id: "in", type: "target", position: Position.Top },
@@ -26,4 +26,4 @@ const symbol: Symbol = {
   ],
 };
 
-export default symbol;
+export default block;

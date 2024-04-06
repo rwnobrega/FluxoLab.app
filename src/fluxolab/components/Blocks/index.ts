@@ -1,11 +1,11 @@
 import { HandleType, Position } from "reactflow";
 
-import symbolStart from "./start";
-import symbolInput from "./input";
-import symbolOutput from "./output";
-import symbolAssignment from "./assignment";
-import symbolConditional from "./conditional";
-import symbolEnd from "./end";
+import blockStart from "./start";
+import blockInput from "./input";
+import blockOutput from "./output";
+import blockAssignment from "./assignment";
+import blockConditional from "./conditional";
+import blockEnd from "./end";
 
 export interface BoxStyle {
   backgroundColor?: string;
@@ -15,7 +15,7 @@ export interface BoxStyle {
   clipPathBorder?: string;
 }
 
-export interface Symbol {
+export interface Block {
   type: string;
   title: string;
   prefixLabel?: string;
@@ -33,13 +33,13 @@ export interface Symbol {
   }>;
 }
 
-const symbols: Symbol[] = [
-  symbolStart,
-  symbolInput,
-  symbolOutput,
-  symbolAssignment,
-  symbolConditional,
-  symbolEnd,
+const blocks: Block[] = [
+  blockStart,
+  blockInput,
+  blockOutput,
+  blockAssignment,
+  blockConditional,
+  blockEnd,
 ];
 
-export default symbols;
+export default blocks;

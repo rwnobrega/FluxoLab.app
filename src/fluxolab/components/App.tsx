@@ -13,7 +13,7 @@ import Hotkeys from "components/Hotkeys";
 import Toaster from "components/Toaster";
 import Navbar from "components/Navbar";
 import Flow from "components/Flow";
-import Symbols from "components/Panels/Symbols";
+import Blocks from "components/Panels/Blocks";
 import Variables from "components/Panels/Variables";
 import InputOutput from "components/Panels/InputOutput";
 
@@ -27,7 +27,7 @@ import { palette } from "utils/colors";
 
 export default function (): JSX.Element {
   const { nodes, edges } = useStoreFlow();
-  const { machine, setFlowchart, setStartSymbolId, setCompileErrors } =
+  const { machine, setFlowchart, setStartBlockId, setCompileErrors } =
     useStoreMachine();
   const { reset } = useStoreMachineState();
 
@@ -41,19 +41,19 @@ export default function (): JSX.Element {
   );
 
   useEffect(() => {
-    const { flowchart, startSymbolId, errors } = compile({
+    const { flowchart, startBlockId, errors } = compile({
       nodes,
       edges,
       variables: machine.variables,
     });
-    setStartSymbolId(startSymbolId);
+    setStartBlockId(startBlockId);
     setFlowchart(flowchart);
     setCompileErrors(errors);
   }, [nodesDep, edgesDep, machine.variables]);
 
   useEffect(() => {
     reset(machine);
-  }, [machine.flowchart, machine.startSymbolId]);
+  }, [machine.flowchart, machine.startBlockId]);
 
   const resizeHandleStyle = {
     backgroundColor: palette.gray300,
@@ -75,7 +75,7 @@ export default function (): JSX.Element {
         <Navbar />
         <PanelGroup direction="horizontal" autoSaveId="fluxolab_main">
           <div className="bg-light p-3">
-            <Symbols />
+            <Blocks />
           </div>
           <Panel defaultSize={70} minSize={50}>
             <Flow />

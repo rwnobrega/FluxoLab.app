@@ -5,14 +5,14 @@ import { Node, Edge } from "reactflow";
 import { Variable } from "./variables";
 
 import {
-  newStartSymbol,
-  newAssignmentSymbol,
-  newConditionalSymbol,
-  newHaltSymbol,
-  newInputSymbol,
-  newOutputSymbol,
-  Symbol,
-} from "./symbols";
+  newStartBlock,
+  newAssignmentBlock,
+  newConditionalBlock,
+  newHaltBlock,
+  newInputBlock,
+  newOutputBlock,
+  Block,
+} from "./blocks";
 
 import grammar from "language/grammar";
 
@@ -42,8 +42,8 @@ interface CompilerInput {
 }
 
 interface CompilerOutput {
-  flowchart: Symbol[];
-  startSymbolId: string;
+  flowchart: Block[];
+  startBlockId: string;
   errors: CompileError[];
 }
 
@@ -52,7 +52,7 @@ export default function compile({
   edges,
   variables,
 }: CompilerInput): CompilerOutput {
-  function getStartSymbolId(): [string, CompileError[]] {
+  function getStartBlockId(): [string, CompileError[]] {
     const startNodes = _.filter(nodes, { type: "start" });
     if (startNodes.length === 0) {
       return ["", [{ message: "CompileError_NoStart", nodeId: null }]];
@@ -62,8 +62,8 @@ export default function compile({
     return [startNodes[0].id, []];
   }
 
-  function compileFlowchart(): [Symbol[], CompileError[]] {
-    const flowchart: Symbol[] = [];
+  function compileFlowchart(): [Block[], CompileError[]] {
+    const flowchart: Block[] = [];
     const errors: CompileError[] = [];
     for (const { id, type, data } of nodes) {
       switch (type) {
@@ -72,7 +72,7 @@ export default function compile({
           if (nextId === null) {
             errors.push({ message: "CompileError_NoOutgoing", nodeId: id });
           } else {
-            flowchart.push(newStartSymbol({ id, nextId }));
+            flowchart.push(newStartBlock({ id, nextId }));
           }
           break;
         }
@@ -107,7 +107,7 @@ export default function compile({
             errors.push({ message: "CompileError_NoOutgoing", nodeId: id });
           } else {
             flowchart.push(
-              newAssignmentSymbol({ id, variableId, expression, nextId }),
+              newAssignmentBlock({ id, variableId, expression, nextId }),
             );
           }
           break;
@@ -141,7 +141,7 @@ export default function compile({
           }
           if (nextTrue !== null && nextFalse !== null) {
             flowchart.push(
-              newConditionalSymbol({ id, condition, nextTrue, nextFalse }),
+              newConditionalBlock({ id, condition, nextTrue, nextFalse }),
             );
           }
           break;
@@ -167,7 +167,7 @@ export default function compile({
           if (nextId === null) {
             errors.push({ message: "CompileError_NoOutgoing", nodeId: id });
           } else {
-            flowchart.push(newInputSymbol({ id, variableId, nextId }));
+            flowchart.push(newInputBlock({ id, variableId, nextId }));
           }
           break;
         }
@@ -186,12 +186,12 @@ export default function compile({
           if (nextId === null) {
             errors.push({ message: "CompileError_NoOutgoing", nodeId: id });
           } else {
-            flowchart.push(newOutputSymbol({ id, expression, nextId }));
+            flowchart.push(newOutputBlock({ id, expression, nextId }));
           }
           break;
         }
         case "end": {
-          flowchart.push(newHaltSymbol({ id }));
+          flowchart.push(newHaltBlock({ id }));
           break;
         }
       }
@@ -201,11 +201,11 @@ export default function compile({
 
   const errors: CompileError[] = [];
 
-  const [startSymbolId, errs1] = getStartSymbolId();
+  const [startBlockId, errs1] = getStartBlockId();
   errors.push(...errs1);
 
   const [flowchart, errs2] = compileFlowchart();
   errors.push(...errs2);
 
-  return { flowchart, startSymbolId, errors };
+  return { flowchart, startBlockId, errors };
 }

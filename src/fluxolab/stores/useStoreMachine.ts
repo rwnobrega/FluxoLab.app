@@ -3,17 +3,17 @@ import _ from "lodash";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { Block } from "machine/blocks";
 import { CompileError } from "machine/compiler";
 import { Machine } from "machine/machine";
-import { Symbol } from "machine/symbols";
 import { Variable } from "machine/variables";
 
 interface StoreMachine {
   machine: Machine;
   clearMachine: () => void;
   setTitle: (title: string) => void;
-  setFlowchart: (flowchart: Symbol[]) => void;
-  setStartSymbolId: (startSymbolId: string) => void;
+  setFlowchart: (flowchart: Block[]) => void;
+  setStartBlockId: (startBlockId: string) => void;
   setVariables: (variables: Variable[]) => void;
   getVariable: (variableId: string) => Variable | undefined;
   addVariable: (id: string, type: Variable["type"]) => void;
@@ -28,7 +28,7 @@ interface StoreMachine {
 const emptyMachine: Machine = {
   title: "",
   flowchart: [],
-  startSymbolId: "",
+  startBlockId: "",
   variables: [],
 };
 
@@ -49,9 +49,9 @@ const useStoreMachine = create<StoreMachine>()(
         machine.flowchart = flowchart;
         set({ machine });
       },
-      setStartSymbolId: (startSymbolId) => {
+      setStartBlockId: (startBlockId) => {
         const { machine } = get();
-        machine.startSymbolId = startSymbolId;
+        machine.startBlockId = startBlockId;
         set({ machine });
       },
       setVariables: (variables) => {

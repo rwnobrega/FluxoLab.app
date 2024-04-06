@@ -6,11 +6,11 @@ import { Node, useReactFlow } from "reactflow";
 
 import { palette, getDropShadow } from "utils/colors";
 
-import { Symbol } from "components/Symbols";
+import { Block } from "components/Blocks";
 
-import SymbolBox from "components/Symbols/SymbolBox";
-import SymbolModal from "components/Symbols/SymbolModal";
-import SymbolLabel from "components/Symbols/SymbolLabel";
+import Box from "components/Blocks/Box";
+import Modal from "components/Blocks/Modal";
+import Label from "components/Blocks/Label";
 
 import MyHandleSource from "./MyHandleSource";
 import MyHandleTarget from "./MyHandleTarget";
@@ -25,15 +25,15 @@ import useStoreStrings from "stores/useStoreStrings";
 
 interface Props {
   nodeId: string;
-  symbol: Symbol;
+  block: Block;
 }
 
-export default function ({ nodeId, symbol }: Props): JSX.Element {
+export default function ({ nodeId, block }: Props): JSX.Element {
   const [margin, setMargin] = useState<number>(0);
   const [boxFilter, setBoxFilter] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const { title, prefixLabel, boxStyle, modal, handles } = symbol;
+  const { title, prefixLabel, boxStyle, modal, handles } = block;
 
   const { nodes, deleteNode, updateNodeProp } = useStoreFlow();
   const {
@@ -80,13 +80,13 @@ export default function ({ nodeId, symbol }: Props): JSX.Element {
         if (_.some(compileErrors, { nodeId })) {
           return getDropShadow(palette.red);
         }
-      } else if (nodeId === state.curSymbolId) {
+      } else if (nodeId === state.curBlockId) {
         if (state.status === "error") {
           return getDropShadow(palette.red);
         } else {
           return getDropShadow(palette.gray800);
         }
-      } else if (node?.type === "start" && state.curSymbolId === null) {
+      } else if (node?.type === "start" && state.curBlockId === null) {
         return getDropShadow(palette.gray800);
       }
       return "";
@@ -121,7 +121,7 @@ export default function ({ nodeId, symbol }: Props): JSX.Element {
       style={{ cursor: "grab" }}
     >
       {modal !== undefined && (
-        <SymbolModal
+        <Modal
           title={getString(title)}
           prefixLabel={
             prefixLabel !== undefined ? getString(prefixLabel) : undefined
@@ -135,7 +135,7 @@ export default function ({ nodeId, symbol }: Props): JSX.Element {
           setShowModal={setShowModal}
         />
       )}
-      <SymbolBox
+      <Box
         boxStyle={boxStyle}
         boxFilter={boxFilter}
         isSelected={node?.selected}
@@ -156,14 +156,14 @@ export default function ({ nodeId, symbol }: Props): JSX.Element {
             cursor: "grab",
           }}
         >
-          <SymbolLabel
+          <Label
             prefixLabel={
               prefixLabel !== undefined ? getString(prefixLabel) : ""
             }
             value={node?.data}
           />
         </span>
-      </SymbolBox>
+      </Box>
       <ButtonDelete onClick={handleDelete} visible={buttonsVisible} />
       <ButtonEdit
         onClick={handleEdit}

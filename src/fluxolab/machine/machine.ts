@@ -1,17 +1,17 @@
 import _ from "lodash";
 
+import { Block } from "./blocks";
 import { VarType, Variable } from "./variables";
-import { Symbol } from "./symbols";
 
 export interface Machine {
   title: string;
-  flowchart: Symbol[];
-  startSymbolId: string;
+  flowchart: Block[];
+  startBlockId: string;
   variables: Variable[];
 }
 
 export interface MachineState {
-  curSymbolId: string | null;
+  curBlockId: string | null;
   timeSlot: number;
   memory: Record<string, VarType | null>;
   input: string | null;
@@ -21,19 +21,19 @@ export interface MachineState {
 }
 
 export function runMachineStep(machine: Machine, state: MachineState): void {
-  if (state.curSymbolId === null) {
-    state.curSymbolId = machine.startSymbolId;
+  if (state.curBlockId === null) {
+    state.curBlockId = machine.startBlockId;
   }
-  const symbol = _.find(machine.flowchart, { id: state.curSymbolId }) as Symbol;
-  symbol.work(machine, state);
-  const nextSymbol = _.find(machine.flowchart, {
-    id: state.curSymbolId,
-  }) as Symbol;
-  if (nextSymbol.type === "halt") {
+  const block = _.find(machine.flowchart, { id: state.curBlockId }) as Block;
+  block.work(machine, state);
+  const nextBlock = _.find(machine.flowchart, {
+    id: state.curBlockId,
+  }) as Block;
+  if (nextBlock.type === "halt") {
     state.status = "halted";
     return;
   }
-  if (nextSymbol.type === "input" && state.status !== "error") {
+  if (nextBlock.type === "input" && state.status !== "error") {
     state.status = "waiting";
   }
   state.timeSlot += 1;
@@ -41,7 +41,7 @@ export function runMachineStep(machine: Machine, state: MachineState): void {
 
 export function getInitialState(variables: Variable[]): MachineState {
   return {
-    curSymbolId: null,
+    curBlockId: null,
     timeSlot: -1,
     memory: _.fromPairs(variables.map((variable) => [variable.id, null])),
     input: null,

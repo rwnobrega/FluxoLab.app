@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { Handle, HandleProps } from "reactflow";
 
-import { BoxStyle } from "components/Symbols";
+import { BoxStyle } from "components/Blocks";
 
 import { getDarkerColor } from "utils/colors";
 

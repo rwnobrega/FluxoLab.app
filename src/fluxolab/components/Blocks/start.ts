@@ -2,12 +2,12 @@ import { Position } from "reactflow";
 
 import { getBrighterColor, palette } from "utils/colors";
 
-import { Symbol } from ".";
+import { Block } from ".";
 
-const symbol: Symbol = {
+const block: Block = {
   type: "start",
-  title: "Symbol_Start",
-  prefixLabel: "Symbol_Start",
+  title: "Block_Start",
+  prefixLabel: "Block_Start",
   boxStyle: {
     backgroundColor: getBrighterColor(palette.purple),
     textColor: "white",
@@ -16,4 +16,4 @@ const symbol: Symbol = {
   handles: [{ id: "out", type: "source", position: Position.Bottom }],
 };
 
-export default symbol;
+export default block;

@@ -6,7 +6,7 @@ import {
   getStripedBackground,
 } from "utils/colors";
 
-import { BoxStyle } from "components/Symbols";
+import { BoxStyle } from "components/Blocks";
 
 interface Props {
   boxStyle: BoxStyle;

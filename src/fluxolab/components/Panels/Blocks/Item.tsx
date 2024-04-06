@@ -1,7 +1,7 @@
 import React from "react";
 
-import { BoxStyle } from "components/Symbols";
-import SymbolBox from "components/Symbols/SymbolBox";
+import { BoxStyle } from "components/Blocks";
+import Box from "components/Blocks/Box";
 
 import useStoreMachineState from "stores/useStoreMachineState";
 import useStoreStrings from "stores/useStoreStrings";
@@ -36,9 +36,9 @@ export default function ({ type, title, boxStyle }: Props): JSX.Element {
         width: 120,
       }}
     >
-      <SymbolBox boxStyle={boxStyle} isDisabled={disabled}>
+      <Box boxStyle={boxStyle} isDisabled={disabled}>
         <span>{getString(title)}</span>
-      </SymbolBox>
+      </Box>
     </div>
   );
 }
