@@ -47,7 +47,7 @@ interface SimpleEdge {
   targetHandle: string;
 }
 
-interface SimplifiedState {
+export interface SimplifiedState {
   title: string;
   variables: Variable[];
   nodes: SimpleNode[];
