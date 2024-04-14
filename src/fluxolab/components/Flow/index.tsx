@@ -35,8 +35,8 @@ export default function (): JSX.Element {
     onNodesChange,
     onEdgesChange,
     onConnect,
-    viewport,
-    setViewport,
+    savedViewport,
+    setSavedViewport,
   } = useStoreFlow();
   const { setIsDraggingNode, setIsConnectingEdge } = useStoreEphemeral();
   const { getViewport, screenToFlowPosition } = useReactFlow();
@@ -76,10 +76,10 @@ export default function (): JSX.Element {
       onConnectStart={() => setIsConnectingEdge(true)}
       onDragOver={onDragOver}
       onDrop={onDrop}
-      onMoveEnd={() => setViewport(getViewport())}
+      onMoveEnd={() => setSavedViewport(getViewport())}
       onNodeDragStart={() => setIsDraggingNode(true)}
       onNodeDragStop={() => setIsDraggingNode(false)}
-      defaultViewport={viewport}
+      defaultViewport={savedViewport}
       multiSelectionKeyCode="Shift"
       selectionKeyCode="Control"
       deleteKeyCode="Delete"
@@ -98,9 +98,9 @@ export default function (): JSX.Element {
         </Stack>
       </div>
       <Controls
-        onZoomIn={() => setViewport(getViewport())}
-        onZoomOut={() => setViewport(getViewport())}
-        onFitView={() => setViewport(getViewport())}
+        onZoomIn={() => setSavedViewport(getViewport())}
+        onZoomOut={() => setSavedViewport(getViewport())}
+        onFitView={() => setSavedViewport(getViewport())}
       />
       <Background gap={20} />
     </ReactFlow>
