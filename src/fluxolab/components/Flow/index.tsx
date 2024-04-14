@@ -87,7 +87,7 @@ export default function (): JSX.Element {
       snapToGrid
       snapGrid={[20, 20]}
     >
-      <div className="position-relative m-3" style={{ zIndex: 5 }}>
+      <div className="position-relative m-3">
         <Stack
           direction="horizontal"
           gap={3}

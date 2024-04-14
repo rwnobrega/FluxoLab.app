@@ -25,7 +25,7 @@ export default function (): JSX.Element {
   };
 
   return (
-    <ButtonGroup>
+    <ButtonGroup style={{ zIndex: 10 }}>
       {_.map(
         buttonList,
         ({ action, description, hotkey, icon, isDisabled }) => {

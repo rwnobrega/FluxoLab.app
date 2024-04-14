@@ -110,7 +110,12 @@ export default function (): JSX.Element {
   return (
     <Alert
       className="m-0 border-0"
-      style={{ backgroundColor, color: "white", padding: "6px 12px" }}
+      style={{
+        backgroundColor,
+        color: "white",
+        padding: "6px 12px",
+        zIndex: 10,
+      }}
     >
       <Stack direction="horizontal" style={{ alignItems: "start" }}>
         <i className={`bi ${statusIcon}`} />
