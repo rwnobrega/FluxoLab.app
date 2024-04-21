@@ -11,10 +11,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "strictNullChecks": true,
-    "baseUrl": "./src/fluxolab",
-    "paths": {
-      "fluxolab/*": ["./src/fluxolab/*"]
-    }
-  },
-  "include": ["custom.d.ts", "./**/*.ts", "./**/*.tsx"]
+    "baseUrl": "./src",
+    "paths": { "~/*": ["*"] }
+  }
 }

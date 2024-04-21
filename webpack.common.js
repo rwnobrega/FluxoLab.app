@@ -9,7 +9,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       title: "FluxoLab.app",
-      favicon: "./src/fluxolab/assets/FluxoLab.svg",
+      favicon: "./src/assets/FluxoLab.svg",
     }),
   ],
   output: {
@@ -39,7 +39,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
-    modules: [path.resolve("./src/fluxolab"), "node_modules"],
+    extensions: [".ts", ".tsx", ".js"],
+    alias: { "~": path.resolve(__dirname, "src") },
   },
 };
