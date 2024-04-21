@@ -17,14 +17,6 @@ export default function (): JSX.Element {
 
   const state = getState();
 
-  const hotkeysOptions: Parameters<typeof useHotkeys>[2] = {
-    filter: (event) => {
-      event.preventDefault();
-      return true;
-    },
-    enableOnTags: ["INPUT", "TEXTAREA"],
-  };
-
   for (const { action, hotkey, isDisabled } of buttonList) {
     useHotkeys(
       hotkey,
@@ -36,11 +28,13 @@ export default function (): JSX.Element {
           execAction(action, machine);
         }
       },
-      hotkeysOptions,
+      {
+        enableOnFormTags: ["INPUT", "TEXTAREA"],
+      },
     );
   }
 
-  useHotkeys("ctrl+a", selectAll, hotkeysOptions);
+  useHotkeys("ctrl+a", selectAll);
 
   return <></>;
 }
