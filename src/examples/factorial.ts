@@ -11,7 +11,7 @@ const example: Example = {
     {
       id: "0",
       type: "start",
-      position: { x: 420, y: 120 },
+      position: { x: 400, y: 120 },
       data: "",
     },
     {
@@ -35,7 +35,7 @@ const example: Example = {
     {
       id: "4",
       type: "assignment",
-      position: { x: 380, y: 440 },
+      position: { x: 400, y: 440 },
       data: "fat = fat * n",
     },
     {
@@ -53,7 +53,7 @@ const example: Example = {
     {
       id: "7",
       type: "end",
-      position: { x: 600, y: 440 },
+      position: { x: 580, y: 440 },
       data: "",
     },
   ],

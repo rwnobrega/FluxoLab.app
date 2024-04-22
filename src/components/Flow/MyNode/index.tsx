@@ -57,15 +57,7 @@ export default function ({ nodeId, block }: Props): JSX.Element {
         40 + 40 * Math.ceil(labelWidth / 40),
         MAX_WIDTH,
       );
-      const marginWidth = (newNodeWidth - labelWidth) / 2;
-      if (node?.width !== undefined && node.width !== null) {
-        updateNodeProp(
-          nodeId,
-          "position.x",
-          node.position.x - (newNodeWidth - node.width) / 2,
-        );
-      }
-      setMargin(marginWidth);
+      setMargin((newNodeWidth - labelWidth) / 2);
     }
   }, [node?.data, language]);
 

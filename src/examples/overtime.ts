@@ -17,31 +17,31 @@ const example: Example = {
     {
       id: "1",
       type: "read",
-      position: { x: 360, y: 160 },
+      position: { x: 400, y: 160 },
       data: "hours",
     },
     {
       id: "2",
       type: "assignment",
-      position: { x: 340, y: 240 },
+      position: { x: 400, y: 240 },
       data: "pay = 50 * hours",
     },
     {
       id: "3",
       type: "conditional",
-      position: { x: 380, y: 320 },
+      position: { x: 400, y: 320 },
       data: "hours > 8",
     },
     {
       id: "4",
       type: "assignment",
-      position: { x: 300, y: 400 },
+      position: { x: 400, y: 400 },
       data: "pay = pay + 25 * (hours - 8)",
     },
     {
       id: "5",
       type: "write",
-      position: { x: 280, y: 480 },
+      position: { x: 400, y: 480 },
       data: '"The payment is $", pay, "."',
     },
     {

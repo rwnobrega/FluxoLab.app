@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import Stack from "react-bootstrap/Stack";
 import ReactFlow, {
   Background,
@@ -39,25 +39,20 @@ export default function (): JSX.Element {
   const { setIsDraggingNode, setIsConnectingEdge } = useStoreEphemeral();
   const { getViewport, screenToFlowPosition } = useReactFlow();
 
-  const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+  const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
-  }, []);
+  };
 
-  const onDrop = useCallback(
-    (event: React.DragEvent<HTMLDivElement>) => {
-      event.preventDefault();
-      const { type, mouseX, mouseY } = JSON.parse(
-        event.dataTransfer.getData("application/reactflow"),
-      );
-      const position = screenToFlowPosition({
-        x: event.clientX - mouseX,
-        y: event.clientY - mouseY,
-      });
-      addNode(type, position);
-    },
-    [addNode, screenToFlowPosition],
-  );
+  const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const type = event.dataTransfer.getData("application/text");
+    const position = screenToFlowPosition({
+      x: event.clientX,
+      y: event.clientY,
+    });
+    addNode(type, position);
+  };
 
   return (
     <ReactFlow
@@ -84,6 +79,7 @@ export default function (): JSX.Element {
       disableKeyboardA11y
       snapToGrid
       snapGrid={[20, 20]}
+      nodeOrigin={[0.5, 0.5]}
     >
       <div className="position-relative m-3">
         <Stack

@@ -28,19 +28,10 @@ export default function (
     width: sourceNode.width as number,
     height: sourceNode.height as number,
   };
-  const sourceCenter: XYPosition = {
-    x: sourceNode.position.x + sourceDimensions.width / 2,
-    y: sourceNode.position.y + sourceDimensions.height / 2,
-  };
   const targetDimensions = {
     width: targetNode.width as number,
     height: targetNode.height as number,
   };
-  const targetCenter: XYPosition = {
-    x: targetNode.position.x + targetDimensions.width / 2,
-    y: targetNode.position.y + targetDimensions.height / 2,
-  };
-
   const block = _.find(blocks, { type: targetNode.type });
   if (!block) throw new Error(`Block not found for type ${targetNode.type}`);
 
@@ -60,8 +51,8 @@ export default function (
     getPath(
       sourcePosition,
       targetPosition,
-      sourceCenter,
-      targetCenter,
+      sourceNode.position,
+      targetNode.position,
       sourceDimensions,
       targetDimensions,
     ),
