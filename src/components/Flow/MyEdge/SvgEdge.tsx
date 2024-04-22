@@ -21,40 +21,37 @@ export default function ({
   targetPosition,
 }: Props): JSX.Element {
   const [mouseHover, setMouseHover] = useState<boolean>(false);
+  const strokeColor = getDarkerColor(
+    selected ? palette.blue : palette.gray500,
+    mouseHover ? 48 : 0,
+  );
 
   return (
-    <g>
+    <g fill="none">
+      {/* Draw a white edge behind the main edge */}
+      <path d={svgPathString} stroke="white" strokeWidth={2} />
+      {/* Draw the edge */}
       <path
         d={svgPathString}
-        className="react-flow__edge-path"
+        stroke={strokeColor}
+        strokeWidth={2}
         markerEnd="url(#arrowhead)"
+        strokeDasharray={animated ? 5 : 0}
         style={{
-          strokeWidth: 2,
-          stroke: getDarkerColor(
-            selected ? palette.blue : palette.gray500,
-            mouseHover ? 48 : 0,
-          ),
-          strokeDasharray: animated ? 5 : 0,
           animation: animated ? "dashdraw 0.5s linear infinite" : "none",
         }}
       />
       {/* Draw the arrowhead */}
       <path
         d={arrowheadSvgPathString(targetX, targetY, targetPosition)}
-        fill={getDarkerColor(
-          selected ? palette.blue : palette.gray500,
-          mouseHover ? 48 : 0,
-        )}
-        stroke={getDarkerColor(
-          selected ? palette.blue : palette.gray500,
-          mouseHover ? 48 : 0,
-        )}
+        stroke={strokeColor}
+        fill={strokeColor}
       />
       {/* Below is a hack to make the edge more clickable */}
       <path
         d={svgPathString}
-        className="react-flow__edge-path"
-        style={{ strokeWidth: 16, strokeOpacity: 0 }}
+        stroke="transparent"
+        strokeWidth={16}
         onMouseEnter={() => setMouseHover(true)}
         onMouseLeave={() => setMouseHover(false)}
       />
