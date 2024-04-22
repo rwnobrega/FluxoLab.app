@@ -1,39 +1,31 @@
 import React, { useState } from "react";
 
 import { BoxStyle } from "~/components/Blocks";
-import {
-  getBrighterColor,
-  getDarkerColor,
-  getStripedBackground,
-} from "~/utils/colors";
+import { getDarkerColor, getStripedBackground } from "~/utils/colors";
 
 interface Props {
   boxStyle: BoxStyle;
-  boxFilter?: string;
-  isSelected?: boolean;
-  isDisabled?: boolean;
+  boxFilter: string;
+  isSelected: boolean;
+  isMouseHover: boolean;
   children: JSX.Element;
 }
 
 export default function ({
   boxStyle,
   boxFilter,
-  isSelected = false,
-  isDisabled = false,
+  isSelected,
+  isMouseHover,
   children,
 }: Props): JSX.Element {
-  const [mouseHover, setMouseHover] = useState<boolean>(false);
-
   function getBackground(): string {
     const bgColor = boxStyle.backgroundColor as string;
     const bgDarker = getDarkerColor(bgColor);
-    if (isDisabled) {
-      return getBrighterColor(bgColor);
-    } else if (isSelected && mouseHover) {
+    if (isSelected && isMouseHover) {
       return getStripedBackground(bgDarker);
     } else if (isSelected) {
       return getStripedBackground(bgColor);
-    } else if (mouseHover) {
+    } else if (isMouseHover) {
       return bgDarker;
     } else {
       return bgColor;
@@ -41,16 +33,10 @@ export default function ({
   }
 
   return (
-    <div
-      className="text-center small"
-      style={{ filter: boxFilter }}
-      onMouseEnter={() => setMouseHover(true)}
-      onMouseLeave={() => setMouseHover(false)}
-    >
+    <div className="text-center small fw-bold" style={{ filter: boxFilter }}>
       <div
         style={{
           lineHeight: "40px",
-          fontWeight: "bold",
           color: boxStyle.textColor,
           background: getBackground(),
           borderRadius: boxStyle.borderRadius,

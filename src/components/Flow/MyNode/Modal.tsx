@@ -13,7 +13,7 @@ import useStoreStrings from "~/store/useStoreStrings";
 
 interface Props {
   title: string;
-  prefixLabel?: string;
+  prefixLabel: string;
   prefixCommand?: string;
   matchStartRule: string;
   placeholder: string;
@@ -81,7 +81,7 @@ export default function ({
         </Modal.Header>
         <Modal.Body>
           <Form.Group as={Row}>
-            {prefixLabel !== undefined && (
+            {prefixLabel !== "" && (
               <Form.Label column className="fw-bold fst-italic" md="auto">
                 {prefixLabel}
               </Form.Label>

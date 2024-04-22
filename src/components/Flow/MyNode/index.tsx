@@ -1,11 +1,8 @@
 import _ from "lodash";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Node, useReactFlow } from "reactflow";
 
 import { Block } from "~/components/Blocks";
-import Box from "~/components/Blocks/Box";
-import Label from "~/components/Blocks/Label";
-import Modal from "~/components/Blocks/Modal";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlow from "~/store/useStoreFlow";
 import useStoreMachine from "~/store/useStoreMachine";
@@ -13,8 +10,11 @@ import useStoreMachineState from "~/store/useStoreMachineState";
 import useStoreStrings from "~/store/useStoreStrings";
 import { getDropShadow, palette } from "~/utils/colors";
 
+import Box from "./Box";
 import ButtonDelete from "./ButtonDelete";
 import ButtonEdit from "./ButtonEdit";
+import Label from "./Label";
+import Modal from "./Modal";
 import MyHandleSource from "./MyHandleSource";
 import MyHandleTarget from "./MyHandleTarget";
 
@@ -30,7 +30,7 @@ export default function ({ nodeId, block }: Props): JSX.Element {
 
   const { title, prefixLabel, boxStyle, modal, handles } = block;
 
-  const { nodes, deleteNode, updateNodeProp } = useStoreFlow();
+  const { nodes, deleteNode } = useStoreFlow();
   const {
     isDraggingNode,
     isConnectingEdge,
@@ -44,19 +44,15 @@ export default function ({ nodeId, block }: Props): JSX.Element {
 
   const state = getState();
 
-  const labelRef = useRef<HTMLInputElement>(null);
+  const labelRef = useRef<HTMLSpanElement>(null);
 
   const node: Node | undefined = _.find(nodes, { id: nodeId });
 
   useEffect(() => {
-    const MAX_WIDTH = 480;
     if (labelRef.current !== null) {
       const zoom = getZoom();
       const labelWidth = labelRef.current.getBoundingClientRect().width / zoom;
-      const newNodeWidth = Math.min(
-        40 + 40 * Math.ceil(labelWidth / 40),
-        MAX_WIDTH,
-      );
+      const newNodeWidth = Math.min(40 + 20 * Math.ceil(labelWidth / 20), 480);
       setMargin((newNodeWidth - labelWidth) / 2);
     }
   }, [node?.data, language]);
@@ -80,39 +76,62 @@ export default function ({ nodeId, block }: Props): JSX.Element {
     });
   }, [state, compileErrors]);
 
-  const handleDelete = useCallback(() => {
+  function handleDelete() {
     deleteNode(nodeId);
     setMouseOverNodeId(null);
-  }, [deleteNode, nodeId, setMouseOverNodeId]);
+  }
 
-  const handleEdit = useCallback(() => {
+  function handleEdit() {
     setMouseOverNodeId(null);
     setShowModal(true);
-  }, [setMouseOverNodeId, setShowModal]);
+  }
 
-  const onMouseEnter = useCallback(() => {
-    setMouseOverNodeId(nodeId);
-  }, [setMouseOverNodeId, nodeId]);
-
-  const onMouseLeave = useCallback(() => {
-    setMouseOverNodeId(null);
-  }, [setMouseOverNodeId]);
-
-  const buttonsVisible =
-    mouseOverNodeId === nodeId && !isDraggingNode && !isConnectingEdge;
+  const isSelected = node?.selected ?? false;
+  const isMouseHover = mouseOverNodeId === nodeId;
+  const isDeleteVisible = isMouseHover && !isDraggingNode && !isConnectingEdge;
+  const isEditVisible = isDeleteVisible && modal !== undefined;
 
   return (
     <div
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      style={{ cursor: "grab" }}
+      onMouseEnter={() => setMouseOverNodeId(nodeId)}
+      onMouseLeave={() => setMouseOverNodeId(null)}
+      style={{ cursor: isDraggingNode ? "grabbing" : "grab" }}
     >
+      <Box
+        boxStyle={boxStyle}
+        boxFilter={boxFilter}
+        isSelected={isSelected}
+        isMouseHover={isMouseHover}
+      >
+        <span
+          className="d-block text-truncate"
+          ref={labelRef}
+          style={{
+            minWidth: "40px",
+            maxWidth: "392px",
+            marginLeft: `${margin}px`,
+            marginRight: `${margin}px`,
+          }}
+        >
+          <Label
+            prefixLabel={getString(prefixLabel ?? "")}
+            value={node?.data}
+          />
+        </span>
+      </Box>
+      <ButtonDelete onClick={handleDelete} visible={isDeleteVisible} />
+      <ButtonEdit onClick={handleEdit} visible={isEditVisible} />
+      {_.map(handles, (props, index) =>
+        props.type === "source" ? (
+          <MyHandleSource key={index} boxStyle={boxStyle} {...props} />
+        ) : (
+          <MyHandleTarget key={index} boxStyle={boxStyle} {...props} />
+        ),
+      )}
       {modal !== undefined && (
         <Modal
           title={getString(title)}
-          prefixLabel={
-            prefixLabel !== undefined ? getString(prefixLabel) : undefined
-          }
+          prefixLabel={getString(prefixLabel ?? "")}
           prefixCommand={modal.prefixCommand}
           matchStartRule={modal.matchStartRule}
           placeholder={getString(modal.placeholder)}
@@ -121,47 +140,6 @@ export default function ({ nodeId, block }: Props): JSX.Element {
           showModal={showModal}
           setShowModal={setShowModal}
         />
-      )}
-      <Box
-        boxStyle={boxStyle}
-        boxFilter={boxFilter}
-        isSelected={node?.selected}
-      >
-        <span
-          ref={labelRef}
-          style={{
-            minWidth: "40px",
-            maxWidth: "392px",
-            marginLeft: `${margin}px`,
-            marginRight: `${margin}px`,
-            display: "inline-block",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            verticalAlign: "middle",
-            textOverflow: "ellipsis",
-            color: boxStyle.textColor,
-            cursor: "grab",
-          }}
-        >
-          <Label
-            prefixLabel={
-              prefixLabel !== undefined ? getString(prefixLabel) : ""
-            }
-            value={node?.data}
-          />
-        </span>
-      </Box>
-      <ButtonDelete onClick={handleDelete} visible={buttonsVisible} />
-      <ButtonEdit
-        onClick={handleEdit}
-        visible={buttonsVisible && modal !== undefined}
-      />
-      {_.map(handles, (props, index) =>
-        props.type === "source" ? (
-          <MyHandleSource key={index} boxStyle={boxStyle} {...props} />
-        ) : (
-          <MyHandleTarget key={index} boxStyle={boxStyle} {...props} />
-        ),
       )}
     </div>
   );

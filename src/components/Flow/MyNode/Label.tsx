@@ -1,8 +1,8 @@
 import React from "react";
 
 interface Props {
-  prefixLabel?: string;
-  value?: string;
+  prefixLabel: string;
+  value: string;
 }
 
 export default function ({ prefixLabel, value }: Props): JSX.Element {
