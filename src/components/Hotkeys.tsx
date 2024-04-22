@@ -28,6 +28,7 @@ export default function (): JSX.Element {
       },
       {
         enableOnFormTags: ["INPUT", "TEXTAREA"],
+        preventDefault: true,
       },
     );
   }
