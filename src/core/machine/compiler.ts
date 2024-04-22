@@ -41,7 +41,6 @@ interface CompilerInput {
 
 interface CompilerOutput {
   flowchart: Block[];
-  startBlockId: string;
   errors: CompileError[];
 }
 
@@ -199,11 +198,11 @@ export default function compile({
 
   const errors: CompileError[] = [];
 
-  const [startBlockId, errs1] = getStartBlockId();
+  const [_startBlockId, errs1] = getStartBlockId();
   errors.push(...errs1);
 
   const [flowchart, errs2] = compileFlowchart();
   errors.push(...errs2);
 
-  return { flowchart, startBlockId, errors };
+  return { flowchart, errors };
 }

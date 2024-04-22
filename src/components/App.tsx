@@ -21,8 +21,7 @@ import UrlImporter from "./UrlImporter";
 
 export default function (): JSX.Element {
   const { nodes, edges } = useStoreFlow();
-  const { machine, setFlowchart, setStartBlockId, setCompileErrors } =
-    useStoreMachine();
+  const { machine, setFlowchart, setCompileErrors } = useStoreMachine();
   const { reset } = useStoreMachineState();
 
   const nodesDep = JSON.stringify(
@@ -35,19 +34,18 @@ export default function (): JSX.Element {
   );
 
   useEffect(() => {
-    const { flowchart, startBlockId, errors } = compile({
+    const { flowchart, errors } = compile({
       nodes,
       edges,
       variables: machine.variables,
     });
-    setStartBlockId(startBlockId);
     setFlowchart(flowchart);
     setCompileErrors(errors);
   }, [nodesDep, edgesDep, machine.variables]);
 
   useEffect(() => {
     reset(machine);
-  }, [machine.flowchart, machine.startBlockId]);
+  }, [machine.flowchart]);
 
   const resizeHandleStyle = {
     backgroundColor: palette.gray300,

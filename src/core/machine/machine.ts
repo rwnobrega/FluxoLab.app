@@ -6,7 +6,6 @@ import { VarType, Variable } from "./variables";
 export interface Machine {
   title: string;
   flowchart: Block[];
-  startBlockId: string;
   variables: Variable[];
 }
 
@@ -21,10 +20,13 @@ export interface MachineState {
 }
 
 export function runMachineStep(machine: Machine, state: MachineState): void {
-  if (state.curBlockId === null) {
-    state.curBlockId = machine.startBlockId;
-  }
-  const block = _.find(machine.flowchart, { id: state.curBlockId }) as Block;
+  const block = (() => {
+    if (state.curBlockId === null) {
+      return _.find(machine.flowchart, { type: "start" });
+    } else {
+      return _.find(machine.flowchart, { id: state.curBlockId });
+    }
+  })() as Block;
   block.work(machine, state);
   const nextBlock = _.find(machine.flowchart, {
     id: state.curBlockId,

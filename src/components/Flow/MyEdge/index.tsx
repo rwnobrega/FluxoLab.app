@@ -26,7 +26,7 @@ export default function ({
       setAnimated(false);
       return;
     }
-    if (sourceNode.id === machine.startBlockId) {
+    if (sourceNode.type === "start") {
       setAnimated(state.timeSlot === -1);
       return;
     }

@@ -12,7 +12,6 @@ interface StoreMachine {
   clearMachine: () => void;
   setTitle: (title: string) => void;
   setFlowchart: (flowchart: Block[]) => void;
-  setStartBlockId: (startBlockId: string) => void;
   setVariables: (variables: Variable[]) => void;
   getVariable: (variableId: string) => Variable | undefined;
   addVariable: (id: string, type: Variable["type"]) => void;
@@ -27,7 +26,6 @@ interface StoreMachine {
 const emptyMachine: Machine = {
   title: "",
   flowchart: [],
-  startBlockId: "",
   variables: [],
 };
 
@@ -46,11 +44,6 @@ const useStoreMachine = create<StoreMachine>()(
       setFlowchart: (flowchart) => {
         const { machine } = get();
         machine.flowchart = flowchart;
-        set({ machine });
-      },
-      setStartBlockId: (startBlockId) => {
-        const { machine } = get();
-        machine.startBlockId = startBlockId;
         set({ machine });
       },
       setVariables: (variables) => {
