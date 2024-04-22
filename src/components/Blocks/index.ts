@@ -8,8 +8,8 @@ import blockOutput from "./output";
 import blockStart from "./start";
 
 export interface BoxStyle {
-  backgroundColor?: string;
-  textColor?: string;
+  backgroundColor: string;
+  textColor: string;
   borderRadius?: string;
   clipPath?: string;
   clipPathBorder?: string;

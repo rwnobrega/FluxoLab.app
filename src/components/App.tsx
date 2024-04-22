@@ -4,19 +4,20 @@ import Stack from "react-bootstrap/Stack";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { ReactFlowProvider } from "reactflow";
 
-import Flow from "~/components/Flow";
-import Hotkeys from "~/components/Hotkeys";
-import Navbar from "~/components/Navbar";
-import Blocks from "~/components/Panels/Blocks";
-import InputOutput from "~/components/Panels/InputOutput";
-import Variables from "~/components/Panels/Variables";
-import Toaster from "~/components/Toaster";
-import UrlImporter from "~/components/UrlImporter";
 import compile from "~/machine/compiler";
 import useStoreFlow from "~/store/useStoreFlow";
 import useStoreMachine from "~/store/useStoreMachine";
 import useStoreMachineState from "~/store/useStoreMachineState";
 import { palette } from "~/utils/colors";
+
+import Flow from "./Flow";
+import Hotkeys from "./Hotkeys";
+import Navbar from "./Navbar";
+import Blocks from "./Panels/BlockList";
+import InputOutput from "./Panels/InputOutput";
+import Variables from "./Panels/Variables";
+import Toaster from "./Toaster";
+import UrlImporter from "./UrlImporter";
 
 export default function (): JSX.Element {
   const { nodes, edges } = useStoreFlow();
