@@ -1,8 +1,9 @@
-import React, { useCallback } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useReactFlow } from "reactflow";
 
+import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlow from "~/store/useStoreFlow";
 import useStoreMachine from "~/store/useStoreMachine";
 import useStoreStrings from "~/store/useStoreStrings";
@@ -14,21 +15,27 @@ interface Props {
 
 export default function ({ showModal, setShowModal }: Props): JSX.Element {
   const { clearAll } = useStoreFlow();
+  const { triggerToast } = useStoreEphemeral();
   const { clearMachine } = useStoreMachine();
   const { getString } = useStoreStrings();
 
   const { setViewport } = useReactFlow();
 
-  const handleCancel = useCallback(() => {
+  const handleCancel = () => {
     setShowModal(false);
-  }, [setShowModal]);
+  };
 
-  const handleConfirm = useCallback(() => {
+  const handleConfirm = () => {
     clearAll();
     setViewport({ x: 0, y: 0, zoom: 1 });
     clearMachine();
     setShowModal(false);
-  }, [clearAll, clearMachine, setViewport, setShowModal]);
+    triggerToast({
+      background: "success",
+      icon: "bi-recycle",
+      message: getString("ToastMessage_FlowchartCleared"),
+    });
+  };
 
   return (
     <Modal show={showModal} onHide={handleCancel}>
