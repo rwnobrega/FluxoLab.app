@@ -1,8 +1,8 @@
 import _ from "lodash";
 import * as ohm from "ohm-js";
 
-import { MachineState } from "~/machine/machine";
-import { VarType, getVariableType } from "~/machine/variables";
+import { MachineState } from "~/core/machine/machine";
+import { VarType, getVariableType } from "~/core/machine/variables";
 
 import grammar from "./grammar";
 

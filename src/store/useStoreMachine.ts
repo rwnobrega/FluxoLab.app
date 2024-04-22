@@ -2,10 +2,10 @@ import _ from "lodash";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { Block } from "~/machine/blocks";
-import { CompileError } from "~/machine/compiler";
-import { Machine } from "~/machine/machine";
-import { Variable } from "~/machine/variables";
+import { Block } from "~/core/machine/blocks";
+import { CompileError } from "~/core/machine/compiler";
+import { Machine } from "~/core/machine/machine";
+import { Variable } from "~/core/machine/variables";
 
 interface StoreMachine {
   machine: Machine;

@@ -1,8 +1,8 @@
 import _ from "lodash";
 
-import { getExpectedText } from "~/language/errors";
-import evaluate from "~/language/evaluate";
-import grammar from "~/language/grammar";
+import { getExpectedText } from "~/core/language/errors";
+import evaluate from "~/core/language/evaluate";
+import grammar from "~/core/language/grammar";
 
 import { Machine, MachineState } from "./machine";
 import { Variable, getVariableType } from "./variables";

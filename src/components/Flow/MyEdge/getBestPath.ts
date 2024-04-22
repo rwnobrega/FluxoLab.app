@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { Node, Position, XYPosition } from "reactflow";
 
-import blocks from "~/components/Blocks";
+import blocks from "~/core/blocks";
 
 import getPath from "./getPath";
 

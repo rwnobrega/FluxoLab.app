@@ -6,8 +6,8 @@ import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 
 import TextInput from "~/components/General/TextInput";
-import { getExpectedText } from "~/language/errors";
-import grammar from "~/language/grammar";
+import { getExpectedText } from "~/core/language/errors";
+import grammar from "~/core/language/grammar";
 import useStoreFlow from "~/store/useStoreFlow";
 import useStoreStrings from "~/store/useStoreStrings";
 

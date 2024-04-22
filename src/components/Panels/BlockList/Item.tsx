@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { BoxStyle } from "~/components/Blocks";
+import { BoxStyle } from "~/core/blocks";
 import useStoreMachineState from "~/store/useStoreMachineState";
 import useStoreStrings from "~/store/useStoreStrings";
 import { getBrighterColor, getDarkerColor } from "~/utils/colors";

@@ -5,8 +5,8 @@ import {
 } from "lz-string";
 import { Edge, Node } from "reactflow";
 
-import { Machine } from "~/machine/machine";
-import { Variable } from "~/machine/variables";
+import { Machine } from "~/core/machine/machine";
+import { Variable } from "~/core/machine/variables";
 
 const revAlias = [
   "number",

@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 
-import blocks from "~/components/Blocks";
+import blocks from "~/core/blocks";
 
 import Item from "./Item";
 

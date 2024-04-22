@@ -2,7 +2,7 @@ import _ from "lodash";
 import React from "react";
 import Form from "react-bootstrap/Form";
 
-import { Variable, variableTypes } from "~/machine/variables";
+import { Variable, variableTypes } from "~/core/machine/variables";
 import useStoreMachine from "~/store/useStoreMachine";
 import useStoreStrings from "~/store/useStoreStrings";
 

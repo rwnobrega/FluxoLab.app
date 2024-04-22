@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { Edge, Node } from "reactflow";
 
-import grammar from "~/language/grammar";
+import grammar from "~/core/language/grammar";
 
 import {
   Block,

@@ -4,7 +4,7 @@ import Stack from "react-bootstrap/Stack";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { ReactFlowProvider } from "reactflow";
 
-import compile from "~/machine/compiler";
+import compile from "~/core/machine/compiler";
 import useStoreFlow from "~/store/useStoreFlow";
 import useStoreMachine from "~/store/useStoreMachine";
 import useStoreMachineState from "~/store/useStoreMachineState";

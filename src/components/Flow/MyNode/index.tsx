@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { Node, useReactFlow } from "reactflow";
 
-import { Block } from "~/components/Blocks";
+import { Block } from "~/core/blocks";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlow from "~/store/useStoreFlow";
 import useStoreMachine from "~/store/useStoreMachine";

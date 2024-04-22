@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 
 import TextInput from "~/components/General/TextInput";
-import isValidIdentifier from "~/language/isValidIdentifier";
+import isValidIdentifier from "~/core/language/isValidIdentifier";
 import useStoreMachine from "~/store/useStoreMachine";
 import useStoreStrings from "~/store/useStoreStrings";
 

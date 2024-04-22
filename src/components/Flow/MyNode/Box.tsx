@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { BoxStyle } from "~/components/Blocks";
+import { BoxStyle } from "~/core/blocks";
 import { getDarkerColor, getStripedBackground } from "~/utils/colors";
 
 interface Props {

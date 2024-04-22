@@ -1,7 +1,7 @@
 import React from "react";
 import { Handle, HandleProps, Position } from "reactflow";
 
-import { BoxStyle } from "~/components/Blocks";
+import { BoxStyle } from "~/core/blocks";
 
 type Props = HandleProps & {
   boxStyle: BoxStyle;

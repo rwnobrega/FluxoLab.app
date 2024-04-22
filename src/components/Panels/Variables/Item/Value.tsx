@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getVariableType } from "~/machine/variables";
+import { getVariableType } from "~/core/machine/variables";
 import useStoreMachineState from "~/store/useStoreMachineState";
 
 import { Props } from ".";

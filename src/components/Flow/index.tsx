@@ -8,9 +8,9 @@ import ReactFlow, {
   useReactFlow,
 } from "reactflow";
 
-import blocks from "~/components/Blocks";
 import PlayButtons from "~/components/PlayButtons";
 import StatusMessage from "~/components/StatusMessage";
+import blocks from "~/core/blocks";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlow from "~/store/useStoreFlow";
 

@@ -1,5 +1,5 @@
-import { CompileError } from "~/machine/compiler";
-import { MachineState } from "~/machine/machine";
+import { CompileError } from "~/core/machine/compiler";
+import { MachineState } from "~/core/machine/machine";
 import { Action } from "~/store/useStoreMachineState";
 
 interface PlayButton {

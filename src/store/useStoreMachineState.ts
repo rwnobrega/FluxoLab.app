@@ -6,7 +6,7 @@ import {
   MachineState,
   getInitialState,
   runMachineStep,
-} from "~/machine/machine";
+} from "~/core/machine/machine";
 
 export type Action = "reset" | "stepBack" | "nextStep";
 
