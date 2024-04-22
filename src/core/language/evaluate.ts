@@ -6,7 +6,7 @@ import { VarType, getVariableType } from "~/core/machine/variables";
 
 import grammar from "./grammar";
 
-const unaryOperators: { [key: string]: (a: VarType) => VarType } = {
+const unaryOperators: Record<string, (a: VarType) => VarType> = {
   "+": (a: number) => a,
   "-": (a: number) => -a,
   "!": (a: boolean) => !a,
@@ -28,23 +28,22 @@ function evalUnaryOperator(a: ohm.Node, b: ohm.Node): VarType {
   return unaryOperators[name](arg);
 }
 
-const binaryOperators: { [key: string]: (a: VarType, b: VarType) => VarType } =
-  {
-    "||": (a: boolean, b: boolean) => a || b,
-    "&&": (a: boolean, b: boolean) => a && b,
-    "<=": (a: number, b: number) => a <= b,
-    "<": (a: number, b: number) => a < b,
-    ">=": (a: number, b: number) => a >= b,
-    ">": (a: number, b: number) => a > b,
-    "==": <T>(a: T, b: T) => a === b,
-    "!=": <T>(a: T, b: T) => a !== b,
-    "+": (a: number, b: number) => a + b,
-    "-": (a: number, b: number) => a - b,
-    "*": (a: number, b: number) => a * b,
-    "/": (a: number, b: number) => a / b,
-    div: (a: number, b: number) => Math.floor(a / b),
-    mod: (a: number, b: number) => a % b,
-  };
+const binaryOperators: Record<string, (a: VarType, b: VarType) => VarType> = {
+  "||": (a: boolean, b: boolean) => a || b,
+  "&&": (a: boolean, b: boolean) => a && b,
+  "<=": (a: number, b: number) => a <= b,
+  "<": (a: number, b: number) => a < b,
+  ">=": (a: number, b: number) => a >= b,
+  ">": (a: number, b: number) => a > b,
+  "==": <T>(a: T, b: T) => a === b,
+  "!=": <T>(a: T, b: T) => a !== b,
+  "+": (a: number, b: number) => a + b,
+  "-": (a: number, b: number) => a - b,
+  "*": (a: number, b: number) => a * b,
+  "/": (a: number, b: number) => a / b,
+  div: (a: number, b: number) => Math.floor(a / b),
+  mod: (a: number, b: number) => a % b,
+};
 
 function evalBinaryOperator(a: ohm.Node, b: ohm.Node, c: ohm.Node): VarType {
   const left = a.eval(this.args.memory);
@@ -89,7 +88,7 @@ function evalBinaryOperator(a: ohm.Node, b: ohm.Node, c: ohm.Node): VarType {
   return binaryOperators[name](left, right);
 }
 
-const numericalFunctions: { [key: string]: (...args: number[]) => number } = {
+const numericalFunctions: Record<string, (...args: number[]) => number> = {
   pow: (a: number, b: number) => Math.pow(a, b),
   sqrt: (a: number) => Math.sqrt(a),
   log: (a: number) => Math.log(a),
@@ -165,7 +164,7 @@ function evalNumericalFunction(
   return numericalFunctions[name](...args);
 }
 
-const numericalConstants: { [key: string]: number } = {
+const numericalConstants: Record<string, number> = {
   pi: Math.PI,
   tau: 2 * Math.PI,
 };

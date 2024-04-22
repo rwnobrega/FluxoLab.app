@@ -1,6 +1,6 @@
 import { Color, contrastBrightness, convert } from "colvertize";
 
-export const palette: { [key: string]: string } = {
+export const palette: Record<string, string> = {
   blue: "#0d6efd",
   indigo: "#6610f2",
   purple: "#6f42c1",

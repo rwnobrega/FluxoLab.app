@@ -23,7 +23,7 @@ const spanClasses = {
   out: "text-bg-success",
 };
 
-const spanStyles: { [key: string]: CSSProperties } = {
+const spanStyles: Record<string, CSSProperties> = {
   common: {
     whiteSpace: "normal",
     wordBreak: "break-word",
