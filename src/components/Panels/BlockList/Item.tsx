@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 
-import { BoxStyle } from "~/core/blocks";
+import { BoxStyle } from "~/core/blockTypes";
 import useStoreMachineState from "~/store/useStoreMachineState";
 import useStoreStrings from "~/store/useStoreStrings";
 import { getBrighterColor, getDarkerColor } from "~/utils/colors";
 
 interface Props {
-  type: string;
+  typeId: string;
   title: string;
   boxStyle: BoxStyle;
 }
 
-export default function ({ type, title, boxStyle }: Props): JSX.Element {
+export default function ({ typeId, title, boxStyle }: Props): JSX.Element {
   const { getString } = useStoreStrings();
   const { getState } = useStoreMachineState();
   const [mouseHover, setMouseHover] = useState<boolean>(false);
@@ -20,7 +20,7 @@ export default function ({ type, title, boxStyle }: Props): JSX.Element {
   const isDisabled = state.timeSlot >= 0;
 
   function onDragStart(event: React.DragEvent<HTMLDivElement>): void {
-    event.dataTransfer.setData("application/text", type);
+    event.dataTransfer.setData("application/text", typeId);
     event.dataTransfer.effectAllowed = "move";
   }
 

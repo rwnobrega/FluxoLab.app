@@ -2,10 +2,10 @@ import { Position } from "reactflow";
 
 import { getBrighterColor, palette } from "~/utils/colors";
 
-import { Block } from ".";
+import { BlockType } from ".";
 
-const block: Block = {
-  type: "conditional",
+const block: BlockType = {
+  id: "conditional",
   title: "Block_Conditional",
   boxStyle: {
     backgroundColor: getBrighterColor(palette.red),

@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { Node, useReactFlow } from "reactflow";
 
-import { Block } from "~/core/blocks";
+import { BlockType } from "~/core/blockTypes";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlow from "~/store/useStoreFlow";
 import useStoreMachine from "~/store/useStoreMachine";
@@ -20,15 +20,15 @@ import MyHandleTarget from "./MyHandleTarget";
 
 interface Props {
   nodeId: string;
-  block: Block;
+  blockType: BlockType;
 }
 
-export default function ({ nodeId, block }: Props): JSX.Element {
+export default function ({ nodeId, blockType }: Props): JSX.Element {
   const [margin, setMargin] = useState<number>(0);
   const [boxFilter, setBoxFilter] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const { title, prefixLabel, boxStyle, modal, handles } = block; // TODO: No need to pass block as prop?
+  const { title, prefixLabel, boxStyle, modal, handles } = blockType; // TODO: No need to pass block as prop?
 
   const { nodes, deleteNode } = useStoreFlow();
   const {
@@ -113,7 +113,7 @@ export default function ({ nodeId, block }: Props): JSX.Element {
             marginRight: `${margin}px`,
           }}
         >
-          <Label block={block} value={node?.data} />
+          <Label blockType={blockType} value={node?.data} />
         </span>
       </Box>
       <ButtonDelete onClick={handleDelete} visible={isDeleteVisible} />

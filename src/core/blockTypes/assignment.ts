@@ -2,10 +2,10 @@ import { Position } from "reactflow";
 
 import { getBrighterColor, palette } from "~/utils/colors";
 
-import { Block } from ".";
+import { BlockType } from ".";
 
-const block: Block = {
-  type: "assignment",
+const block: BlockType = {
+  id: "assignment",
   title: "Block_Assignment",
   boxStyle: {
     backgroundColor: getBrighterColor(palette.orange),

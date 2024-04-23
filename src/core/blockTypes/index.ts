@@ -15,9 +15,8 @@ export interface BoxStyle {
   clipPathBorder?: string;
 }
 
-// Contrast with "~/core/machine/block.ts"
-export interface Block {
-  type: "start" | "read" | "write" | "assignment" | "conditional" | "end";
+export interface BlockType {
+  id: "start" | "read" | "write" | "assignment" | "conditional" | "end";
   title: string;
   prefixLabel?: string;
   boxStyle: BoxStyle;
@@ -34,7 +33,7 @@ export interface Block {
   }>;
 }
 
-const blocks: Block[] = [
+const blockTypes: BlockType[] = [
   blockStart,
   blockInput,
   blockOutput,
@@ -43,4 +42,4 @@ const blocks: Block[] = [
   blockEnd,
 ];
 
-export default blocks;
+export default blockTypes;

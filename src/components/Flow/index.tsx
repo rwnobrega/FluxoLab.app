@@ -10,7 +10,7 @@ import ReactFlow, {
 
 import PlayButtons from "~/components/PlayButtons";
 import StatusMessage from "~/components/StatusMessage";
-import blocks from "~/core/blocks";
+import blockTypes from "~/core/blockTypes";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlow from "~/store/useStoreFlow";
 
@@ -21,8 +21,8 @@ import MyNode from "./MyNode";
 const edgeTypes: EdgeTypes = { edge: MyEdge };
 
 const nodeTypes: NodeTypes = {};
-for (const block of blocks) {
-  nodeTypes[block.type] = ({ id }) => <MyNode nodeId={id} block={block} />;
+for (const type of blockTypes) {
+  nodeTypes[type.id] = ({ id }) => <MyNode nodeId={id} blockType={type} />;
 }
 
 export default function (): JSX.Element {

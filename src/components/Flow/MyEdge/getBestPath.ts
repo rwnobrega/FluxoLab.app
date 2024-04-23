@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { Node, Position } from "reactflow";
 
-import blocks from "~/core/blocks";
+import blockTypes from "~/core/blockTypes";
 
 import getPath from "./getPath";
 
@@ -33,11 +33,11 @@ export default function (
     height: targetNode.height as number,
   };
 
-  const block = blocks.find((block) => block.type === targetNode.type);
-  if (!block) throw new Error(`Unknown block type: ${targetNode.type}`);
+  const blockType = blockTypes.find((bt) => bt.id === targetNode.type);
+  if (!blockType) throw new Error(`Unknown block type: ${targetNode.type}`);
 
   const takenPositions = [Position.Bottom];
-  for (const handle of block.handles) {
+  for (const handle of blockType.handles) {
     if (handle.id !== "in") {
       takenPositions.push(handle.position);
     }

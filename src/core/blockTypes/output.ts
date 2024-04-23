@@ -2,23 +2,23 @@ import { Position } from "reactflow";
 
 import { getBrighterColor, palette } from "~/utils/colors";
 
-import { Block } from ".";
+import { BlockType } from ".";
 
-const block: Block = {
-  type: "read",
-  title: "Block_Input",
-  prefixLabel: "Block_Read",
+const block: BlockType = {
+  id: "write",
+  title: "Block_Output",
+  prefixLabel: "Block_Write",
   boxStyle: {
-    backgroundColor: getBrighterColor(palette.blue),
+    backgroundColor: getBrighterColor(palette.green),
     textColor: "white",
     clipPath: "polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%)",
     clipPathBorder:
       "polygon(20px 0, calc(100% + 1px) 0, calc(100% - 21px) 100%, -1px calc(100% - 1px))",
   },
   modal: {
-    prefixCommand: "read ",
-    matchStartRule: "Command_read",
-    placeholder: "Block_InputPlaceholder",
+    prefixCommand: "write ",
+    matchStartRule: "Command_write",
+    placeholder: "Block_OutputPlaceholder",
   },
   handles: [
     { id: "in", type: "target", position: Position.Top },

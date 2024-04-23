@@ -2,10 +2,10 @@ import { Position } from "reactflow";
 
 import { getBrighterColor, palette } from "~/utils/colors";
 
-import { Block } from ".";
+import { BlockType } from ".";
 
-const block: Block = {
-  type: "end",
+const block: BlockType = {
+  id: "end",
   title: "Block_End",
   prefixLabel: "Block_End",
   boxStyle: {

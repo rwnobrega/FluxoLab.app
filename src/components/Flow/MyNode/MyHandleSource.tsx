@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Handle, HandleProps } from "reactflow";
 
-import { BoxStyle } from "~/core/blocks";
+import { BoxStyle } from "~/core/blockTypes";
 import { getDarkerColor } from "~/utils/colors";
 
 type Props = HandleProps & {
