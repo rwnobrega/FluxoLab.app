@@ -1,26 +1,38 @@
 import React from "react";
 
+import { Block } from "~/core/blocks";
+import useStoreStrings from "~/store/useStoreStrings";
+
 interface Props {
-  prefixLabel: string;
+  type: Block["type"];
+  prefixLabel?: string;
   value: string;
 }
 
-export default function ({ prefixLabel, value }: Props): JSX.Element {
-  if (prefixLabel && value) {
+export default function ({ type, prefixLabel, value }: Props): JSX.Element {
+  const { getString } = useStoreStrings();
+  if (type === "read" || type === "write") {
+    console.log(1);
     return (
       <span>
         <i>{prefixLabel}</i>
         {"\u00A0\u00A0"}
-        <span className="font-monospace">{value}</span>
+        <span className={`font-monospace ${value ? "" : "fst-italic"}`}>
+          {value || getString("Block_Empty")}
+        </span>
       </span>
     );
-  } else if (prefixLabel) {
+  } else if (type === "start" || type === "end") {
     return (
       <span style={{ position: "relative", top: "-2.5px" }}>
         <i>{prefixLabel}</i>
       </span>
     );
   } else {
-    return <span className="font-monospace">{value}</span>;
+    return (
+      <span className={`font-monospace ${value ? "" : "fst-italic"}`}>
+        {value || getString("Block_Empty")}
+      </span>
+    );
   }
 }

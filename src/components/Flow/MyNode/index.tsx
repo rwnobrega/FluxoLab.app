@@ -28,7 +28,7 @@ export default function ({ nodeId, block }: Props): JSX.Element {
   const [boxFilter, setBoxFilter] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const { title, prefixLabel, boxStyle, modal, handles } = block;
+  const { title, prefixLabel, boxStyle, modal, handles } = block; // TODO: No need to pass block as prop?
 
   const { nodes, deleteNode } = useStoreFlow();
   const {
@@ -114,7 +114,8 @@ export default function ({ nodeId, block }: Props): JSX.Element {
           }}
         >
           <Label
-            prefixLabel={getString(prefixLabel ?? "")}
+            type={block.type}
+            prefixLabel={prefixLabel && getString(prefixLabel)}
             value={node?.data}
           />
         </span>
