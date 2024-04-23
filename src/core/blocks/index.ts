@@ -17,7 +17,7 @@ export interface BoxStyle {
 
 // Contrast with "~/core/machine/block.ts"
 export interface Block {
-  type: string; // TODO: Use union type
+  type: "start" | "read" | "write" | "assignment" | "conditional" | "end";
   title: string;
   prefixLabel?: string;
   boxStyle: BoxStyle;

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Node, Position, XYPosition } from "reactflow";
+import { Node, Position } from "reactflow";
 
 import blocks from "~/core/blocks";
 
@@ -32,8 +32,9 @@ export default function (
     width: targetNode.width as number,
     height: targetNode.height as number,
   };
-  const block = _.find(blocks, { type: targetNode.type });
-  if (!block) throw new Error(`Block not found for type ${targetNode.type}`);
+
+  const block = blocks.find((block) => block.type === targetNode.type);
+  if (!block) throw new Error(`Unknown block type: ${targetNode.type}`);
 
   const takenPositions = [Position.Bottom];
   for (const handle of block.handles) {

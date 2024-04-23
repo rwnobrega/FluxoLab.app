@@ -113,11 +113,7 @@ export default function ({ nodeId, block }: Props): JSX.Element {
             marginRight: `${margin}px`,
           }}
         >
-          <Label
-            type={block.type}
-            prefixLabel={prefixLabel && getString(prefixLabel)}
-            value={node?.data}
-          />
+          <Label block={block} value={node?.data} />
         </span>
       </Box>
       <ButtonDelete onClick={handleDelete} visible={isDeleteVisible} />
