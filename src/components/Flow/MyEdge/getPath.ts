@@ -3,6 +3,8 @@ import { Dimensions, Position, XYPosition } from "reactflow";
 
 import doRectanglesIntersect from "./doRectanglesIntersect";
 
+export type Path = Array<[number, number]>;
+
 export default function getPath(
   pos0: Position,
   pos1: Position,
@@ -11,7 +13,7 @@ export default function getPath(
   dim0: Dimensions,
   dim1: Dimensions,
   gridSize: number = 20,
-): Array<[number, number]> {
+): Path {
   const right0 = center0.x + dim0.width / 2;
   const left0 = center0.x - dim0.width / 2;
   const top0 = center0.y - dim0.height / 2;
@@ -35,7 +37,7 @@ export default function getPath(
     [Position.Right]: [right1, center1.y],
   }[pos1];
 
-  let path: Array<[number, number]> = [];
+  let path: Path = [];
 
   if (doRectanglesIntersect(center0, dim0, center1, dim1)) {
     return [
@@ -246,9 +248,7 @@ export default function getPath(
   return removeRedundantPoints(path);
 }
 
-function removeRedundantPoints(
-  path: Array<[number, number]>,
-): Array<[number, number]> {
+function removeRedundantPoints(path: Path): Path {
   const newPath = [path[0]];
   for (let i = 1; i < path.length - 1; i++) {
     if (path[i][0] === path[i - 1][0] && path[i][0] === path[i + 1][0]) {

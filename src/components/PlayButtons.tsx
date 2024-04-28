@@ -4,35 +4,30 @@ import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 
 import Tooltip from "~/components/General/Tooltip";
+import actions, { Action } from "~/core/machine/actions";
 import useStoreMachine from "~/store/useStoreMachine";
-import useStoreMachineState, { Action } from "~/store/useStoreMachineState";
 import useStoreStrings from "~/store/useStoreStrings";
 
-import buttonList from "./buttonList";
-
 export default function (): JSX.Element {
-  const { machine, compileErrors } = useStoreMachine();
-  const { getState, execAction } = useStoreMachineState();
+  const { machineState, executeAction } = useStoreMachine();
   const { getString } = useStoreStrings();
 
-  const state = getState();
-
-  const onClick = (action: Action): void => {
-    execAction(action, machine);
+  const onClick = (actionId: Action["actionId"]): void => {
+    executeAction(actionId);
   };
 
   return (
     <ButtonGroup style={{ zIndex: 10 }}>
       {_.map(
-        buttonList,
-        ({ action, description, hotkey, icon, isDisabled }) => {
-          const disabled = isDisabled(state, compileErrors);
+        actions,
+        ({ actionId, description, hotkey, icon, enabledStatuses }) => {
+          const disabled = !enabledStatuses.includes(machineState.status);
           const tooltipText = disabled
             ? ""
             : `${getString(description)} (${hotkey})`;
           return (
-            <Tooltip key={action} text={tooltipText}>
-              <Button disabled={disabled} onClick={() => onClick(action)}>
+            <Tooltip key={actionId} text={tooltipText}>
+              <Button disabled={disabled} onClick={() => onClick(actionId)}>
                 <i className={`bi ${icon}`} />
               </Button>
             </Tooltip>

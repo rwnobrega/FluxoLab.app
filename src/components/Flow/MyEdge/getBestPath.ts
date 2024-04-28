@@ -1,15 +1,15 @@
 import _ from "lodash";
-import { Node, Position } from "reactflow";
+import { Dimensions, Node, Position } from "reactflow";
 
-import blockTypes from "~/core/blockTypes";
+import { BlockTypeId, getBlockType } from "~/core/blockTypes";
 
-import getPath from "./getPath";
+import getPath, { Path } from "./getPath";
 
-const pathTurns = (path: Array<[number, number]>): number => {
+const pathTurns = (path: Path): number => {
   return path.length - 1;
 };
 
-const manhattanLength = (path: Array<[number, number]>): number => {
+const manhattanLength = (path: Path): number => {
   let length = 0;
   for (let i = 1; i < path.length; i++) {
     length +=
@@ -23,21 +23,11 @@ export default function (
   sourceNode: Node,
   targetNode: Node,
   sourcePosition: Position,
-): [Array<[number, number]>, Position] {
-  const sourceDimensions = {
-    width: sourceNode.width as number,
-    height: sourceNode.height as number,
-  };
-  const targetDimensions = {
-    width: targetNode.width as number,
-    height: targetNode.height as number,
-  };
-
-  const blockType = blockTypes.find((bt) => bt.id === targetNode.type);
-  if (!blockType) throw new Error(`Unknown block type: ${targetNode.type}`);
+): [Path, Position] {
+  const { handles } = getBlockType(targetNode.type as BlockTypeId);
 
   const takenPositions = [Position.Bottom];
-  for (const handle of blockType.handles) {
+  for (const handle of handles) {
     if (handle.id !== "in") {
       takenPositions.push(handle.position);
     }
@@ -54,8 +44,8 @@ export default function (
       targetPosition,
       sourceNode.position,
       targetNode.position,
-      sourceDimensions,
-      targetDimensions,
+      sourceNode as Dimensions,
+      targetNode as Dimensions,
     ),
   );
 

@@ -1,12 +1,12 @@
 import _ from "lodash";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 
 import TextInput from "~/components/General/TextInput";
 import isValidIdentifier from "~/core/language/isValidIdentifier";
-import useStoreMachine from "~/store/useStoreMachine";
+import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
 interface Props {
@@ -19,7 +19,7 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
   const [textId, setTextId] = useState<string>(id);
   const [problem, setProblem] = useState<string>("");
 
-  const { machine, renameVariable } = useStoreMachine();
+  const { flowchart, renameVariable } = useStoreFlowchart();
   const { getString } = useStoreStrings();
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
       setProblem(getString("IdentifierError_Invalid"));
     } else if (
       textId !== id &&
-      _.includes(_.map(machine.variables, "id"), textId)
+      _.includes(_.map(flowchart.variables, "id"), textId)
     ) {
       setProblem(getString("IdentifierError_Duplicate"));
     } else {
@@ -41,16 +41,13 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
     }
   }, [textId]);
 
-  const handleSubmit = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      setTimeout(() => {
-        renameVariable(id, textId);
-      }, 200);
-      setShowModal(false);
-    },
-    [id, textId, renameVariable, setShowModal],
-  );
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setTimeout(() => {
+      renameVariable(id, textId);
+    }, 200);
+    setShowModal(false);
+  };
 
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)}>

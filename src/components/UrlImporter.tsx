@@ -2,13 +2,11 @@ import React, { useEffect } from "react";
 
 import { deserialize } from "~/store/serialize";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
-import useStoreFlow from "~/store/useStoreFlow";
-import useStoreMachine from "~/store/useStoreMachine";
+import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
 export default function UrlImporter(): JSX.Element {
-  const { clearAll, setNodes, makeConnections } = useStoreFlow();
-  const { setTitle, setVariables } = useStoreMachine();
+  const { importSimpleFlowchart } = useStoreFlowchart();
   const { triggerToast } = useStoreEphemeral();
   const { getString } = useStoreStrings();
 
@@ -17,12 +15,8 @@ export default function UrlImporter(): JSX.Element {
     const lzs = url.searchParams.get("lzs");
     if (lzs !== null) {
       try {
-        const { nodes, edges, variables, title } = deserialize(lzs);
-        clearAll();
-        setNodes(nodes);
-        makeConnections(edges);
-        setVariables(variables);
-        setTitle(title);
+        const simpleFlowchart = deserialize(lzs);
+        importSimpleFlowchart(simpleFlowchart);
         url.searchParams.delete("lzs");
         window.history.replaceState({}, "", url.toString());
         triggerToast({

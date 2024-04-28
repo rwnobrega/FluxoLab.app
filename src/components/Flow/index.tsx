@@ -10,9 +10,9 @@ import ReactFlow, {
 
 import PlayButtons from "~/components/PlayButtons";
 import StatusMessage from "~/components/StatusMessage";
-import blockTypes from "~/core/blockTypes";
+import { blockTypeIds } from "~/core/blockTypes";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
-import useStoreFlow from "~/store/useStoreFlow";
+import useStoreFlowchart from "~/store/useStoreFlowchart";
 
 import MyEdge from "./MyEdge";
 import ConnectionLine from "./MyEdge/ConnectionLine";
@@ -21,21 +21,22 @@ import MyNode from "./MyNode";
 const edgeTypes: EdgeTypes = { edge: MyEdge };
 
 const nodeTypes: NodeTypes = {};
-for (const type of blockTypes) {
-  nodeTypes[type.id] = ({ id }) => <MyNode nodeId={id} blockType={type} />;
+for (const blockTypeId of blockTypeIds) {
+  nodeTypes[blockTypeId] = ({ id }) => (
+    <MyNode nodeId={id} blockTypeId={blockTypeId} />
+  );
 }
 
 export default function (): JSX.Element {
   const {
-    nodes,
-    edges,
+    flowchart,
     addNode,
     onNodesChange,
     onEdgesChange,
     onConnect,
     savedViewport,
     setSavedViewport,
-  } = useStoreFlow();
+  } = useStoreFlowchart();
   const { setIsDraggingNode, setIsConnectingEdge } = useStoreEphemeral();
   const { getViewport, screenToFlowPosition } = useReactFlow();
 
@@ -56,8 +57,8 @@ export default function (): JSX.Element {
 
   return (
     <ReactFlow
-      nodes={nodes}
-      edges={edges}
+      nodes={flowchart.nodes}
+      edges={flowchart.edges}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
       onNodesChange={onNodesChange}

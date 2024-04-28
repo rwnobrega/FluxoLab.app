@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -8,7 +8,7 @@ import Row from "react-bootstrap/Row";
 import TextInput from "~/components/General/TextInput";
 import { getExpectedText } from "~/core/language/errors";
 import grammar from "~/core/language/grammar";
-import useStoreFlow from "~/store/useStoreFlow";
+import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
 interface Props {
@@ -37,7 +37,7 @@ export default function ({
   const [textValue, setTextValue] = useState<string>(value);
   const [problem, setProblem] = useState<string>("");
 
-  const { updateNodeProp } = useStoreFlow();
+  const { changeNodeData } = useStoreFlowchart();
   const { language, getString } = useStoreStrings();
 
   useEffect(() => {
@@ -62,16 +62,13 @@ export default function ({
     }
   }, [textValue, language]);
 
-  const handleSubmit = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      setTimeout(() => {
-        updateNodeProp(nodeId, "data", textValue);
-      }, 200);
-      setShowModal(false);
-    },
-    [nodeId, textValue, updateNodeProp, setShowModal],
-  );
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setTimeout(() => {
+      changeNodeData(nodeId, textValue);
+    }, 200);
+    setShowModal(false);
+  };
 
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)}>

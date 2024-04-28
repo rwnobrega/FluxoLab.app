@@ -1,9 +1,10 @@
 import _ from "lodash";
-import React, { useCallback, useEffect, useState } from "react";
-import { EdgeProps, useStore } from "reactflow";
+import React, { useEffect, useState } from "react";
+import { EdgeProps } from "reactflow";
 
+import execute from "~/core/machine/execute";
+import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreMachine from "~/store/useStoreMachine";
-import useStoreMachineState from "~/store/useStoreMachineState";
 
 import SvgEdge from "./SvgEdge";
 import generateSvgRoundedPath from "./generateSvgRoundedPath";
@@ -16,35 +17,24 @@ export default function ({
   selected,
 }: EdgeProps): JSX.Element {
   const [animated, setAnimated] = useState<boolean>(false);
-  const { machine, compileErrors } = useStoreMachine();
-  const { getState } = useStoreMachineState();
-  const state = getState();
+  const { flowchart } = useStoreFlowchart();
+  const { machineState: state } = useStoreMachine();
 
   useEffect(() => {
-    const sourceNode = _.find(machine.flowchart, { id: source });
-    if (sourceNode === undefined || compileErrors.length > 0) {
+    if (sourceNode === undefined || targetNode === undefined) {
       setAnimated(false);
-      return;
+    } else if (sourceNode.type === "start" && state.status === "ready") {
+      setAnimated(true);
+    } else if (!_.includes(["running", "waiting"], state.status)) {
+      setAnimated(false);
+    } else {
+      const nextState = execute(flowchart, state); // Peek the future
+      setAnimated(source === state.curNodeId && target === nextState.curNodeId);
     }
-    if (sourceNode.type === "start") {
-      setAnimated(state.timeSlot === -1);
-      return;
-    }
-    // Peek the future --- TODO: What if `rand` or `rand_int` is used?
-    const stateClone = _.cloneDeep(state);
-    const sourceBlockId = stateClone.curBlockId;
-    sourceNode.work(machine, stateClone);
-    const targetBlockId = stateClone.curBlockId;
-    setAnimated(source === sourceBlockId && target === targetBlockId);
-  }, [state, machine]);
+  }, [source, target, state.curNodeId, state.status]);
 
-  const sourceNode = useStore(
-    useCallback((store) => store.nodeInternals.get(source), [source]),
-  );
-  const targetNode = useStore(
-    useCallback((store) => store.nodeInternals.get(target), [target]),
-  );
-
+  const sourceNode = _.find(flowchart.nodes, { id: source });
+  const targetNode = _.find(flowchart.nodes, { id: target });
   if (sourceNode === undefined || targetNode === undefined) return <></>;
 
   const [path, targetPosition] = getBestPath(

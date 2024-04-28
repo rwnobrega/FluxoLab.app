@@ -21,10 +21,10 @@ const codeStyle: CSSProperties = {
 
 interface Props {
   className?: string;
-  source: string;
+  source?: string;
 }
 
-export default function ({ className = "", source }: Props): JSX.Element {
+export default function ({ className = "", source = "" }: Props): JSX.Element {
   return (
     <Markdown
       className={className}

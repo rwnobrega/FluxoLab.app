@@ -1,38 +1,20 @@
 import _ from "lodash";
-import React, { useCallback } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 
+import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreMachine from "~/store/useStoreMachine";
-import useStoreMachineState from "~/store/useStoreMachineState";
 import useStoreStrings from "~/store/useStoreStrings";
 
 import VariableItem from "./Item";
 
 export default function (): JSX.Element {
-  const { machine, addVariable } = useStoreMachine();
-  const { getState, reset } = useStoreMachineState();
+  const { addVariable } = useStoreFlowchart();
+  const { machineState } = useStoreMachine();
   const { getString } = useStoreStrings();
 
-  const state = getState();
-
-  const getNextVariableId = useCallback(() => {
-    const prefix = "var";
-    let i = 1;
-    while (true) {
-      const id = `${prefix}${i}`;
-      const allIds = _.map(machine.variables, "id");
-      if (!_.includes(allIds, id)) {
-        return id;
-      }
-      i++;
-    }
-  }, [machine]);
-
-  const handleAddVariable = useCallback(() => {
-    addVariable(getNextVariableId(), "number");
-    reset(machine);
-  }, [addVariable, getNextVariableId, reset, machine]);
+  const disabled = machineState.timeSlot !== 0;
 
   return (
     <div className="d-flex flex-column h-100">
@@ -41,8 +23,8 @@ export default function (): JSX.Element {
         <Button
           size="sm"
           className="fw-semibold text-nowrap"
-          onClick={handleAddVariable}
-          disabled={state.timeSlot !== -1}
+          onClick={addVariable}
+          disabled={disabled}
         >
           {getString("VariableList_Add")}
         </Button>
@@ -50,12 +32,13 @@ export default function (): JSX.Element {
       <div style={{ overflowY: "auto", overflowX: "clip" }}>
         <Table size="sm" variant="borderless" className="mb-0">
           <tbody>
-            {_.map(machine.variables, ({ id, type }, index) => (
+            {_.map(machineState.memory, ({ type, value }, id) => (
               <VariableItem
-                key={index}
+                key={id}
                 id={id}
                 type={type}
-                disabled={state.timeSlot !== -1}
+                value={value}
+                disabled={disabled}
               />
             ))}
           </tbody>

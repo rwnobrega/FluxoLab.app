@@ -1,6 +1,8 @@
 // From <https://github.com/xyflow/xyflow/blob/main/packages/system/src/utils/edges/smoothstep-edge.ts>
 import { XYPosition } from "reactflow";
 
+import { Path } from "./getPath";
+
 function distance(a: XYPosition, b: XYPosition): number {
   return Math.hypot(a.x - b.x, a.y - b.y);
 }
@@ -31,11 +33,8 @@ function getBend(
   return `L ${x},${y + bendSize * yDir}Q ${x},${y} ${x + bendSize * xDir},${y}`;
 }
 
-export default function (
-  points: Array<[number, number]>,
-  borderRadius: number,
-): string {
-  const pointsXY: XYPosition[] = points.map(([x, y]) => ({ x, y }));
+export default function (path: Path, borderRadius: number): string {
+  const pointsXY: XYPosition[] = path.map(([x, y]) => ({ x, y }));
 
   const svgPath = pointsXY.reduce<string>((res, p, i) => {
     let segment = "";

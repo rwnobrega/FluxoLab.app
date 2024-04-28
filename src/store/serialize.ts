@@ -3,10 +3,8 @@ import {
   compressToEncodedURIComponent as compress,
   decompressFromEncodedURIComponent as decompress,
 } from "lz-string";
-import { Edge, Node } from "reactflow";
 
-import { Machine } from "~/core/machine/machine";
-import { Variable } from "~/core/machine/variables";
+import { Flowchart } from "./useStoreFlowchart";
 
 const revAlias = [
   "number",
@@ -25,12 +23,6 @@ const revAlias = [
 ];
 const dirAlias = _.fromPairs(_.map(revAlias, (item, index) => [item, index]));
 
-interface State {
-  machine: Machine;
-  nodes: Node[];
-  edges: Edge[];
-}
-
 interface SimpleNode {
   id: string;
   type: string;
@@ -42,27 +34,28 @@ interface SimpleEdge {
   source: string;
   sourceHandle: string;
   target: string;
-  targetHandle: string;
+  targetHandle: string; // TODO: This is not needed
 }
 
-export interface SimplifiedState {
-  title: string;
-  variables: Variable[];
+export interface SimpleFlowchart {
+  title: Flowchart["title"];
+  variables: Flowchart["variables"];
   nodes: SimpleNode[];
   edges: SimpleEdge[];
 }
 
-type MinifiedState = [
+type MiniFlowchart = [
   string, // title
   Array<[string, number]>, // variables (id, type)
   Array<[number, number, number, number, string]>, // nodes (id, type, x, y, data)
   Array<[number, number, number, number]>, // edges (source, sourceHandle, target, targetHandle)
 ];
 
-function simplify({ machine, nodes, edges }: State): SimplifiedState {
+function simplify(flowchart: Flowchart): SimpleFlowchart {
+  const { title, variables, nodes, edges } = flowchart;
   return {
-    title: machine.title,
-    variables: machine.variables,
+    title,
+    variables,
     nodes: _.map(nodes, (node) =>
       _.pick(node, ["id", "type", "position", "data"]),
     ) as SimpleNode[],
@@ -72,12 +65,8 @@ function simplify({ machine, nodes, edges }: State): SimplifiedState {
   };
 }
 
-function minify({
-  title,
-  variables,
-  nodes,
-  edges,
-}: SimplifiedState): MinifiedState {
+function minify(simpleFlowchart: SimpleFlowchart): MiniFlowchart {
+  const { title, variables, nodes, edges } = simpleFlowchart;
   return [
     title,
     _.map(variables, (variable) => [variable.id, dirAlias[variable.type]]),
@@ -97,14 +86,14 @@ function minify({
   ];
 }
 
-function expand(minifiedState: MinifiedState): SimplifiedState {
-  const [title, variables, nodes, edges] = minifiedState;
+function expand(miniFlowchart: MiniFlowchart): SimpleFlowchart {
+  const [title, variables, nodes, edges] = miniFlowchart;
   return {
     title,
     variables: _.map(variables, ([id, type]) => ({
       id,
       type: revAlias[type],
-    })) as Variable[],
+    })) as Flowchart["variables"],
     nodes: _.map(nodes, ([id, type, x, y, data]) => ({
       id: id.toString(),
       type: revAlias[type],

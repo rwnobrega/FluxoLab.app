@@ -1,29 +1,23 @@
 import React from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
-import buttonList from "~/components/PlayButtons/buttonList";
+import actions from "~/core/machine/actions";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
-import useStoreFlow from "~/store/useStoreFlow";
 import useStoreMachine from "~/store/useStoreMachine";
-import useStoreMachineState from "~/store/useStoreMachineState";
 
 export default function (): JSX.Element {
-  const { selectAll } = useStoreFlow();
-  const { execAction, getState } = useStoreMachineState();
-  const { machine, compileErrors } = useStoreMachine();
   const { refInput } = useStoreEphemeral();
+  const { machineState, executeAction } = useStoreMachine();
 
-  const state = getState();
-
-  for (const { action, hotkey, isDisabled } of buttonList) {
+  for (const { actionId, hotkey, enabledStatuses } of actions) {
     useHotkeys(
       hotkey,
       () => {
         if (hotkey === "F8") {
           refInput.current?.focus();
         }
-        if (!isDisabled(state, compileErrors)) {
-          execAction(action, machine);
+        if (enabledStatuses.includes(machineState.status)) {
+          executeAction(actionId);
         }
       },
       {
@@ -33,7 +27,7 @@ export default function (): JSX.Element {
     );
   }
 
-  useHotkeys("ctrl+a", selectAll);
+  // useHotkeys("ctrl+a", selectAll);  // TODO: Implement selectAll
 
   return <></>;
 }
