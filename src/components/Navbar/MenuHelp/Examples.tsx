@@ -16,17 +16,20 @@ interface Props {
 }
 
 export default function ({ showModal, setShowModal }: Props): JSX.Element {
-  const { importSimpleFlowchart } = useStoreFlowchart();
+  const { importSimpleFlowchart, setSavedViewport } = useStoreFlowchart();
   const { triggerToast } = useStoreEphemeral();
   const { getString } = useStoreStrings();
 
-  const { setViewport } = useReactFlow();
+  const { fitView, getViewport } = useReactFlow();
 
   const openExample = (index: number) => {
     const { variables, nodes, edges, title } = examples[index];
 
     importSimpleFlowchart({ title, variables, nodes, edges });
-    setViewport({ x: 0, y: 0, zoom: 1 });
+    setTimeout(() => {
+      fitView({ minZoom: 1, maxZoom: 1 });
+      setSavedViewport(getViewport());
+    }, 100);
 
     triggerToast({
       message: getString("ToastMessage_ExampleLoaded"),
