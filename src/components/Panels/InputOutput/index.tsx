@@ -1,11 +1,10 @@
 import _ from "lodash";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
 
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreMachine from "~/store/useStoreMachine";
-import useStoreMachineState from "~/store/useStoreMachineState";
 import useStoreStrings from "~/store/useStoreStrings";
 
 import ChatBubble from "./ChatBubble";
@@ -15,36 +14,33 @@ export default function (): JSX.Element {
   const refStackEnd = useRef<HTMLDivElement>(null);
   const [inputText, setInputText] = useState("");
 
-  const { machine } = useStoreMachine();
-  const { getState, nextStep, stateHistory } = useStoreMachineState();
   const { setRefInput } = useStoreEphemeral();
+  const { machineState, executeAction } = useStoreMachine();
   const { getString } = useStoreStrings();
-
-  const state = getState();
 
   useEffect(() => {
     setRefInput(refInput);
   }, [refInput]);
 
-  const handleSendInput = useCallback(() => {
+  const handleSendInput = () => {
     if (inputText.length > 0) {
-      state.input = inputText;
-      nextStep(machine);
+      machineState.input = inputText;
+      executeAction("nextStep");
       setInputText("");
     }
-  }, [inputText, machine, state, stateHistory]);
+  };
 
   useEffect(() => {
-    if (state.status === "waiting") {
+    if (machineState.status === "waiting") {
       refInput.current?.focus();
     }
-  }, [state]);
+  }, [machineState.status]);
 
   useEffect(() => {
     if (refStackEnd.current != null) {
       refStackEnd.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [state]);
+  }, [machineState.status, machineState.interaction]);
 
   return (
     <div className="d-flex flex-column h-100">
@@ -54,7 +50,7 @@ export default function (): JSX.Element {
         className="mb-3"
         style={{ overflowY: "auto", overflowX: "clip" }}
       >
-        {_.map(state.interaction, ({ direction, text }, index) => (
+        {_.map(machineState.interaction, ({ direction, text }, index) => (
           <ChatBubble key={index} direction={direction} text={text} />
         ))}
         <div ref={refStackEnd} />
@@ -63,7 +59,7 @@ export default function (): JSX.Element {
         ref={refInput}
         size="sm"
         value={inputText}
-        disabled={state.status !== "waiting"}
+        disabled={machineState.status !== "waiting"}
         onChange={(event) => setInputText(event.target.value)}
         onKeyDown={(event) => {
           if (event.key === "Enter") {

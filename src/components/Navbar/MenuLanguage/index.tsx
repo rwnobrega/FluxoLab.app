@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { useCallback } from "react";
+import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 
 import Tooltip from "~/components/General/Tooltip";
@@ -18,7 +18,7 @@ export default function (): JSX.Element {
     en: "English",
     "pt-BR": "Português (BR)",
   };
-  const handleClick = useCallback((language: string) => {
+  const handleClick = (language: string) => {
     setLanguage(language);
     triggerToast({
       message: getString("ToastMessage_LanguageChanged", {
@@ -27,7 +27,7 @@ export default function (): JSX.Element {
       icon: "bi-check2-circle",
       background: "success",
     });
-  }, []);
+  };
 
   return (
     <Dropdown align="end">

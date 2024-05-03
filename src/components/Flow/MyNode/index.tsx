@@ -2,11 +2,10 @@ import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { Node, useReactFlow } from "reactflow";
 
-import { BlockType } from "~/core/blockTypes";
+import { BlockTypeId, getBlockType } from "~/core/blockTypes";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
-import useStoreFlow from "~/store/useStoreFlow";
+import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreMachine from "~/store/useStoreMachine";
-import useStoreMachineState from "~/store/useStoreMachineState";
 import useStoreStrings from "~/store/useStoreStrings";
 import { getDropShadow, palette } from "~/utils/colors";
 
@@ -20,33 +19,32 @@ import MyHandleTarget from "./MyHandleTarget";
 
 interface Props {
   nodeId: string;
-  blockType: BlockType;
+  blockTypeId: BlockTypeId;
 }
 
-export default function ({ nodeId, blockType }: Props): JSX.Element {
+export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
   const [margin, setMargin] = useState<number>(0);
   const [boxFilter, setBoxFilter] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const { title, prefixLabel, boxStyle, modal, handles } = blockType; // TODO: No need to pass block as prop?
+  const { title, prefixLabel, boxStyle, modal, handles } =
+    getBlockType(blockTypeId);
 
-  const { nodes, deleteNode } = useStoreFlow();
   const {
     isDraggingNode,
     isConnectingEdge,
     mouseOverNodeId,
     setMouseOverNodeId,
   } = useStoreEphemeral();
-  const { compileErrors } = useStoreMachine();
-  const { getState } = useStoreMachineState();
+  const { flowchart, deleteNode } = useStoreFlowchart();
+  const { machineState } = useStoreMachine();
   const { getString, language } = useStoreStrings();
-  const { getZoom } = useReactFlow();
 
-  const state = getState();
+  const { getZoom } = useReactFlow();
 
   const labelRef = useRef<HTMLSpanElement>(null);
 
-  const node: Node | undefined = _.find(nodes, { id: nodeId });
+  const node: Node | undefined = _.find(flowchart.nodes, { id: nodeId });
 
   useEffect(() => {
     if (labelRef.current !== null) {
@@ -59,22 +57,22 @@ export default function ({ nodeId, blockType }: Props): JSX.Element {
 
   useEffect(() => {
     setBoxFilter(() => {
-      if (compileErrors.length > 0) {
-        if (_.some(compileErrors, { nodeId })) {
+      if (machineState.errors.length > 0) {
+        if (_.some(machineState.errors, { nodeId })) {
           return getDropShadow(palette.red);
         }
-      } else if (nodeId === state.curBlockId) {
-        if (state.status === "error") {
+      } else if (nodeId === machineState.curNodeId) {
+        if (machineState.status === "invalid") {
           return getDropShadow(palette.red);
         } else {
           return getDropShadow(palette.gray800);
         }
-      } else if (node?.type === "start" && state.curBlockId === null) {
+      } else if (node?.type === "start" && machineState.curNodeId === null) {
         return getDropShadow(palette.gray800);
       }
       return "";
     });
-  }, [state, compileErrors]);
+  }, [machineState.curNodeId, machineState.status, machineState.errors]);
 
   function handleDelete() {
     deleteNode(nodeId);
@@ -113,7 +111,7 @@ export default function ({ nodeId, blockType }: Props): JSX.Element {
             marginRight: `${margin}px`,
           }}
         >
-          <Label blockType={blockType} value={node?.data} />
+          <Label blockTypeId={blockTypeId} value={node?.data} />
         </span>
       </Box>
       <ButtonDelete onClick={handleDelete} visible={isDeleteVisible} />

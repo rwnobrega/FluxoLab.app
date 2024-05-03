@@ -7,10 +7,10 @@ interface Props {
 }
 
 export default function ({ children, text }: Props): JSX.Element {
-  const childRef = useRef(undefined as unknown as Element);
+  const childRef = useRef<string>("");
 
   useEffect(() => {
-    const t = new BsTooltip(childRef?.current, {
+    const t = new BsTooltip(childRef.current, {
       title: text,
       placement: "bottom",
       trigger: "hover",

@@ -1,105 +1,108 @@
 import _ from "lodash";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
-import { Block } from "~/core/machine/blocks";
-import { CompileError } from "~/core/machine/compiler";
-import { Machine } from "~/core/machine/machine";
-import { Variable } from "~/core/machine/variables";
+import { Action } from "~/core/machine/actions";
+import check from "~/core/machine/check";
+import execute from "~/core/machine/execute";
+import { VariableTypeId } from "~/core/variableTypes";
+import minstd from "~/utils/minstd";
 
-interface StoreMachine {
-  machine: Machine;
-  clearMachine: () => void;
-  setTitle: (title: string) => void;
-  setFlowchart: (flowchart: Block[]) => void;
-  setVariables: (variables: Variable[]) => void;
-  getVariable: (variableId: string) => Variable | undefined;
-  addVariable: (id: string, type: Variable["type"]) => void;
-  clearVariables: () => void;
-  removeVariable: (id: string) => void;
-  renameVariable: (id: string, newId: string) => void;
-  changeVariableType: (id: string, type: Variable["type"]) => void;
-  compileErrors: CompileError[];
-  setCompileErrors: (compileErrors: CompileError[]) => void;
+import { Flowchart } from "./useStoreFlowchart";
+
+export type MachineMemory = Record<
+  string,
+  { type: VariableTypeId; value: any | null }
+>;
+
+export interface InteractionAtom {
+  direction: "in" | "out";
+  text: string;
 }
 
-const emptyMachine: Machine = {
-  title: "",
-  flowchart: [],
-  variables: [],
-};
+export interface MachineError {
+  type: "check" | "runtime";
+  message: string;
+  nodeId: string | null;
+  payload?: Record<string, string>;
+}
 
-const useStoreMachine = create<StoreMachine>()(
-  persist(
-    (set, get) => ({
-      machine: _.cloneDeep(emptyMachine),
-      clearMachine: () => {
-        set({ machine: _.cloneDeep(emptyMachine) });
-      },
-      setTitle: (title) => {
-        const { machine } = get();
-        machine.title = title;
-        set({ machine });
-      },
-      setFlowchart: (flowchart) => {
-        const { machine } = get();
-        machine.flowchart = flowchart;
-        set({ machine });
-      },
-      setVariables: (variables) => {
-        const { machine } = get();
-        machine.variables = variables;
-        set({ machine });
-      },
-      getVariable: (id) => {
-        const { machine } = get();
-        return _.find(machine.variables, { id });
-      },
-      addVariable: (id, type) => {
-        const { machine } = get();
-        machine.variables = _.concat(machine.variables, { id, type });
-        set({ machine });
-      },
-      clearVariables: () => {
-        const { machine } = get();
-        machine.variables = [];
-        set({ machine });
-      },
-      removeVariable: (id) => {
-        const { machine } = get();
-        machine.variables = _.reject(machine.variables, { id });
-        set({ machine });
-      },
-      renameVariable: (id, newId) => {
-        const { machine } = get();
-        machine.variables = _.map(machine.variables, (variable) => {
-          if (variable.id === id) {
-            variable.id = newId;
-          }
-          return variable;
-        });
-        set({ machine });
-      },
-      changeVariableType: (id, type) => {
-        const { machine } = get();
-        machine.variables = _.map(machine.variables, (variable) => {
-          if (variable.id === id) {
-            variable.type = type;
-          }
-          return variable;
-        });
-        set({ machine });
-      },
-      compileErrors: [],
-      setCompileErrors: (compileErrors) => {
-        set({ compileErrors });
-      },
-    }),
-    {
-      name: "fluxolab_machine",
-      version: 6,
-    },
-  ),
-);
+export interface MachineState {
+  curNodeId: string | null;
+  timeSlot: number;
+  memory: MachineMemory;
+  input: string | null;
+  outPort: string | null;
+  rand: number;
+  interaction: InteractionAtom[];
+  status:
+    | "ready" // Ready to run (timeSlot = 0)
+    | "running" // Running (timeSlot > 0)
+    | "waiting" // Waiting for user input
+    | "halted" // Execution has halted
+    | "exception" // Runtime exception
+    | "invalid"; // Failed to compile (check errors)
+  errors: MachineError[];
+}
+
+interface StoreMachine {
+  flowchart: Flowchart | null;
+  machineState: MachineState;
+  stateHistory: MachineState[];
+  seed: number;
+  resetMachine: (flowchart: Flowchart) => void;
+  executeAction: (actionId: Action["actionId"]) => void;
+}
+
+const getEmptyMachineState = (): MachineState => ({
+  curNodeId: null,
+  timeSlot: 0,
+  memory: {},
+  input: null,
+  outPort: null,
+  rand: 0,
+  interaction: [],
+  status: "invalid",
+  errors: [],
+});
+
+const useStoreMachine = create<StoreMachine>()((set, get) => ({
+  flowchart: null,
+  seed: minstd.getNext(Math.floor(Date.now())), // Unix timestamp
+  machineState: getEmptyMachineState(),
+  stateHistory: [],
+  resetMachine: (flowchart) => {
+    const machineState = getEmptyMachineState();
+    const checkErrors = check(flowchart);
+    machineState.status = checkErrors.length > 0 ? "invalid" : "ready";
+    machineState.errors = checkErrors;
+    machineState.memory = {};
+    for (const { id, type } of flowchart.variables) {
+      machineState.memory[id] = { type, value: null };
+    }
+    machineState.rand = get().seed;
+    set({ machineState, flowchart });
+  },
+  executeAction: (actionId) => {
+    const { flowchart, stateHistory, machineState, resetMachine } = get();
+    if (flowchart === null) throw new Error("Flowchart is not set");
+    switch (actionId) {
+      case "reset": {
+        resetMachine(flowchart);
+        break;
+      }
+      case "stepBack": {
+        const lastState = stateHistory.pop();
+        set({ machineState: lastState, stateHistory });
+        break;
+      }
+      case "nextStep": {
+        stateHistory.push(machineState);
+        const nextState = execute(flowchart, machineState);
+        set({ machineState: nextState, stateHistory });
+        break;
+      }
+    }
+  },
+}));
 
 export default useStoreMachine;

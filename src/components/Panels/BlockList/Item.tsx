@@ -1,26 +1,26 @@
 import React, { useState } from "react";
 
-import { BoxStyle } from "~/core/blockTypes";
-import useStoreMachineState from "~/store/useStoreMachineState";
+import { BlockTypeId, getBlockType } from "~/core/blockTypes";
+import useStoreMachine from "~/store/useStoreMachine";
 import useStoreStrings from "~/store/useStoreStrings";
 import { getBrighterColor, getDarkerColor } from "~/utils/colors";
 
 interface Props {
-  typeId: string;
-  title: string;
-  boxStyle: BoxStyle;
+  blockTypeId: BlockTypeId;
 }
 
-export default function ({ typeId, title, boxStyle }: Props): JSX.Element {
+export default function ({ blockTypeId }: Props): JSX.Element {
   const { getString } = useStoreStrings();
-  const { getState } = useStoreMachineState();
+  const { machineState } = useStoreMachine();
   const [mouseHover, setMouseHover] = useState<boolean>(false);
 
-  const state = getState();
-  const isDisabled = state.timeSlot >= 0;
+  const { title, boxStyle } = getBlockType(blockTypeId);
+
+  const isDisabled =
+    machineState.status === "running" || machineState.status === "waiting";
 
   function onDragStart(event: React.DragEvent<HTMLDivElement>): void {
-    event.dataTransfer.setData("application/text", typeId);
+    event.dataTransfer.setData("application/text", blockTypeId);
     event.dataTransfer.effectAllowed = "move";
   }
 

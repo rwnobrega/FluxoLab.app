@@ -4,8 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import { useReactFlow } from "reactflow";
 
 import useStoreEphemeral from "~/store/useStoreEphemeral";
-import useStoreFlow from "~/store/useStoreFlow";
-import useStoreMachine from "~/store/useStoreMachine";
+import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
 interface Props {
@@ -14,9 +13,8 @@ interface Props {
 }
 
 export default function ({ showModal, setShowModal }: Props): JSX.Element {
-  const { clearAll } = useStoreFlow();
+  const { clearFlowchart } = useStoreFlowchart();
   const { triggerToast } = useStoreEphemeral();
-  const { clearMachine } = useStoreMachine();
   const { getString } = useStoreStrings();
 
   const { setViewport } = useReactFlow();
@@ -26,9 +24,8 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
   };
 
   const handleConfirm = () => {
-    clearAll();
+    clearFlowchart();
     setViewport({ x: 0, y: 0, zoom: 1 });
-    clearMachine();
     setShowModal(false);
     triggerToast({
       background: "success",

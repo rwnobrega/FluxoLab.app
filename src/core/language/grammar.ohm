@@ -1,8 +1,10 @@
 Language {
   Command
-    = identifier "=" Expression  --assignment
+    = start  --start
+    | identifier "=" Expression  --assignment
     | read identifier  --read
     | write NonemptyListOf<Expression, ",">  --write
+    | conditional Expression  --conditional
 
   Expression
     = Expression "||" Expression0  --binary
@@ -43,8 +45,10 @@ Language {
     | identifier  --identifier
     | Parentheses
 
+  start = "start" ~alnum
   read = "read" ~alnum
   write = "write" ~alnum
+  conditional = "conditional" ~alnum
   true = "true" ~alnum
   false = "false" ~alnum
   div = "div" ~alnum

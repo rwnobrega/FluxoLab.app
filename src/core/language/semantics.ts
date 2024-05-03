@@ -1,10 +1,13 @@
 import _ from "lodash";
 import * as ohm from "ohm-js";
 
-import { MachineState } from "~/core/machine/machine";
-import { VarType, getVariableType } from "~/core/machine/variables";
+import { VariableTypeId, getVariableType } from "~/core/variableTypes";
+import { MachineState } from "~/store/useStoreMachine";
+import minstd from "~/utils/minstd";
 
 import grammar from "./grammar";
+
+type VarType = number | boolean | string;
 
 const unaryOperators: Record<string, (a: VarType) => VarType> = {
   "+": (a: number) => a,
@@ -14,15 +17,15 @@ const unaryOperators: Record<string, (a: VarType) => VarType> = {
 
 function evalUnaryOperator(a: ohm.Node, b: ohm.Node): VarType {
   const name = a.sourceString;
-  const arg = b.eval(this.args.memory);
+  const arg = b.eval(this.args.state);
   const argType = typeof arg;
   const operandTypes = { "+": "number", "-": "number", "!": "boolean" };
   for (const [operator, type] of _.toPairs(operandTypes)) {
     if (name === operator && argType !== type) {
-      throw new EvaluateError({
-        message: "RuntimeError_UnaryOperatorTypeMismatch",
+      throw {
+        message: "_CheckError_UnaryOperatorTypeMismatch",
         payload: { operator: name, expected: type, found: argType },
-      });
+      };
     }
   }
   return unaryOperators[name](arg);
@@ -46,43 +49,43 @@ const binaryOperators: Record<string, (a: VarType, b: VarType) => VarType> = {
 };
 
 function evalBinaryOperator(a: ohm.Node, b: ohm.Node, c: ohm.Node): VarType {
-  const left = a.eval(this.args.memory);
+  const left = a.eval(this.args.state);
   const name = b.sourceString;
-  const right = c.eval(this.args.memory);
+  const right = c.eval(this.args.state);
   if (_.includes(["||", "&&"], name)) {
     if (typeof left !== "boolean" || typeof right !== "boolean") {
-      throw new EvaluateError({
-        message: "RuntimeError_BinaryOperatorTypeMismatch",
+      throw {
+        message: "_CheckError_BinaryOperatorTypeMismatch",
         payload: {
           operator: name,
           expected: "boolean",
           left: typeof left,
           right: typeof right,
         },
-      });
+      };
     }
   }
   if (
     _.includes(["<=", "<", ">=", ">", "+", "-", "*", "/", "div", "mod"], name)
   ) {
     if (typeof left !== "number" || typeof right !== "number") {
-      throw new EvaluateError({
-        message: "RuntimeError_BinaryOperatorTypeMismatch",
+      throw {
+        message: "_CheckError_BinaryOperatorTypeMismatch",
         payload: {
           operator: name,
           expected: "number",
           left: typeof left,
           right: typeof right,
         },
-      });
+      };
     }
   }
   if (_.includes(["==", "!="], name)) {
     if (typeof left !== typeof right) {
-      throw new EvaluateError({
-        message: "RuntimeError_BinaryOperatorTypeMismatchEqual",
+      throw {
+        message: "_CheckError_BinaryOperatorTypeMismatchEqual",
         payload: { operator: name, left: typeof left, right: typeof right },
-      });
+      };
     }
   }
   return binaryOperators[name](left, right);
@@ -114,9 +117,8 @@ const numericalFunctions: Record<string, (...args: number[]) => number> = {
   ceil: (a: number) => Math.ceil(a),
   min: (a: number, b: number) => Math.min(a, b),
   max: (a: number, b: number) => Math.max(a, b),
-  rand: () => Math.random(),
-  rand_int: (a: number, b: number) =>
-    Math.floor(Math.random() * (b - a + 1)) + a,
+  rand: (r: number) => minstd.rand(r),
+  rand_int: (a: number, b: number, r: number) => minstd.randInt(a, b, r),
 };
 
 function evalNumericalFunction(
@@ -125,41 +127,46 @@ function evalNumericalFunction(
   c: ohm.Node,
   d: ohm.Node,
 ): number {
+  const state: MachineState = this.args.state;
   const name = a.sourceString;
   if (!_.has(numericalFunctions, name)) {
-    throw new EvaluateError({
-      message: "RuntimeError_FunctionNotExists",
+    throw {
+      message: "_CheckError_FunctionNotExists",
       payload: { id: name },
-    });
+    };
   }
   const args = _.map(c.asIteration().children, (child: ohm.Node) =>
-    child.eval(this.args.memory),
+    child.eval(this.args.state),
   );
   if (_.includes(["pow", "min", "max", "rand_int"], name)) {
     if (args.length !== 2) {
-      throw new EvaluateError({
-        message: "RuntimeError_FunctionArityMismatch2",
+      throw {
+        message: "_CheckError_FunctionArityMismatch2",
         payload: { id: name, count: String(args.length) },
-      });
+      };
     }
   } else if (_.includes(["rand"], name)) {
     if (args.length !== 0) {
-      throw new EvaluateError({
-        message: "RuntimeError_FunctionArityMismatch0",
+      throw {
+        message: "_CheckError_FunctionArityMismatch0",
         payload: { id: name, count: String(args.length) },
-      });
+      };
     }
   } else if (args.length !== 1) {
-    throw new EvaluateError({
-      message: "RuntimeError_FunctionArityMismatch1",
+    throw {
+      message: "_CheckError_FunctionArityMismatch1",
       payload: { id: name, count: String(args.length) },
-    });
+    };
   }
   if (_.some(args, (arg) => typeof arg !== "number")) {
-    throw new EvaluateError({
-      message: "RuntimeError_FunctionArgumentTypeMismatchNumber",
+    throw {
+      message: "_CheckError_FunctionArgumentTypeMismatchNumber",
       payload: { id: name, count: String(args.length) },
-    });
+    };
+  }
+  if (_.includes(["rand", "rand_int"], name)) {
+    state.rand = minstd.getNext(state.rand);
+    args.push(state.rand);
   }
   return numericalFunctions[name](...args);
 }
@@ -172,52 +179,96 @@ const numericalConstants: Record<string, number> = {
 function evalNumericalConstant(a: ohm.Node): number {
   const name = a.sourceString;
   if (!_.has(numericalConstants, name)) {
-    throw new EvaluateError({
-      message: "RuntimeError_ConstantNotExists",
+    throw {
+      message: "_CheckError_ConstantNotExists",
       payload: { id: name },
-    });
+    };
   }
   return numericalConstants[name];
 }
 
 function evalIdentifier(a: ohm.Node): VarType {
+  const state: MachineState = this.args.state;
   const name = a.sourceString;
-  const value = this.args.memory[name];
-  if (value === undefined) {
-    throw new EvaluateError({
-      message: "RuntimeError_VariableNotFound",
+  if (!_.has(state.memory, name)) {
+    throw {
+      message: "_CheckError_VariableNotFound",
       payload: { id: name },
-    });
+    };
   }
+  const { value } = state.memory[name];
   if (value === null) {
-    throw new EvaluateError({
+    throw {
       message: "RuntimeError_VariableNotInitialized",
       payload: { id: name },
-    });
+    };
   }
   return value;
 }
 
 function evalParentheses(a: ohm.Node, b: ohm.Node, c: ohm.Node): VarType {
-  return b.eval(this.args.memory);
+  return b.eval(this.args.state);
 }
 
-function getOutput(a: ohm.Node, b: ohm.Node): string {
-  const args = b.asIteration().children;
-  let result = "";
-  for (const arg of args) {
-    const value = arg.eval(this.args.memory);
-    const varType = getVariableType(typeof value);
-    result += varType.valueToString(value);
+// Command functions
+
+function performStart(a: ohm.Node): void {
+  const state: MachineState = this.args.state;
+  state.outPort = "out";
+}
+
+function performRead(a: ohm.Node, b: ohm.Node): void {
+  const state: MachineState = this.args.state;
+  const variableId = b.sourceString;
+  const input = state.input ?? "";
+  const { type } = state.memory[variableId];
+  const variableType = getVariableType(type);
+  if (!variableType.stringIsValid(input)) {
+    throw {
+      message: "RuntimeError_InvalidInput",
+      payload: { input, type },
+    };
   }
-  return result;
+  state.interaction.push({ direction: "in", text: input });
+  state.memory[variableId].value = variableType.parse(input);
+  state.outPort = "out";
+}
+
+function performWrite(a: ohm.Node, b: ohm.Node): void {
+  const state: MachineState = this.args.state;
+  let output = "";
+  for (const expression of b.asIteration().children) {
+    const value = expression.eval(state);
+    const variableType = getVariableType(typeof value as VariableTypeId);
+    output += variableType.stringify(value);
+  }
+  state.interaction.push({ direction: "out", text: output });
+  state.outPort = "out";
+}
+
+function performAssignment(a: ohm.Node, b: ohm.Node, c: ohm.Node): void {
+  const state: MachineState = this.args.state;
+  const variableId = a.sourceString;
+  const expression = c.eval(state);
+  state.memory[variableId].value = expression;
+  state.outPort = "out";
+}
+
+function performConditional(a: ohm.Node, b: ohm.Node): void {
+  const state: MachineState = this.args.state;
+  const condition = b.eval(state);
+  if (typeof condition !== "boolean") {
+    throw {
+      message: "_CheckError_ConditionNotBoolean",
+    };
+  }
+  state.outPort = condition ? "true" : "false";
 }
 
 const semantics = grammar.createSemantics();
 
-semantics.addOperation<VarType>("eval(memory)", {
-  Primary_stringLiteral: (a) =>
-    a.sourceString.slice(1, -1).replace(/\\"/g, '"'),
+semantics.addOperation<VarType | void>("eval(state)", {
+  Primary_stringLiteral: (a) => a.sourceString.slice(1, -1),
   Primary_numberLiteral: (a) => parseFloat(a.sourceString),
   Primary_booleanLiteral: (a) => a.sourceString === "true",
   Primary_identifier: evalIdentifier,
@@ -230,31 +281,11 @@ semantics.addOperation<VarType>("eval(memory)", {
   Expression3_binary: evalBinaryOperator,
   Expression4_unary: evalUnaryOperator,
   FunctionCall: evalNumericalFunction,
-  Command_write: getOutput,
+  Command_start: performStart,
+  Command_read: performRead,
+  Command_write: performWrite,
+  Command_assignment: performAssignment,
+  Command_conditional: performConditional,
 });
 
-class EvaluateError extends Error {
-  payload?: Record<string, string>;
-
-  constructor({
-    message,
-    payload,
-  }: {
-    message: string;
-    payload?: Record<string, string>;
-  }) {
-    super(message);
-    this.payload = payload;
-  }
-}
-
-export default function (
-  matchResult: ohm.MatchResult,
-  memory: MachineState["memory"],
-): VarType | EvaluateError {
-  try {
-    return semantics(matchResult).eval(memory);
-  } catch (evaluateError) {
-    return evaluateError;
-  }
-}
+export default semantics;

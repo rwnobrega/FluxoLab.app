@@ -1,11 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 
 import Tooltip from "~/components/General/Tooltip";
 import { serialize } from "~/store/serialize";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
-import useStoreFlow from "~/store/useStoreFlow";
-import useStoreMachine from "~/store/useStoreMachine";
+import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
 import Clear from "./Clear";
@@ -13,13 +12,12 @@ import Clear from "./Clear";
 export default function (): JSX.Element {
   const [showClear, setShowClear] = useState(false);
 
-  const { nodes, edges } = useStoreFlow();
-  const { machine } = useStoreMachine();
+  const { flowchart } = useStoreFlowchart();
   const { triggerToast } = useStoreEphemeral();
   const { getString } = useStoreStrings();
 
-  const handleCopyLink = useCallback(() => {
-    const lzs = serialize({ machine, nodes, edges });
+  const handleCopyLink = () => {
+    const lzs = serialize(flowchart);
     const baseUrl = window.location.href.split("?")[0];
     void navigator.clipboard.writeText(`${baseUrl}?lzs=${lzs}`);
     triggerToast({
@@ -27,7 +25,7 @@ export default function (): JSX.Element {
       icon: "bi-clipboard-check",
       background: "secondary",
     });
-  }, [machine, nodes, edges]);
+  };
 
   return (
     <>

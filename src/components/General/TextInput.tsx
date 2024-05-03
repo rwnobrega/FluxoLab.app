@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import Form from "react-bootstrap/Form";
 
 import Markdown from "~/components/General/Markdown";
@@ -16,12 +16,9 @@ export default function ({
   setValue,
   problem = "",
 }: Props): JSX.Element {
-  const handleChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>): void => {
-      setValue(event.target.value);
-    },
-    [setValue],
-  );
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setValue(event.target.value);
+  };
 
   return (
     <>
