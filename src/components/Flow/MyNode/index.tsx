@@ -64,22 +64,16 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
 
   useEffect(() => {
     setBoxFilter(() => {
-      if (machineState.errors.length > 0) {
-        if (_.some(machineState.errors, { nodeId })) {
-          return getDropShadow(palette.red);
-        }
+      if (_.some(machineState.errors, { nodeId })) {
+        return getDropShadow(palette.red);
+      } else if (node?.type === "start" && machineState.status === "ready") {
+        return getDropShadow(palette.gray800);
       } else if (nodeId === machineState.curNodeId) {
-        if (machineState.status === "invalid") {
-          return getDropShadow(palette.red);
-        } else {
-          return getDropShadow(palette.gray800);
-        }
-      } else if (node?.type === "start" && machineState.curNodeId === null) {
         return getDropShadow(palette.gray800);
       }
       return "";
     });
-  }, [machineState.curNodeId, machineState.status, machineState.errors]);
+  }, [machineState]);
 
   function handleDelete() {
     deleteNode(nodeId);
