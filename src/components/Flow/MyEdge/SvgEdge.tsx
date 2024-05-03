@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Position } from "reactflow";
 
-import { getDarkerColor, palette } from "~/utils/colors";
+import colors from "~/utils/colors";
+import palette from "~/utils/palette";
 
 interface Props {
   svgPathString: string;
@@ -21,7 +22,7 @@ export default function ({
   targetPosition,
 }: Props): JSX.Element {
   const [mouseHover, setMouseHover] = useState<boolean>(false);
-  const strokeColor = getDarkerColor(
+  const strokeColor = colors.darker(
     selected ? palette.blue : palette.gray500,
     mouseHover ? 48 : 0,
   );

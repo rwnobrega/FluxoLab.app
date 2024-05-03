@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { BlockTypeId, getBlockType } from "~/core/blockTypes";
 import useStoreMachine from "~/store/useStoreMachine";
 import useStoreStrings from "~/store/useStoreStrings";
-import { getBrighterColor, getDarkerColor } from "~/utils/colors";
+import colors from "~/utils/colors";
 
 interface Props {
   blockTypeId: BlockTypeId;
@@ -26,9 +26,9 @@ export default function ({ blockTypeId }: Props): JSX.Element {
 
   function getBackground(): string {
     if (isDisabled) {
-      return getBrighterColor(boxStyle.backgroundColor);
+      return colors.brighter(boxStyle.backgroundColor);
     } else if (mouseHover) {
-      return getDarkerColor(boxStyle.backgroundColor);
+      return colors.darker(boxStyle.backgroundColor);
     } else {
       return boxStyle.backgroundColor;
     }

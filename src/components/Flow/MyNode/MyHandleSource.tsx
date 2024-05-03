@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Handle, HandleProps } from "reactflow";
 
 import { BoxStyle } from "~/core/blockTypes";
-import { getDarkerColor } from "~/utils/colors";
+import colors from "~/utils/colors";
 
 type Props = HandleProps & {
   boxStyle: BoxStyle;
@@ -28,13 +28,13 @@ export default function ({
       fontWeight: "bold",
       textAlign: "center" as "center",
       color: textColor,
-      borderColor: getDarkerColor(backgroundColor as string),
+      borderColor: colors.darker(backgroundColor as string),
     },
     "hover-false": {
       backgroundColor: backgroundColor,
     },
     "hover-true": {
-      backgroundColor: getDarkerColor(backgroundColor as string),
+      backgroundColor: colors.darker(backgroundColor as string),
     },
   };
 

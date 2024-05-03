@@ -4,7 +4,7 @@ import Stack from "react-bootstrap/Stack";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { ReactFlowProvider } from "reactflow";
 
-import { palette } from "~/utils/colors";
+import palette from "~/utils/palette";
 
 import Flow from "./Flow";
 import Hotkeys from "./Hotkeys";

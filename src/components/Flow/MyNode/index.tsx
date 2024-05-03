@@ -7,7 +7,7 @@ import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreMachine from "~/store/useStoreMachine";
 import useStoreStrings from "~/store/useStoreStrings";
-import { getDropShadow, palette } from "~/utils/colors";
+import palette from "~/utils/palette";
 
 import Box from "./Box";
 import ButtonDelete from "./ButtonDelete";
@@ -45,6 +45,13 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
   const labelRef = useRef<HTMLSpanElement>(null);
 
   const node: Node | undefined = _.find(flowchart.nodes, { id: nodeId });
+
+  function getDropShadow(color: string): string {
+    return `drop-shadow(+2px 0 2px ${color})
+            drop-shadow(-2px 0 2px ${color})
+            drop-shadow(0 +2px 2px ${color})
+            drop-shadow(0 -2px 2px ${color})`;
+  }
 
   useEffect(() => {
     if (labelRef.current !== null) {

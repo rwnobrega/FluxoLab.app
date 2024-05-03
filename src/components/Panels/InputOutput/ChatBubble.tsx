@@ -1,6 +1,6 @@
 import React, { CSSProperties } from "react";
 
-import { palette } from "~/utils/colors";
+import palette from "~/utils/palette";
 
 const divClasses = {
   common: "d-flex",

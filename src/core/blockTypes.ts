@@ -1,6 +1,7 @@
 import { HandleType, Position } from "reactflow";
 
-import { getBrighterColor, palette } from "~/utils/colors";
+import colors from "~/utils/colors";
+import palette from "~/utils/palette";
 
 export const blockTypeIds = [
   "start",
@@ -42,7 +43,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
     title: "Block_Start",
     prefixLabel: "Block_Start",
     boxStyle: {
-      backgroundColor: getBrighterColor(palette.purple),
+      backgroundColor: colors.brighter(palette.purple),
       textColor: "white",
       borderRadius: "15px",
     },
@@ -52,7 +53,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
     title: "Block_Input",
     prefixLabel: "Block_Read",
     boxStyle: {
-      backgroundColor: getBrighterColor(palette.blue),
+      backgroundColor: colors.brighter(palette.blue),
       textColor: "white",
       clipPath: "polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%)",
       clipPathBorder:
@@ -72,7 +73,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
     title: "Block_Output",
     prefixLabel: "Block_Write",
     boxStyle: {
-      backgroundColor: getBrighterColor(palette.green),
+      backgroundColor: colors.brighter(palette.green),
       textColor: "white",
       clipPath: "polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%)",
       clipPathBorder:
@@ -91,7 +92,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
   assignment: {
     title: "Block_Assignment",
     boxStyle: {
-      backgroundColor: getBrighterColor(palette.orange),
+      backgroundColor: colors.brighter(palette.orange),
       textColor: "white",
     },
     modal: {
@@ -106,7 +107,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
   conditional: {
     title: "Block_Conditional",
     boxStyle: {
-      backgroundColor: getBrighterColor(palette.red),
+      backgroundColor: colors.brighter(palette.red),
       textColor: "white",
       clipPath:
         "polygon(20px 0, 0 50%, 20px 100%, calc(100% - 20px) 100%, 100% 50%, calc(100% - 20px) 0)",
@@ -125,7 +126,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
     title: "Block_End",
     prefixLabel: "Block_End",
     boxStyle: {
-      backgroundColor: getBrighterColor(palette.purple),
+      backgroundColor: colors.brighter(palette.purple),
       textColor: "white",
       borderRadius: "15px",
     },

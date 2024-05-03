@@ -7,7 +7,7 @@ import Markdown from "~/components/General/Markdown";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreMachine from "~/store/useStoreMachine";
 import useStoreStrings from "~/store/useStoreStrings";
-import { palette } from "~/utils/colors";
+import palette from "~/utils/palette";
 
 interface StatusProps {
   backgroundColor: string;

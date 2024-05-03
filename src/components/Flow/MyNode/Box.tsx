@@ -1,7 +1,7 @@
 import React from "react";
 
 import { BoxStyle } from "~/core/blockTypes";
-import { getDarkerColor, getStripedBackground } from "~/utils/colors";
+import colors from "~/utils/colors";
 
 interface Props {
   boxStyle: BoxStyle;
@@ -18,9 +18,20 @@ export default function ({
   isMouseHover,
   children,
 }: Props): JSX.Element {
+  function getStripedBackground(color: string): string {
+    const darkerColor = colors.darker(color);
+    return `repeating-linear-gradient(
+      45deg,
+      ${color},
+      ${color} 10px,
+      ${darkerColor} 10px,
+      ${darkerColor} 20px
+    )`;
+  }
+
   function getBackground(): string {
     const bgColor = boxStyle.backgroundColor as string;
-    const bgDarker = getDarkerColor(bgColor);
+    const bgDarker = colors.darker(bgColor);
     if (isSelected && isMouseHover) {
       return getStripedBackground(bgDarker);
     } else if (isSelected) {
