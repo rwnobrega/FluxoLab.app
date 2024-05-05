@@ -5,6 +5,7 @@ import { Action } from "~/core/machine/actions";
 import check from "~/core/machine/check";
 import execute from "~/core/machine/execute";
 import { VariableTypeId } from "~/core/variableTypes";
+import assert from "~/utils/assert";
 import minstd from "~/utils/minstd";
 
 import { Flowchart } from "./useStoreFlowchart";
@@ -87,7 +88,7 @@ const useStoreMachine = create<StoreMachine>()((set, get) => ({
   },
   executeAction: (actionId) => {
     const { flowchart, stateHistory, machineState, resetMachine } = get();
-    if (flowchart === null) throw new Error("Flowchart is not set");
+    assert(flowchart !== null);
     switch (actionId) {
       case "reset": {
         resetMachine(flowchart);

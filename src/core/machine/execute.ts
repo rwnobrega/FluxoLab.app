@@ -69,7 +69,7 @@ export default function (
     return state;
   }
 
-  if (state.outPort === null) throw new Error("Output port not set");
+  assert(state.outPort !== null);
   state.curNodeId = getOutgoingEdge(node.id, state.outPort, flowchart);
   const nextNode = getNodeById(flowchart, state.curNodeId);
   if (nextNode.type === "end" && state.status === "running") {
