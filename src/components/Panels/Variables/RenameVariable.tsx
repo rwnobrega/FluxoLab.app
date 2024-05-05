@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 
 import TextInput from "~/components/General/TextInput";
-import isValidIdentifier from "~/core/language/isValidIdentifier";
+import grammar from "~/core/language/grammar";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
@@ -29,7 +29,7 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
   useEffect(() => {
     if (_.isEmpty(textId)) {
       setProblem(getString("IdentifierError_Empty"));
-    } else if (!isValidIdentifier(textId)) {
+    } else if (grammar.match(textId, "identifier").failed()) {
       setProblem(getString("IdentifierError_Invalid"));
     } else if (
       textId !== id &&
