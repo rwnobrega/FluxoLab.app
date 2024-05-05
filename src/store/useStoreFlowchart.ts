@@ -14,6 +14,7 @@ import {
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { BlockTypeId } from "~/core/blockTypes";
 import { VariableTypeId } from "~/core/variableTypes";
 
 import { SimpleFlowchart } from "./serialize";
@@ -33,7 +34,7 @@ interface StoreFlowchart {
   setTitle: (title: string) => void;
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
-  addNode: (type: string, position: XYPosition) => void;
+  addNode: (type: BlockTypeId, position: XYPosition) => void;
   deleteNode: (id: string) => void;
   changeNodeData: (id: string, value: any) => void;
   onConnect: (connection: Connection) => void;

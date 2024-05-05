@@ -10,7 +10,7 @@ import ReactFlow, {
 
 import PlayButtons from "~/components/PlayButtons";
 import StatusMessage from "~/components/StatusMessage";
-import { blockTypeIds } from "~/core/blockTypes";
+import { BlockTypeId, blockTypeIds } from "~/core/blockTypes";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 
@@ -52,7 +52,9 @@ export default function (): JSX.Element {
       x: event.clientX,
       y: event.clientY,
     });
-    addNode(type, position);
+    if (blockTypeIds.includes(type as BlockTypeId)) {
+      addNode(type as BlockTypeId, position);
+    }
   };
 
   return (

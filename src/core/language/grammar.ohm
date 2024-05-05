@@ -1,8 +1,8 @@
 Language {
   Command
     = start  --start
-    | identifier "=" Expression  --assignment
-    | read identifier  --read
+    | Variable "=" Expression  --assignment
+    | read Variable  --read
     | write NonemptyListOf<Expression, ",">  --write
     | conditional Expression  --conditional
 
@@ -36,13 +36,19 @@ Language {
   Parentheses ([[Syntax_Parentheses]])
     = "(" Expression ")"
 
+  Constant
+    = identifier  --constant
+
+  Variable
+    = identifier  --identifier
+
   Primary
     = stringLiteral  --stringLiteral
     | numberLiteral  --numberLiteral
     | booleanLiteral  --booleanLiteral
     | FunctionCall
-    | constant  --constant
-    | identifier  --identifier
+    | Constant
+    | Variable
     | Parentheses
 
   start = "start" ~alnum
@@ -53,17 +59,12 @@ Language {
   false = "false" ~alnum
   div = "div" ~alnum
   mod = "mod" ~alnum
-  pi = "pi" ~alnum
-  tau = "tau" ~alnum
 
   keyword ([[Syntax_Keyword]])
-    = true | false | div | mod | read | write | pi | tau
+    = true | false | div | mod | start | read | write | conditional
 
   identifier ([[Syntax_Identifier]])
     = ~keyword (letter | "_") (alnum | "_")*
-
-  constant ([[Syntax_Constant]])
-    = pi | tau
 
   stringLiteral ([[Syntax_StringLiteral]])
     = "\"" ("\\\"" | ~"\"" ~"\n" any)* "\""

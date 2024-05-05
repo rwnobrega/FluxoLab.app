@@ -1,20 +1,23 @@
-import { cloneDeep } from "lodash";
+import _ from "lodash";
 import { Node } from "reactflow";
 
 import grammar from "~/core/language/grammar";
 import semantics from "~/core/language/semantics";
 import { Flowchart } from "~/store/useStoreFlowchart";
 import { MachineState } from "~/store/useStoreMachine";
+import assert from "~/utils/assert";
+
+import { BlockTypeId, getBlockType } from "../blockTypes";
 
 function getNodeById(flowchart: Flowchart, nodeId: string): Node {
-  const node = flowchart.nodes.find((n) => n.id === nodeId);
-  if (node === undefined) throw new Error(`Node not found: ${nodeId}`);
+  const node = _.find(flowchart.nodes, { id: nodeId });
+  assert(node !== undefined);
   return node;
 }
 
 function getStartNode(flowchart: Flowchart): Node {
-  const node = flowchart.nodes.find((n) => n.type === "start");
-  if (node === undefined) throw new Error("Start node not found");
+  const node = _.find(flowchart.nodes, { type: "start" });
+  assert(node !== undefined);
   return node;
 }
 
@@ -23,11 +26,11 @@ function getOutgoingEdge(
   handleId: string,
   flowchart: Flowchart,
 ): string {
-  const edge = flowchart.edges.find(
-    (e) => e.source === sourceId && e.sourceHandle === handleId,
-  );
-  if (edge === undefined)
-    throw new Error(`Edge not found: ${sourceId}, ${handleId}`);
+  const edge = _.find(flowchart.edges, {
+    source: sourceId,
+    sourceHandle: handleId,
+  });
+  assert(edge !== undefined);
   return edge.target;
 }
 
@@ -35,24 +38,22 @@ export default function (
   flowchart: Flowchart,
   state: MachineState,
 ): MachineState {
-  state = cloneDeep(state);
+  state = _.cloneDeep(state);
 
   const node =
     state.curNodeId === null
       ? getStartNode(flowchart)
       : getNodeById(flowchart, state.curNodeId);
 
-  const command = (() => {
-    if (node.type === "assignment") {
-      return node.data;
-    } else {
-      return `${node.type} ${node.data}`;
-    }
-  })();
+  const blockType = getBlockType(node.type as BlockTypeId);
+  const { prefixCommand } = blockType;
 
   try {
-    const matchResult = grammar.match(command, "Command");
-    semantics(matchResult).eval(state);
+    const matchResult = grammar.match(
+      `${prefixCommand}${node.data}`,
+      `Command_${node.type}`,
+    );
+    semantics(matchResult).exec(state);
     state.status = "running";
     state.timeSlot += 1;
   } catch (error) {

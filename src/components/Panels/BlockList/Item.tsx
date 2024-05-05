@@ -14,7 +14,7 @@ export default function ({ blockTypeId }: Props): JSX.Element {
   const { machineState } = useStoreMachine();
   const [mouseHover, setMouseHover] = useState<boolean>(false);
 
-  const { title, boxStyle } = getBlockType(blockTypeId);
+  const { boxStyle } = getBlockType(blockTypeId);
 
   const isDisabled =
     machineState.status === "running" || machineState.status === "waiting";
@@ -51,7 +51,7 @@ export default function ({ blockTypeId }: Props): JSX.Element {
         clipPath: boxStyle.clipPath,
       }}
     >
-      <span>{getString(title)}</span>
+      <span>{getString(`BlockTitle_${blockTypeId}`)}</span>
     </div>
   );
 }

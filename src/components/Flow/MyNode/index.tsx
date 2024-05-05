@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
-import { Node, useReactFlow } from "reactflow";
+import { useReactFlow } from "reactflow";
 
 import { BlockTypeId, getBlockType } from "~/core/blockTypes";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
@@ -27,8 +27,7 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
   const [boxFilter, setBoxFilter] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const { title, prefixLabel, boxStyle, modal, handles } =
-    getBlockType(blockTypeId);
+  const { hasModal, handles, boxStyle } = getBlockType(blockTypeId);
 
   const {
     isDraggingNode,
@@ -38,20 +37,20 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
   } = useStoreEphemeral();
   const { flowchart, deleteNode } = useStoreFlowchart();
   const { machineState } = useStoreMachine();
-  const { getString, language } = useStoreStrings();
+  const { language } = useStoreStrings();
 
   const { getZoom } = useReactFlow();
 
   const labelRef = useRef<HTMLSpanElement>(null);
 
-  const node: Node | undefined = _.find(flowchart.nodes, { id: nodeId });
-
   function getDropShadow(color: string): string {
     return `drop-shadow(+2px 0 2px ${color})
-            drop-shadow(-2px 0 2px ${color})
-            drop-shadow(0 +2px 2px ${color})
-            drop-shadow(0 -2px 2px ${color})`;
+    drop-shadow(-2px 0 2px ${color})
+    drop-shadow(0 +2px 2px ${color})
+    drop-shadow(0 -2px 2px ${color})`;
   }
+
+  const node = _.find(flowchart.nodes, { id: nodeId });
 
   useEffect(() => {
     if (labelRef.current !== null) {
@@ -88,7 +87,7 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
   const isSelected = node?.selected ?? false;
   const isMouseHover = mouseOverNodeId === nodeId;
   const isDeleteVisible = isMouseHover && !isDraggingNode && !isConnectingEdge;
-  const isEditVisible = isDeleteVisible && modal !== undefined;
+  const isEditVisible = isDeleteVisible && hasModal;
 
   return (
     <div
@@ -112,7 +111,7 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
             marginRight: `${margin}px`,
           }}
         >
-          <Label blockTypeId={blockTypeId} value={node?.data} />
+          <Label node={node} />
         </span>
       </Box>
       <ButtonDelete onClick={handleDelete} visible={isDeleteVisible} />
@@ -124,18 +123,8 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
           <MyHandleTarget key={index} boxStyle={boxStyle} {...props} />
         ),
       )}
-      {modal !== undefined && (
-        <Modal
-          title={getString(title)}
-          prefixLabel={getString(prefixLabel ?? "")}
-          prefixCommand={modal.prefixCommand}
-          matchStartRule={modal.matchStartRule}
-          placeholder={getString(modal.placeholder)}
-          nodeId={nodeId}
-          value={node?.data}
-          showModal={showModal}
-          setShowModal={setShowModal}
-        />
+      {hasModal && (
+        <Modal node={node} showModal={showModal} setShowModal={setShowModal} />
       )}
     </div>
   );

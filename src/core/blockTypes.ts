@@ -22,36 +22,35 @@ export interface BoxStyle {
 }
 
 interface BlockType {
-  title: string;
-  prefixLabel?: string;
-  boxStyle: BoxStyle;
-  modal?: {
-    prefixCommand?: string;
-    matchStartRule: string;
-    placeholder: string;
-  };
+  prefixCommand: string;
+  hasModal: boolean;
   handles: Array<{
     id: string;
     label?: string;
     type: HandleType;
     position: Position;
   }>;
+  boxStyle: BoxStyle;
 }
 
 const blockTypes: Record<BlockTypeId, BlockType> = {
   start: {
-    title: "Block_Start",
-    prefixLabel: "Block_Start",
+    prefixCommand: "start",
+    hasModal: false,
+    handles: [{ id: "out", type: "source", position: Position.Bottom }],
     boxStyle: {
       backgroundColor: colors.brighter(palette.purple),
       textColor: "white",
       borderRadius: "15px",
     },
-    handles: [{ id: "out", type: "source", position: Position.Bottom }],
   },
   read: {
-    title: "Block_Input",
-    prefixLabel: "Block_Read",
+    prefixCommand: "read ",
+    hasModal: true,
+    handles: [
+      { id: "in", type: "target", position: Position.Top },
+      { id: "out", type: "source", position: Position.Bottom },
+    ],
     boxStyle: {
       backgroundColor: colors.brighter(palette.blue),
       textColor: "white",
@@ -59,19 +58,14 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
       clipPathBorder:
         "polygon(20px 0, calc(100% + 1px) 0, calc(100% - 21px) 100%, -1px calc(100% - 1px))",
     },
-    modal: {
-      prefixCommand: "read ",
-      matchStartRule: "Command_read",
-      placeholder: "Block_InputPlaceholder",
-    },
+  },
+  write: {
+    prefixCommand: "write ",
+    hasModal: true,
     handles: [
       { id: "in", type: "target", position: Position.Top },
       { id: "out", type: "source", position: Position.Bottom },
     ],
-  },
-  write: {
-    title: "Block_Output",
-    prefixLabel: "Block_Write",
     boxStyle: {
       backgroundColor: colors.brighter(palette.green),
       textColor: "white",
@@ -79,58 +73,43 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
       clipPathBorder:
         "polygon(20px 0, calc(100% + 1px) 0, calc(100% - 21px) 100%, -1px calc(100% - 1px))",
     },
-    modal: {
-      prefixCommand: "write ",
-      matchStartRule: "Command_write",
-      placeholder: "Block_OutputPlaceholder",
-    },
+  },
+  assignment: {
+    prefixCommand: "",
+    hasModal: true,
     handles: [
       { id: "in", type: "target", position: Position.Top },
       { id: "out", type: "source", position: Position.Bottom },
     ],
-  },
-  assignment: {
-    title: "Block_Assignment",
     boxStyle: {
       backgroundColor: colors.brighter(palette.orange),
       textColor: "white",
     },
-    modal: {
-      matchStartRule: "Command_assignment",
-      placeholder: "Block_AssignmentPlaceholder",
-    },
-    handles: [
-      { id: "in", type: "target", position: Position.Top },
-      { id: "out", type: "source", position: Position.Bottom },
-    ],
   },
   conditional: {
-    title: "Block_Conditional",
+    prefixCommand: "conditional ",
+    hasModal: true,
+    handles: [
+      { id: "in", type: "target", position: Position.Top },
+      { id: "true", type: "source", position: Position.Bottom, label: "T" },
+      { id: "false", type: "source", position: Position.Right, label: "F" },
+    ],
     boxStyle: {
       backgroundColor: colors.brighter(palette.red),
       textColor: "white",
       clipPath:
         "polygon(20px 0, 0 50%, 20px 100%, calc(100% - 20px) 100%, 100% 50%, calc(100% - 20px) 0)",
     },
-    modal: {
-      matchStartRule: "Expression",
-      placeholder: "Block_ConditionalPlaceholder",
-    },
-    handles: [
-      { id: "in", type: "target", position: Position.Top },
-      { id: "true", type: "source", position: Position.Bottom, label: "T" },
-      { id: "false", type: "source", position: Position.Right, label: "F" },
-    ],
   },
   end: {
-    title: "Block_End",
-    prefixLabel: "Block_End",
+    hasModal: false,
+    prefixCommand: "",
+    handles: [{ id: "in", type: "target", position: Position.Top }],
     boxStyle: {
       backgroundColor: colors.brighter(palette.purple),
       textColor: "white",
       borderRadius: "15px",
     },
-    handles: [{ id: "in", type: "target", position: Position.Top }],
   },
 };
 

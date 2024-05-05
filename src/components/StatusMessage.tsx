@@ -38,7 +38,7 @@ export default function (): JSX.Element {
         return {
           backgroundColor: palette.green,
           statusIcon: "bi-check-circle-fill",
-          mainStatus: getString("Status_Running", { step: String(timeSlot) }),
+          mainStatus: getString("Status_Running", { step: timeSlot }),
         };
 
       case "waiting":
@@ -72,7 +72,7 @@ export default function (): JSX.Element {
             const error = nonNodeErrors[0];
             mainStatus = getString(error.message, error.payload);
           } else {
-            const count = String(errors.length);
+            const count = errors.length;
             mainStatus = getString("Status_CompileErrors", { count });
           }
         } else if (hoveredErrors.length === 1) {

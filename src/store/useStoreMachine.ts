@@ -20,10 +20,13 @@ export interface InteractionAtom {
 }
 
 export interface MachineError {
-  type: "check" | "runtime";
+  type: "syntax" | "check" | "runtime";
   message: string;
   nodeId: string | null;
-  payload?: Record<string, string>;
+  payload?: Record<
+    string,
+    string | number | boolean | Array<string | number | boolean>
+  >;
 }
 
 export interface MachineState {
