@@ -83,7 +83,8 @@ function checkNode(flowchart: Flowchart, node: Node): MachineError[] {
       },
     });
   } else {
-    for (const error of semantics(matchResult).check(variables)) {
+    const error = semantics(matchResult).check(variables);
+    if (error) {
       errors.push({
         type: "check",
         message: error.message,

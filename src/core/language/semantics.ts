@@ -55,10 +55,10 @@ semantics.addOperation<VariableTypeId | "invalid">("getType(variables)", {
   FunctionCall: getTypeFunctionCall,
 });
 
-semantics.addOperation<CheckError[]>("check(variables)", {
-  Primary_stringLiteral: (a) => [],
-  Primary_numberLiteral: (a) => [],
-  Primary_booleanLiteral: (a) => [],
+semantics.addOperation<CheckError | null>("check(variables)", {
+  Primary_stringLiteral: (a) => null,
+  Primary_numberLiteral: (a) => null,
+  Primary_booleanLiteral: (a) => null,
   Variable: checkVariable,
   Constant: checkVariable,
   Parentheses: checkParentheses,
