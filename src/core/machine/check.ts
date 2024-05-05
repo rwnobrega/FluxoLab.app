@@ -22,7 +22,6 @@ function checkGraph(flowchart: Flowchart): MachineError[] {
   const errors: MachineError[] = [];
   const startNodes = _.filter(nodes, { type: "start" });
 
-  // Check if there is a start node
   if (startNodes.length === 0) {
     errors.push({
       type: "check",
@@ -30,7 +29,6 @@ function checkGraph(flowchart: Flowchart): MachineError[] {
       nodeId: null,
     });
   }
-  // Check if there are multiple start nodes
   if (startNodes.length > 1) {
     errors.push({
       type: "check",
@@ -39,7 +37,6 @@ function checkGraph(flowchart: Flowchart): MachineError[] {
     });
   }
 
-  // Check for handles with no outgoing edges
   for (const node of nodes) {
     const blockType = getBlockType(node.type as BlockTypeId);
     for (const handle of _.filter(blockType.handles, { type: "source" })) {
