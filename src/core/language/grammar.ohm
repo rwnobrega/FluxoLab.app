@@ -19,11 +19,11 @@ Language {
     | Expression2
 
   Expression2
-  	= Expression2 ("+" | "-") Expression3  --binary
-  	| Expression3
+    = Expression2 ("+" | "-") Expression3  --binary
+    | Expression3
 
   Expression3
-  	= Expression3 ("*" | "/" | div | mod) Expression4  --binary
+    = Expression3 ("*" | "/" | div | mod) Expression4  --binary
     | Expression4
 
   Expression4 ([[Syntax_Expression]])
@@ -36,10 +36,10 @@ Language {
   Parentheses ([[Syntax_Parentheses]])
     = "(" Expression ")"
 
-  Constant
+  Constant ([[Syntax_Constant]])
     = identifier  --constant
 
-  Variable
+  Variable ([[Syntax_Variable]])
     = identifier  --identifier
 
   Primary
