@@ -39,7 +39,7 @@ import {
 
 const semantics = grammar.createSemantics();
 
-semantics.addOperation<VariableTypeId | "invalid">("getType(variables)", {
+semantics.addOperation<VariableTypeId | null>("getType(variables)", {
   Primary_stringLiteral: (a) => "string",
   Primary_numberLiteral: (a) => "number",
   Primary_booleanLiteral: (a) => "boolean",

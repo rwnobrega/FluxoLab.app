@@ -10,17 +10,17 @@ import {
   unaryOperators,
 } from "./library";
 
-export function getTypeVariable(a: ohm.Node): VariableTypeId | "invalid" {
+export function getTypeVariable(a: ohm.Node): VariableTypeId | null {
   const constantsAndVariables = [...constants, ...this.args.variables];
   const variable = _.find(constantsAndVariables, { id: a.sourceString });
-  return variable === undefined ? "invalid" : variable.type;
+  return variable !== undefined ? variable.type : null;
 }
 
 export function getTypeParentheses(
   a: ohm.Node,
   b: ohm.Node,
   c: ohm.Node,
-): VariableTypeId | "invalid" {
+): VariableTypeId | null {
   return b.getType(this.args.variables);
 }
 
@@ -28,22 +28,22 @@ export function getTypeExpressionBinary(
   a: ohm.Node,
   b: ohm.Node,
   c: ohm.Node,
-): VariableTypeId | "invalid" {
+): VariableTypeId | null {
   const leftType = a.getType(this.args.variables);
   const id = b.sourceString;
   const rightType = c.getType(this.args.variables);
   const operationObject = _.find(binaryOperators, { id, leftType, rightType });
-  return operationObject === undefined ? "invalid" : operationObject.resultType;
+  return operationObject !== undefined ? operationObject.resultType : null;
 }
 
 export function getTypeUnaryOperator(
   a: ohm.Node,
   b: ohm.Node,
-): VariableTypeId | "invalid" {
+): VariableTypeId | null {
   const id = a.sourceString;
   const operandType = b.getType(this.args.variables);
   const operationObject = _.find(unaryOperators, { id, operandType });
-  return operationObject === undefined ? "invalid" : operationObject.resultType;
+  return operationObject !== undefined ? operationObject.resultType : null;
 }
 
 export function getTypeFunctionCall(
@@ -51,11 +51,11 @@ export function getTypeFunctionCall(
   b: ohm.Node,
   c: ohm.Node,
   d: ohm.Node,
-): VariableTypeId | "invalid" {
+): VariableTypeId | null {
   const id = a.sourceString;
   const parameterTypes = _.map(c.asIteration().children, (child) =>
     child.getType(this.args.variables),
   );
   const functionObject = _.find(functions, { id, parameterTypes });
-  return functionObject === undefined ? "invalid" : functionObject.returnType;
+  return functionObject !== undefined ? functionObject.returnType : null;
 }
