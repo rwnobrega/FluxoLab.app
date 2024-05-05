@@ -11,8 +11,9 @@ import generateSvgRoundedPath from "./generateSvgRoundedPath";
 import getBestPath from "./getBestPath";
 
 export default function ({
-  source,
-  target,
+  source: sourceId,
+  target: targetId,
+  sourceHandleId,
   sourcePosition,
   selected,
 }: EdgeProps): JSX.Element {
@@ -21,29 +22,31 @@ export default function ({
   const { machineState: state } = useStoreMachine();
 
   useEffect(() => {
-    if (sourceNode === undefined || targetNode === undefined) {
+    if (source === undefined || target === undefined) {
       setAnimated(false);
-    } else if (sourceNode.type === "start" && state.status === "ready") {
+    } else if (state.status === "ready" && source.type === "start") {
       setAnimated(true);
-    } else if (!_.includes(["running", "waiting"], state.status)) {
-      setAnimated(false);
-    } else {
+    } else if (state.status === "waiting" && source.type === "read") {
+      setAnimated(state.curNodeId === sourceId);
+    } else if (state.status === "running") {
       const nextState = execute(flowchart, state); // Peek the future
-      setAnimated(source === state.curNodeId && target === nextState.curNodeId);
+      setAnimated(
+        state.curNodeId === sourceId &&
+          nextState.curNodeId === targetId &&
+          nextState.outPort === sourceHandleId,
+      );
+    } else {
+      setAnimated(false);
     }
-  }, [source, target, state.curNodeId, state.status]);
+  }, [sourceId, targetId, sourceHandleId, state.curNodeId, state.status]);
 
-  const sourceNode = _.find(flowchart.nodes, { id: source });
-  const targetNode = _.find(flowchart.nodes, { id: target });
-  if (sourceNode === undefined || targetNode === undefined) return <></>;
+  const source = _.find(flowchart.nodes, { id: sourceId });
+  const target = _.find(flowchart.nodes, { id: targetId });
+  if (source === undefined || target === undefined) return <></>;
 
-  const [path, targetPosition] = getBestPath(
-    sourceNode,
-    targetNode,
-    sourcePosition,
-  );
+  const [path, targetPosition] = getBestPath(source, target, sourcePosition);
 
-  if (_.includes(["read", "write"], targetNode.type)) {
+  if (_.includes(["read", "write"], target.type)) {
     if (targetPosition === "left") {
       path[path.length - 1][0] += 10;
     } else if (targetPosition === "right") {
