@@ -145,6 +145,53 @@ export default function getPath(
             ([x, y]) => [-x, y],
           );
         }
+        case Position.Bottom: {
+          if (y0 <= y1) {
+            if (x0 < left1 || x0 > right1) {
+              // Cases 1, 4 || 3, 5
+              const yp = Math.max(y1, y0) + gridSize;
+              path = [
+                [x0, y0],
+                [x0, yp],
+                [x1, yp],
+                [x1, y1],
+              ];
+            } else {
+              // Cases 2a, 2b
+              const xp = x0 <= x1 ? left1 - gridSize : right1 + gridSize;
+              const yp = (bottom0 + top1) / 2;
+              path = [
+                [x0, y0],
+                [x0, yp],
+                [xp, yp],
+                [xp, y1 + gridSize],
+                [x1, y1 + gridSize],
+                [x1, y1],
+              ];
+            }
+          } else if (right0 < x1 || left0 > x1) {
+            // Case 6, 8
+            return [
+              [x0, y0],
+              [x0, y0 + gridSize],
+              [x1, y0 + gridSize],
+              [x1, y1],
+            ];
+          } else {
+            // Case 7
+            const xp = x0 <= x1 ? right0 + gridSize : left0 - gridSize;
+            const yp = (bottom1 + top0) / 2;
+            return [
+              [x0, y0],
+              [x0, y0 + gridSize],
+              [xp, y0 + gridSize],
+              [xp, yp],
+              [x1, yp],
+              [x1, y1],
+            ];
+          }
+          return path;
+        }
       }
       break;
     }

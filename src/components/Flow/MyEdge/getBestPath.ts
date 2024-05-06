@@ -26,7 +26,7 @@ export default function (
 ): [Path, Position] {
   const { handles } = getBlockType(targetNode.type as BlockTypeId);
 
-  const takenPositions = [Position.Bottom];
+  const takenPositions = [];
   for (const handle of handles) {
     if (handle.id !== "in") {
       takenPositions.push(handle.position);
