@@ -243,6 +243,24 @@ export default function getPath(
           break;
         }
       }
+      break;
+    }
+
+    case Position.Left: {
+      // Use symmetry
+      const newCenter0 = { x: -center0.x, y: center0.y };
+      const newCenter1 = { x: -center1.x, y: center1.y };
+      const newPos1 = {
+        [Position.Top]: Position.Top,
+        [Position.Bottom]: Position.Bottom,
+        [Position.Left]: Position.Right,
+        [Position.Right]: Position.Left,
+      }[pos1];
+      return _.map(
+        getPath(Position.Right, newPos1, newCenter0, newCenter1, dim0, dim1),
+        ([x, y]) => [-x, y],
+      );
+      break;
     }
   }
   return removeRedundantPoints(path);
