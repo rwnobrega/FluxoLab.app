@@ -2,6 +2,7 @@ import _ from "lodash";
 import * as ohm from "ohm-js";
 
 import assert from "~/utils/assert";
+import minstd from "~/utils/minstd";
 
 import {
   Value,
@@ -45,6 +46,7 @@ export function evalFunction(
     child.eval(this.args.state),
   );
   if (_.includes(func.tags, "random")) {
+    this.args.state.rand = minstd.getNext(this.args.state.rand);
     args.push(this.args.state.rand);
   }
   return func.work(...args);
