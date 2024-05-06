@@ -30,12 +30,12 @@ export default function (): JSX.Element {
 
   return (
     <ReactFlowProvider>
+      <Hotkeys />
+      <Updater />
+      <UrlImporter />
+      <Toaster />
       <Stack className="vh-100 h-100" style={{ userSelect: "none" }}>
-        <UrlImporter />
-        <Hotkeys />
-        <Toaster />
         <Navbar />
-        <Updater />
         <PanelGroup direction="horizontal" autoSaveId="fluxolab_main">
           <div className="bg-light p-3">
             <Blocks />
