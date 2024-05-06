@@ -6,6 +6,7 @@ import Modal from "react-bootstrap/Modal";
 
 import TextInput from "~/components/General/TextInput";
 import grammar from "~/core/language/grammar";
+import { constants, functions } from "~/core/language/library";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
@@ -29,6 +30,10 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
   useEffect(() => {
     if (_.isEmpty(textId)) {
       setProblem(getString("IdentifierError_Empty"));
+    } else if (_.find(constants, { id: textId })) {
+      setProblem(getString("IdentifierError_Constant"));
+    } else if (_.find(functions, { id: textId })) {
+      setProblem(getString("IdentifierError_Function"));
     } else if (grammar.match(textId, "identifier").failed()) {
       setProblem(getString("IdentifierError_Invalid"));
     } else if (
