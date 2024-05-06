@@ -1,8 +1,7 @@
-import { Example } from ".";
+import { SimpleFlowchart } from "~/store/serialize";
 
-const example: Example = {
-  title: "Overtime work",
-  description: "Computes the payment taking into account overtime.",
+const example: SimpleFlowchart = {
+  title: "overtime",
   variables: [
     { id: "hours", type: "number" },
     { id: "pay", type: "number" },

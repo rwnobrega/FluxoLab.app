@@ -1,8 +1,7 @@
-import { Example } from ".";
+import { SimpleFlowchart } from "~/store/serialize";
 
-const example: Example = {
-  title: "Sign of a number",
-  description: "Determines if a number is positive, negative, or zero.",
+const example: SimpleFlowchart = {
+  title: "sign",
   variables: [{ id: "n", type: "number" }],
   nodes: [
     {

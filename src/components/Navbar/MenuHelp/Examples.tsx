@@ -23,7 +23,8 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
   const { fitView, getViewport } = useReactFlow();
 
   const openExample = (index: number) => {
-    const { variables, nodes, edges, title } = examples[index];
+    const { variables, nodes, edges, title: id } = examples[index];
+    const title = getString(`ExampleTitle_${id}`);
 
     importSimpleFlowchart({ title, variables, nodes, edges });
     setTimeout(() => {
@@ -50,17 +51,17 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
           <Markdown source={getString("ModalExamples_Body")} />
         </p>
         <div className="px-3">
-          {_.map(examples, ({ title, description }, index) => (
+          {_.map(examples, ({ title: id }, index) => (
             <p key={index}>
               <b
                 className="text-primary"
                 style={{ cursor: "pointer" }}
                 onClick={() => openExample(index)}
               >
-                {title}
+                {getString(`ExampleTitle_${id}`)}
               </b>
               {" – "}
-              <i>{description}</i>
+              <i>{getString(`ExampleDescription_${id}`)}</i>
             </p>
           ))}
         </div>
