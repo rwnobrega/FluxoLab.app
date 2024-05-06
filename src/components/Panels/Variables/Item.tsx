@@ -17,10 +17,9 @@ export interface Props {
   id: string;
   type: VariableTypeId;
   value: any;
-  disabled: boolean;
 }
 
-export default function ({ id, type, value, disabled }: Props): JSX.Element {
+export default function ({ id, type, value }: Props): JSX.Element {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const { getString } = useStoreStrings();
@@ -40,7 +39,6 @@ export default function ({ id, type, value, disabled }: Props): JSX.Element {
           <Button
             variant="secondary"
             size="sm"
-            disabled={disabled}
             className="font-monospace"
             onClick={() => setShowModal(true)}
           >
@@ -51,7 +49,6 @@ export default function ({ id, type, value, disabled }: Props): JSX.Element {
           <Form.Select
             size="sm"
             value={type}
-            disabled={disabled}
             onChange={(e) =>
               changeVariableType(id, e.target.value as VariableTypeId)
             }
@@ -68,19 +65,17 @@ export default function ({ id, type, value, disabled }: Props): JSX.Element {
             {value === null ? "?" : variableType.stringify(value)}
           </small>
         </td>
-        {!disabled && (
-          <td>
-            <Tooltip text={getString("VariableList_Remove")}>
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={() => removeVariable(id)}
-              >
-                <i className="bi bi-trash-fill" />
-              </Button>
-            </Tooltip>
-          </td>
-        )}
+        <td>
+          <Tooltip text={getString("VariableList_Remove")}>
+            <Button
+              variant="danger"
+              size="sm"
+              onClick={() => removeVariable(id)}
+            >
+              <i className="bi bi-trash-fill" />
+            </Button>
+          </Tooltip>
+        </td>
       </tr>
     </>
   );

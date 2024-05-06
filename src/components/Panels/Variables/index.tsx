@@ -14,8 +14,6 @@ export default function (): JSX.Element {
   const { machineState } = useStoreMachine();
   const { getString } = useStoreStrings();
 
-  const disabled = machineState.timeSlot !== 0;
-
   return (
     <div className="d-flex flex-column h-100">
       <div className="d-flex flex-row justify-content-between align-items-center mb-2 gap-3">
@@ -24,7 +22,6 @@ export default function (): JSX.Element {
           size="sm"
           className="fw-semibold text-nowrap"
           onClick={addVariable}
-          disabled={disabled}
         >
           {getString("VariableList_Add")}
         </Button>
@@ -33,13 +30,7 @@ export default function (): JSX.Element {
         <Table size="sm" variant="borderless" className="mb-0">
           <tbody>
             {_.map(machineState.memory, ({ type, value }, id) => (
-              <VariableItem
-                key={id}
-                id={id}
-                type={type}
-                value={value}
-                disabled={disabled}
-              />
+              <VariableItem key={id} id={id} type={type} value={value} />
             ))}
           </tbody>
         </Table>
