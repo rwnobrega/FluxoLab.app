@@ -3,19 +3,17 @@ import { Handle, HandleProps, Position } from "reactflow";
 
 import { BoxStyle } from "~/core/blockTypes";
 
-type Props = HandleProps & {
-  boxStyle: BoxStyle;
-  label?: string;
+type Props = {
+  id: string;
 };
 
-export default function ({ id, type }: Props): JSX.Element {
+export default function ({ id }: Props): JSX.Element {
   return (
     <Handle
       id={id}
-      type={type}
+      type={"target"}
       position={Position.Top}
       isConnectableStart={false}
-      className="react-flow__handle"
       style={{
         width: "80px",
         height: "40px",

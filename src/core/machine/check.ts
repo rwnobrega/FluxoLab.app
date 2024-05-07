@@ -39,7 +39,7 @@ function checkGraph(flowchart: Flowchart): MachineError[] {
 
   for (const node of nodes) {
     const blockType = getBlockType(node.type as BlockTypeId);
-    for (const handle of _.filter(blockType.handles, { type: "source" })) {
+    for (const handle of blockType.handles) {
       const outgoingEdges = _.filter(edges, {
         source: node.id,
         sourceHandle: handle.id,

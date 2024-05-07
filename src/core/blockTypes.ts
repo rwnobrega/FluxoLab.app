@@ -1,4 +1,4 @@
-import { HandleType, Position } from "reactflow";
+import { Position } from "reactflow";
 
 import colors from "~/utils/colors";
 import palette from "~/utils/palette";
@@ -27,7 +27,6 @@ interface BlockType {
   handles: Array<{
     id: string;
     label?: string;
-    type: HandleType;
     position: Position;
   }>;
   boxStyle: BoxStyle;
@@ -37,7 +36,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
   start: {
     prefixCommand: "start",
     hasModal: false,
-    handles: [{ id: "out", type: "source", position: Position.Bottom }],
+    handles: [{ id: "out", position: Position.Bottom }],
     boxStyle: {
       backgroundColor: colors.brighter(palette.purple),
       textColor: "white",
@@ -47,10 +46,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
   read: {
     prefixCommand: "read ",
     hasModal: true,
-    handles: [
-      { id: "in", type: "target", position: Position.Top },
-      { id: "out", type: "source", position: Position.Bottom },
-    ],
+    handles: [{ id: "out", position: Position.Bottom }],
     boxStyle: {
       backgroundColor: colors.brighter(palette.blue),
       textColor: "white",
@@ -62,10 +58,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
   write: {
     prefixCommand: "write ",
     hasModal: true,
-    handles: [
-      { id: "in", type: "target", position: Position.Top },
-      { id: "out", type: "source", position: Position.Bottom },
-    ],
+    handles: [{ id: "out", position: Position.Bottom }],
     boxStyle: {
       backgroundColor: colors.brighter(palette.green),
       textColor: "white",
@@ -77,10 +70,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
   assignment: {
     prefixCommand: "",
     hasModal: true,
-    handles: [
-      { id: "in", type: "target", position: Position.Top },
-      { id: "out", type: "source", position: Position.Bottom },
-    ],
+    handles: [{ id: "out", position: Position.Bottom }],
     boxStyle: {
       backgroundColor: colors.brighter(palette.orange),
       textColor: "white",
@@ -90,9 +80,8 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
     prefixCommand: "conditional ",
     hasModal: true,
     handles: [
-      { id: "in", type: "target", position: Position.Top },
-      { id: "true", type: "source", position: Position.Bottom, label: "T" },
-      { id: "false", type: "source", position: Position.Right, label: "F" },
+      { id: "true", position: Position.Bottom, label: "T" },
+      { id: "false", position: Position.Right, label: "F" },
     ],
     boxStyle: {
       backgroundColor: colors.brighter(palette.red),
@@ -104,7 +93,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
   end: {
     hasModal: false,
     prefixCommand: "",
-    handles: [{ id: "in", type: "target", position: Position.Top }],
+    handles: [],
     boxStyle: {
       backgroundColor: colors.brighter(palette.purple),
       textColor: "white",

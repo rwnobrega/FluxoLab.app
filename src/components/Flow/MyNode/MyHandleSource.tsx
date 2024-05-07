@@ -1,17 +1,18 @@
-import React, { useState } from "react";
-import { Handle, HandleProps } from "reactflow";
+import React, { CSSProperties, useState } from "react";
+import { Handle, Position } from "reactflow";
 
 import { BoxStyle } from "~/core/blockTypes";
 import colors from "~/utils/colors";
 
-type Props = HandleProps & {
-  boxStyle: BoxStyle;
+type Props = {
+  id: string;
+  position: Position;
   label?: string;
+  boxStyle: BoxStyle;
 };
 
 export default function ({
   id,
-  type,
   position,
   label,
   boxStyle,
@@ -19,29 +20,29 @@ export default function ({
   const [mouseHover, setMouseHover] = useState<boolean>(false);
   const { textColor, backgroundColor } = boxStyle;
 
-  const handleStyle = {
+  const handleStyle: Record<string, CSSProperties> = {
     all: {
       width: "15px",
       height: "15px",
       lineHeight: "15px",
       fontSize: "10px",
       fontWeight: "bold",
-      textAlign: "center" as "center",
+      textAlign: "center",
       color: textColor,
-      borderColor: colors.darker(backgroundColor as string),
+      borderColor: colors.darker(backgroundColor),
     },
     "hover-false": {
       backgroundColor: backgroundColor,
     },
     "hover-true": {
-      backgroundColor: colors.darker(backgroundColor as string),
+      backgroundColor: colors.darker(backgroundColor),
     },
   };
 
   return (
     <Handle
       id={id}
-      type={type}
+      type="source"
       position={position}
       style={{
         ...handleStyle.all,

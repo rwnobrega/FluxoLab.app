@@ -116,13 +116,16 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
       </Box>
       <ButtonDelete onClick={handleDelete} visible={isDeleteVisible} />
       <ButtonEdit onClick={handleEdit} visible={isEditVisible} />
-      {_.map(handles, (props, index) =>
-        props.type === "source" ? (
-          <MyHandleSource key={index} boxStyle={boxStyle} {...props} />
-        ) : (
-          <MyHandleTarget key={index} boxStyle={boxStyle} {...props} />
-        ),
-      )}
+      {_.map(handles, ({ id, position, label }, index) => (
+        <MyHandleSource
+          key={index}
+          id={id}
+          position={position}
+          label={label}
+          boxStyle={boxStyle}
+        />
+      ))}
+      <MyHandleTarget id="out" />
       {hasModal && (
         <Modal node={node} showModal={showModal} setShowModal={setShowModal} />
       )}
