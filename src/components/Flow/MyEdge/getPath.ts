@@ -289,6 +289,19 @@ export default function getPath(
           }
           break;
         }
+        case Position.Bottom: {
+          // Use symmetry
+          return _.reverse(
+            getPath(
+              Position.Bottom,
+              Position.Right,
+              center1,
+              center0,
+              dim1,
+              dim0,
+            ),
+          );
+        }
       }
       break;
     }
@@ -307,7 +320,6 @@ export default function getPath(
         getPath(Position.Right, newPos1, newCenter0, newCenter1, dim0, dim1),
         ([x, y]) => [-x, y],
       );
-      break;
     }
   }
   return removeRedundantPoints(path);
