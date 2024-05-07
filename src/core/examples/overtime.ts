@@ -51,13 +51,13 @@ const example: SimpleFlowchart = {
     },
   ],
   edges: [
-    { source: "0", sourceHandle: "out", target: "1", targetHandle: "in" },
-    { source: "1", sourceHandle: "out", target: "2", targetHandle: "in" },
-    { source: "2", sourceHandle: "out", target: "3", targetHandle: "in" },
-    { source: "3", sourceHandle: "true", target: "4", targetHandle: "in" },
-    { source: "4", sourceHandle: "out", target: "5", targetHandle: "in" },
-    { source: "5", sourceHandle: "out", target: "6", targetHandle: "in" },
-    { source: "3", sourceHandle: "false", target: "5", targetHandle: "in" },
+    { source: "0", sourceHandle: "out", target: "1" },
+    { source: "1", sourceHandle: "out", target: "2" },
+    { source: "2", sourceHandle: "out", target: "3" },
+    { source: "3", sourceHandle: "true", target: "4" },
+    { source: "4", sourceHandle: "out", target: "5" },
+    { source: "5", sourceHandle: "out", target: "6" },
+    { source: "3", sourceHandle: "false", target: "5" },
   ],
 };
 
