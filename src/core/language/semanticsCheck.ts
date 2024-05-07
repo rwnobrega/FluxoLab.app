@@ -120,6 +120,20 @@ export function checkFunctionCall(
   return null;
 }
 
+export function checkDeclaration(a: ohm.Node, b: ohm.Node): CheckError | null {
+  const id = b.sourceString;
+  if (_.find(this.args.variables, { id }) !== undefined) {
+    return { message: "IdentifierError_Duplicate" };
+  }
+  if (_.find(constants, { id }) !== undefined) {
+    return { message: "IdentifierError_Constant" };
+  }
+  if (_.find(functions, { id }) !== undefined) {
+    return { message: "IdentifierError_Function" };
+  }
+  return null;
+}
+
 export function checkStart(a: ohm.Node): CheckError | null {
   return null;
 }

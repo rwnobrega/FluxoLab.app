@@ -5,8 +5,9 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 
 import TextInput from "~/components/General/TextInput";
+import { getExpectedText } from "~/core/language/errors";
 import grammar from "~/core/language/grammar";
-import { constants, functions } from "~/core/language/library";
+import semantics from "~/core/language/semantics";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
@@ -28,28 +29,32 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
   }, [showModal]);
 
   useEffect(() => {
-    if (_.isEmpty(textId)) {
-      setProblem(getString("IdentifierError_Empty"));
-    } else if (_.find(constants, { id: textId })) {
-      setProblem(getString("IdentifierError_Constant"));
-    } else if (_.find(functions, { id: textId })) {
-      setProblem(getString("IdentifierError_Function"));
-    } else if (grammar.match(textId, "identifier").failed()) {
-      setProblem(getString("IdentifierError_Invalid"));
-    } else if (
-      textId !== id &&
-      _.includes(_.map(flowchart.variables, "id"), textId)
-    ) {
-      setProblem(getString("IdentifierError_Duplicate"));
+    const prefixCommand = "let ";
+    const matchResult = grammar.match(
+      `${prefixCommand}${textId}`,
+      "Command_declaration",
+    );
+    if (matchResult.failed()) {
+      const problem = getString("SyntaxError", {
+        pos: matchResult.getInterval().startIdx - prefixCommand.length,
+        expected: getExpectedText(matchResult),
+      });
+      setProblem(problem);
     } else {
-      setProblem("");
+      const otherVariables = _.reject(flowchart.variables, { id });
+      const error = semantics(matchResult).check(otherVariables);
+      if (error !== null) {
+        setProblem(getString(error.message, error.payload));
+      } else {
+        setProblem("");
+      }
     }
   }, [textId]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setTimeout(() => {
-      renameVariable(id, textId);
+      renameVariable(id, textId.trim());
     }, 200);
     setShowModal(false);
   };
