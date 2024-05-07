@@ -1,8 +1,8 @@
 Language {
   Command
     = start  --start
-    | Variable "=" Expression  --assignment
-    | read Variable  --read
+    | Identifier "=" Expression  --assignment
+    | read Identifier  --read
     | write NonemptyListOf<Expression, ",">  --write
     | conditional Expression  --conditional
 
@@ -36,19 +36,15 @@ Language {
   Parentheses ([[Syntax_Parentheses]])
     = "(" Expression ")"
 
-  Constant ([[Syntax_Constant]])
-    = identifier  --constant
-
-  Variable ([[Syntax_Variable]])
-    = identifier  --identifier
+  Identifier ([[Syntax_Identifier]])
+    = identifier
 
   Primary
     = stringLiteral  --stringLiteral
     | numberLiteral  --numberLiteral
     | booleanLiteral  --booleanLiteral
     | FunctionCall
-    | Constant
-    | Variable
+    | Identifier
     | Parentheses
 
   start = "start" ~alnum

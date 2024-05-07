@@ -10,7 +10,7 @@ import {
   unaryOperators,
 } from "./library";
 
-export function getTypeVariable(a: ohm.Node): VariableTypeId | null {
+export function getTypeIdentifier(a: ohm.Node): VariableTypeId | null {
   const constantsAndVariables = [...constants, ...this.args.variables];
   const variable = _.find(constantsAndVariables, { id: a.sourceString });
   return variable !== undefined ? variable.type : null;

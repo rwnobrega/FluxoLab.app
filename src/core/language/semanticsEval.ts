@@ -52,7 +52,7 @@ export function evalFunction(
   return func.work(...args);
 }
 
-export function evalVariable(a: ohm.Node): Value {
+export function evalIdentifier(a: ohm.Node): Value {
   const id = a.sourceString;
   const constant = _.find(constants, { id });
   if (constant !== undefined) {

@@ -15,12 +15,12 @@ export interface CheckError {
   payload?: MachineError["payload"];
 }
 
-export function checkVariable(a: ohm.Node): CheckError | null {
+export function checkIdentifier(a: ohm.Node): CheckError | null {
   const id = a.sourceString;
   if (_.find(functions, { id }) !== undefined) {
     return {
-      message: "CheckError_IdentifierIsFunction",
-      payload: { id },
+      message: "CheckError_VariableExpected",
+      payload: { id, type: "a function" },
     };
   }
   const constantsAndVariables = [...constants, ...this.args.variables];
@@ -125,6 +125,19 @@ export function checkStart(a: ohm.Node): CheckError | null {
 }
 
 export function checkRead(a: ohm.Node, b: ohm.Node): CheckError | null {
+  const id = b.sourceString;
+  if (_.find(constants, { id }) !== undefined) {
+    return {
+      message: "CheckError_VariableExpected",
+      payload: { id, type: "a constant" },
+    };
+  }
+  if (_.find(functions, { id }) !== undefined) {
+    return {
+      message: "CheckError_VariableExpected",
+      payload: { id, type: "a function" },
+    };
+  }
   return b.check(this.args.variables);
 }
 
@@ -144,8 +157,14 @@ export function checkAssignment(
   const id = a.sourceString;
   if (_.find(constants, { id }) !== undefined) {
     return {
-      message: "CheckError_AssignmentToConstant",
-      payload: { id },
+      message: "CheckError_VariableExpected",
+      payload: { id, type: "a constant" },
+    };
+  }
+  if (_.find(functions, { id }) !== undefined) {
+    return {
+      message: "CheckError_VariableExpected",
+      payload: { id, type: "a function" },
     };
   }
   const aCheck = a.check(this.args.variables);

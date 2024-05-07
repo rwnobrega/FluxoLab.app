@@ -9,18 +9,18 @@ import {
   checkExpressionBinary,
   checkExpressionUnary,
   checkFunctionCall,
+  checkIdentifier,
   checkParentheses,
   checkRead,
   checkStart,
-  checkVariable,
   checkWrite,
 } from "./semanticsCheck";
 import {
   evalBinaryOperator,
   evalFunction,
+  evalIdentifier,
   evalParentheses,
   evalUnaryOperator,
-  evalVariable,
 } from "./semanticsEval";
 import {
   execAssignment,
@@ -32,9 +32,9 @@ import {
 import {
   getTypeExpressionBinary,
   getTypeFunctionCall,
+  getTypeIdentifier,
   getTypeParentheses,
   getTypeUnaryOperator,
-  getTypeVariable,
 } from "./semanticsType";
 
 const semantics = grammar.createSemantics();
@@ -43,8 +43,7 @@ semantics.addOperation<VariableTypeId | null>("getType(variables)", {
   Primary_stringLiteral: (a) => "string",
   Primary_numberLiteral: (a) => "number",
   Primary_booleanLiteral: (a) => "boolean",
-  Variable: getTypeVariable,
-  Constant: getTypeVariable,
+  Identifier: getTypeIdentifier,
   Parentheses: getTypeParentheses,
   Expression_binary: getTypeExpressionBinary,
   Expression0_binary: getTypeExpressionBinary,
@@ -59,8 +58,7 @@ semantics.addOperation<CheckError | null>("check(variables)", {
   Primary_stringLiteral: (a) => null,
   Primary_numberLiteral: (a) => null,
   Primary_booleanLiteral: (a) => null,
-  Variable: checkVariable,
-  Constant: checkVariable,
+  Identifier: checkIdentifier,
   Parentheses: checkParentheses,
   Expression_binary: checkExpressionBinary,
   Expression0_binary: checkExpressionBinary,
@@ -80,8 +78,7 @@ semantics.addOperation<Value>("eval(state)", {
   Primary_stringLiteral: (a) => a.sourceString.slice(1, -1),
   Primary_numberLiteral: (a) => parseFloat(a.sourceString),
   Primary_booleanLiteral: (a) => a.sourceString === "true",
-  Variable: evalVariable,
-  Constant: evalVariable,
+  Identifier: evalIdentifier,
   Parentheses: evalParentheses,
   Expression_binary: evalBinaryOperator,
   Expression0_binary: evalBinaryOperator,
