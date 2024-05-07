@@ -26,19 +26,19 @@ export default function (
 ): [Path, Position] {
   const { handles } = getBlockType(targetNode.type as BlockTypeId);
 
-  const takenPositions = [];
+  const targetPositions = [
+    Position.Top,
+    Position.Right,
+    Position.Bottom,
+    Position.Left,
+  ];
   for (const handle of handles) {
     if (handle.id !== "in") {
-      takenPositions.push(handle.position);
+      _.remove(targetPositions, (pos) => pos === handle.position);
     }
   }
 
-  const positions = _.difference(
-    [Position.Top, Position.Right, Position.Bottom, Position.Left],
-    takenPositions,
-  );
-
-  const paths = _.map(positions, (targetPosition) =>
+  const paths = _.map(targetPositions, (targetPosition) =>
     getPath(
       sourcePosition,
       targetPosition,
@@ -59,5 +59,5 @@ export default function (
     ) ?? paths[0];
   const bestPathIndex = _.indexOf(paths, bestPath);
 
-  return [bestPath, positions[bestPathIndex]];
+  return [bestPath, targetPositions[bestPathIndex]];
 }
