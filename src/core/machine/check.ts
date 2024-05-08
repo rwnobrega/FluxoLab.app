@@ -45,14 +45,15 @@ function checkGraph(flowchart: Flowchart): MachineError[] {
         sourceHandle: handle.id,
       });
       if (outgoingEdges.length === 0) {
+        const output = handle.label ?? "out";
         errors.push({
           type: "check",
           message:
-            handle.label === undefined
+            output === "out"
               ? "CheckError_NoOutgoing_Default"
               : "CheckError_NoOutgoing_Handle",
           nodeId: node.id,
-          payload: { output: handle.label as string },
+          payload: { output },
         });
       }
     }

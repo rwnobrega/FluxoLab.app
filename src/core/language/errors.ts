@@ -10,12 +10,12 @@ export function getExpectedText(matchResult: ohm.MatchResult): string {
     }
     const failure = failures[i];
     if (failure.type === "description") {
-      expectedText += (failure.text as string).replace(
+      expectedText += failure.text.replace(
         /end of input/g,
         "[[Syntax_EndOfInput]]",
       );
     } else {
-      expectedText += `\`${failure.text as string}\``;
+      expectedText += `\`${failure.text}\``;
     }
   }
   return expectedText;

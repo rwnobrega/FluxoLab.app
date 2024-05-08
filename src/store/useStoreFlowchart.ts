@@ -16,6 +16,7 @@ import { persist } from "zustand/middleware";
 
 import { BlockTypeId } from "~/core/blockTypes";
 import { VariableTypeId } from "~/core/variableTypes";
+import assert from "~/utils/assert";
 
 import { SimpleFlowchart } from "./serialize";
 
@@ -124,7 +125,8 @@ const useStoreFlow = create<StoreFlowchart>()(
       },
       changeNodeData: (id, value) => {
         const { flowchart } = get();
-        const node = _.find(flowchart.nodes, { id }) as Node;
+        const node = _.find(flowchart.nodes, { id });
+        assert(node !== undefined);
         _.set(node, "data", value);
         set({ flowchart });
       },

@@ -30,7 +30,7 @@ export default function ({
   }
 
   function getBackground(): string {
-    const bgColor = boxStyle.backgroundColor as string;
+    const bgColor = boxStyle.backgroundColor;
     const bgDarker = colors.darker(bgColor);
     if (isSelected && isMouseHover) {
       return getStripedBackground(bgDarker);
