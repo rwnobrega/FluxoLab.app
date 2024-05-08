@@ -23,11 +23,11 @@ interface Props {
 }
 
 export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
+  const labelRef = useRef<HTMLSpanElement>(null);
+
   const [margin, setMargin] = useState<number>(0);
   const [boxFilter, setBoxFilter] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
-
-  const { hasModal, handles, boxStyle } = getBlockType(blockTypeId);
 
   const {
     isDraggingNode,
@@ -41,16 +41,8 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
 
   const { getZoom } = useReactFlow();
 
-  const labelRef = useRef<HTMLSpanElement>(null);
-
-  function getDropShadow(color: string): string {
-    return `drop-shadow(+2px 0 2px ${color})
-    drop-shadow(-2px 0 2px ${color})
-    drop-shadow(0 +2px 2px ${color})
-    drop-shadow(0 -2px 2px ${color})`;
-  }
-
   const node = _.find(flowchart.nodes, { id: nodeId });
+  const { hasModal, handles, boxStyle } = getBlockType(blockTypeId);
 
   useEffect(() => {
     if (labelRef.current !== null) {
@@ -59,13 +51,20 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
       const newNodeWidth = Math.min(40 + 20 * Math.ceil(labelWidth / 20), 480);
       setMargin((newNodeWidth - labelWidth) / 2);
     }
-  }, [node?.data, language]);
+  }, [node, language]);
+
+  function getDropShadow(color: string): string {
+    return `drop-shadow(+2px 0 2px ${color})
+      drop-shadow(-2px 0 2px ${color})
+      drop-shadow(0 +2px 2px ${color})
+      drop-shadow(0 -2px 2px ${color})`;
+  }
 
   useEffect(() => {
     setBoxFilter(() => {
       if (_.some(machineState.errors, { nodeId })) {
         return getDropShadow(palette.red);
-      } else if (node?.type === "start" && machineState.status === "ready") {
+      } else if (blockTypeId === "start" && machineState.status === "ready") {
         return getDropShadow(palette.gray800);
       } else if (nodeId === machineState.curNodeId) {
         return getDropShadow(palette.gray800);
@@ -84,7 +83,9 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
     setShowModal(true);
   }
 
-  const isSelected = node?.selected ?? false;
+  if (node === undefined) return <></>;
+
+  const isSelected = node.selected ?? false;
   const isMouseHover = mouseOverNodeId === nodeId;
   const isDeleteVisible = isMouseHover && !isDraggingNode && !isConnectingEdge;
   const isEditVisible = isDeleteVisible && hasModal;

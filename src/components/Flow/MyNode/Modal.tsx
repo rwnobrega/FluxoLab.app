@@ -14,7 +14,7 @@ import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
 interface Props {
-  node?: Node;
+  node: Node;
   showModal: boolean;
   setShowModal: (modal: boolean) => void;
 }
@@ -24,8 +24,6 @@ export default function ({
   showModal,
   setShowModal,
 }: Props): JSX.Element {
-  if (node === undefined) return <></>;
-
   const [textValue, setTextValue] = useState<string>("");
   const [problem, setProblem] = useState<string>("");
 

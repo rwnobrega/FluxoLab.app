@@ -5,12 +5,10 @@ import { BlockTypeId } from "~/core/blockTypes";
 import useStoreStrings from "~/store/useStoreStrings";
 
 interface Props {
-  node?: Node;
+  node: Node;
 }
 
 export default function ({ node }: Props): JSX.Element {
-  if (node === undefined) return <></>;
-
   const { getString } = useStoreStrings();
 
   const label = getString(`BlockLabel_${node.type}`);
