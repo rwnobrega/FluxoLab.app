@@ -30,8 +30,7 @@ export default function ({
   const { changeNodePayload } = useStoreFlowchart();
   const { language, getString } = useStoreStrings();
 
-  const blockType = getBlockType(node.type as BlockTypeId);
-  const { prefixCommand } = blockType;
+  const { prefixCommand } = getBlockType(node.type as BlockTypeId);
 
   useEffect(() => {
     if (showModal) {

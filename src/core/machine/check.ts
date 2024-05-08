@@ -38,8 +38,8 @@ function checkGraph(flowchart: Flowchart): MachineError[] {
   }
 
   for (const node of nodes) {
-    const blockType = getBlockType(node.type as BlockTypeId);
-    for (const handle of blockType.handles) {
+    const { handles } = getBlockType(node.type as BlockTypeId);
+    for (const handle of handles) {
       const outgoingEdges = _.filter(edges, {
         source: node.id,
         sourceHandle: handle.id,
@@ -66,8 +66,7 @@ function checkNode(flowchart: Flowchart, node: Node<NodeData>): MachineError[] {
   const { variables } = flowchart;
   const errors: MachineError[] = [];
 
-  const blockType = getBlockType(node.type as BlockTypeId);
-  const { prefixCommand } = blockType;
+  const { prefixCommand } = getBlockType(node.type as BlockTypeId);
 
   const matchResult = grammar.match(
     `${prefixCommand}${node.data.payload}`,

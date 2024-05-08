@@ -45,8 +45,7 @@ export default function (
       ? getStartNode(flowchart)
       : getNodeById(flowchart, state.curNodeId);
 
-  const blockType = getBlockType(node.type as BlockTypeId);
-  const { prefixCommand } = blockType;
+  const { prefixCommand } = getBlockType(node.type as BlockTypeId);
 
   try {
     const matchResult = grammar.match(
