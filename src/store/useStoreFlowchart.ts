@@ -5,6 +5,7 @@ import {
   EdgeChange,
   Node,
   NodeChange,
+  Position,
   Viewport,
   XYPosition,
   addEdge,
@@ -20,10 +21,15 @@ import assert from "~/utils/assert";
 
 import { SimpleFlowchart } from "./serialize";
 
+export interface NodeData {
+  payload: string;
+  handles: Record<string, Position>;
+}
+
 export interface Flowchart {
   title: string;
   variables: Array<{ id: string; type: VariableTypeId }>;
-  nodes: Node[];
+  nodes: Node<NodeData>[];
   edges: Edge[];
 }
 
@@ -37,7 +43,7 @@ interface StoreFlowchart {
   onEdgesChange: (changes: EdgeChange[]) => void;
   addNode: (type: BlockTypeId, position: XYPosition) => void;
   deleteNode: (id: string) => void;
-  changeNodeData: (id: string, value: any) => void;
+  changeNodePayload: (id: string, value: any) => void;
   onConnect: (connection: Connection) => void;
   addVariable: () => void;
   removeVariable: (id: string) => void;
@@ -46,7 +52,7 @@ interface StoreFlowchart {
   setSavedViewport: (viewport: Viewport) => void;
 }
 
-function getNextAvailableNodeId(nodes: Node[]): string {
+function getNextAvailableNodeId(nodes: Node<NodeData>[]): string {
   const intIds = _.map(nodes, (node) => parseInt(node.id));
   let i = 0;
   while (_.includes(intIds, i)) i++;
@@ -86,11 +92,19 @@ const useStoreFlow = create<StoreFlowchart>()(
       },
       importSimpleFlowchart: (simpleFlowchart) => {
         const { title, variables, nodes, edges } = simpleFlowchart;
-        const edgesWithIds = _.map(edges, (edge, id) => ({
-          ...edge,
-          id: id.toString(),
+        const edges0 = _.map(edges, ({ source, target, sourceHandle }) => ({
+          id: `${source}-${target}-${sourceHandle}`,
+          source,
+          target,
+          sourceHandle,
         }));
-        set({ flowchart: { title, variables, nodes, edges: edgesWithIds } });
+        const nodes0 = _.map(nodes, ({ id, type, position, payload }) => ({
+          id,
+          type,
+          position,
+          data: { payload, handles: {} },
+        }));
+        set({ flowchart: { title, variables, nodes: nodes0, edges: edges0 } });
       },
       setTitle: (title) => {
         const { flowchart } = get();
@@ -109,8 +123,12 @@ const useStoreFlow = create<StoreFlowchart>()(
       },
       addNode: (type, position) => {
         const { flowchart } = get();
-        const id = getNextAvailableNodeId(flowchart.nodes);
-        const newNode = { id, type, position, data: "" };
+        const newNode = {
+          id: getNextAvailableNodeId(flowchart.nodes),
+          type,
+          position,
+          data: { payload: "", handles: {} },
+        };
         flowchart.nodes = [...flowchart.nodes, newNode];
         set({ flowchart });
       },
@@ -123,11 +141,11 @@ const useStoreFlow = create<StoreFlowchart>()(
         );
         set({ flowchart });
       },
-      changeNodeData: (id, value) => {
+      changeNodePayload: (id, value) => {
         const { flowchart } = get();
         const node = _.find(flowchart.nodes, { id });
         assert(node !== undefined);
-        _.set(node, "data", value);
+        node.data.payload = value;
         set({ flowchart });
       },
       onConnect: (connection) => {

@@ -5,7 +5,7 @@ import { BlockTypeId, getBlockType } from "~/core/blockTypes";
 import { getExpectedText } from "~/core/language/errors";
 import grammar from "~/core/language/grammar";
 import semantics from "~/core/language/semantics";
-import { Flowchart } from "~/store/useStoreFlowchart";
+import { Flowchart, NodeData } from "~/store/useStoreFlowchart";
 import { MachineError } from "~/store/useStoreMachine";
 
 export default function (flowchart: Flowchart): MachineError[] {
@@ -62,7 +62,7 @@ function checkGraph(flowchart: Flowchart): MachineError[] {
   return errors;
 }
 
-function checkNode(flowchart: Flowchart, node: Node): MachineError[] {
+function checkNode(flowchart: Flowchart, node: Node<NodeData>): MachineError[] {
   const { variables } = flowchart;
   const errors: MachineError[] = [];
 
@@ -70,7 +70,7 @@ function checkNode(flowchart: Flowchart, node: Node): MachineError[] {
   const { prefixCommand } = blockType;
 
   const matchResult = grammar.match(
-    `${prefixCommand}${node.data}`,
+    `${prefixCommand}${node.data.payload}`,
     `Command_${node.type}`,
   );
   if (matchResult.failed()) {

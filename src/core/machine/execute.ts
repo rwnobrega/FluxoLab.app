@@ -3,19 +3,19 @@ import { Node } from "reactflow";
 
 import grammar from "~/core/language/grammar";
 import semantics from "~/core/language/semantics";
-import { Flowchart } from "~/store/useStoreFlowchart";
+import { Flowchart, NodeData } from "~/store/useStoreFlowchart";
 import { MachineState } from "~/store/useStoreMachine";
 import assert from "~/utils/assert";
 
 import { BlockTypeId, getBlockType } from "../blockTypes";
 
-function getNodeById(flowchart: Flowchart, nodeId: string): Node {
+function getNodeById(flowchart: Flowchart, nodeId: string): Node<NodeData> {
   const node = _.find(flowchart.nodes, { id: nodeId });
   assert(node !== undefined);
   return node;
 }
 
-function getStartNode(flowchart: Flowchart): Node {
+function getStartNode(flowchart: Flowchart): Node<NodeData> {
   const node = _.find(flowchart.nodes, { type: "start" });
   assert(node !== undefined);
   return node;
@@ -50,7 +50,7 @@ export default function (
 
   try {
     const matchResult = grammar.match(
-      `${prefixCommand}${node.data}`,
+      `${prefixCommand}${node.data.payload}`,
       `Command_${node.type}`,
     );
     semantics(matchResult).exec(state);

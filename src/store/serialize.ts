@@ -27,7 +27,7 @@ interface SimpleNode {
   id: string;
   type: string;
   position: { x: number; y: number };
-  data: string;
+  payload: string;
 }
 
 interface SimpleEdge {
@@ -46,7 +46,7 @@ export interface SimpleFlowchart {
 type MiniFlowchart = [
   string, // title
   Array<[string, number]>, // variables (id, type)
-  Array<[number, number, number, number, string]>, // nodes (id, type, x, y, data)
+  Array<[number, number, number, number, string]>, // nodes (id, type, x, y, payload)
   Array<[number, number, number]>, // edges (source, sourceHandle, target)
 ];
 
@@ -56,7 +56,7 @@ function simplify(flowchart: Flowchart): SimpleFlowchart {
     title,
     variables,
     nodes: _.map(nodes, (node) =>
-      _.pick(node, ["id", "type", "position", "data"]),
+      _.pick(node, ["id", "type", "position", "data.payload"]),
     ) as SimpleNode[],
     edges: _.map(edges, (edge) =>
       _.pick(edge, ["source", "sourceHandle", "target"]),
@@ -74,7 +74,7 @@ function minify(simpleFlowchart: SimpleFlowchart): MiniFlowchart {
       dirAlias[node.type],
       node.position.x,
       node.position.y,
-      node.data,
+      node.payload,
     ]),
     _.map(edges, (edge) => [
       parseInt(edge.source),
@@ -92,11 +92,11 @@ function expand(miniFlowchart: MiniFlowchart): SimpleFlowchart {
       id,
       type: revAlias[type],
     })) as Flowchart["variables"],
-    nodes: _.map(nodes, ([id, type, x, y, data]) => ({
+    nodes: _.map(nodes, ([id, type, x, y, payload]) => ({
       id: id.toString(),
       type: revAlias[type],
       position: { x, y },
-      data,
+      payload,
     })),
     edges: _.map(edges, ([source, sourceHandle, target]) => ({
       source: source.toString(),

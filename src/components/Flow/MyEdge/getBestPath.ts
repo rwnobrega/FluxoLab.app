@@ -2,6 +2,7 @@ import _ from "lodash";
 import { Dimensions, Node, Position } from "reactflow";
 
 import { BlockTypeId, getBlockType } from "~/core/blockTypes";
+import { NodeData } from "~/store/useStoreFlowchart";
 
 import getPath, { Path } from "./getPath";
 
@@ -20,8 +21,8 @@ const manhattanLength = (path: Path): number => {
 };
 
 export default function (
-  sourceNode: Node,
-  targetNode: Node,
+  sourceNode: Node<NodeData>,
+  targetNode: Node<NodeData>,
   sourcePosition: Position,
 ): [Path, Position] {
   const { handles } = getBlockType(targetNode.type as BlockTypeId);

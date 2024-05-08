@@ -10,11 +10,11 @@ import TextInput from "~/components/General/TextInput";
 import { BlockTypeId, getBlockType } from "~/core/blockTypes";
 import { getExpectedText } from "~/core/language/errors";
 import grammar from "~/core/language/grammar";
-import useStoreFlowchart from "~/store/useStoreFlowchart";
+import useStoreFlowchart, { NodeData } from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
 interface Props {
-  node: Node;
+  node: Node<NodeData>;
   showModal: boolean;
   setShowModal: (modal: boolean) => void;
 }
@@ -27,7 +27,7 @@ export default function ({
   const [textValue, setTextValue] = useState<string>("");
   const [problem, setProblem] = useState<string>("");
 
-  const { changeNodeData } = useStoreFlowchart();
+  const { changeNodePayload } = useStoreFlowchart();
   const { language, getString } = useStoreStrings();
 
   const blockType = getBlockType(node.type as BlockTypeId);
@@ -35,7 +35,7 @@ export default function ({
 
   useEffect(() => {
     if (showModal) {
-      setTextValue(node.data);
+      setTextValue(node.data.payload);
     }
   }, [showModal]);
 
@@ -57,7 +57,7 @@ export default function ({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    changeNodeData(node.id, textValue);
+    changeNodePayload(node.id, textValue);
     setShowModal(false);
   };
 
