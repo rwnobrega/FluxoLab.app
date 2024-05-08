@@ -47,13 +47,13 @@ export default function (): JSX.Element {
 
   const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    const type = event.dataTransfer.getData("application/text");
+    const type = event.dataTransfer.getData("application/text") as BlockTypeId;
     const position = screenToFlowPosition({
       x: event.clientX,
       y: event.clientY,
     });
-    if (blockTypeIds.includes(type as BlockTypeId)) {
-      addNode(type as BlockTypeId, position);
+    if (blockTypeIds.includes(type)) {
+      addNode(type, position);
     }
   };
 
