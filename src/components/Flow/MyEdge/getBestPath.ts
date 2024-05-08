@@ -34,9 +34,7 @@ export default function (
     Position.Left,
   ];
   for (const handle of handles) {
-    if (handle.id !== "in") {
-      _.remove(targetPositions, (pos) => pos === handle.position);
-    }
+    _.remove(targetPositions, (pos) => pos === handle.position);
   }
 
   const paths = _.map(targetPositions, (targetPosition) =>
