@@ -30,7 +30,7 @@ export default function ({
   const { changeNodePayload } = useStoreFlowchart();
   const { language, getString } = useStoreStrings();
 
-  const { prefixCommand } = getBlockType(node.type as BlockTypeId);
+  const { prefix } = getBlockType(node.type as BlockTypeId);
 
   useEffect(() => {
     if (showModal) {
@@ -39,13 +39,10 @@ export default function ({
   }, [showModal]);
 
   useEffect(() => {
-    const matchResult = grammar.match(
-      `${prefixCommand}${textValue}`,
-      `Command_${node.type}`,
-    );
+    const matchResult = grammar.match(`${prefix}${textValue}`, "Command");
     if (matchResult.failed()) {
       const problem = getString("SyntaxError", {
-        pos: matchResult.getInterval().startIdx - prefixCommand.length,
+        pos: matchResult.getInterval().startIdx - prefix.length,
         expected: getExpectedText(matchResult),
       });
       setProblem(problem);

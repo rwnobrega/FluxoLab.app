@@ -45,12 +45,12 @@ export default function (
       ? getStartNode(flowchart)
       : getNodeById(flowchart, state.curNodeId);
 
-  const { prefixCommand } = getBlockType(node.type as BlockTypeId);
+  const { prefix } = getBlockType(node.type as BlockTypeId);
 
   try {
     const matchResult = grammar.match(
-      `${prefixCommand}${node.data.payload}`,
-      `Command_${node.type}`,
+      `${prefix}${node.data.payload}`,
+      "Command",
     );
     semantics(matchResult).exec(state);
     state.status = "running";

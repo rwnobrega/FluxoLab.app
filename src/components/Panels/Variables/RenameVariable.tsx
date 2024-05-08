@@ -29,14 +29,11 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
   }, [showModal]);
 
   useEffect(() => {
-    const prefixCommand = "let ";
-    const matchResult = grammar.match(
-      `${prefixCommand}${textId}`,
-      "Command_declaration",
-    );
+    const prefix = "let ";
+    const matchResult = grammar.match(`${prefix}${textId}`, "Command");
     if (matchResult.failed()) {
       const problem = getString("SyntaxError", {
-        pos: matchResult.getInterval().startIdx - prefixCommand.length,
+        pos: matchResult.getInterval().startIdx - prefix.length,
         expected: getExpectedText(matchResult),
       });
       setProblem(problem);

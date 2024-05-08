@@ -22,7 +22,7 @@ export interface BoxStyle {
 }
 
 interface BlockType {
-  prefixCommand: string;
+  prefix: string;
   hasModal: boolean;
   handles: Array<{
     id: string;
@@ -34,7 +34,7 @@ interface BlockType {
 
 const blockTypes: Record<BlockTypeId, BlockType> = {
   start: {
-    prefixCommand: "start",
+    prefix: "start",
     hasModal: false,
     handles: [{ id: "out", position: Position.Bottom }],
     boxStyle: {
@@ -44,7 +44,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
     },
   },
   read: {
-    prefixCommand: "read ",
+    prefix: "read ",
     hasModal: true,
     handles: [{ id: "out", position: Position.Bottom }],
     boxStyle: {
@@ -56,7 +56,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
     },
   },
   write: {
-    prefixCommand: "write ",
+    prefix: "write ",
     hasModal: true,
     handles: [{ id: "out", position: Position.Bottom }],
     boxStyle: {
@@ -68,7 +68,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
     },
   },
   assignment: {
-    prefixCommand: "",
+    prefix: "",
     hasModal: true,
     handles: [{ id: "out", position: Position.Bottom }],
     boxStyle: {
@@ -77,7 +77,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
     },
   },
   conditional: {
-    prefixCommand: "conditional ",
+    prefix: "conditional ",
     hasModal: true,
     handles: [
       { id: "true", position: Position.Bottom, label: "T" },
@@ -92,7 +92,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
   },
   end: {
     hasModal: false,
-    prefixCommand: "",
+    prefix: "",
     handles: [],
     boxStyle: {
       backgroundColor: colors.brighter(palette.purple),
