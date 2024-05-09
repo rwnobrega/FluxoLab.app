@@ -1,3 +1,5 @@
+import { Position } from "reactflow";
+
 import { SimpleFlowchart } from "~/store/serialize";
 
 const example: SimpleFlowchart = {
@@ -12,48 +14,56 @@ const example: SimpleFlowchart = {
       type: "start",
       position: { x: 400, y: 120 },
       payload: "",
+      handlePositions: { out: Position.Bottom },
     },
     {
       id: "1",
       type: "assignment",
       position: { x: 400, y: 280 },
       payload: "fat = 1",
+      handlePositions: { out: Position.Bottom },
     },
     {
       id: "2",
       type: "read",
       position: { x: 400, y: 200 },
       payload: "n",
+      handlePositions: { out: Position.Bottom },
     },
     {
       id: "3",
       type: "conditional",
       position: { x: 400, y: 360 },
       payload: "n > 1",
+      handlePositions: { true: Position.Bottom, false: Position.Right },
     },
     {
       id: "4",
       type: "assignment",
       position: { x: 400, y: 440 },
       payload: "fat = fat * n",
+      handlePositions: { out: Position.Bottom },
     },
     {
       id: "5",
       type: "assignment",
       position: { x: 400, y: 520 },
       payload: "n = n - 1",
+      handlePositions: { out: Position.Left },
     },
     {
       id: "6",
       type: "write",
       position: { x: 580, y: 360 },
       payload: "fat",
+      handlePositions: { out: Position.Bottom },
     },
     {
       id: "7",
       type: "end",
       position: { x: 580, y: 440 },
       payload: "",
+      handlePositions: {},
     },
   ],
   edges: [
