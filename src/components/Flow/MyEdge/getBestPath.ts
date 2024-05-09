@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Dimensions, Node, Position } from "reactflow";
+import { Node, Position } from "reactflow";
 
 import { NodeData } from "~/store/useStoreFlowchart";
 
@@ -29,14 +29,24 @@ export default function (
     _.values(targetNode.data.handlePositions),
   );
 
+  const sourceDimensions = {
+    width: sourceNode.width || 0,
+    height: sourceNode.height || 0,
+  };
+
+  const targetDimensions = {
+    width: targetNode.width || 0,
+    height: targetNode.height || 0,
+  };
+
   const paths = _.map(targetPositions, (targetPosition) =>
     getPath(
-      sourcePosition,
+      sourcePosition || Position.Bottom,
       targetPosition,
       sourceNode.position,
       targetNode.position,
-      sourceNode as Dimensions,
-      targetNode as Dimensions,
+      sourceDimensions,
+      targetDimensions,
     ),
   );
 
