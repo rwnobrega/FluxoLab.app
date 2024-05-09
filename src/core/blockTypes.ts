@@ -44,7 +44,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
     },
   },
   read: {
-    prefix: "read ",
+    prefix: "read",
     hasModal: true,
     handles: [{ id: "out", position: Position.Bottom }],
     boxStyle: {
@@ -56,7 +56,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
     },
   },
   write: {
-    prefix: "write ",
+    prefix: "write",
     hasModal: true,
     handles: [{ id: "out", position: Position.Bottom }],
     boxStyle: {
@@ -68,7 +68,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
     },
   },
   assignment: {
-    prefix: "",
+    prefix: "assign",
     hasModal: true,
     handles: [{ id: "out", position: Position.Bottom }],
     boxStyle: {
@@ -77,7 +77,7 @@ const blockTypes: Record<BlockTypeId, BlockType> = {
     },
   },
   conditional: {
-    prefix: "conditional ",
+    prefix: "conditional",
     hasModal: true,
     handles: [
       { id: "true", position: Position.Bottom, label: "T" },

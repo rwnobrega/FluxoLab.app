@@ -49,7 +49,7 @@ export default function (
 
   try {
     const matchResult = grammar.match(
-      `${prefix}${node.data.payload}`,
+      `${prefix} ${node.data.payload}`,
       "Command",
     );
     semantics(matchResult).exec(state);

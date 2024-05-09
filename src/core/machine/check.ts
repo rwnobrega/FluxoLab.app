@@ -68,14 +68,17 @@ function checkNode(flowchart: Flowchart, node: Node<NodeData>): MachineError[] {
 
   const { prefix } = getBlockType(node.type as BlockTypeId);
 
-  const matchResult = grammar.match(`${prefix}${node.data.payload}`, "Command");
+  const matchResult = grammar.match(
+    `${prefix} ${node.data.payload}`,
+    "Command",
+  );
   if (matchResult.failed()) {
     errors.push({
       type: "syntax",
       message: "SyntaxError",
       nodeId: node.id,
       payload: {
-        pos: matchResult.getInterval().startIdx - prefix.length,
+        pos: matchResult.getInterval().startIdx - prefix.length - 1,
         expected: getExpectedText(matchResult),
       },
     });

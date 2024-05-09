@@ -120,7 +120,10 @@ export function checkFunctionCall(
   return null;
 }
 
-export function checkDeclaration(a: ohm.Node, b: ohm.Node): CheckError | null {
+export function checkVariableDeclaration(
+  a: ohm.Node,
+  b: ohm.Node,
+): CheckError | null {
   const id = b.sourceString;
   if (_.find(this.args.variables, { id }) !== undefined) {
     return { message: "IdentifierError_Duplicate" };
@@ -163,12 +166,13 @@ export function checkWrite(a: ohm.Node, b: ohm.Node): CheckError | null {
   return null;
 }
 
-export function checkAssignment(
+export function checkAssign(
   a: ohm.Node,
   b: ohm.Node,
   c: ohm.Node,
+  d: ohm.Node,
 ): CheckError | null {
-  const id = a.sourceString;
+  const id = b.sourceString;
   if (_.find(constants, { id }) !== undefined) {
     return {
       message: "CheckError_VariableExpected",
@@ -181,12 +185,12 @@ export function checkAssignment(
       payload: { id, type: "a function" },
     };
   }
-  const aCheck = a.check(this.args.variables);
+  const aCheck = b.check(this.args.variables);
   if (aCheck !== null) return aCheck;
-  const cCheck = c.check(this.args.variables);
+  const cCheck = d.check(this.args.variables);
   if (cCheck !== null) return cCheck;
-  const leftType = a.getType(this.args.variables);
-  const rightType = c.getType(this.args.variables);
+  const leftType = b.getType(this.args.variables);
+  const rightType = d.getType(this.args.variables);
   if (leftType !== rightType) {
     return {
       message: "CheckError_AssignmentTypeMismatch",

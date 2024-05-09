@@ -1,10 +1,10 @@
 Language {
   Command
-    = start  --start
-    | let Identifier  --declaration
-    | Identifier "=" Expression  --assignment
+    = var Identifier  --var
+    | start  --start
     | read Identifier  --read
     | write NonemptyListOf<Expression, ",">  --write
+    | assign Identifier "=" Expression  --assign
     | conditional Expression  --conditional
 
   Expression
@@ -48,10 +48,11 @@ Language {
     | Identifier
     | Parentheses
 
-  let = "let" ~alnum
+  var = "var" ~alnum
   start = "start" ~alnum
   read = "read" ~alnum
   write = "write" ~alnum
+  assign = "assign" ~alnum
   conditional = "conditional" ~alnum
   true = "true" ~alnum
   false = "false" ~alnum
@@ -59,7 +60,8 @@ Language {
   mod = "mod" ~alnum
 
   keyword ([[Syntax_Keyword]])
-    = true | false | div | mod | let | start | read | write | conditional
+    = true | false | div | mod
+    | var | start | read | write | assign | conditional
 
   identifier ([[Syntax_Identifier]])
     = ~keyword (letter | "_") (alnum | "_")*

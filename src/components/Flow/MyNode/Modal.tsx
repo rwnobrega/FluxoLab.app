@@ -39,10 +39,10 @@ export default function ({
   }, [showModal]);
 
   useEffect(() => {
-    const matchResult = grammar.match(`${prefix}${textValue}`, "Command");
+    const matchResult = grammar.match(`${prefix} ${textValue}`, "Command");
     if (matchResult.failed()) {
       const problem = getString("SyntaxError", {
-        pos: matchResult.getInterval().startIdx - prefix.length,
+        pos: matchResult.getInterval().startIdx - prefix.length - 1,
         expected: getExpectedText(matchResult),
       });
       setProblem(problem);

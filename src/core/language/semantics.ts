@@ -4,9 +4,8 @@ import grammar from "./grammar";
 import { Value } from "./library";
 import {
   CheckError,
-  checkAssignment,
+  checkAssign,
   checkConditional,
-  checkDeclaration,
   checkExpressionBinary,
   checkExpressionUnary,
   checkFunctionCall,
@@ -14,6 +13,7 @@ import {
   checkParentheses,
   checkRead,
   checkStart,
+  checkVariableDeclaration,
   checkWrite,
 } from "./semanticsCheck";
 import {
@@ -24,7 +24,7 @@ import {
   evalUnaryOperator,
 } from "./semanticsEval";
 import {
-  execAssignment,
+  execAssign,
   execConditional,
   execRead,
   execStart,
@@ -68,11 +68,11 @@ semantics.addOperation<CheckError | null>("check(variables)", {
   Expression3_binary: checkExpressionBinary,
   Expression4_unary: checkExpressionUnary,
   FunctionCall: checkFunctionCall,
-  Command_declaration: checkDeclaration,
+  Command_var: checkVariableDeclaration,
   Command_start: checkStart,
   Command_read: checkRead,
   Command_write: checkWrite,
-  Command_assignment: checkAssignment,
+  Command_assign: checkAssign,
   Command_conditional: checkConditional,
 });
 
@@ -95,7 +95,7 @@ semantics.addOperation<void>("exec(state)", {
   Command_start: execStart,
   Command_read: execRead,
   Command_write: execWrite,
-  Command_assignment: execAssignment,
+  Command_assign: execAssign,
   Command_conditional: execConditional,
 });
 

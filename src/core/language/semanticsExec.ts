@@ -40,10 +40,15 @@ export function execWrite(a: ohm.Node, b: ohm.Node): void {
   state.outPort = "out";
 }
 
-export function execAssignment(a: ohm.Node, b: ohm.Node, c: ohm.Node): void {
+export function execAssign(
+  a: ohm.Node,
+  b: ohm.Node,
+  c: ohm.Node,
+  d: ohm.Node,
+): void {
   const state: MachineState = this.args.state;
-  const variableId = a.sourceString;
-  const expression = c.eval(state);
+  const variableId = b.sourceString;
+  const expression = d.eval(state);
   state.memory[variableId].value = expression;
   state.outPort = "out";
 }
