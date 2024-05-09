@@ -73,12 +73,12 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
     });
   }, [machineState]);
 
-  function handleDelete() {
+  function onClickDelete() {
     deleteNode(nodeId);
     setMouseOverNodeId(null);
   }
 
-  function handleEdit() {
+  function onClickEdit() {
     setMouseOverNodeId(null);
     setShowModal(true);
   }
@@ -115,8 +115,8 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
           <Label node={node} />
         </span>
       </Box>
-      <ButtonDelete onClick={handleDelete} visible={isDeleteVisible} />
-      <ButtonEdit onClick={handleEdit} visible={isEditVisible} />
+      <ButtonDelete onClick={onClickDelete} visible={isDeleteVisible} />
+      <ButtonEdit onClick={onClickEdit} visible={isEditVisible} />
       {_.map(handles, ({ id, position, label }, index) => (
         <MyHandleSource
           key={index}

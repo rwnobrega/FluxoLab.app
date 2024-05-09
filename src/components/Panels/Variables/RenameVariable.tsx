@@ -48,7 +48,7 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
     }
   }, [textId]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setTimeout(() => {
       renameVariable(id, textId.trim());
@@ -58,7 +58,7 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
 
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)}>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={onSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>{getString("ModalRenameVariable_Title")}</Modal.Title>
         </Modal.Header>

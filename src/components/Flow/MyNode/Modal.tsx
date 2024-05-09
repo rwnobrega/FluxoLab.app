@@ -51,7 +51,7 @@ export default function ({
     }
   }, [textValue, language]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     changeNodePayload(node.id, textValue);
     setShowModal(false);
@@ -61,7 +61,7 @@ export default function ({
 
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)}>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={onSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>{getString(`BlockTitle_${node.type}`)}</Modal.Title>
         </Modal.Header>

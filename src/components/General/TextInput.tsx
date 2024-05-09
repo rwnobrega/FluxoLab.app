@@ -16,10 +16,6 @@ export default function ({
   setValue,
   problem = "",
 }: Props): JSX.Element {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setValue(event.target.value);
-  };
-
   return (
     <>
       <Form.Control
@@ -29,7 +25,7 @@ export default function ({
         autoComplete="off"
         placeholder={placeholder}
         value={value}
-        onChange={handleChange}
+        onChange={(event) => setValue(event.target.value)}
         onFocus={(event) => event.target.select()}
       />
       <Markdown

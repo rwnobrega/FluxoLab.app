@@ -19,11 +19,11 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
 
   const { setViewport } = useReactFlow();
 
-  const handleCancel = () => {
+  const onCancel = () => {
     setShowModal(false);
   };
 
-  const handleConfirm = () => {
+  const onConfirmClear = () => {
     clearFlowchart();
     setViewport({ x: 0, y: 0, zoom: 1 });
     setShowModal(false);
@@ -35,7 +35,7 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
   };
 
   return (
-    <Modal show={showModal} onHide={handleCancel}>
+    <Modal show={showModal} onHide={onCancel}>
       <Modal.Header closeButton>
         <Modal.Title>{getString("ModalClear_Title")}</Modal.Title>
       </Modal.Header>
@@ -43,10 +43,10 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
         <p>{getString("ModalClear_Body")}</p>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleCancel}>
+        <Button variant="secondary" onClick={onCancel}>
           {getString("Button_Cancel")}
         </Button>
-        <Button variant="primary" onClick={handleConfirm}>
+        <Button variant="primary" onClick={onConfirmClear}>
           {getString("Button_Clear")}
         </Button>
       </Modal.Footer>
