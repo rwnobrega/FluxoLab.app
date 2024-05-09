@@ -102,12 +102,15 @@ const useStoreFlow = create<StoreFlowchart>()(
           target,
           sourceHandle,
         }));
-        const nodes0 = _.map(nodes, ({ id, type, position, payload }) => ({
-          id,
-          type,
-          position,
-          data: { payload, handlePositions: {} },
-        }));
+        const nodes0 = _.map(
+          nodes,
+          ({ id, type, position, payload, handlePositions }) => ({
+            id,
+            type,
+            position,
+            data: { payload, handlePositions },
+          }),
+        );
         set({ flowchart: { title, variables, nodes: nodes0, edges: edges0 } });
       },
       setTitle: (title) => {

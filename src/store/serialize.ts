@@ -3,8 +3,12 @@ import {
   compressToEncodedURIComponent as compress,
   decompressFromEncodedURIComponent as decompress,
 } from "lz-string";
+import { Position } from "reactflow";
 
-import { Flowchart } from "./useStoreFlowchart";
+import { BlockTypeId, getBlockType } from "~/core/blockTypes";
+import { VariableTypeId } from "~/core/variableTypes";
+
+import { Flowchart, NodeData } from "./useStoreFlowchart";
 
 const revAlias = [
   "number",
@@ -27,7 +31,8 @@ interface SimpleNode {
   id: string;
   type: string;
   position: { x: number; y: number };
-  payload: string;
+  payload: NodeData["payload"];
+  handlePositions: NodeData["handlePositions"];
 }
 
 interface SimpleEdge {
@@ -46,22 +51,25 @@ export interface SimpleFlowchart {
 type MiniFlowchart = [
   string, // title
   Array<[string, number]>, // variables (id, type)
-  Array<[number, number, number, number, string]>, // nodes (id, type, x, y, payload)
+  Array<[number, number, number, number, string, Position[]]>, // nodes (id, type, x, y, payload, handlePositions)
   Array<[number, number, number]>, // edges (source, sourceHandle, target)
 ];
 
 function simplify(flowchart: Flowchart): SimpleFlowchart {
   const { title, variables, nodes, edges } = flowchart;
-  return {
-    title,
-    variables,
-    nodes: _.map(nodes, (node) =>
-      _.pick(node, ["id", "type", "position", "data.payload"]),
-    ) as SimpleNode[],
-    edges: _.map(edges, (edge) =>
-      _.pick(edge, ["source", "sourceHandle", "target"]),
-    ) as SimpleEdge[],
-  };
+  const nodes0 = _.map(nodes, (node) => ({
+    id: node.id,
+    type: node.type as BlockTypeId,
+    position: node.position,
+    payload: node.data.payload,
+    handlePositions: node.data.handlePositions,
+  }));
+  const edges0 = _.map(edges, ({ source, target, sourceHandle }) => ({
+    source,
+    target,
+    sourceHandle: sourceHandle as string,
+  }));
+  return { title, variables, nodes: nodes0, edges: edges0 };
 }
 
 function minify(simpleFlowchart: SimpleFlowchart): MiniFlowchart {
@@ -75,6 +83,7 @@ function minify(simpleFlowchart: SimpleFlowchart): MiniFlowchart {
       node.position.x,
       node.position.y,
       node.payload,
+      _.values(node.handlePositions),
     ]),
     _.map(edges, (edge) => [
       parseInt(edge.source),
@@ -86,18 +95,27 @@ function minify(simpleFlowchart: SimpleFlowchart): MiniFlowchart {
 
 function expand(miniFlowchart: MiniFlowchart): SimpleFlowchart {
   const [title, variables, nodes, edges] = miniFlowchart;
+  const variables0 = _.map(variables, ([id, type]) => ({
+    id,
+    type: revAlias[type] as VariableTypeId,
+  }));
   return {
     title,
-    variables: _.map(variables, ([id, type]) => ({
-      id,
-      type: revAlias[type],
-    })) as Flowchart["variables"],
-    nodes: _.map(nodes, ([id, type, x, y, payload]) => ({
-      id: id.toString(),
-      type: revAlias[type],
-      position: { x, y },
-      payload,
-    })),
+    variables: variables0,
+    nodes: _.map(nodes, ([id0, type0, x, y, payload, handlePositions0]) => {
+      const id = id0.toString();
+      const type = revAlias[type0] as BlockTypeId;
+      const position = { x, y };
+      const { handles } = getBlockType(type);
+      const undef = handlePositions0 === undefined; // For compatibility with old data
+      const handlePositions = _.fromPairs(
+        _.map(handles, ({ id, position }, i) => [
+          id,
+          undef ? position : handlePositions0[i],
+        ]),
+      );
+      return { id, type, position, payload, handlePositions };
+    }),
     edges: _.map(edges, ([source, sourceHandle, target]) => ({
       source: source.toString(),
       sourceHandle: revAlias[sourceHandle],
