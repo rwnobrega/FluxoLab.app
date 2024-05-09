@@ -15,7 +15,7 @@ import {
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { BlockTypeId } from "~/core/blockTypes";
+import { BlockTypeId, getBlockType } from "~/core/blockTypes";
 import { VariableTypeId } from "~/core/variableTypes";
 import assert from "~/utils/assert";
 
@@ -23,7 +23,7 @@ import { SimpleFlowchart } from "./serialize";
 
 export interface NodeData {
   payload: string;
-  handles: Record<string, Position>;
+  handlePositions: Record<string, Position>;
 }
 
 export interface Flowchart {
@@ -44,6 +44,10 @@ interface StoreFlowchart {
   addNode: (type: BlockTypeId, position: XYPosition) => void;
   deleteNode: (id: string) => void;
   changeNodePayload: (id: string, value: any) => void;
+  changeNodeHandlePositions: (
+    nodeId: string,
+    handlePositions: NodeData["handlePositions"],
+  ) => void;
   onConnect: (connection: Connection) => void;
   addVariable: () => void;
   removeVariable: (id: string) => void;
@@ -102,7 +106,7 @@ const useStoreFlow = create<StoreFlowchart>()(
           id,
           type,
           position,
-          data: { payload, handles: {} },
+          data: { payload, handlePositions: {} },
         }));
         set({ flowchart: { title, variables, nodes: nodes0, edges: edges0 } });
       },
@@ -123,11 +127,17 @@ const useStoreFlow = create<StoreFlowchart>()(
       },
       addNode: (type, position) => {
         const { flowchart } = get();
+        const { handles } = getBlockType(type);
         const newNode = {
           id: getNextAvailableNodeId(flowchart.nodes),
           type,
           position,
-          data: { payload: "", handles: {} },
+          data: {
+            payload: "",
+            handlePositions: _.fromPairs(
+              _.map(handles, ({ id, position }) => [id, position]),
+            ),
+          },
         };
         flowchart.nodes = [...flowchart.nodes, newNode];
         set({ flowchart });
@@ -146,6 +156,13 @@ const useStoreFlow = create<StoreFlowchart>()(
         const node = _.find(flowchart.nodes, { id });
         assert(node !== undefined);
         node.data.payload = value;
+        set({ flowchart });
+      },
+      changeNodeHandlePositions: (nodeId, handlePositions) => {
+        const { flowchart } = get();
+        const node = _.find(flowchart.nodes, { id: nodeId });
+        assert(node !== undefined);
+        node.data.handlePositions = handlePositions;
         set({ flowchart });
       },
       onConnect: (connection) => {

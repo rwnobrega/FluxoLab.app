@@ -42,7 +42,7 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
   const { getZoom } = useReactFlow();
 
   const node = _.find(flowchart.nodes, { id: nodeId });
-  const { hasModal, handles, boxStyle } = getBlockType(blockTypeId);
+  const { handles, boxStyle } = getBlockType(blockTypeId);
 
   useEffect(() => {
     if (labelRef.current !== null) {
@@ -87,49 +87,48 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
 
   const isSelected = node.selected ?? false;
   const isMouseHover = mouseOverNodeId === nodeId;
-  const isDeleteVisible = isMouseHover && !isDraggingNode && !isConnectingEdge;
-  const isEditVisible = isDeleteVisible && hasModal;
+  const isButtonVisible = isMouseHover && !isDraggingNode && !isConnectingEdge;
 
   return (
-    <div
-      onMouseEnter={() => setMouseOverNodeId(nodeId)}
-      onMouseLeave={() => setMouseOverNodeId(null)}
-      style={{ cursor: isDraggingNode ? "grabbing" : "grab" }}
-    >
-      <Box
-        boxStyle={boxStyle}
-        boxFilter={boxFilter}
-        isSelected={isSelected}
-        isMouseHover={isMouseHover}
+    <>
+      <div
+        onMouseEnter={() => setMouseOverNodeId(nodeId)}
+        onMouseLeave={() => setMouseOverNodeId(null)}
+        style={{ cursor: isDraggingNode ? "grabbing" : "grab" }}
       >
-        <span
-          className="d-block text-truncate"
-          ref={labelRef}
-          style={{
-            minWidth: "40px",
-            maxWidth: "392px",
-            marginLeft: `${margin}px`,
-            marginRight: `${margin}px`,
-          }}
-        >
-          <Label node={node} />
-        </span>
-      </Box>
-      <ButtonDelete onClick={onClickDelete} visible={isDeleteVisible} />
-      <ButtonEdit onClick={onClickEdit} visible={isEditVisible} />
-      {_.map(handles, ({ id, position, label }, index) => (
-        <MyHandleSource
-          key={index}
-          id={id}
-          position={position}
-          label={label}
+        <Box
           boxStyle={boxStyle}
-        />
-      ))}
-      <MyHandleTarget id="out" />
-      {hasModal && (
-        <Modal node={node} showModal={showModal} setShowModal={setShowModal} />
-      )}
-    </div>
+          boxFilter={boxFilter}
+          isSelected={isSelected}
+          isMouseHover={isMouseHover}
+        >
+          <span
+            className="d-block text-truncate"
+            ref={labelRef}
+            style={{
+              minWidth: "40px",
+              maxWidth: "392px",
+              marginLeft: `${margin}px`,
+              marginRight: `${margin}px`,
+            }}
+          >
+            <Label node={node} />
+          </span>
+        </Box>
+        <ButtonDelete onClick={onClickDelete} visible={isButtonVisible} />
+        <ButtonEdit onClick={onClickEdit} visible={isButtonVisible} />
+        {_.map(handles, ({ id, label }, index) => (
+          <MyHandleSource
+            key={index}
+            id={id}
+            position={node.data.handlePositions[id]}
+            label={label}
+            boxStyle={boxStyle}
+          />
+        ))}
+        <MyHandleTarget id="out" />
+      </div>
+      <Modal node={node} showModal={showModal} setShowModal={setShowModal} />
+    </>
   );
 }

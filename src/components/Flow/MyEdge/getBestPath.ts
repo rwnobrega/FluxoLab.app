@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { Dimensions, Node, Position } from "reactflow";
 
-import { BlockTypeId, getBlockType } from "~/core/blockTypes";
 import { NodeData } from "~/store/useStoreFlowchart";
 
 import getPath, { Path } from "./getPath";
@@ -25,17 +24,10 @@ export default function (
   targetNode: Node<NodeData>,
   sourcePosition: Position,
 ): [Path, Position] {
-  const { handles } = getBlockType(targetNode.type as BlockTypeId);
-
-  const targetPositions = [
-    Position.Top,
-    Position.Right,
-    Position.Bottom,
-    Position.Left,
-  ];
-  for (const handle of handles) {
-    _.remove(targetPositions, (pos) => pos === handle.position);
-  }
+  const targetPositions = _.difference(
+    _.values(Position),
+    _.values(targetNode.data.handlePositions),
+  );
 
   const paths = _.map(targetPositions, (targetPosition) =>
     getPath(

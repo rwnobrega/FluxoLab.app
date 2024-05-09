@@ -14,7 +14,6 @@ export default function ({
   source: sourceId,
   target: targetId,
   sourceHandleId,
-  sourcePosition,
   selected,
 }: EdgeProps): JSX.Element {
   const [animated, setAnimated] = useState<boolean>(false);
@@ -42,7 +41,15 @@ export default function ({
 
   const source = _.find(flowchart.nodes, { id: sourceId });
   const target = _.find(flowchart.nodes, { id: targetId });
-  if (source === undefined || target === undefined) return <></>;
+  if (
+    source === undefined ||
+    target === undefined ||
+    sourceHandleId === null ||
+    sourceHandleId === undefined
+  )
+    return <></>;
+
+  const sourcePosition = source.data.handlePositions[sourceHandleId];
 
   const [path, targetPosition] = getBestPath(source, target, sourcePosition);
 

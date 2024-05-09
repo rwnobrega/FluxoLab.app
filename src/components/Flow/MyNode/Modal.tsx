@@ -1,10 +1,11 @@
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
-import { Node } from "reactflow";
+import { Node, Position, useUpdateNodeInternals } from "reactflow";
 
 import TextInput from "~/components/General/TextInput";
 import { BlockTypeId, getBlockType } from "~/core/blockTypes";
@@ -19,22 +20,28 @@ interface Props {
   setShowModal: (modal: boolean) => void;
 }
 
+type HandlePositions = NodeData["handlePositions"];
+
 export default function ({
   node,
   showModal,
   setShowModal,
 }: Props): JSX.Element {
   const [textValue, setTextValue] = useState<string>("");
+  const [handlePositions, setHandlePositions] = useState<HandlePositions>({});
   const [problem, setProblem] = useState<string>("");
 
-  const { changeNodePayload } = useStoreFlowchart();
+  const { changeNodePayload, changeNodeHandlePositions } = useStoreFlowchart();
   const { language, getString } = useStoreStrings();
 
-  const { prefix } = getBlockType(node.type as BlockTypeId);
+  const updateNodeInternals = useUpdateNodeInternals();
+
+  const { prefix, handles } = getBlockType(node.type as BlockTypeId);
 
   useEffect(() => {
     if (showModal) {
       setTextValue(node.data.payload);
+      setHandlePositions(node.data.handlePositions);
     }
   }, [showModal]);
 
@@ -54,6 +61,8 @@ export default function ({
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     changeNodePayload(node.id, textValue);
+    changeNodeHandlePositions(node.id, handlePositions);
+    updateNodeInternals(node.id);
     setShowModal(false);
   };
 
@@ -81,6 +90,30 @@ export default function ({
               />
             </Col>
           </Form.Group>
+          {_.map(handles, ({ id }) => (
+            <Form.Group as={Row} key={id}>
+              <Form.Label column className="fst-italic m-1" sm="2">
+                {id}
+              </Form.Label>
+              <Col className="m-1" sm="9">
+                <Form.Select
+                  value={handlePositions[id]}
+                  onChange={(event) =>
+                    setHandlePositions({
+                      ...handlePositions,
+                      [id]: event.target.value as Position,
+                    })
+                  }
+                >
+                  {_.map(Position, (position) => (
+                    <option key={position} value={position}>
+                      {position}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+            </Form.Group>
+          ))}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
