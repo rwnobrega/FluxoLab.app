@@ -214,7 +214,7 @@ const useStoreFlow = create<StoreFlowchart>()(
     }),
     {
       name: "fluxolab_flow",
-      version: 6,
+      version: 7,
     },
   ),
 );
