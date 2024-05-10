@@ -18,7 +18,6 @@ export default function ({
   boxStyle,
 }: Props): JSX.Element {
   const [mouseHover, setMouseHover] = useState<boolean>(false);
-  const { textColor, backgroundColor } = boxStyle;
 
   const handleStyle: Record<string, CSSProperties> = {
     all: {
@@ -28,14 +27,14 @@ export default function ({
       fontSize: "10px",
       fontWeight: "bold",
       textAlign: "center",
-      color: textColor,
-      borderColor: colors.darker(backgroundColor),
+      color: boxStyle.textColor,
+      borderColor: colors.darker(boxStyle.backgroundColor),
     },
     "hover-false": {
-      backgroundColor: backgroundColor,
+      backgroundColor: boxStyle.backgroundColor,
     },
     "hover-true": {
-      backgroundColor: colors.darker(backgroundColor),
+      backgroundColor: colors.darker(boxStyle.backgroundColor),
     },
   };
 

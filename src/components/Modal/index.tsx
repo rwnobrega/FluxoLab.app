@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
-import { Node, Position, useUpdateNodeInternals } from "reactflow";
+import { Node, useUpdateNodeInternals } from "reactflow";
 
 import TextInput from "~/components/General/TextInput";
 import { BlockTypeId, getBlockType } from "~/core/blockTypes";
@@ -13,6 +13,8 @@ import { getExpectedText } from "~/core/language/errors";
 import grammar from "~/core/language/grammar";
 import useStoreFlowchart, { NodeData } from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
+
+import DraggingBox from "./DraggingBox";
 
 interface Props {
   node: Node<NodeData>;
@@ -36,7 +38,7 @@ export default function ({
 
   const updateNodeInternals = useUpdateNodeInternals();
 
-  const { prefix, handles } = getBlockType(node.type as BlockTypeId);
+  const { prefix, handles, boxStyle } = getBlockType(node.type as BlockTypeId);
 
   useEffect(() => {
     if (showModal) {
@@ -92,30 +94,19 @@ export default function ({
               </Col>
             </Form.Group>
           )}
-          {_.map(handles, ({ id }) => (
-            <Form.Group as={Row} key={id}>
-              <Form.Label column className="fst-italic m-1" sm="2">
-                {id}
-              </Form.Label>
-              <Col className="m-1" sm="9">
-                <Form.Select
-                  value={handlePositions[id]}
-                  onChange={(event) =>
-                    setHandlePositions({
-                      ...handlePositions,
-                      [id]: event.target.value as Position,
-                    })
-                  }
-                >
-                  {_.map(Position, (position) => (
-                    <option key={position} value={position}>
-                      {position}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Col>
-            </Form.Group>
-          ))}
+          <Form.Group as={Row}>
+            <Form.Label column className="fst-italic" md="auto">
+              {`${getString("Modal_HandlePositions")}:`}
+            </Form.Label>
+            <Col>
+              <DraggingBox
+                handles={handles}
+                handlePositions={handlePositions}
+                setHandlePositions={setHandlePositions}
+                boxStyle={boxStyle}
+              />
+            </Col>
+          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
