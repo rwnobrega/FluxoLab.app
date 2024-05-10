@@ -2,6 +2,7 @@ import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { useReactFlow } from "reactflow";
 
+import Modal from "~/components/Modal";
 import { BlockTypeId, getBlockType } from "~/core/blockTypes";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
@@ -13,7 +14,6 @@ import Box from "./Box";
 import ButtonDelete from "./ButtonDelete";
 import ButtonEdit from "./ButtonEdit";
 import Label from "./Label";
-import Modal from "./Modal";
 import MyHandleSource from "./MyHandleSource";
 import MyHandleTarget from "./MyHandleTarget";
 
