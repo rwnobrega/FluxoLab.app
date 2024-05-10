@@ -60,7 +60,7 @@ export default function ({
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    changeNodePayload(node.id, textValue);
+    changeNodePayload(node.id, textValue.trim());
     changeNodeHandlePositions(node.id, handlePositions);
     updateNodeInternals(node.id);
     setShowModal(false);
