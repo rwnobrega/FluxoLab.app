@@ -32,12 +32,12 @@ export default function ({
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div style={{ position: "relative", width: 120, minHeight: 40 }}>
+      <div style={{ position: "relative", width: 90, minHeight: 30 }}>
         <div
           style={{
             position: "relative",
-            width: 120,
-            height: 40,
+            width: 90,
+            height: 30,
             color: boxStyle.textColor,
             background: boxStyle.backgroundColor,
             borderRadius: boxStyle.borderRadius,

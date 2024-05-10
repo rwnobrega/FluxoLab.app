@@ -95,10 +95,12 @@ export default function ({
             </Form.Group>
           )}
           <Form.Group as={Row}>
-            <Form.Label column className="fst-italic" md="auto">
-              {`${getString("Modal_HandlePositions")}:`}
+            <Form.Label className="mt-2" column md="auto">
+              {`${getString("Modal_HandlePositions", {
+                count: _.size(handlePositions),
+              })}:`}
             </Form.Label>
-            <Col>
+            <Col className="mt-3">
               <DraggingBox
                 handles={handles}
                 handlePositions={handlePositions}
