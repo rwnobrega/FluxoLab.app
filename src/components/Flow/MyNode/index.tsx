@@ -11,8 +11,7 @@ import useStoreStrings from "~/store/useStoreStrings";
 import palette from "~/utils/palette";
 
 import Box from "./Box";
-import ButtonDelete from "./ButtonDelete";
-import ButtonEdit from "./ButtonEdit";
+import Button from "./Button";
 import Label from "./Label";
 import MyHandleSource from "./MyHandleSource";
 import MyHandleTarget from "./MyHandleTarget";
@@ -116,8 +115,22 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
             <Label node={node} />
           </span>
         </Box>
-        <ButtonDelete onClick={onClickDelete} visible={isDeleteVisible} />
-        <ButtonEdit onClick={onClickEdit} visible={isEditVisible} />
+        <Button
+          variant="danger"
+          top={-8}
+          right={-8}
+          icon="bi-trash-fill"
+          visible={isDeleteVisible}
+          onClick={onClickDelete}
+        />
+        <Button
+          variant="primary"
+          bottom={-8}
+          right={-8}
+          icon="bi-pencil-fill"
+          visible={isEditVisible}
+          onClick={onClickEdit}
+        />
         {_.map(handles, ({ id, label }, index) => (
           <MyHandleSource
             key={index}

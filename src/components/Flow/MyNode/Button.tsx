@@ -2,31 +2,48 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 
 interface Props {
-  onClick: () => void;
+  variant: string;
+  top?: number;
+  right?: number;
+  bottom?: number;
+  left?: number;
+  icon: string;
   visible: boolean;
+  onClick: () => void;
 }
 
-export default function ({ onClick, visible }: Props): JSX.Element {
+export default function ({
+  variant,
+  top,
+  right,
+  bottom,
+  left,
+  icon,
+  visible,
+  onClick,
+}: Props): JSX.Element {
   return (
     <Button
-      variant="primary"
+      variant={variant}
       size="sm"
       onClick={visible ? onClick : undefined}
       style={{
         position: "absolute",
-        bottom: "-8px",
-        right: "-8px",
+        top: top,
+        right: right,
+        bottom: bottom,
+        left: left,
         width: "24px",
         height: "24px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        cursor: visible ? "pointer" : "grab",
+        cursor: "pointer",
         opacity: visible ? 1 : 0,
         transition: "visibility 0s, opacity 0.2s linear",
       }}
     >
-      <i className="bi bi-pencil-fill" />
+      <i className={`bi ${icon}`} />
     </Button>
   );
 }
