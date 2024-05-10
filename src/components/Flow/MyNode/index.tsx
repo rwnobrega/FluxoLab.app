@@ -87,7 +87,8 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
 
   const isSelected = node.selected ?? false;
   const isMouseHover = mouseOverNodeId === nodeId;
-  const isButtonVisible = isMouseHover && !isDraggingNode && !isConnectingEdge;
+  const isDeleteVisible = isMouseHover && !isDraggingNode && !isConnectingEdge;
+  const isEditVisible = isDeleteVisible && node.type !== "end";
 
   return (
     <>
@@ -115,8 +116,8 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
             <Label node={node} />
           </span>
         </Box>
-        <ButtonDelete onClick={onClickDelete} visible={isButtonVisible} />
-        <ButtonEdit onClick={onClickEdit} visible={isButtonVisible} />
+        <ButtonDelete onClick={onClickDelete} visible={isDeleteVisible} />
+        <ButtonEdit onClick={onClickEdit} visible={isEditVisible} />
         {_.map(handles, ({ id, label }, index) => (
           <MyHandleSource
             key={index}

@@ -75,21 +75,23 @@ export default function ({
           <Modal.Title>{getString(`BlockTitle_${node.type}`)}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Group as={Row}>
-            {label !== "" && (
-              <Form.Label column className="fw-bold fst-italic" md="auto">
-                {label}
-              </Form.Label>
-            )}
-            <Col>
-              <TextInput
-                placeholder={getString(`BlockPlaceholder_${node.type}`)}
-                value={textValue}
-                setValue={setTextValue}
-                problem={problem}
-              />
-            </Col>
-          </Form.Group>
+          {node.type !== "start" && (
+            <Form.Group as={Row}>
+              {label !== "" && (
+                <Form.Label column className="fw-bold fst-italic" md="auto">
+                  {label}
+                </Form.Label>
+              )}
+              <Col>
+                <TextInput
+                  placeholder={getString(`BlockPlaceholder_${node.type}`)}
+                  value={textValue}
+                  setValue={setTextValue}
+                  problem={problem}
+                />
+              </Col>
+            </Form.Group>
+          )}
           {_.map(handles, ({ id }) => (
             <Form.Group as={Row} key={id}>
               <Form.Label column className="fst-italic m-1" sm="2">

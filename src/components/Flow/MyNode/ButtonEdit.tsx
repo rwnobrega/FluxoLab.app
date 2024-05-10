@@ -11,7 +11,7 @@ export default function ({ onClick, visible }: Props): JSX.Element {
     <Button
       variant="primary"
       size="sm"
-      onClick={onClick}
+      onClick={visible ? onClick : undefined}
       style={{
         position: "absolute",
         bottom: "-8px",
@@ -21,7 +21,7 @@ export default function ({ onClick, visible }: Props): JSX.Element {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        cursor: "pointer",
+        cursor: visible ? "pointer" : "grab",
         opacity: visible ? 1 : 0,
         transition: "visibility 0s, opacity 0.2s linear",
       }}
