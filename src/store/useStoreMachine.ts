@@ -10,12 +10,9 @@ import minstd from "~/utils/minstd";
 
 import { Flowchart } from "./useStoreFlowchart";
 
-export type MachineMemory = Record<
-  string,
-  { type: DataType; value: any | null }
->;
+type MachineMemory = Record<string, { type: DataType; value: any | null }>;
 
-export interface InteractionAtom {
+interface InteractionAtom {
   direction: "in" | "out";
   text: string;
 }
@@ -24,10 +21,7 @@ export interface MachineError {
   type: "syntax" | "check" | "runtime";
   message: string;
   nodeId: string | null;
-  payload?: Record<
-    string,
-    string | number | boolean | Array<string | number | boolean>
-  >;
+  payload?: Record<string, any>;
 }
 
 export interface MachineState {
