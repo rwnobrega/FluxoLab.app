@@ -1,6 +1,6 @@
 import React from "react";
 
-import { BoxStyle } from "~/core/blockTypes";
+import { BoxStyle } from "~/core/roles";
 import colors from "~/utils/colors";
 
 interface Props {

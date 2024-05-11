@@ -15,13 +15,14 @@ import {
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { BlockTypeId, getBlockType } from "~/core/blockTypes";
+import { Role, getRoleHandles } from "~/core/roles";
 import { VariableTypeId } from "~/core/variableTypes";
 import assert from "~/utils/assert";
 
 import { SimpleFlowchart } from "./serialize";
 
 export interface NodeData {
+  role: Role;
   payload: string;
   handlePositions: Record<string, Position>;
 }
@@ -41,7 +42,7 @@ interface StoreFlowchart {
   setTitle: (title: string) => void;
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
-  addNode: (type: BlockTypeId, position: XYPosition) => void;
+  addNode: (role: Role, position: XYPosition) => void;
   deleteNode: (id: string) => void;
   changeNodePayload: (id: string, value: any) => void;
   onConnect: (isEditingHandles: boolean, connection: Connection) => void;
@@ -91,23 +92,28 @@ const useStoreFlow = create<StoreFlowchart>()(
         set({ savedViewport: { x: 0, y: 0, zoom: 1 } });
       },
       importSimpleFlowchart: (simpleFlowchart) => {
-        const { title, variables, nodes, edges } = simpleFlowchart;
-        const edges0 = _.map(edges, ({ source, target, sourceHandle }) => ({
+        const {
+          title,
+          variables,
+          nodes: nodes0,
+          edges: edges0,
+        } = simpleFlowchart;
+        const edges = _.map(edges0, ({ source, target, sourceHandle }) => ({
           id: `${source}-${target}-${sourceHandle}`,
           source,
           target,
           sourceHandle,
         }));
-        const nodes0 = _.map(
-          nodes,
-          ({ id, type, position, payload, handlePositions }) => ({
+        const nodes = _.map(
+          nodes0,
+          ({ id, role, position, payload, handlePositions }) => ({
             id,
-            type,
+            type: "MyNode",
             position,
-            data: { payload, handlePositions },
+            data: { payload, role, handlePositions },
           }),
         );
-        set({ flowchart: { title, variables, nodes: nodes0, edges: edges0 } });
+        set({ flowchart: { title, variables, nodes, edges } });
       },
       setTitle: (title) => {
         const { flowchart } = get();
@@ -124,15 +130,16 @@ const useStoreFlow = create<StoreFlowchart>()(
         flowchart.edges = applyEdgeChanges(changes, flowchart.edges);
         set({ flowchart });
       },
-      addNode: (type, position) => {
+      addNode: (role, position) => {
         const { flowchart } = get();
-        const { handles } = getBlockType(type);
+        const handles = getRoleHandles(role);
         const newNode = {
           id: getNextAvailableNodeId(flowchart.nodes),
-          type,
+          type: "MyNode",
           position,
           data: {
             payload: "",
+            role,
             handlePositions: _.fromPairs(
               _.map(handles, ({ id, position }) => [id, position]),
             ),
@@ -212,7 +219,7 @@ const useStoreFlow = create<StoreFlowchart>()(
     }),
     {
       name: "fluxolab_flow",
-      version: 7,
+      version: 8,
     },
   ),
 );

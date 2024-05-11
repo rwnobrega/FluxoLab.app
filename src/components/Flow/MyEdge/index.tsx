@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { EdgeProps } from "reactflow";
 
 import execute from "~/core/machine/execute";
+import { Role } from "~/core/roles";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreMachine from "~/store/useStoreMachine";
 
@@ -23,9 +24,9 @@ export default function ({
   useEffect(() => {
     if (source === undefined || target === undefined) {
       setAnimated(false);
-    } else if (state.status === "ready" && source.type === "start") {
+    } else if (state.status === "ready" && source.data.role === Role.Start) {
       setAnimated(true);
-    } else if (state.status === "waiting" && source.type === "read") {
+    } else if (state.status === "waiting" && source.data.role === Role.Read) {
       setAnimated(state.curNodeId === sourceId);
     } else if (state.status === "running") {
       const nextState = execute(flowchart, state); // Peek the future
@@ -53,7 +54,7 @@ export default function ({
 
   const [path, targetPosition] = getBestPath(source, target, sourcePosition);
 
-  if (_.includes(["read", "write"], target.type)) {
+  if (_.includes([Role.Read, Role.Write], target.data.role)) {
     if (targetPosition === "left") {
       path[path.length - 1][0] += 10;
     } else if (targetPosition === "right") {

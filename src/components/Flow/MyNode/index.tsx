@@ -1,11 +1,11 @@
 import _ from "lodash";
-import React, { useEffect, useRef, useState } from "react";
-import { Position, useReactFlow } from "reactflow";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Handle, Position, useReactFlow } from "reactflow";
 
 import NodeModal from "~/components/Modals/NodeModal";
-import { BlockTypeId, getBlockType } from "~/core/blockTypes";
+import { Role, getRoleBoxStyle, getRoleHandles } from "~/core/roles";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
-import useStoreFlowchart from "~/store/useStoreFlowchart";
+import useStoreFlowchart, { NodeData } from "~/store/useStoreFlowchart";
 import useStoreMachine from "~/store/useStoreMachine";
 import useStoreStrings from "~/store/useStoreStrings";
 import palette from "~/utils/palette";
@@ -18,11 +18,12 @@ import MyHandleSource from "./MyHandleSource";
 import MyHandleTarget from "./MyHandleTarget";
 
 interface Props {
-  nodeId: string;
-  blockTypeId: BlockTypeId;
+  id: string;
+  data: NodeData;
+  selected: boolean;
 }
 
-export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
+export default function ({ id, data, selected }: Props): JSX.Element {
   const labelRef = useRef<HTMLSpanElement>(null);
 
   const [margin, setMargin] = useState<number>(0);
@@ -41,9 +42,6 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
 
   const { getZoom } = useReactFlow();
 
-  const node = _.find(flowchart.nodes, { id: nodeId });
-  const { handles, boxStyle } = getBlockType(blockTypeId);
-
   useEffect(() => {
     if (labelRef.current !== null) {
       const zoom = getZoom();
@@ -51,7 +49,7 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
       const newNodeWidth = Math.min(40 + 20 * Math.ceil(labelWidth / 20), 480);
       setMargin((newNodeWidth - labelWidth) / 2);
     }
-  }, [node, language]);
+  }, [language]);
 
   function getDropShadow(color: string): string {
     return `drop-shadow(+2px 0 2px ${color})
@@ -62,11 +60,11 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
 
   useEffect(() => {
     setBoxFilter(() => {
-      if (_.some(machineState.errors, { nodeId })) {
+      if (_.some(machineState.errors, { nodeId: id })) {
         return getDropShadow(palette.red);
-      } else if (blockTypeId === "start" && machineState.status === "ready") {
+      } else if (machineState.status === "ready" && data.role === Role.Start) {
         return getDropShadow(palette.gray800);
-      } else if (nodeId === machineState.curNodeId) {
+      } else if (id === machineState.curNodeId) {
         return getDropShadow(palette.gray800);
       }
       return "";
@@ -74,7 +72,7 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
   }, [machineState]);
 
   function onClickDelete() {
-    deleteNode(nodeId);
+    deleteNode(id);
     setMouseOverNodeId(null);
   }
 
@@ -83,25 +81,26 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
     setShowModal(true);
   }
 
-  if (node === undefined) return <></>;
+  const boxStyle = getRoleBoxStyle(data.role);
+  const handles = getRoleHandles(data.role);
 
-  const isSelected = node.selected ?? false;
-  const isMouseHover = mouseOverNodeId === nodeId;
+  const isMouseHover = mouseOverNodeId === id;
   const isDeleteVisible =
     isMouseHover && !isDraggingNode && connectionSource === null;
   const isEditVisible =
-    isDeleteVisible && !_.includes(["start", "end"], node.type);
+    isDeleteVisible && !_.includes([Role.Start, Role.End], data.role);
+
   return (
     <>
       <div
-        onMouseEnter={() => setMouseOverNodeId(nodeId)}
+        onMouseEnter={() => setMouseOverNodeId(id)}
         onMouseLeave={() => setMouseOverNodeId(null)}
         style={{ cursor: isDraggingNode ? "grabbing" : "grab" }}
       >
         <Box
           boxStyle={boxStyle}
           boxFilter={boxFilter}
-          isSelected={isSelected}
+          isSelected={selected}
           isMouseHover={isMouseHover}
         >
           <>
@@ -115,7 +114,7 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
                 marginRight: `${margin}px`,
               }}
             >
-              <Label node={node} />
+              <Label data={data} />
             </span>
           </>
         </Box>
@@ -140,20 +139,21 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
           <MyHandleSource
             key={index}
             id={id}
-            position={node.data.handlePositions[id]}
+            position={data.handlePositions[id]}
             label={label}
             boxStyle={boxStyle}
           />
         ))}
         {_.map(
-          _.difference(_.values(Position), _.values(node.data.handlePositions)),
+          _.difference(_.values(Position), _.values(data.handlePositions)),
           (position, index) => (
-            <DropZone key={index} nodeId={nodeId} position={position} />
+            <DropZone key={index} nodeId={id} position={position} />
           ),
         )}
       </div>
       <NodeModal
-        node={node}
+        id={id}
+        data={data}
         showModal={showModal}
         setShowModal={setShowModal}
       />

@@ -3,10 +3,10 @@ import { Handle, Position } from "reactflow";
 
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 
-type Props = {
+interface Props {
   nodeId: string;
   position: Position;
-};
+}
 
 export default function ({ nodeId, position }: Props): JSX.Element {
   const [mouseHover, setMouseHover] = useState<boolean>(false);

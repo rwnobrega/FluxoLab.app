@@ -1,17 +1,18 @@
-import _ from "lodash";
+import _, { flow } from "lodash";
 import { Node } from "reactflow";
 
-import { BlockTypeId, getBlockType } from "~/core/blockTypes";
 import { getExpectedText } from "~/core/language/errors";
 import grammar from "~/core/language/grammar";
 import semantics from "~/core/language/semantics";
+import { Role, getRoleHandles } from "~/core/roles";
 import { Flowchart, NodeData } from "~/store/useStoreFlowchart";
 import { MachineError } from "~/store/useStoreMachine";
 
 export default function (flowchart: Flowchart): MachineError[] {
   const errors: MachineError[] = [];
   errors.push(...checkGraph(flowchart));
-  for (const node of _.reject(flowchart.nodes, { type: "end" })) {
+  for (const node of flowchart.nodes) {
+    if (node.data.role === Role.End) continue;
     errors.push(...checkNode(flowchart, node));
   }
   return errors;
@@ -20,8 +21,8 @@ export default function (flowchart: Flowchart): MachineError[] {
 function checkGraph(flowchart: Flowchart): MachineError[] {
   const { nodes, edges } = flowchart;
   const errors: MachineError[] = [];
-  const startNodes = _.filter(nodes, { type: "start" });
 
+  const startNodes = _.filter(nodes, { data: { role: Role.Start } });
   if (startNodes.length === 0) {
     errors.push({
       type: "check",
@@ -38,7 +39,7 @@ function checkGraph(flowchart: Flowchart): MachineError[] {
   }
 
   for (const node of nodes) {
-    const { handles } = getBlockType(node.type as BlockTypeId);
+    const handles = getRoleHandles(node.data.role);
     for (const handle of handles) {
       const outgoingEdges = _.filter(edges, {
         source: node.id,
@@ -66,7 +67,7 @@ function checkNode(flowchart: Flowchart, node: Node<NodeData>): MachineError[] {
   const { variables } = flowchart;
   const errors: MachineError[] = [];
 
-  const { prefix } = getBlockType(node.type as BlockTypeId);
+  const prefix = node.data.role;
 
   const matchResult = grammar.match(
     `${prefix} ${node.data.payload}`,

@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 
-import { BlockTypeId, getBlockType } from "~/core/blockTypes";
+import { Role, getRoleBoxStyle } from "~/core/roles";
 import useStoreStrings from "~/store/useStoreStrings";
 import colors from "~/utils/colors";
 
 interface Props {
-  blockTypeId: BlockTypeId;
+  role: Role;
 }
 
-export default function ({ blockTypeId }: Props): JSX.Element {
+export default function ({ role }: Props): JSX.Element {
   const { getString } = useStoreStrings();
   const [mouseHover, setMouseHover] = useState<boolean>(false);
 
-  const { boxStyle } = getBlockType(blockTypeId);
+  const boxStyle = getRoleBoxStyle(role);
 
   function onDragStart(event: React.DragEvent<HTMLDivElement>): void {
-    event.dataTransfer.setData("application/text", blockTypeId);
+    event.dataTransfer.setData("application/text", role);
     event.dataTransfer.effectAllowed = "move";
   }
 
@@ -38,7 +38,7 @@ export default function ({ blockTypeId }: Props): JSX.Element {
         clipPath: boxStyle.clipPath,
       }}
     >
-      <span>{getString(`BlockTitle_${blockTypeId}`)}</span>
+      <span>{getString(`BlockTitle_${role}`)}</span>
     </div>
   );
 }

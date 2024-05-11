@@ -1,33 +1,23 @@
-import React from "react";
+import _ from "lodash";
+import React, { useMemo } from "react";
 import Stack from "react-bootstrap/Stack";
 import ReactFlow, {
   Background,
   Connection,
   Controls,
-  EdgeTypes,
-  NodeTypes,
   useReactFlow,
   useUpdateNodeInternals,
 } from "reactflow";
 
 import PlayButtons from "~/components/PlayButtons";
 import StatusMessage from "~/components/StatusMessage";
-import { BlockTypeId, blockTypeIds } from "~/core/blockTypes";
+import { Role } from "~/core/roles";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 
 import MyEdge from "./MyEdge";
 import ConnectionLine from "./MyEdge/ConnectionLine";
 import MyNode from "./MyNode";
-
-const edgeTypes: EdgeTypes = { edge: MyEdge };
-
-const nodeTypes: NodeTypes = {};
-for (const blockTypeId of blockTypeIds) {
-  nodeTypes[blockTypeId] = ({ id }) => (
-    <MyNode nodeId={id} blockTypeId={blockTypeId} />
-  );
-}
 
 export default function (): JSX.Element {
   const {
@@ -72,13 +62,13 @@ export default function (): JSX.Element {
 
   const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    const type = event.dataTransfer.getData("application/text") as BlockTypeId;
+    const role = event.dataTransfer.getData("application/text") as Role;
     const position = screenToFlowPosition({
       x: event.clientX,
       y: event.clientY,
     });
-    if (blockTypeIds.includes(type)) {
-      addNode(type, position);
+    if (_.includes(_.values(Role), role)) {
+      addNode(role, position);
     }
   };
 
@@ -97,6 +87,9 @@ export default function (): JSX.Element {
     setConnectionSource(null);
   };
 
+  const nodeTypes = useMemo(() => ({ MyNode: MyNode }), []);
+  const edgeTypes = useMemo(() => ({ MyEdge: MyEdge }), []);
+
   return (
     <ReactFlow
       nodes={flowchart.nodes}
@@ -105,7 +98,7 @@ export default function (): JSX.Element {
       edgeTypes={edgeTypes}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
-      defaultEdgeOptions={{ type: "edge" }}
+      defaultEdgeOptions={{ type: "MyEdge" }}
       isValidConnection={isValidConnection}
       connectionLineComponent={ConnectionLine}
       onConnect={onConnectWrapper}

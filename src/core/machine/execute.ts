@@ -7,7 +7,7 @@ import { Flowchart, NodeData } from "~/store/useStoreFlowchart";
 import { MachineState } from "~/store/useStoreMachine";
 import assert from "~/utils/assert";
 
-import { BlockTypeId, getBlockType } from "../blockTypes";
+import { Role } from "../roles";
 
 function getNodeById(flowchart: Flowchart, nodeId: string): Node<NodeData> {
   const node = _.find(flowchart.nodes, { id: nodeId });
@@ -16,7 +16,7 @@ function getNodeById(flowchart: Flowchart, nodeId: string): Node<NodeData> {
 }
 
 function getStartNode(flowchart: Flowchart): Node<NodeData> {
-  const node = _.find(flowchart.nodes, { type: "start" });
+  const node = _.find(flowchart.nodes, { data: { role: Role.Start } });
   assert(node !== undefined);
   return node;
 }
@@ -45,9 +45,8 @@ export default function (
       ? getStartNode(flowchart)
       : getNodeById(flowchart, state.curNodeId);
 
-  const { prefix } = getBlockType(node.type as BlockTypeId);
-
   try {
+    const prefix = node.data.role;
     const matchResult = grammar.match(
       `${prefix} ${node.data.payload}`,
       "Command",
@@ -71,9 +70,9 @@ export default function (
   assert(state.outPort !== null);
   state.curNodeId = getOutgoingEdge(node.id, state.outPort, flowchart);
   const nextNode = getNodeById(flowchart, state.curNodeId);
-  if (nextNode.type === "end" && state.status === "running") {
+  if (nextNode.data.role === Role.End && state.status === "running") {
     state.status = "halted";
-  } else if (nextNode.type === "read" && state.status === "running") {
+  } else if (nextNode.data.role === Role.Read && state.status === "running") {
     state.status = "waiting";
   }
 

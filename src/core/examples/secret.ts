@@ -2,6 +2,8 @@ import { Position } from "reactflow";
 
 import { SimpleFlowchart } from "~/store/serialize";
 
+import { Role } from "../roles";
+
 const example: SimpleFlowchart = {
   title: "secret",
   variables: [
@@ -12,84 +14,84 @@ const example: SimpleFlowchart = {
   nodes: [
     {
       id: "0",
-      type: "start",
+      role: Role.Start,
       position: { x: 480, y: -60 },
       payload: "",
       handlePositions: { out: Position.Bottom },
     },
     {
       id: "1",
-      type: "assignment",
+      role: Role.Assign,
       position: { x: 480, y: 20 },
       payload: "secret = rand_int(1, 100)",
       handlePositions: { out: Position.Bottom },
     },
     {
       id: "2",
-      type: "assignment",
+      role: Role.Assign,
       position: { x: 480, y: 100 },
       payload: "tries = 0",
       handlePositions: { out: Position.Bottom },
     },
     {
       id: "3",
-      type: "read",
+      role: Role.Read,
       position: { x: 480, y: 180 },
       payload: "guess",
       handlePositions: { out: Position.Bottom },
     },
     {
       id: "4",
-      type: "assignment",
+      role: Role.Assign,
       position: { x: 480, y: 260 },
       payload: "tries = tries + 1",
       handlePositions: { out: Position.Bottom },
     },
     {
       id: "5",
-      type: "conditional",
+      role: Role.Conditional,
       position: { x: 480, y: 340 },
       payload: "secret > guess",
       handlePositions: { true: Position.Right, false: Position.Bottom },
     },
     {
       id: "6",
-      type: "write",
+      role: Role.Write,
       position: { x: 720, y: 340 },
       payload: '"Secret is higher"',
       handlePositions: { out: Position.Right },
     },
     {
       id: "7",
-      type: "conditional",
+      role: Role.Conditional,
       position: { x: 480, y: 420 },
       payload: "secret < guess",
       handlePositions: { true: Position.Right, false: Position.Bottom },
     },
     {
       id: "8",
-      type: "write",
+      role: Role.Write,
       position: { x: 720, y: 420 },
       payload: '"Secret is lower"',
       handlePositions: { out: Position.Right },
     },
     {
       id: "9",
-      type: "conditional",
+      role: Role.Conditional,
       position: { x: 480, y: 500 },
       payload: "secret != guess",
       handlePositions: { true: Position.Left, false: Position.Bottom },
     },
     {
       id: "10",
-      type: "write",
+      role: Role.Write,
       position: { x: 480, y: 580 },
       payload: '"Congratulations! ", tries, " tries."',
       handlePositions: { out: Position.Right },
     },
     {
       id: "11",
-      type: "end",
+      role: Role.End,
       position: { x: 760, y: 580 },
       payload: "",
       handlePositions: {},

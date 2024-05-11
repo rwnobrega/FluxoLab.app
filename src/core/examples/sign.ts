@@ -2,62 +2,64 @@ import { Position } from "reactflow";
 
 import { SimpleFlowchart } from "~/store/serialize";
 
+import { Role } from "../roles";
+
 const example: SimpleFlowchart = {
   title: "sign",
   variables: [{ id: "n", type: "number" }],
   nodes: [
     {
       id: "0",
-      type: "start",
+      role: Role.Start,
       position: { x: 300, y: 140 },
       payload: "",
       handlePositions: { out: Position.Bottom },
     },
     {
       id: "1",
-      type: "read",
+      role: Role.Read,
       position: { x: 300, y: 220 },
       payload: "n",
       handlePositions: { out: Position.Bottom },
     },
     {
       id: "2",
-      type: "conditional",
+      role: Role.Conditional,
       position: { x: 300, y: 300 },
       payload: "n > 0",
       handlePositions: { true: Position.Bottom, false: Position.Right },
     },
     {
       id: "3",
-      type: "conditional",
+      role: Role.Conditional,
       position: { x: 520, y: 300 },
       payload: "n < 0",
       handlePositions: { true: Position.Bottom, false: Position.Right },
     },
     {
       id: "4",
-      type: "write",
+      role: Role.Write,
       position: { x: 300, y: 380 },
       payload: '"Positive"',
       handlePositions: { out: Position.Bottom },
     },
     {
       id: "5",
-      type: "write",
+      role: Role.Write,
       position: { x: 520, y: 380 },
       payload: '"Negative"',
       handlePositions: { out: Position.Bottom },
     },
     {
       id: "6",
-      type: "write",
+      role: Role.Write,
       position: { x: 720, y: 380 },
       payload: '"Zero"',
       handlePositions: { out: Position.Bottom },
     },
     {
       id: "7",
-      type: "end",
+      role: Role.End,
       position: { x: 720, y: 480 },
       payload: "",
       handlePositions: {},

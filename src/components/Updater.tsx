@@ -9,7 +9,7 @@ export default function (): JSX.Element {
   const { resetMachine } = useStoreMachine();
 
   const nodesDep = JSON.stringify(
-    _.map(flowchart.nodes, (node) => _.pick(node, ["id", "type", "data"])),
+    _.map(flowchart.nodes, (node) => _.pick(node, ["id", "data"])),
   );
   const edgesDep = JSON.stringify(
     _.map(flowchart.edges, (edge) =>

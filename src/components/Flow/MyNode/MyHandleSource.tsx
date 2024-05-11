@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { Handle, Position } from "reactflow";
 
-import { BoxStyle } from "~/core/blockTypes";
+import { BoxStyle } from "~/core/roles";
 import colors from "~/utils/colors";
 
-type Props = {
+interface Props {
   id: string;
   position: Position;
   label?: string;
   boxStyle: BoxStyle;
-};
+}
 
 export default function ({
   id,

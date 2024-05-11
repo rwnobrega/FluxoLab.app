@@ -1,23 +1,24 @@
 import React from "react";
 import { Node } from "reactflow";
 
-import { BlockTypeId } from "~/core/blockTypes";
+import { Role } from "~/core/roles";
 import { NodeData } from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
 interface Props {
-  node: Node<NodeData>;
+  data: NodeData;
 }
 
-export default function ({ node }: Props): JSX.Element {
+export default function ({ data }: Props): JSX.Element {
   const { getString } = useStoreStrings();
 
-  const label = getString(`BlockLabel_${node.type}`);
-  const { payload } = node.data;
+  const { role, payload } = data;
 
-  switch (node.type as BlockTypeId) {
-    case "read":
-    case "write":
+  const label = getString(`BlockLabel_${role}`);
+
+  switch (role) {
+    case Role.Read:
+    case Role.Write:
       return (
         <span>
           <i>{label}</i>
@@ -27,15 +28,15 @@ export default function ({ node }: Props): JSX.Element {
           </span>
         </span>
       );
-    case "start":
-    case "end":
+    case Role.Start:
+    case Role.End:
       return (
         <span style={{ position: "relative", top: "-2.5px" }}>
           <i>{label}</i>
         </span>
       );
-    case "assignment":
-    case "conditional":
+    case Role.Assign:
+    case Role.Conditional:
       return (
         <span className={`font-monospace ${payload ? "" : "fst-italic"}`}>
           {payload || getString("Block_Empty")}

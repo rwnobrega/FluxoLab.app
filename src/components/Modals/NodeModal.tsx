@@ -8,20 +8,22 @@ import Row from "react-bootstrap/Row";
 import { Node } from "reactflow";
 
 import TextInput from "~/components/General/TextInput";
-import { BlockTypeId, getBlockType } from "~/core/blockTypes";
 import { getExpectedText } from "~/core/language/errors";
 import grammar from "~/core/language/grammar";
+import { Role } from "~/core/roles";
 import useStoreFlowchart, { NodeData } from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
 interface Props {
-  node: Node<NodeData>;
+  id: string;
+  data: NodeData;
   showModal: boolean;
   setShowModal: (modal: boolean) => void;
 }
 
 export default function ({
-  node,
+  id,
+  data,
   showModal,
   setShowModal,
 }: Props): JSX.Element {
@@ -31,15 +33,14 @@ export default function ({
   const { changeNodePayload } = useStoreFlowchart();
   const { language, getString } = useStoreStrings();
 
-  const { prefix } = getBlockType(node.type as BlockTypeId);
-
   useEffect(() => {
     if (showModal) {
-      setTextValue(node.data.payload);
+      setTextValue(data.payload);
     }
   }, [showModal]);
 
   useEffect(() => {
+    const prefix = data.role;
     const matchResult = grammar.match(`${prefix} ${textValue}`, "Command");
     if (matchResult.failed()) {
       const problem = getString("SyntaxError", {
@@ -54,20 +55,20 @@ export default function ({
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    changeNodePayload(node.id, textValue.trim());
+    changeNodePayload(id, textValue.trim());
     setShowModal(false);
   };
 
-  const label = getString(`BlockLabel_${node.type}`);
+  const label = getString(`BlockLabel_${data.role}`);
 
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)}>
       <Form onSubmit={onSubmit}>
         <Modal.Header closeButton>
-          <Modal.Title>{getString(`BlockTitle_${node.type}`)}</Modal.Title>
+          <Modal.Title>{getString(`BlockTitle_${data.role}`)}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {node.type !== "start" && (
+          {data.role !== Role.Start && (
             <Form.Group as={Row}>
               {label !== "" && (
                 <Form.Label column className="fw-bold fst-italic" md="auto">
@@ -76,7 +77,7 @@ export default function ({
               )}
               <Col>
                 <TextInput
-                  placeholder={getString(`BlockPlaceholder_${node.type}`)}
+                  placeholder={getString(`BlockPlaceholder_${data.role}`)}
                   value={textValue}
                   setValue={setTextValue}
                   problem={problem}
