@@ -17,12 +17,12 @@ interface StatusProps {
 }
 
 export default function (): JSX.Element {
-  const { isDraggingNode, isConnectingEdge, mouseOverNodeId } =
+  const { isDraggingNode, connectionSource, mouseOverNodeId } =
     useStoreEphemeral();
   const { machineState } = useStoreMachine();
   const { getString } = useStoreStrings();
 
-  if (isDraggingNode || isConnectingEdge) return <></>;
+  if (isDraggingNode || connectionSource !== null) return <></>;
 
   function getStatusProps(): StatusProps {
     const { status, errors, timeSlot } = machineState;

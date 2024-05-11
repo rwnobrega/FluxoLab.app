@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
-import { Node, useUpdateNodeInternals } from "reactflow";
+import { Node } from "reactflow";
 
 import TextInput from "~/components/General/TextInput";
 import { BlockTypeId, getBlockType } from "~/core/blockTypes";
@@ -14,15 +14,11 @@ import grammar from "~/core/language/grammar";
 import useStoreFlowchart, { NodeData } from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
-import DraggingBox from "./DraggingBox";
-
 interface Props {
   node: Node<NodeData>;
   showModal: boolean;
   setShowModal: (modal: boolean) => void;
 }
-
-type HandlePositions = NodeData["handlePositions"];
 
 export default function ({
   node,
@@ -30,20 +26,16 @@ export default function ({
   setShowModal,
 }: Props): JSX.Element {
   const [textValue, setTextValue] = useState<string>("");
-  const [handlePositions, setHandlePositions] = useState<HandlePositions>({});
   const [problem, setProblem] = useState<string>("");
 
-  const { changeNodePayload, changeNodeHandlePositions } = useStoreFlowchart();
+  const { changeNodePayload } = useStoreFlowchart();
   const { language, getString } = useStoreStrings();
 
-  const updateNodeInternals = useUpdateNodeInternals();
-
-  const { prefix, handles, boxStyle } = getBlockType(node.type as BlockTypeId);
+  const { prefix } = getBlockType(node.type as BlockTypeId);
 
   useEffect(() => {
     if (showModal) {
       setTextValue(node.data.payload);
-      setHandlePositions(node.data.handlePositions);
     }
   }, [showModal]);
 
@@ -63,8 +55,6 @@ export default function ({
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     changeNodePayload(node.id, textValue.trim());
-    changeNodeHandlePositions(node.id, handlePositions);
-    updateNodeInternals(node.id);
     setShowModal(false);
   };
 
@@ -94,21 +84,6 @@ export default function ({
               </Col>
             </Form.Group>
           )}
-          <Form.Group as={Row}>
-            <Form.Label className="mt-2" column md="auto">
-              {`${getString("Modal_HandlePositions", {
-                count: _.size(handlePositions),
-              })}:`}
-            </Form.Label>
-            <Col className="mt-3">
-              <DraggingBox
-                handles={handles}
-                handlePositions={handlePositions}
-                setHandlePositions={setHandlePositions}
-                boxStyle={boxStyle}
-              />
-            </Col>
-          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>

@@ -9,10 +9,12 @@ interface ToastContent {
 interface StoreEphemeral {
   isDraggingNode: boolean;
   setIsDraggingNode: (isDraggingNode: boolean) => void;
-  isConnectingEdge: boolean;
-  setIsConnectingEdge: (isConnectingEdge: boolean) => void;
+  connectionSource: string | null;
+  setConnectionSource: (connectionSource: string | null) => void;
   mouseOverNodeId: string | null;
   setMouseOverNodeId: (id: string | null) => void;
+  isEditingHandles: boolean;
+  setIsEditingHandles: (isEditingHandles: boolean) => void;
   toasts: ToastContent[];
   triggerToast: (content: ToastContent) => void;
   refInput: React.RefObject<HTMLInputElement>;
@@ -22,10 +24,12 @@ interface StoreEphemeral {
 const useStoreEphemeral = create<StoreEphemeral>()((set, get) => ({
   isDraggingNode: false,
   setIsDraggingNode: (isDraggingNode) => set({ isDraggingNode }),
-  isConnectingEdge: false,
-  setIsConnectingEdge: (isConnectingEdge) => set({ isConnectingEdge }),
+  connectionSource: null,
+  setConnectionSource: (connectionSource) => set({ connectionSource }),
   mouseOverNodeId: null,
   setMouseOverNodeId: (id) => set({ mouseOverNodeId: id }),
+  isEditingHandles: false,
+  setIsEditingHandles: (isEditingHandles) => set({ isEditingHandles }),
   toasts: [],
   triggerToast: (content) => {
     set({ toasts: [...get().toasts, content] });

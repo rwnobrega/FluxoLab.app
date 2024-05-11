@@ -44,11 +44,7 @@ interface StoreFlowchart {
   addNode: (type: BlockTypeId, position: XYPosition) => void;
   deleteNode: (id: string) => void;
   changeNodePayload: (id: string, value: any) => void;
-  changeNodeHandlePositions: (
-    nodeId: string,
-    handlePositions: NodeData["handlePositions"],
-  ) => void;
-  onConnect: (connection: Connection) => void;
+  onConnect: (isEditingHandles: boolean, connection: Connection) => void;
   addVariable: () => void;
   removeVariable: (id: string) => void;
   renameVariable: (id: string, newId: string) => void;
@@ -161,22 +157,24 @@ const useStoreFlow = create<StoreFlowchart>()(
         node.data.payload = value;
         set({ flowchart });
       },
-      changeNodeHandlePositions: (nodeId, handlePositions) => {
+      onConnect: (isEditingHandles, connection) => {
         const { flowchart } = get();
-        const node = _.find(flowchart.nodes, { id: nodeId });
-        assert(node !== undefined);
-        node.data.handlePositions = handlePositions;
-        set({ flowchart });
-      },
-      onConnect: (connection) => {
-        const { flowchart } = get();
-        flowchart.edges = _.reject(
-          flowchart.edges,
-          (edge) =>
-            edge.source === connection.source &&
-            edge.sourceHandle === connection.sourceHandle,
-        );
-        flowchart.edges = addEdge(connection, flowchart.edges);
+        if (!isEditingHandles) {
+          flowchart.edges = _.reject(
+            flowchart.edges,
+            (edge) =>
+              edge.source === connection.source &&
+              edge.sourceHandle === connection.sourceHandle,
+          );
+          flowchart.edges = addEdge(connection, flowchart.edges);
+        } else {
+          const id = connection.source as string;
+          const handle = connection.sourceHandle as Position;
+          const position = connection.targetHandle as Position;
+          const node = _.find(flowchart.nodes, { id });
+          assert(node !== undefined);
+          node.data.handlePositions[handle] = position;
+        }
         set({ flowchart });
       },
       addVariable: () => {

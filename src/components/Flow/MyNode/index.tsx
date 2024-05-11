@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
-import { useReactFlow } from "reactflow";
+import { Position, useReactFlow } from "reactflow";
 
 import Modal from "~/components/Modal";
 import { BlockTypeId, getBlockType } from "~/core/blockTypes";
@@ -12,6 +12,7 @@ import palette from "~/utils/palette";
 
 import Box from "./Box";
 import Button from "./Button";
+import DropZone from "./DropZone";
 import Label from "./Label";
 import MyHandleSource from "./MyHandleSource";
 import MyHandleTarget from "./MyHandleTarget";
@@ -30,7 +31,7 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
 
   const {
     isDraggingNode,
-    isConnectingEdge,
+    connectionSource,
     mouseOverNodeId,
     setMouseOverNodeId,
   } = useStoreEphemeral();
@@ -86,9 +87,10 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
 
   const isSelected = node.selected ?? false;
   const isMouseHover = mouseOverNodeId === nodeId;
-  const isDeleteVisible = isMouseHover && !isDraggingNode && !isConnectingEdge;
-  const isEditVisible = isDeleteVisible && node.type !== "end";
-
+  const isDeleteVisible =
+    isMouseHover && !isDraggingNode && connectionSource === null;
+  const isEditVisible =
+    isDeleteVisible && !_.includes(["start", "end"], node.type);
   return (
     <>
       <div
@@ -102,18 +104,20 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
           isSelected={isSelected}
           isMouseHover={isMouseHover}
         >
-          <span
-            className="d-block text-truncate"
-            ref={labelRef}
-            style={{
-              minWidth: "40px",
-              maxWidth: "392px",
-              marginLeft: `${margin}px`,
-              marginRight: `${margin}px`,
-            }}
-          >
-            <Label node={node} />
-          </span>
+          <>
+            <span
+              className="d-block text-truncate"
+              ref={labelRef}
+              style={{
+                minWidth: "40px",
+                maxWidth: "392px",
+                marginLeft: `${margin}px`,
+                marginRight: `${margin}px`,
+              }}
+            >
+              <Label node={node} />
+            </span>
+          </>
         </Box>
         <Button
           variant="danger"
@@ -131,6 +135,7 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
           visible={isEditVisible}
           onClick={onClickEdit}
         />
+        <MyHandleTarget id="out" />
         {_.map(handles, ({ id, label }, index) => (
           <MyHandleSource
             key={index}
@@ -140,7 +145,12 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
             boxStyle={boxStyle}
           />
         ))}
-        <MyHandleTarget id="out" />
+        {_.map(
+          _.difference(_.values(Position), _.values(node.data.handlePositions)),
+          (position, index) => (
+            <DropZone key={index} nodeId={nodeId} position={position} />
+          ),
+        )}
       </div>
       <Modal node={node} showModal={showModal} setShowModal={setShowModal} />
     </>

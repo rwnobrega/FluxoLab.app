@@ -2,10 +2,12 @@ import React from "react";
 import Stack from "react-bootstrap/Stack";
 import ReactFlow, {
   Background,
+  Connection,
   Controls,
   EdgeTypes,
   NodeTypes,
   useReactFlow,
+  useUpdateNodeInternals,
 } from "reactflow";
 
 import PlayButtons from "~/components/PlayButtons";
@@ -37,8 +39,31 @@ export default function (): JSX.Element {
     savedViewport,
     setSavedViewport,
   } = useStoreFlowchart();
-  const { setIsDraggingNode, setIsConnectingEdge } = useStoreEphemeral();
+  const {
+    isEditingHandles,
+    connectionSource,
+    setIsDraggingNode,
+    setConnectionSource,
+  } = useStoreEphemeral();
   const { getViewport, screenToFlowPosition } = useReactFlow();
+
+  const updateNodeInternals = useUpdateNodeInternals();
+
+  const isValidConnection = (connection: Connection) => {
+    if (!isEditingHandles) {
+      // Normal connection
+      return (
+        connection.targetHandle === "out" &&
+        connection.source !== connection.target
+      );
+    } else {
+      // Repositioning a handle
+      return (
+        connection.targetHandle !== "out" &&
+        connection.source === connection.target
+      );
+    }
+  };
 
   const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -57,6 +82,21 @@ export default function (): JSX.Element {
     }
   };
 
+  const onConnectWrapper = (params: Connection) => {
+    return onConnect(isEditingHandles, params);
+  };
+
+  const onConnectStart = (event: React.MouseEvent, { nodeId }: any) => {
+    setConnectionSource(nodeId);
+  };
+
+  const onConnectEnd = () => {
+    if (connectionSource !== null) {
+      updateNodeInternals(connectionSource);
+    }
+    setConnectionSource(null);
+  };
+
   return (
     <ReactFlow
       nodes={flowchart.nodes}
@@ -66,10 +106,11 @@ export default function (): JSX.Element {
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       defaultEdgeOptions={{ type: "edge" }}
+      isValidConnection={isValidConnection}
       connectionLineComponent={ConnectionLine}
-      onConnect={onConnect}
-      onConnectEnd={() => setIsConnectingEdge(false)}
-      onConnectStart={() => setIsConnectingEdge(true)}
+      onConnect={onConnectWrapper}
+      onConnectStart={onConnectStart}
+      onConnectEnd={onConnectEnd}
       onDragOver={onDragOver}
       onDrop={onDrop}
       onMoveEnd={() => setSavedViewport(getViewport())}

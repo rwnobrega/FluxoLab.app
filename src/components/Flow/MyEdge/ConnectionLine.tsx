@@ -1,20 +1,25 @@
 import React from "react";
 import { ConnectionLineComponentProps } from "reactflow";
 
+import useStoreEphemeral from "~/store/useStoreEphemeral";
+
 export default ({
   fromX,
   fromY,
   toX,
   toY,
 }: ConnectionLineComponentProps): JSX.Element => {
+  const { isEditingHandles } = useStoreEphemeral();
   return (
     <g>
-      <path
-        d={`M ${fromX} ${fromY} L ${toX} ${toY}`}
-        fill="none"
-        stroke="gray"
-        strokeWidth={4}
-      />
+      {!isEditingHandles && (
+        <path
+          d={`M ${fromX} ${fromY} L ${toX} ${toY}`}
+          fill="none"
+          stroke="gray"
+          strokeWidth={4}
+        />
+      )}
       <circle
         cx={fromX}
         cy={fromY}
