@@ -2,13 +2,14 @@ import { Position } from "reactflow";
 
 import { SimpleFlowchart } from "~/store/serialize";
 
+import { DataType } from "../dataTypes";
 import { Role } from "../roles";
 
 const example: SimpleFlowchart = {
   title: "factorial",
   variables: [
-    { id: "n", type: "number" },
-    { id: "fat", type: "number" },
+    { id: "n", type: DataType.Number },
+    { id: "fat", type: DataType.Number },
   ],
   nodes: [
     {

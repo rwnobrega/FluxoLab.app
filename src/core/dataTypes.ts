@@ -1,13 +1,16 @@
-export const variableTypeIds = ["number", "boolean", "string"] as const;
-export type VariableTypeId = (typeof variableTypeIds)[number];
+export enum DataType {
+  Number = "number",
+  Boolean = "boolean",
+  String = "string",
+}
 
-interface VariableType {
+interface DataParser {
   stringIsValid: (str: string) => boolean;
   parse: (str: string) => any;
   stringify: (value: any) => string;
 }
 
-const variableTypes: Record<VariableTypeId, VariableType> = {
+const DATA_PARSERS: Record<DataType, DataParser> = {
   number: {
     stringIsValid(str: string): boolean {
       const floatRegex = /^-?\d+(?:[.]\d*?)?$/;
@@ -57,6 +60,6 @@ const variableTypes: Record<VariableTypeId, VariableType> = {
   },
 };
 
-export function getVariableType(id: VariableTypeId): VariableType {
-  return variableTypes[id];
+export function getDataParser(dataType: DataType): DataParser {
+  return DATA_PARSERS[dataType];
 }

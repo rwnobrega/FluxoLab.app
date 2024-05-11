@@ -4,17 +4,13 @@ import { Button, Form } from "react-bootstrap";
 
 import Tooltip from "~/components/General/Tooltip";
 import VariableModal from "~/components/Modals/VariableModal";
-import {
-  VariableTypeId,
-  getVariableType,
-  variableTypeIds,
-} from "~/core/variableTypes";
+import { DataType, getDataParser } from "~/core/dataTypes";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
 export interface Props {
   id: string;
-  type: VariableTypeId;
+  type: DataType;
   value: any;
 }
 
@@ -24,7 +20,7 @@ export default function ({ id, type, value }: Props): JSX.Element {
   const { getString } = useStoreStrings();
   const { changeVariableType, removeVariable } = useStoreFlowchart();
 
-  const variableType = getVariableType(type);
+  const parser = getDataParser(type);
 
   return (
     <>
@@ -48,20 +44,18 @@ export default function ({ id, type, value }: Props): JSX.Element {
           <Form.Select
             size="sm"
             value={type}
-            onChange={(e) =>
-              changeVariableType(id, e.target.value as VariableTypeId)
-            }
+            onChange={(e) => changeVariableType(id, e.target.value as DataType)}
           >
-            {_.map(variableTypeIds, (id) => (
+            {_.map(DataType, (id) => (
               <option key={id} value={id}>
-                {getString(`VariableType_${id}`)}
+                {getString(`DataType_${id}`)}
               </option>
             ))}
           </Form.Select>
         </td>
         <td className="w-100">
           <small className="d-flex p-1 fw-bold font-monospace text-success bg-success bg-opacity-10 border border-success border-opacity-10 rounded-1">
-            {value === null ? "?" : variableType.stringify(value)}
+            {value === null ? "?" : parser.stringify(value)}
           </small>
         </td>
         <td>

@@ -15,8 +15,8 @@ import {
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { DataType } from "~/core/dataTypes";
 import { Role, getRoleHandles } from "~/core/roles";
-import { VariableTypeId } from "~/core/variableTypes";
 import assert from "~/utils/assert";
 
 import { SimpleFlowchart } from "./serialize";
@@ -29,7 +29,7 @@ export interface NodeData {
 
 export interface Flowchart {
   title: string;
-  variables: Array<{ id: string; type: VariableTypeId }>;
+  variables: Array<{ id: string; type: DataType }>;
   nodes: Node<NodeData>[];
   edges: Edge[];
 }
@@ -49,7 +49,7 @@ interface StoreFlowchart {
   addVariable: () => void;
   removeVariable: (id: string) => void;
   renameVariable: (id: string, newId: string) => void;
-  changeVariableType: (id: string, type: VariableTypeId) => void;
+  changeVariableType: (id: string, type: DataType) => void;
   setSavedViewport: (viewport: Viewport) => void;
 }
 
@@ -187,7 +187,10 @@ const useStoreFlow = create<StoreFlowchart>()(
       addVariable: () => {
         const { flowchart } = get();
         const id = getNextAvailableVariableId(flowchart.variables);
-        flowchart.variables = [...flowchart.variables, { id, type: "number" }];
+        flowchart.variables = [
+          ...flowchart.variables,
+          { id, type: DataType.Number },
+        ];
         set({ flowchart });
       },
       removeVariable: (id) => {

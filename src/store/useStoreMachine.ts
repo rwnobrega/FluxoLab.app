@@ -2,9 +2,9 @@ import _ from "lodash";
 import { create } from "zustand";
 
 import { Action } from "~/core/actions";
+import { DataType } from "~/core/dataTypes";
 import check from "~/core/machine/check";
 import execute from "~/core/machine/execute";
-import { VariableTypeId } from "~/core/variableTypes";
 import assert from "~/utils/assert";
 import minstd from "~/utils/minstd";
 
@@ -12,7 +12,7 @@ import { Flowchart } from "./useStoreFlowchart";
 
 export type MachineMemory = Record<
   string,
-  { type: VariableTypeId; value: any | null }
+  { type: DataType; value: any | null }
 >;
 
 export interface InteractionAtom {

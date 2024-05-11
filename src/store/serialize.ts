@@ -5,8 +5,8 @@ import {
 } from "lz-string";
 import { Position } from "reactflow";
 
+import { DataType } from "~/core/dataTypes";
 import { Role, getRoleHandles } from "~/core/roles";
-import { VariableTypeId } from "~/core/variableTypes";
 
 import { Flowchart, NodeData } from "./useStoreFlowchart";
 
@@ -97,7 +97,7 @@ function expand(miniFlowchart: MiniFlowchart): SimpleFlowchart {
   const [title, variables, nodes, edges] = miniFlowchart;
   const variables0 = _.map(variables, ([id, type]) => ({
     id,
-    type: revAlias[type] as VariableTypeId,
+    type: revAlias[type] as DataType,
   }));
   return {
     title,

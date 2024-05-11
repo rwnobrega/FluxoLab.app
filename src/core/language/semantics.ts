@@ -1,4 +1,4 @@
-import { VariableTypeId } from "~/core/variableTypes";
+import { DataType } from "~/core/dataTypes";
 
 import grammar from "./grammar";
 import { Value } from "./library";
@@ -40,10 +40,10 @@ import {
 
 const semantics = grammar.createSemantics();
 
-semantics.addOperation<VariableTypeId | null>("getType(variables)", {
-  Primary_stringLiteral: (a) => "string",
-  Primary_numberLiteral: (a) => "number",
-  Primary_booleanLiteral: (a) => "boolean",
+semantics.addOperation<DataType | null>("getType(variables)", {
+  Primary_stringLiteral: (a) => DataType.String,
+  Primary_numberLiteral: (a) => DataType.Number,
+  Primary_booleanLiteral: (a) => DataType.Boolean,
   Identifier: getTypeIdentifier,
   Parentheses: getTypeParentheses,
   Expression_binary: getTypeExpressionBinary,

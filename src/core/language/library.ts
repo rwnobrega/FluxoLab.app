@@ -1,54 +1,56 @@
-import { VariableTypeId } from "~/core/variableTypes";
+import { DataType } from "~/core/dataTypes";
 import minstd from "~/utils/minstd";
 
 export type Value = number | boolean | string;
 
 interface UnaryOperator {
   id: string;
-  operandType: VariableTypeId;
-  resultType: VariableTypeId;
+  operandType: DataType;
+  resultType: DataType;
   work: (a: Value) => Value;
 }
 
 interface BinaryOperator {
   id: string;
-  leftType: VariableTypeId;
-  rightType: VariableTypeId;
-  resultType: VariableTypeId;
+  leftType: DataType;
+  rightType: DataType;
+  resultType: DataType;
   work: (a: Value, b: Value) => Value;
 }
 
 interface Function {
   id: string;
-  parameterTypes: VariableTypeId[];
-  returnType: VariableTypeId;
+  parameterTypes: DataType[];
+  returnType: DataType;
   work: (...args: Value[]) => Value;
   tags?: string[];
 }
 
 interface Constant {
   id: string;
-  type: VariableTypeId;
+  type: DataType;
   value: Value;
 }
+
+const { Number, Boolean, String } = DataType;
 
 const unaryOperators: UnaryOperator[] = [
   {
     id: "+",
-    operandType: "number",
-    resultType: "number",
+    operandType: Number,
+    resultType: Number,
     work: (a) => a,
   },
   {
     id: "-",
-    operandType: "number",
-    resultType: "number",
+    operandType: Number,
+    resultType: Number,
     work: (a) => -a,
   },
   {
     id: "!",
-    operandType: "boolean",
-    resultType: "boolean",
+    operandType: Boolean,
+    resultType: Boolean,
     work: (a) => !a,
   },
 ];
@@ -56,128 +58,128 @@ const unaryOperators: UnaryOperator[] = [
 const binaryOperators: BinaryOperator[] = [
   {
     id: "||",
-    leftType: "boolean",
-    rightType: "boolean",
-    resultType: "boolean",
+    leftType: Boolean,
+    rightType: Boolean,
+    resultType: Boolean,
     work: (a, b) => a || b,
   },
   {
     id: "&&",
-    leftType: "boolean",
-    rightType: "boolean",
-    resultType: "boolean",
+    leftType: Boolean,
+    rightType: Boolean,
+    resultType: Boolean,
     work: (a, b) => a && b,
   },
   {
     id: "<=",
-    leftType: "number",
-    rightType: "number",
-    resultType: "boolean",
+    leftType: Number,
+    rightType: Number,
+    resultType: Boolean,
     work: (a, b) => a <= b,
   },
   {
     id: "<",
-    leftType: "number",
-    rightType: "number",
-    resultType: "boolean",
+    leftType: Number,
+    rightType: Number,
+    resultType: Boolean,
     work: (a, b) => a < b,
   },
   {
     id: ">=",
-    leftType: "number",
-    rightType: "number",
-    resultType: "boolean",
+    leftType: Number,
+    rightType: Number,
+    resultType: Boolean,
     work: (a, b) => a >= b,
   },
   {
     id: ">",
-    leftType: "number",
-    rightType: "number",
-    resultType: "boolean",
+    leftType: Number,
+    rightType: Number,
+    resultType: Boolean,
     work: (a, b) => a > b,
   },
   {
     id: "==",
-    leftType: "number",
-    rightType: "number",
-    resultType: "boolean",
+    leftType: Number,
+    rightType: Number,
+    resultType: Boolean,
     work: (a, b) => a === b,
   },
   {
     id: "==",
-    leftType: "boolean",
-    rightType: "boolean",
-    resultType: "boolean",
+    leftType: Boolean,
+    rightType: Boolean,
+    resultType: Boolean,
     work: (a, b) => a === b,
   },
   {
     id: "==",
-    leftType: "string",
-    rightType: "string",
-    resultType: "boolean",
+    leftType: String,
+    rightType: String,
+    resultType: Boolean,
     work: (a, b) => a === b,
   },
   {
     id: "!=",
-    leftType: "number",
-    rightType: "number",
-    resultType: "boolean",
+    leftType: Number,
+    rightType: Number,
+    resultType: Boolean,
     work: (a, b) => a !== b,
   },
   {
     id: "!=",
-    leftType: "boolean",
-    rightType: "boolean",
-    resultType: "boolean",
+    leftType: Boolean,
+    rightType: Boolean,
+    resultType: Boolean,
     work: (a, b) => a !== b,
   },
   {
     id: "!=",
-    leftType: "string",
-    rightType: "string",
-    resultType: "boolean",
+    leftType: String,
+    rightType: String,
+    resultType: Boolean,
     work: (a, b) => a !== b,
   },
   {
     id: "+",
-    leftType: "number",
-    rightType: "number",
-    resultType: "number",
+    leftType: Number,
+    rightType: Number,
+    resultType: Number,
     work: (a: number, b: number) => a + b,
   },
   {
     id: "-",
-    leftType: "number",
-    rightType: "number",
-    resultType: "number",
+    leftType: Number,
+    rightType: Number,
+    resultType: Number,
     work: (a: number, b: number) => a - b,
   },
   {
     id: "*",
-    leftType: "number",
-    rightType: "number",
-    resultType: "number",
+    leftType: Number,
+    rightType: Number,
+    resultType: Number,
     work: (a: number, b: number) => a * b,
   },
   {
     id: "/",
-    leftType: "number",
-    rightType: "number",
-    resultType: "number",
+    leftType: Number,
+    rightType: Number,
+    resultType: Number,
     work: (a: number, b: number) => a / b,
   },
   {
     id: "div",
-    leftType: "number",
-    rightType: "number",
-    resultType: "number",
+    leftType: Number,
+    rightType: Number,
+    resultType: Number,
     work: (a: number, b: number) => Math.floor(a / b),
   },
   {
     id: "mod",
-    leftType: "number",
-    rightType: "number",
-    resultType: "number",
+    leftType: Number,
+    rightType: Number,
+    resultType: Number,
     work: (a: number, b: number) => a % b,
   },
 ];
@@ -185,165 +187,165 @@ const binaryOperators: BinaryOperator[] = [
 const functions: Function[] = [
   {
     id: "pow",
-    parameterTypes: ["number", "number"],
-    returnType: "number",
+    parameterTypes: [Number, Number],
+    returnType: Number,
     work: Math.pow,
   },
   {
     id: "sqrt",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.sqrt,
   },
   {
     id: "log",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.log,
   },
   {
     id: "log10",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.log10,
   },
   {
     id: "log2",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.log2,
   },
   {
     id: "exp",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.exp,
   },
   {
     id: "sin",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.sin,
   },
   {
     id: "cos",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.cos,
   },
   {
     id: "tan",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.tan,
   },
   {
     id: "asin",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.asin,
   },
   {
     id: "acos",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.acos,
   },
   {
     id: "atan",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.atan,
   },
   {
     id: "sinh",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.sinh,
   },
   {
     id: "cosh",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.cosh,
   },
   {
     id: "tanh",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.tanh,
   },
   {
     id: "asinh",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.asinh,
   },
   {
     id: "acosh",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.acosh,
   },
   {
     id: "atanh",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.atanh,
   },
   {
     id: "sign",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.sign,
   },
   {
     id: "abs",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.abs,
   },
   {
     id: "round",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.round,
   },
   {
     id: "floor",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.floor,
   },
   {
     id: "ceil",
-    parameterTypes: ["number"],
-    returnType: "number",
+    parameterTypes: [Number],
+    returnType: Number,
     work: Math.ceil,
   },
   {
     id: "min",
-    parameterTypes: ["number", "number"],
-    returnType: "number",
+    parameterTypes: [Number, Number],
+    returnType: Number,
     work: Math.min,
   },
   {
     id: "max",
-    parameterTypes: ["number", "number"],
-    returnType: "number",
+    parameterTypes: [Number, Number],
+    returnType: Number,
     work: Math.max,
   },
   {
     id: "rand",
     parameterTypes: [],
-    returnType: "number",
+    returnType: Number,
     work: minstd.rand,
     tags: ["random"],
   },
   {
     id: "rand_int",
-    parameterTypes: ["number", "number"],
-    returnType: "number",
+    parameterTypes: [Number, Number],
+    returnType: Number,
     work: minstd.randInt,
     tags: ["random"],
   },
@@ -352,12 +354,12 @@ const functions: Function[] = [
 const constants: Constant[] = [
   {
     id: "pi",
-    type: "number",
+    type: Number,
     value: Math.PI,
   },
   {
     id: "tau",
-    type: "number",
+    type: Number,
     value: 2 * Math.PI,
   },
 ];
