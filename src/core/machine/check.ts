@@ -1,4 +1,4 @@
-import _, { flow } from "lodash";
+import _ from "lodash";
 import { Node } from "reactflow";
 
 import { getExpectedText } from "~/core/language/errors";

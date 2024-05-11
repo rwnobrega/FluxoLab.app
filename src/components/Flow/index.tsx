@@ -62,13 +62,13 @@ export default function (): JSX.Element {
 
   const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    const role = event.dataTransfer.getData("application/text") as Role;
+    const role = event.dataTransfer.getData("application/text");
     const position = screenToFlowPosition({
       x: event.clientX,
       y: event.clientY,
     });
-    if (_.includes(_.values(Role), role)) {
-      addNode(role, position);
+    if (_.includes(Role, role)) {
+      addNode(role as Role, position);
     }
   };
 
