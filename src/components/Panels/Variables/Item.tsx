@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 
 import Tooltip from "~/components/General/Tooltip";
+import VariableModal from "~/components/Modals/VariableModal";
 import {
   VariableTypeId,
   getVariableType,
@@ -10,8 +11,6 @@ import {
 } from "~/core/variableTypes";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
-
-import VariableModalRename from "./RenameVariable";
 
 export interface Props {
   id: string;
@@ -29,7 +28,7 @@ export default function ({ id, type, value }: Props): JSX.Element {
 
   return (
     <>
-      <VariableModalRename
+      <VariableModal
         id={id}
         showModal={showModal}
         setShowModal={setShowModal}

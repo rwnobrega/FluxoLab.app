@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { Position, useReactFlow } from "reactflow";
 
-import Modal from "~/components/Modal";
+import NodeModal from "~/components/Modals/NodeModal";
 import { BlockTypeId, getBlockType } from "~/core/blockTypes";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
@@ -152,7 +152,11 @@ export default function ({ nodeId, blockTypeId }: Props): JSX.Element {
           ),
         )}
       </div>
-      <Modal node={node} showModal={showModal} setShowModal={setShowModal} />
+      <NodeModal
+        node={node}
+        showModal={showModal}
+        setShowModal={setShowModal}
+      />
     </>
   );
 }
