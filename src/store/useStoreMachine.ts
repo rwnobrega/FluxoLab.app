@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { create } from "zustand";
 
-import { Action } from "~/core/machine/actions";
+import { Action } from "~/core/actions";
 import check from "~/core/machine/check";
 import execute from "~/core/machine/execute";
 import { VariableTypeId } from "~/core/variableTypes";

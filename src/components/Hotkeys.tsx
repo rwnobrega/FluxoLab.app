@@ -1,7 +1,7 @@
 import React from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
-import actions from "~/core/machine/actions";
+import actions from "~/core/actions";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreMachine from "~/store/useStoreMachine";
 

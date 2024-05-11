@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 
 import Tooltip from "~/components/General/Tooltip";
-import actions, { Action } from "~/core/machine/actions";
+import actions, { Action } from "~/core/actions";
 import useStoreMachine from "~/store/useStoreMachine";
 import useStoreStrings from "~/store/useStoreStrings";
 
