@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import { useReactFlow } from "reactflow";
 
 import Markdown from "~/components/General/Markdown";
-import examples from "~/core/examples";
+import examples from "~/examples";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";

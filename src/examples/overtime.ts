@@ -2,8 +2,8 @@ import { Position } from "reactflow";
 
 import { SimpleFlowchart } from "~/store/serialize";
 
-import { DataType } from "../dataTypes";
-import { Role } from "../roles";
+import { DataType } from "../core/dataTypes";
+import { Role } from "../core/roles";
 
 const example: SimpleFlowchart = {
   title: "overtime",
