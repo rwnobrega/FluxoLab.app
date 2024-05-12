@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { EdgeProps } from "reactflow";
 
-import execute from "~/core/machine/execute";
+import execute from "~/core/execute";
 import { Role } from "~/core/roles";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreMachine from "~/store/useStoreMachine";

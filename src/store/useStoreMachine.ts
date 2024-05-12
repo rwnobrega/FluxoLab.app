@@ -2,9 +2,9 @@ import _ from "lodash";
 import { create } from "zustand";
 
 import { Action } from "~/core/actions";
+import check from "~/core/check";
 import { DataType } from "~/core/dataTypes";
-import check from "~/core/machine/check";
-import execute from "~/core/machine/execute";
+import execute from "~/core/execute";
 import assert from "~/utils/assert";
 import minstd from "~/utils/minstd";
 

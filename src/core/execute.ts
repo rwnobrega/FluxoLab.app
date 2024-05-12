@@ -7,7 +7,7 @@ import { Flowchart, NodeData } from "~/store/useStoreFlowchart";
 import { MachineState } from "~/store/useStoreMachine";
 import assert from "~/utils/assert";
 
-import { Role } from "../roles";
+import { Role } from "./roles";
 
 function getNodeById(flowchart: Flowchart, nodeId: string): Node<NodeData> {
   const node = _.find(flowchart.nodes, { id: nodeId });
