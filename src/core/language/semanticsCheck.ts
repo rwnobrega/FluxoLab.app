@@ -19,8 +19,8 @@ export function checkIdentifier(a: ohm.Node): CheckError | null {
   const id = a.sourceString;
   if (_.find(functions, { id }) !== undefined) {
     return {
-      message: "CheckError_VariableExpected",
-      payload: { id, type: "a function" },
+      message: "CheckError_VariableExpectedFoundFunction",
+      payload: { id },
     };
   }
   const constantsAndVariables = [...constants, ...this.args.variables];
@@ -142,20 +142,24 @@ export function checkStart(a: ohm.Node): CheckError | null {
 }
 
 export function checkRead(a: ohm.Node, b: ohm.Node): CheckError | null {
-  const id = b.sourceString;
-  if (_.find(constants, { id }) !== undefined) {
-    return {
-      message: "CheckError_VariableExpected",
-      payload: { id, type: "a constant" },
-    };
+  for (const child of b.asIteration().children) {
+    const id = child.sourceString;
+    if (_.find(constants, { id }) !== undefined) {
+      return {
+        message: "CheckError_VariableExpectedFoundConstant",
+        payload: { id },
+      };
+    }
+    if (_.find(functions, { id }) !== undefined) {
+      return {
+        message: "CheckError_VariableExpectedFoundFunction",
+        payload: { id },
+      };
+    }
+    const error = child.check(this.args.variables);
+    if (error !== null) return error;
   }
-  if (_.find(functions, { id }) !== undefined) {
-    return {
-      message: "CheckError_VariableExpected",
-      payload: { id, type: "a function" },
-    };
-  }
-  return b.check(this.args.variables);
+  return null;
 }
 
 export function checkWrite(a: ohm.Node, b: ohm.Node): CheckError | null {
@@ -175,14 +179,14 @@ export function checkAssign(
   const id = b.sourceString;
   if (_.find(constants, { id }) !== undefined) {
     return {
-      message: "CheckError_VariableExpected",
-      payload: { id, type: "a constant" },
+      message: "CheckError_VariableExpectedFoundConstant",
+      payload: { id },
     };
   }
   if (_.find(functions, { id }) !== undefined) {
     return {
-      message: "CheckError_VariableExpected",
-      payload: { id, type: "a function" },
+      message: "CheckError_VariableExpectedFoundFunction",
+      payload: { id },
     };
   }
   const aCheck = b.check(this.args.variables);

@@ -2,7 +2,7 @@ Language {
   Command
     = var Identifier  --var
     | start  --start
-    | read Identifier  --read
+    | read NonemptyListOf<Identifier, ",">  --read
     | write NonemptyListOf<Expression, ",">  --write
     | assign Identifier "=" Expression  --assign
     | conditional Expression  --conditional

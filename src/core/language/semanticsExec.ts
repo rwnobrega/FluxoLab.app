@@ -2,6 +2,7 @@ import _ from "lodash";
 import * as ohm from "ohm-js";
 
 import { DataType, getDataParser } from "~/core/dataTypes";
+import splitIntoTokens from "~/core/splitIntoTokens";
 import { MachineState } from "~/store/useStoreMachine";
 import assert from "~/utils/assert";
 
@@ -13,17 +14,28 @@ export function execStart(a: ohm.Node): void {
 export function execRead(a: ohm.Node, b: ohm.Node): void {
   const state: MachineState = this.args.state;
   assert(state.input !== null);
-  const variableId = b.sourceString;
-  const { type } = state.memory[variableId];
-  const parser = getDataParser(type);
-  if (!parser.stringIsValid(state.input)) {
+  const inputTokens = splitIntoTokens(state.input);
+  const children = b.asIteration().children;
+  if (children.length !== inputTokens.length) {
     throw {
-      message: "RuntimeError_InvalidInput",
-      payload: { input: state.input, type },
+      message: "RuntimeError_InvalidNumberOfTokens",
+      payload: { count: inputTokens.length, expected: children.length },
     };
   }
+  for (const [child, input] of _.zip(children, inputTokens)) {
+    assert(child !== undefined && input !== undefined);
+    const variableId = child.sourceString;
+    const { type } = state.memory[variableId];
+    const parser = getDataParser(type);
+    if (!parser.stringIsValid(input)) {
+      throw {
+        message: "RuntimeError_InvalidInput",
+        payload: { input, type },
+      };
+    }
+    state.memory[variableId].value = parser.parse(input);
+  }
   state.interaction.push({ direction: "in", text: state.input });
-  state.memory[variableId].value = parser.parse(state.input);
   state.input = null;
   state.outPort = "out";
 }
