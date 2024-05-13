@@ -50,6 +50,7 @@ interface StoreFlowchart {
   removeVariable: (id: string) => void;
   renameVariable: (id: string, newId: string) => void;
   changeVariableType: (id: string, type: DataType) => void;
+  reorderVariables: (fromIndex: number, toIndex: number | undefined) => void;
   setSavedViewport: (viewport: Viewport) => void;
 }
 
@@ -216,6 +217,14 @@ const useStoreFlow = create<StoreFlowchart>()(
           }
           return variable;
         });
+        set({ flowchart });
+      },
+      reorderVariables: (fromIndex, toIndex) => {
+        if (toIndex === undefined || fromIndex === toIndex) return;
+        const { flowchart } = get();
+        const variable = flowchart.variables[fromIndex];
+        flowchart.variables.splice(fromIndex, 1);
+        flowchart.variables.splice(toIndex, 0, variable);
         set({ flowchart });
       },
       setSavedViewport: (viewport) => set({ savedViewport: viewport }),
