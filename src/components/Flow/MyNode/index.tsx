@@ -1,6 +1,6 @@
 import _ from "lodash";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Handle, Position, useReactFlow } from "reactflow";
+import React, { useEffect, useRef, useState } from "react";
+import { Position, useReactFlow } from "reactflow";
 
 import NodeModal from "~/components/Modals/NodeModal";
 import { Role, getRoleBoxStyle, getRoleHandles } from "~/core/roles";

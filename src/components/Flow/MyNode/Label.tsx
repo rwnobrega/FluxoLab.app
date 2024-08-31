@@ -1,5 +1,4 @@
 import React from "react";
-import { Node } from "reactflow";
 
 import { Role } from "~/core/roles";
 import { NodeData } from "~/store/useStoreFlowchart";

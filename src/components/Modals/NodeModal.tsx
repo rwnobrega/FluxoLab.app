@@ -9,7 +9,6 @@ import Row from "react-bootstrap/Row";
 import TextInput from "~/components/General/TextInput";
 import { getExpectedText } from "~/core/language/errors";
 import grammar from "~/core/language/grammar";
-import { Role } from "~/core/roles";
 import useStoreFlowchart, { NodeData } from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
