@@ -67,23 +67,21 @@ export default function ({
           <Modal.Title>{getString(`BlockTitle_${data.role}`)}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {data.role !== Role.Start && (
-            <Form.Group as={Row}>
-              {label !== "" && (
-                <Form.Label column className="fw-bold fst-italic" md="auto">
-                  {label}
-                </Form.Label>
-              )}
-              <Col>
-                <TextInput
-                  helpText={getString(`BlockHelpText_${data.role}`)}
-                  value={textValue}
-                  setValue={setTextValue}
-                  problem={problem}
-                />
-              </Col>
-            </Form.Group>
-          )}
+          <Form.Group as={Row}>
+            {label !== "" && (
+              <Form.Label column className="fw-bold fst-italic" md="auto">
+                {label}
+              </Form.Label>
+            )}
+            <Col>
+              <TextInput
+                helpText={getString(`BlockHelpText_${data.role}`)}
+                value={textValue}
+                setValue={setTextValue}
+                problem={problem}
+              />
+            </Col>
+          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
