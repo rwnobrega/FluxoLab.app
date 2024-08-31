@@ -76,7 +76,7 @@ export default function (): JSX.Element {
     return onConnect(isEditingHandles, params);
   };
 
-  const onConnectStart = (event: React.MouseEvent, { nodeId }: any) => {
+  const onConnectStart = (_event: React.MouseEvent, { nodeId }: any) => {
     setConnectionSource(nodeId);
   };
 

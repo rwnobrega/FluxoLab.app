@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function ({ nodeId, position }: Props): JSX.Element {
-  const [mouseHover, setMouseHover] = useState<boolean>(false);
+  const [, setMouseHover] = useState<boolean>(false);
 
   const { connectionSource, isEditingHandles } = useStoreEphemeral();
 

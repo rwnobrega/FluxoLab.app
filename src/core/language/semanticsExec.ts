@@ -6,12 +6,12 @@ import splitIntoTokens from "~/core/splitIntoTokens";
 import { MachineState } from "~/store/useStoreMachine";
 import assert from "~/utils/assert";
 
-export function execStart(a: ohm.Node): void {
+export function execStart(_a: ohm.Node): void {
   const state: MachineState = this.args.state;
   state.outPort = "out";
 }
 
-export function execRead(a: ohm.Node, b: ohm.Node): void {
+export function execRead(_a: ohm.Node, b: ohm.Node): void {
   const state: MachineState = this.args.state;
   assert(state.input !== null);
   const inputTokens = splitIntoTokens(state.input);
@@ -40,7 +40,7 @@ export function execRead(a: ohm.Node, b: ohm.Node): void {
   state.outPort = "out";
 }
 
-export function execWrite(a: ohm.Node, b: ohm.Node): void {
+export function execWrite(_a: ohm.Node, b: ohm.Node): void {
   const state: MachineState = this.args.state;
   let output = "";
   for (const expression of b.asIteration().children) {
@@ -54,9 +54,9 @@ export function execWrite(a: ohm.Node, b: ohm.Node): void {
 }
 
 export function execAssign(
-  a: ohm.Node,
+  _a: ohm.Node,
   b: ohm.Node,
-  c: ohm.Node,
+  _c: ohm.Node,
   d: ohm.Node,
 ): void {
   const state: MachineState = this.args.state;
@@ -66,7 +66,7 @@ export function execAssign(
   state.outPort = "out";
 }
 
-export function execConditional(a: ohm.Node, b: ohm.Node): void {
+export function execConditional(_a: ohm.Node, b: ohm.Node): void {
   const state: MachineState = this.args.state;
   const condition = b.eval(state);
   state.outPort = condition ? "true" : "false";

@@ -48,7 +48,7 @@ const DATA_PARSERS: Record<DataType, DataParser> = {
     },
   },
   string: {
-    stringIsValid(str: string): boolean {
+    stringIsValid(_str: string): boolean {
       return true;
     },
     parse: (str: string): string => {

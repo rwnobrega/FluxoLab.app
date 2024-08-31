@@ -36,7 +36,7 @@ export default function ({ id, data, selected }: Props): JSX.Element {
     mouseOverNodeId,
     setMouseOverNodeId,
   } = useStoreEphemeral();
-  const { flowchart, deleteNode } = useStoreFlowchart();
+  const { deleteNode } = useStoreFlowchart();
   const { machineState } = useStoreMachine();
   const { language } = useStoreStrings();
 

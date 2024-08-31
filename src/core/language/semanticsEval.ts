@@ -35,9 +35,9 @@ export function evalBinaryOperator(
 
 export function evalFunction(
   a: ohm.Node,
-  b: ohm.Node,
+  _b: ohm.Node,
   c: ohm.Node,
-  d: ohm.Node,
+  _d: ohm.Node,
 ): Value {
   const id = a.sourceString;
   const func = _.find(functions, { id });
@@ -68,6 +68,10 @@ export function evalIdentifier(a: ohm.Node): Value {
   return value;
 }
 
-export function evalParentheses(a: ohm.Node, b: ohm.Node, c: ohm.Node): Value {
+export function evalParentheses(
+  _a: ohm.Node,
+  b: ohm.Node,
+  _c: ohm.Node,
+): Value {
   return b.eval(this.args.state);
 }

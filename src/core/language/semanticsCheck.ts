@@ -34,9 +34,9 @@ export function checkIdentifier(a: ohm.Node): CheckError | null {
 }
 
 export function checkParentheses(
-  a: ohm.Node,
+  _a: ohm.Node,
   b: ohm.Node,
-  c: ohm.Node,
+  _c: ohm.Node,
 ): CheckError | null {
   return b.check(this.args.variables);
 }
@@ -83,9 +83,9 @@ export function checkExpressionUnary(
 
 export function checkFunctionCall(
   a: ohm.Node,
-  b: ohm.Node,
+  _b: ohm.Node,
   c: ohm.Node,
-  d: ohm.Node,
+  _d: ohm.Node,
 ): CheckError | null {
   for (const child of c.asIteration().children) {
     const error = child.check(this.args.variables);
@@ -121,7 +121,7 @@ export function checkFunctionCall(
 }
 
 export function checkVariableDeclaration(
-  a: ohm.Node,
+  _a: ohm.Node,
   b: ohm.Node,
 ): CheckError | null {
   const id = b.sourceString;
@@ -137,11 +137,11 @@ export function checkVariableDeclaration(
   return null;
 }
 
-export function checkStart(a: ohm.Node): CheckError | null {
+export function checkStart(_a: ohm.Node): CheckError | null {
   return null;
 }
 
-export function checkRead(a: ohm.Node, b: ohm.Node): CheckError | null {
+export function checkRead(_a: ohm.Node, b: ohm.Node): CheckError | null {
   for (const child of b.asIteration().children) {
     const id = child.sourceString;
     if (_.find(constants, { id }) !== undefined) {
@@ -162,7 +162,7 @@ export function checkRead(a: ohm.Node, b: ohm.Node): CheckError | null {
   return null;
 }
 
-export function checkWrite(a: ohm.Node, b: ohm.Node): CheckError | null {
+export function checkWrite(_a: ohm.Node, b: ohm.Node): CheckError | null {
   for (const child of b.asIteration().children) {
     const error = child.check(this.args.variables);
     if (error !== null) return error;
@@ -171,9 +171,9 @@ export function checkWrite(a: ohm.Node, b: ohm.Node): CheckError | null {
 }
 
 export function checkAssign(
-  a: ohm.Node,
+  _a: ohm.Node,
   b: ohm.Node,
-  c: ohm.Node,
+  _c: ohm.Node,
   d: ohm.Node,
 ): CheckError | null {
   const id = b.sourceString;
@@ -204,7 +204,7 @@ export function checkAssign(
   return null;
 }
 
-export function checkConditional(a: ohm.Node, b: ohm.Node): CheckError | null {
+export function checkConditional(_a: ohm.Node, b: ohm.Node): CheckError | null {
   const bCheck = b.check(this.args.variables);
   if (bCheck !== null) return bCheck;
   const conditionType = b.getType(this.args.variables);

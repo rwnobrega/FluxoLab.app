@@ -17,9 +17,9 @@ export function getTypeIdentifier(a: ohm.Node): DataType | null {
 }
 
 export function getTypeParentheses(
-  a: ohm.Node,
+  _a: ohm.Node,
   b: ohm.Node,
-  c: ohm.Node,
+  _c: ohm.Node,
 ): DataType | null {
   return b.getType(this.args.variables);
 }
@@ -48,9 +48,9 @@ export function getTypeUnaryOperator(
 
 export function getTypeFunctionCall(
   a: ohm.Node,
-  b: ohm.Node,
+  _b: ohm.Node,
   c: ohm.Node,
-  d: ohm.Node,
+  _d: ohm.Node,
 ): DataType | null {
   const id = a.sourceString;
   const parameterTypes = _.map(c.asIteration().children, (child) =>

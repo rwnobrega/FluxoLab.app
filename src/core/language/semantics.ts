@@ -41,9 +41,9 @@ import {
 const semantics = grammar.createSemantics();
 
 semantics.addOperation<DataType | null>("getType(variables)", {
-  Primary_stringLiteral: (a) => DataType.String,
-  Primary_numberLiteral: (a) => DataType.Number,
-  Primary_booleanLiteral: (a) => DataType.Boolean,
+  Primary_stringLiteral: (_a) => DataType.String,
+  Primary_numberLiteral: (_a) => DataType.Number,
+  Primary_booleanLiteral: (_a) => DataType.Boolean,
   Identifier: getTypeIdentifier,
   Parentheses: getTypeParentheses,
   Expression_binary: getTypeExpressionBinary,
@@ -56,9 +56,9 @@ semantics.addOperation<DataType | null>("getType(variables)", {
 });
 
 semantics.addOperation<CheckError | null>("check(variables)", {
-  Primary_stringLiteral: (a) => null,
-  Primary_numberLiteral: (a) => null,
-  Primary_booleanLiteral: (a) => null,
+  Primary_stringLiteral: (_a) => null,
+  Primary_numberLiteral: (_a) => null,
+  Primary_booleanLiteral: (_a) => null,
   Identifier: checkIdentifier,
   Parentheses: checkParentheses,
   Expression_binary: checkExpressionBinary,
