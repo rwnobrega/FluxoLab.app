@@ -5,7 +5,6 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
-import { Node } from "reactflow";
 
 import TextInput from "~/components/General/TextInput";
 import { getExpectedText } from "~/core/language/errors";
@@ -77,7 +76,7 @@ export default function ({
               )}
               <Col>
                 <TextInput
-                  placeholder={getString(`BlockPlaceholder_${data.role}`)}
+                  helpText={getString(`BlockHelpText_${data.role}`)}
                   value={textValue}
                   setValue={setTextValue}
                   problem={problem}

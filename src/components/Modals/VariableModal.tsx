@@ -64,7 +64,7 @@ export default function ({ id, showModal, setShowModal }: Props): JSX.Element {
         </Modal.Header>
         <Modal.Body>
           <TextInput
-            placeholder={getString("ModalRenameVariable_Placeholder")}
+            helpText={getString("ModalRenameVariable_HelpText")}
             value={textId}
             setValue={setTextId}
             problem={getString(problem)}
