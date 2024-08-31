@@ -13,7 +13,7 @@ interface DataParser {
 const DATA_PARSERS: Record<DataType, DataParser> = {
   number: {
     stringIsValid(str: string): boolean {
-      const floatRegex = /^-?\d+(?:[.]\d*?)?$/;
+      const floatRegex = /^-?\d+(\.\d+)?(e[+-]?\d+)?$/;
       return floatRegex.test(str);
     },
     parse: (str: string): number => {
