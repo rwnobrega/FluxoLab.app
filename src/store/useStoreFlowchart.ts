@@ -45,7 +45,8 @@ interface StoreFlowchart {
   addNode: (role: Role, position: XYPosition) => void;
   deleteNode: (id: string) => void;
   changeNodePayload: (id: string, value: any) => void;
-  onConnect: (isEditingHandles: boolean, connection: Connection) => void;
+  addEdge: (connection: Connection) => void;
+  moveHandle(connection: Connection): void;
   addVariable: () => void;
   removeVariable: (id: string) => void;
   renameVariable: (id: string, newId: string) => void;
@@ -83,7 +84,7 @@ function getEmptyFlowchart(): Flowchart {
   };
 }
 
-const useStoreFlow = create<StoreFlowchart>()(
+const useStoreFlowchart = create<StoreFlowchart>()(
   persist(
     (set, get) => ({
       flowchart: getEmptyFlowchart(),
@@ -165,24 +166,25 @@ const useStoreFlow = create<StoreFlowchart>()(
         node.data.payload = value;
         set({ flowchart });
       },
-      onConnect: (isEditingHandles, connection) => {
+      addEdge: (connection) => {
         const { flowchart } = get();
-        if (!isEditingHandles) {
-          flowchart.edges = _.reject(
-            flowchart.edges,
-            (edge) =>
-              edge.source === connection.source &&
-              edge.sourceHandle === connection.sourceHandle,
-          );
-          flowchart.edges = addEdge(connection, flowchart.edges);
-        } else {
-          const id = connection.source as string;
-          const handle = connection.sourceHandle as Position;
-          const position = connection.targetHandle as Position;
-          const node = _.find(flowchart.nodes, { id });
-          assert(node !== undefined);
-          node.data.handlePositions[handle] = position;
-        }
+        flowchart.edges = _.reject(
+          flowchart.edges,
+          (edge) =>
+            edge.source === connection.source &&
+            edge.sourceHandle === connection.sourceHandle,
+        );
+        flowchart.edges = addEdge(connection, flowchart.edges);
+        set({ flowchart });
+      },
+      moveHandle: (connection) => {
+        const { flowchart } = get();
+        const id = connection.source as string;
+        const handle = connection.sourceHandle as Position;
+        const position = connection.targetHandle as Position;
+        const node = _.find(flowchart.nodes, { id });
+        assert(node !== undefined);
+        node.data.handlePositions[handle] = position;
         set({ flowchart });
       },
       addVariable: () => {
@@ -236,4 +238,4 @@ const useStoreFlow = create<StoreFlowchart>()(
   ),
 );
 
-export default useStoreFlow;
+export default useStoreFlowchart;

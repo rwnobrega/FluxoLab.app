@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
-import { Connection, Position, useReactFlow } from "reactflow";
+import { Position, useReactFlow } from "reactflow";
 
 import NodeModal from "~/components/Modals/NodeModal";
 import { Role, getRoleBoxStyle, getRoleHandles } from "~/core/roles";
@@ -39,7 +39,7 @@ export default function ({ id, data, selected }: Props): JSX.Element {
     setConnectionTarget,
     setMouseOverNodeId,
   } = useStoreEphemeral();
-  const { deleteNode, onConnect } = useStoreFlowchart();
+  const { deleteNode, addEdge } = useStoreFlowchart();
   const { machineState } = useStoreMachine();
   const { language } = useStoreStrings();
 
@@ -107,13 +107,12 @@ export default function ({ id, data, selected }: Props): JSX.Element {
 
   function onMouseUp() {
     if (connectionTarget === id) {
-      const connection: Connection = {
+      addEdge({
         source: connectionSource,
         target: id,
         sourceHandle: connectionSourceHandle,
         targetHandle: "in",
-      };
-      onConnect(false, connection);
+      });
     }
   }
 

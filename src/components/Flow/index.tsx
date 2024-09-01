@@ -22,10 +22,11 @@ import MyNode from "./MyNode";
 export default function (): JSX.Element {
   const {
     flowchart,
-    addNode,
     onNodesChange,
     onEdgesChange,
-    onConnect,
+    addNode,
+    addEdge,
+    moveHandle,
     savedViewport,
     setSavedViewport,
   } = useStoreFlowchart();
@@ -74,8 +75,12 @@ export default function (): JSX.Element {
     }
   };
 
-  const onConnectWrapper = (params: Connection) => {
-    return onConnect(isEditingHandles, params);
+  const onConnect = (connection: Connection) => {
+    if (!isEditingHandles) {
+      addEdge(connection);
+    } else {
+      moveHandle(connection);
+    }
   };
 
   const onConnectStart = (
@@ -109,7 +114,7 @@ export default function (): JSX.Element {
       defaultEdgeOptions={{ type: "MyEdge" }}
       isValidConnection={isValidConnection}
       connectionLineComponent={ConnectionLine}
-      onConnect={onConnectWrapper}
+      onConnect={onConnect}
       onConnectStart={onConnectStart}
       onConnectEnd={onConnectEnd}
       onDragOver={onDragOver}
