@@ -9,14 +9,14 @@ export default ({
   toX,
   toY,
 }: ConnectionLineComponentProps): JSX.Element => {
-  const { isEditingHandles } = useStoreEphemeral();
+  const { isEditingHandles, connectionTarget } = useStoreEphemeral();
   return (
     <g>
       {!isEditingHandles && (
         <path
           d={`M ${fromX} ${fromY} L ${toX} ${toY}`}
           fill="none"
-          stroke="gray"
+          stroke={connectionTarget !== null ? "green" : "gray"}
           strokeWidth={4}
         />
       )}

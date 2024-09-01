@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
-import { Position, useReactFlow } from "reactflow";
+import { Connection, Position, useReactFlow } from "reactflow";
 
 import NodeModal from "~/components/Modals/NodeModal";
 import { Role, getRoleBoxStyle, getRoleHandles } from "~/core/roles";
@@ -33,10 +33,13 @@ export default function ({ id, data, selected }: Props): JSX.Element {
   const {
     isDraggingNode,
     connectionSource,
+    connectionSourceHandle,
+    connectionTarget,
     mouseOverNodeId,
+    setConnectionTarget,
     setMouseOverNodeId,
   } = useStoreEphemeral();
-  const { deleteNode } = useStoreFlowchart();
+  const { deleteNode, onConnect } = useStoreFlowchart();
   const { machineState } = useStoreMachine();
   const { language } = useStoreStrings();
 
@@ -52,15 +55,17 @@ export default function ({ id, data, selected }: Props): JSX.Element {
   }, [language]);
 
   function getDropShadow(color: string): string {
-    return `drop-shadow(+2px 0 2px ${color})
-      drop-shadow(-2px 0 2px ${color})
-      drop-shadow(0 +2px 2px ${color})
-      drop-shadow(0 -2px 2px ${color})`;
+    return `drop-shadow(+1px 0 1px ${color})
+      drop-shadow(-1px 0 1px ${color})
+      drop-shadow(0 +1px 1px ${color})
+      drop-shadow(0 -1px 1px ${color})`;
   }
 
   useEffect(() => {
     setBoxFilter(() => {
-      if (_.some(machineState.errors, { nodeId: id })) {
+      if (connectionTarget === id) {
+        return getDropShadow(palette.green);
+      } else if (_.some(machineState.errors, { nodeId: id })) {
         return getDropShadow(palette.red);
       } else if (machineState.status === "ready" && data.role === Role.Start) {
         return getDropShadow(palette.gray800);
@@ -69,7 +74,17 @@ export default function ({ id, data, selected }: Props): JSX.Element {
       }
       return "";
     });
-  }, [machineState]);
+  }, [machineState, connectionTarget]);
+
+  useEffect(() => {
+    if (
+      mouseOverNodeId === id &&
+      connectionSource !== null &&
+      connectionSource !== id
+    ) {
+      setConnectionTarget(id);
+    }
+  }, [mouseOverNodeId, connectionSource]);
 
   function onClickDelete() {
     deleteNode(id);
@@ -79,6 +94,27 @@ export default function ({ id, data, selected }: Props): JSX.Element {
   function onClickEdit() {
     setMouseOverNodeId(null);
     setShowModal(true);
+  }
+
+  function onMouseEnter() {
+    setMouseOverNodeId(id);
+  }
+
+  function onMouseLeave() {
+    setMouseOverNodeId(null);
+    setConnectionTarget(null);
+  }
+
+  function onMouseUp() {
+    if (connectionTarget === id) {
+      const connection: Connection = {
+        source: connectionSource,
+        target: id,
+        sourceHandle: connectionSourceHandle,
+        targetHandle: "in",
+      };
+      onConnect(false, connection);
+    }
   }
 
   const boxStyle = getRoleBoxStyle(data.role);
@@ -93,8 +129,9 @@ export default function ({ id, data, selected }: Props): JSX.Element {
   return (
     <>
       <div
-        onMouseEnter={() => setMouseOverNodeId(id)}
-        onMouseLeave={() => setMouseOverNodeId(null)}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onMouseUp={onMouseUp}
         style={{ cursor: isDraggingNode ? "grabbing" : "grab" }}
       >
         <Box
@@ -134,7 +171,7 @@ export default function ({ id, data, selected }: Props): JSX.Element {
           visible={isEditVisible}
           onClick={onClickEdit}
         />
-        <MyHandleTarget id="out" />
+        <MyHandleTarget id="in" />
         {_.map(handles, ({ id, label }, index) => (
           <MyHandleSource
             key={index}

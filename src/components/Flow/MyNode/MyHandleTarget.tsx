@@ -12,14 +12,8 @@ export default function ({ id }: Props): JSX.Element {
       type="target"
       position={Position.Top}
       isConnectableStart={false}
-      style={{
-        width: "80px",
-        height: "40px",
-        top: "0px",
-        borderRadius: "0",
-        backgroundColor: "transparent",
-        borderColor: "transparent",
-      }}
+      isConnectable={false} // Connections are created manually
+      style={{ backgroundColor: "transparent", borderColor: "transparent" }}
     />
   );
 }

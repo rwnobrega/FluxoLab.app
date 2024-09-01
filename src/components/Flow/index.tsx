@@ -34,6 +34,8 @@ export default function (): JSX.Element {
     connectionSource,
     setIsDraggingNode,
     setConnectionSource,
+    setConnectionSourceHandle,
+    setConnectionTarget,
   } = useStoreEphemeral();
   const { getViewport, screenToFlowPosition } = useReactFlow();
 
@@ -76,7 +78,11 @@ export default function (): JSX.Element {
     return onConnect(isEditingHandles, params);
   };
 
-  const onConnectStart = (_event: React.MouseEvent, { nodeId }: any) => {
+  const onConnectStart = (
+    _event: React.MouseEvent,
+    { nodeId, handleId }: { nodeId: string | null; handleId: string | null },
+  ) => {
+    setConnectionSourceHandle(handleId);
     setConnectionSource(nodeId);
   };
 
@@ -85,6 +91,8 @@ export default function (): JSX.Element {
       updateNodeInternals(connectionSource);
     }
     setConnectionSource(null);
+    setConnectionSourceHandle(null);
+    setConnectionTarget(null);
   };
 
   const nodeTypes = useMemo(() => ({ MyNode: MyNode }), []);

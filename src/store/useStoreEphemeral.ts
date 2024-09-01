@@ -11,6 +11,10 @@ interface StoreEphemeral {
   setIsDraggingNode: (isDraggingNode: boolean) => void;
   connectionSource: string | null;
   setConnectionSource: (connectionSource: string | null) => void;
+  connectionSourceHandle: string | null;
+  setConnectionSourceHandle: (connectionSourceHandle: string | null) => void;
+  connectionTarget: string | null;
+  setConnectionTarget: (connectionTarget: string | null) => void;
   mouseOverNodeId: string | null;
   setMouseOverNodeId: (id: string | null) => void;
   isEditingHandles: boolean;
@@ -26,6 +30,11 @@ const useStoreEphemeral = create<StoreEphemeral>()((set, get) => ({
   setIsDraggingNode: (isDraggingNode) => set({ isDraggingNode }),
   connectionSource: null,
   setConnectionSource: (connectionSource) => set({ connectionSource }),
+  connectionSourceHandle: null,
+  setConnectionSourceHandle: (connectionSourceHandle) =>
+    set({ connectionSourceHandle }),
+  connectionTarget: null,
+  setConnectionTarget: (connectionTarget) => set({ connectionTarget }),
   mouseOverNodeId: null,
   setMouseOverNodeId: (id) => set({ mouseOverNodeId: id }),
   isEditingHandles: false,
