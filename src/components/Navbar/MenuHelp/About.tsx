@@ -3,9 +3,10 @@ import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import Modal from "react-bootstrap/Modal";
 
-import Logo from "~/assets/FluxoLab.svg";
 import Markdown from "~/components/General/Markdown";
 import useStoreStrings from "~/store/useStoreStrings";
+
+import Logo from "/FluxoLab.svg";
 
 interface Props {
   showModal: boolean;

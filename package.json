@@ -1,12 +1,13 @@
 {
   "name": "fluxolab.app",
-  "homepage": "https://fluxolab.app",
   "version": "0.1.0",
+  "type": "module",
+  "homepage": "https://fluxolab.app",
   "description": "A web application designed to teach algorithm and programming fundamentals using flowcharts.",
   "private": true,
   "scripts": {
-    "serve": "webpack serve --config webpack.dev.js",
-    "build": "webpack build --config webpack.prod.js",
+    "dev": "vite serve",
+    "build": "vite build",
     "deploy": "npm run build && echo 'fluxolab.app' > ./dist/CNAME && npx gh-pages -d dist"
   },
   "keywords": [],
@@ -19,17 +20,11 @@
     "@types/react": "^18.3.5",
     "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-dom": "^18.3.0",
-    "css-loader": "^7.1.2",
+    "@vitejs/plugin-react": "^4.3.1",
     "gh-pages": "^6.1.1",
-    "html-webpack-plugin": "^5.6.0",
     "prettier": "^3.3.3",
-    "style-loader": "^4.0.0",
-    "ts-loader": "^9.5.1",
     "typescript": "^5.5.4",
-    "webpack": "^5.94.0",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4",
-    "webpack-merge": "^6.0.1"
+    "vite": "^5.4.2"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^16.6.0",

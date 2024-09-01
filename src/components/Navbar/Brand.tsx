@@ -3,7 +3,7 @@ import Image from "react-bootstrap/Image";
 import Navbar from "react-bootstrap/Navbar";
 import Stack from "react-bootstrap/Stack";
 
-import Logo from "~/assets/FluxoLab.svg";
+import Logo from "/FluxoLab.svg";
 
 export default function (): JSX.Element {
   return (

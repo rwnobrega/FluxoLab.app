@@ -1,6 +1,6 @@
 import * as ohm from "ohm-js";
 
-import grammarContents from "./grammar.ohm";
+import grammarContents from "~/assets/grammar.ohm?raw";
 
 const grammar = ohm.grammar(grammarContents);
 
