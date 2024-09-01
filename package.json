@@ -32,6 +32,7 @@
     "webpack-merge": "^6.0.1"
   },
   "dependencies": {
+    "@hello-pangea/dnd": "^16.6.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "colvertize": "^0.1.0",
@@ -39,7 +40,6 @@
     "lz-string": "^1.5.0",
     "ohm-js": "^17.1.0",
     "react": "^18.3.1",
-    "react-beautiful-dnd": "^13.1.1",
     "react-bootstrap": "^2.10.4",
     "react-dom": "^18.3.1",
     "react-hotkeys-hook": "^4.5.0",

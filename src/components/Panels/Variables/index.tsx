@@ -1,6 +1,6 @@
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import _ from "lodash";
 import React from "react";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 
