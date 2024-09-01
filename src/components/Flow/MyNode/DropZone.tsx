@@ -11,9 +11,9 @@ interface Props {
 export default function ({ nodeId, position }: Props): JSX.Element {
   const [, setMouseHover] = useState<boolean>(false);
 
-  const { connectionSource, isEditingHandles } = useStoreEphemeral();
+  const { connectionSource, mouseOverNodeId } = useStoreEphemeral();
 
-  const isVisible = isEditingHandles && connectionSource === nodeId;
+  const isVisible = mouseOverNodeId === nodeId && connectionSource === nodeId;
 
   return (
     <Handle

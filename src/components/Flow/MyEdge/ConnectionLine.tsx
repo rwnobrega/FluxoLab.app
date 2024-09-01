@@ -9,14 +9,14 @@ export default ({
   toX,
   toY,
 }: ConnectionLineComponentProps): JSX.Element => {
-  const { isEditingHandles, connectionTarget } = useStoreEphemeral();
+  const { connectionSource, mouseOverNodeId } = useStoreEphemeral();
   return (
     <g>
-      {!isEditingHandles && (
+      {connectionSource !== mouseOverNodeId && (
         <path
           d={`M ${fromX} ${fromY} L ${toX} ${toY}`}
           fill="none"
-          stroke={connectionTarget !== null ? "green" : "gray"}
+          stroke={mouseOverNodeId !== null ? "green" : "gray"}
           strokeWidth={4}
         />
       )}

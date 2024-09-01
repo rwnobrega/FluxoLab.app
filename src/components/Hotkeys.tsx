@@ -6,8 +6,7 @@ import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreMachine from "~/store/useStoreMachine";
 
 export default function (): JSX.Element {
-  const { refInput, setIsEditingHandles, connectionSource } =
-    useStoreEphemeral();
+  const { refInput } = useStoreEphemeral();
   const { machineState, executeAction } = useStoreMachine();
 
   for (const { actionId, hotkey, enabledStatuses } of actions) {
@@ -27,28 +26,6 @@ export default function (): JSX.Element {
       },
     );
   }
-
-  useHotkeys(
-    "ctrl",
-    () => {
-      setIsEditingHandles(connectionSource === null);
-    },
-    {
-      keydown: true,
-      keyup: false,
-    },
-  );
-
-  useHotkeys(
-    "ctrl",
-    () => {
-      setIsEditingHandles(false);
-    },
-    {
-      keydown: false,
-      keyup: true,
-    },
-  );
 
   // useHotkeys("ctrl+a", selectAll);  // TODO: Implement selectAll
 

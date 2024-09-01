@@ -34,9 +34,7 @@ export default function ({ id, data, selected }: Props): JSX.Element {
     isDraggingNode,
     connectionSource,
     connectionSourceHandle,
-    connectionTarget,
     mouseOverNodeId,
-    setConnectionTarget,
     setMouseOverNodeId,
   } = useStoreEphemeral();
   const { deleteNode, addEdge } = useStoreFlowchart();
@@ -63,7 +61,11 @@ export default function ({ id, data, selected }: Props): JSX.Element {
 
   useEffect(() => {
     setBoxFilter(() => {
-      if (connectionTarget === id) {
+      const isTargetNode =
+        mouseOverNodeId === id &&
+        connectionSource !== null &&
+        connectionSource !== id;
+      if (isTargetNode) {
         return getDropShadow(palette.green);
       } else if (_.some(machineState.errors, { nodeId: id })) {
         return getDropShadow(palette.red);
@@ -74,17 +76,7 @@ export default function ({ id, data, selected }: Props): JSX.Element {
       }
       return "";
     });
-  }, [machineState, connectionTarget]);
-
-  useEffect(() => {
-    if (
-      mouseOverNodeId === id &&
-      connectionSource !== null &&
-      connectionSource !== id
-    ) {
-      setConnectionTarget(id);
-    }
-  }, [mouseOverNodeId, connectionSource]);
+  }, [machineState, mouseOverNodeId, connectionSource]);
 
   function onClickDelete() {
     deleteNode(id);
@@ -102,11 +94,10 @@ export default function ({ id, data, selected }: Props): JSX.Element {
 
   function onMouseLeave() {
     setMouseOverNodeId(null);
-    setConnectionTarget(null);
   }
 
   function onMouseUp() {
-    if (connectionTarget === id) {
+    if (connectionSource !== null && connectionSource !== id) {
       addEdge({
         source: connectionSource,
         target: id,

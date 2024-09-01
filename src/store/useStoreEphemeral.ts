@@ -13,12 +13,8 @@ interface StoreEphemeral {
   setConnectionSource: (connectionSource: string | null) => void;
   connectionSourceHandle: string | null;
   setConnectionSourceHandle: (connectionSourceHandle: string | null) => void;
-  connectionTarget: string | null;
-  setConnectionTarget: (connectionTarget: string | null) => void;
   mouseOverNodeId: string | null;
   setMouseOverNodeId: (id: string | null) => void;
-  isEditingHandles: boolean;
-  setIsEditingHandles: (isEditingHandles: boolean) => void;
   toasts: ToastContent[];
   triggerToast: (content: ToastContent) => void;
   refInput: React.RefObject<HTMLInputElement>;
@@ -33,12 +29,8 @@ const useStoreEphemeral = create<StoreEphemeral>()((set, get) => ({
   connectionSourceHandle: null,
   setConnectionSourceHandle: (connectionSourceHandle) =>
     set({ connectionSourceHandle }),
-  connectionTarget: null,
-  setConnectionTarget: (connectionTarget) => set({ connectionTarget }),
   mouseOverNodeId: null,
   setMouseOverNodeId: (id) => set({ mouseOverNodeId: id }),
-  isEditingHandles: false,
-  setIsEditingHandles: (isEditingHandles) => set({ isEditingHandles }),
   toasts: [],
   triggerToast: (content) => {
     set({ toasts: [...get().toasts, content] });

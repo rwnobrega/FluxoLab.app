@@ -25,37 +25,24 @@ export default function (): JSX.Element {
     onNodesChange,
     onEdgesChange,
     addNode,
-    addEdge,
     moveHandle,
     savedViewport,
     setSavedViewport,
   } = useStoreFlowchart();
   const {
-    isEditingHandles,
     connectionSource,
     setIsDraggingNode,
     setConnectionSource,
     setConnectionSourceHandle,
-    setConnectionTarget,
   } = useStoreEphemeral();
   const { getViewport, screenToFlowPosition } = useReactFlow();
 
   const updateNodeInternals = useUpdateNodeInternals();
 
   const isValidConnection = (connection: Connection) => {
-    if (!isEditingHandles) {
-      // Normal connection
-      return (
-        connection.targetHandle === "out" &&
-        connection.source !== connection.target
-      );
-    } else {
-      // Repositioning a handle
-      return (
-        connection.targetHandle !== "out" &&
-        connection.source === connection.target
-      );
-    }
+    // Normal connections are created manually (not by ReactFlow)
+    // Repositioning a handle is left to ReactFlow
+    return connection.source === connection.target;
   };
 
   const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -75,14 +62,6 @@ export default function (): JSX.Element {
     }
   };
 
-  const onConnect = (connection: Connection) => {
-    if (!isEditingHandles) {
-      addEdge(connection);
-    } else {
-      moveHandle(connection);
-    }
-  };
-
   const onConnectStart = (
     _event: React.MouseEvent,
     { nodeId, handleId }: { nodeId: string | null; handleId: string | null },
@@ -97,7 +76,6 @@ export default function (): JSX.Element {
     }
     setConnectionSource(null);
     setConnectionSourceHandle(null);
-    setConnectionTarget(null);
   };
 
   const nodeTypes = useMemo(() => ({ MyNode: MyNode }), []);
@@ -114,7 +92,7 @@ export default function (): JSX.Element {
       defaultEdgeOptions={{ type: "MyEdge" }}
       isValidConnection={isValidConnection}
       connectionLineComponent={ConnectionLine}
-      onConnect={onConnect}
+      onConnect={moveHandle}
       onConnectStart={onConnectStart}
       onConnectEnd={onConnectEnd}
       onDragOver={onDragOver}
