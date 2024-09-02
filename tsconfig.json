@@ -7,6 +7,7 @@
     "module": "ES6",
     "moduleResolution": "Bundler",
     "noImplicitAny": true,
+    "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": "./dist/",
