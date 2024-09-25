@@ -77,9 +77,9 @@ semantics.addOperation<CheckError | null>("check(variables)", {
 });
 
 semantics.addOperation<Value>("eval(state)", {
-  Primary_stringLiteral: (a) => a.sourceString.slice(1, -1),
-  Primary_numberLiteral: (a) => parseFloat(a.sourceString),
-  Primary_booleanLiteral: (a) => a.sourceString === "true",
+  Primary_stringLiteral: (a) => JSON.parse(a.sourceString),
+  Primary_numberLiteral: (a) => JSON.parse(a.sourceString),
+  Primary_booleanLiteral: (a) => JSON.parse(a.sourceString),
   Identifier: evalIdentifier,
   Parentheses: evalParentheses,
   Expression_binary: evalBinaryOperator,

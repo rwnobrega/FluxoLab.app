@@ -4,7 +4,7 @@ import { Button, Form } from "react-bootstrap";
 
 import Tooltip from "~/components/General/Tooltip";
 import VariableModal from "~/components/Modals/VariableModal";
-import { DataType, getDataParser } from "~/core/dataTypes";
+import { DataType } from "~/core/dataTypes";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreMachine from "~/store/useStoreMachine";
 import useStoreStrings from "~/store/useStoreStrings";
@@ -23,7 +23,6 @@ export default function ({ id }: Props): JSX.Element {
   if (!_.has(machineState.memory, id)) return <></>;
 
   const { type, value } = machineState.memory[id];
-  const parser = getDataParser(type);
 
   return (
     <>
@@ -57,7 +56,7 @@ export default function ({ id }: Props): JSX.Element {
       </td>
       <td className="w-100">
         <small className="d-flex p-1 fw-bold font-monospace text-success bg-success bg-opacity-10 border border-success border-opacity-10 rounded-1">
-          {value === null ? "?" : parser.stringify(value)}
+          {value === null ? "?" : JSON.stringify(value)}
         </small>
       </td>
       <td>

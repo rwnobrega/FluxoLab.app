@@ -2,7 +2,6 @@ import _ from "lodash";
 import * as ohm from "ohm-js";
 
 import { DataType, getDataParser } from "~/core/dataTypes";
-import splitIntoTokens from "~/core/splitIntoTokens";
 import { MachineState } from "~/store/useStoreMachine";
 import assert from "~/utils/assert";
 
@@ -14,7 +13,7 @@ export function execStart(_a: ohm.Node): void {
 export function execRead(_a: ohm.Node, b: ohm.Node): void {
   const state: MachineState = this.args.state;
   assert(state.input !== null);
-  const inputTokens = splitIntoTokens(state.input);
+  const inputTokens = state.input.split(/\s+/);
   const children = b.asIteration().children;
   if (children.length !== inputTokens.length) {
     throw {
@@ -33,7 +32,7 @@ export function execRead(_a: ohm.Node, b: ohm.Node): void {
         payload: { input, type },
       };
     }
-    state.memory[variableId].value = parser.parse(input);
+    state.memory[variableId].value = parser.read(input);
   }
   state.interaction.push({ direction: "in", text: state.input });
   state.input = null;
@@ -47,7 +46,7 @@ export function execWrite(_a: ohm.Node, b: ohm.Node): void {
     const value = expression.eval(state);
     const dataType = typeof value as DataType;
     const parser = getDataParser(dataType);
-    output += parser.stringify(value);
+    output += parser.write(value);
   }
   state.interaction.push({ direction: "out", text: output });
   state.outPort = "out";

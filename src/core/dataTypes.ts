@@ -6,8 +6,8 @@ export enum DataType {
 
 interface DataParser {
   stringIsValid: (str: string) => boolean;
-  parse: (str: string) => any;
-  stringify: (value: any) => string;
+  read: (str: string) => any;
+  write: (value: any) => string;
 }
 
 const DATA_PARSERS: Record<DataType, DataParser> = {
@@ -16,10 +16,10 @@ const DATA_PARSERS: Record<DataType, DataParser> = {
       const floatRegex = /^-?\d+(\.\d+)?(e[+-]?\d+)?$/;
       return floatRegex.test(str);
     },
-    parse: (str: string): number => {
+    read: (str: string): number => {
       return parseFloat(str);
     },
-    stringify: (value: number): string => {
+    write: (value: number): string => {
       const p: string = value.toPrecision(6);
       if (p.includes("e")) {
         const [mantissa, signal, exponent] = p.split(/e([+-])/);
@@ -40,10 +40,10 @@ const DATA_PARSERS: Record<DataType, DataParser> = {
     stringIsValid(str: string): boolean {
       return str === "true" || str === "false";
     },
-    parse: (str: string): boolean => {
+    read: (str: string): boolean => {
       return str === "true";
     },
-    stringify: (value: boolean): string => {
+    write: (value: boolean): string => {
       return value ? "true" : "false";
     },
   },
@@ -51,10 +51,10 @@ const DATA_PARSERS: Record<DataType, DataParser> = {
     stringIsValid(_str: string): boolean {
       return true;
     },
-    parse: (str: string): string => {
+    read: (str: string): string => {
       return str;
     },
-    stringify: (value: string): string => {
+    write: (value: string): string => {
       return value;
     },
   },
