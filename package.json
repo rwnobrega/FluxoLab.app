@@ -1,30 +1,17 @@
 {
   "name": "fluxolab.app",
   "version": "0.1.0",
-  "type": "module",
-  "homepage": "https://fluxolab.app",
-  "description": "A web application designed to teach algorithm and programming fundamentals using flowcharts.",
   "private": true,
-  "scripts": {
-    "dev": "vite serve",
-    "build": "vite build",
-    "deploy": "npm run build && echo 'fluxolab.app' > ./dist/CNAME && npx gh-pages -d dist"
-  },
+  "description": "A web application designed to teach algorithm and programming fundamentals using flowcharts.",
   "keywords": [],
-  "author": "",
+  "homepage": "https://fluxolab.app",
   "license": "GPL-3.0-only",
-  "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-    "@types/bootstrap": "^5.2.10",
-    "@types/lodash": "^4.17.9",
-    "@types/react": "^18.3.9",
-    "@types/react-beautiful-dnd": "^13.1.8",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "gh-pages": "^6.1.1",
-    "prettier": "^3.3.3",
-    "typescript": "^5.6.2",
-    "vite": "^5.4.7"
+  "author": "",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "deploy": "npm run build && echo 'fluxolab.app' > ./dist/CNAME && npx gh-pages -d dist",
+    "dev": "vite serve"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^17.0.0",
@@ -42,5 +29,18 @@
     "react-resizable-panels": "^2.1.3",
     "reactflow": "^11.11.4",
     "zustand": "^4.5.5"
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/bootstrap": "^5.2.10",
+    "@types/lodash": "^4.17.9",
+    "@types/react": "^18.3.9",
+    "@types/react-beautiful-dnd": "^13.1.8",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "gh-pages": "^6.1.1",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.2",
+    "vite": "^5.4.7"
   }
 }
