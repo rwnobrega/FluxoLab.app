@@ -41,11 +41,12 @@ export default function ({ id }: Props): JSX.Element {
           {id}
         </Button>
       </td>
-      <td style={{ minWidth: "6.5em" }}>
+      <td>
         <Form.Select
           size="sm"
           value={type}
           onChange={(e) => changeVariableType(id, e.target.value as DataType)}
+          className="w-auto"
         >
           {_.map(DataType, (id) => (
             <option key={id} value={id}>
