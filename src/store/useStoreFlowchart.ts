@@ -75,23 +75,24 @@ function getNextAvailableVariableId(variables: Array<{ id: string }>): string {
   }
 }
 
-function getEmptyFlowchart(): Flowchart {
-  return {
-    title: "",
-    variables: [],
-    nodes: [],
-    edges: [],
-  };
+function getDefaultFlowchart(): Flowchart {
+  return { title: "", variables: [], nodes: [], edges: [] };
+}
+
+function getDefaultViewport(): Viewport {
+  return { x: 0, y: 0, zoom: 1 };
 }
 
 const useStoreFlowchart = create<StoreFlowchart>()(
   persist(
     (set, get) => ({
-      flowchart: getEmptyFlowchart(),
-      savedViewport: { x: 0, y: 0, zoom: 1 },
+      flowchart: getDefaultFlowchart(),
+      savedViewport: getDefaultViewport(),
       clearFlowchart: () => {
-        set({ flowchart: getEmptyFlowchart() });
-        set({ savedViewport: { x: 0, y: 0, zoom: 1 } });
+        set({
+          flowchart: getDefaultFlowchart(),
+          savedViewport: getDefaultViewport(),
+        });
       },
       importSimpleFlowchart: (simpleFlowchart) => {
         const {
@@ -115,7 +116,8 @@ const useStoreFlowchart = create<StoreFlowchart>()(
             data: { payload, role, handlePositions },
           }),
         );
-        set({ flowchart: { title, variables, nodes, edges } });
+        const flowchart = { title, variables, nodes, edges };
+        set({ flowchart, savedViewport: getDefaultViewport() });
       },
       setTitle: (title) => {
         const { flowchart } = get();
