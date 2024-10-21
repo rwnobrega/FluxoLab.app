@@ -180,7 +180,7 @@ const binaryOperators: BinaryOperator[] = [
     leftType: Number,
     rightType: Number,
     resultType: Number,
-    work: (a: number, b: number) => a % b,
+    work: (a: number, b: number) => a - Math.floor(a / b) * b,
   },
 ];
 
