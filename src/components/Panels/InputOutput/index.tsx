@@ -23,8 +23,9 @@ export default function (): JSX.Element {
   }, [refInput]);
 
   const handleSendInput = () => {
-    if (inputText.length > 0) {
-      machineState.input = inputText;
+    const inputTextTrimmed = inputText.trim();
+    if (inputTextTrimmed.length > 0) {
+      machineState.input = inputTextTrimmed;
       executeAction("nextStep");
       setInputText("");
     }
