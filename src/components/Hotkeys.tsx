@@ -10,7 +10,7 @@ import useStoreFlowchart from "~/store/useStoreFlowchart";
 export default function (): JSX.Element {
   const { refInput } = useStoreEphemeral();
   const { machineState, executeAction } = useStoreMachine();
-  const { copyNodes, pasteNodes, cutNodes } = useStoreFlowchart();  
+  const { copyNodes, pasteNodes, cutNodes } = useStoreFlowchart();
   const { getNodes } = useReactFlow();
 
   for (const { actionId, hotkey, enabledStatuses } of actions) {
