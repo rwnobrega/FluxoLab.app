@@ -37,6 +37,10 @@ export interface Flowchart {
 interface StoreFlowchart {
   flowchart: Flowchart;
   savedViewport: Viewport;
+  clipboard: { nodes: Node<NodeData>[]; edges: Edge[] };
+  copyNodes: (ids: string[]) => void;
+  pasteNodes: () => void;
+  cutNodes: (ids: string[]) => void;
   clearFlowchart: () => void;
   importSimpleFlowchart: (simpleFlowchart: SimpleFlowchart) => void;
   setTitle: (title: string) => void;
@@ -88,6 +92,8 @@ const useStoreFlowchart = create<StoreFlowchart>()(
     (set, get) => ({
       flowchart: getDefaultFlowchart(),
       savedViewport: getDefaultViewport(),
+      clipboard: { nodes: [], edges: [] },
+
       clearFlowchart: () => {
         set({
           flowchart: getDefaultFlowchart(),
@@ -232,10 +238,74 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       setSavedViewport: (viewport) => set({ savedViewport: viewport }),
+
+      // ── Clipboard ────────────────────────────────────────────────────────────
+      copyNodes: (ids) => {
+        const { flowchart } = get();
+        const idSet = new Set(ids);
+        const copiedNodes = flowchart.nodes
+          .filter((n) => idSet.has(n.id))
+          .map((n) => _.cloneDeep(n));
+        const copiedEdges = flowchart.edges
+          .filter((e) => idSet.has(e.source) && idSet.has(e.target))
+          .map((e) => _.cloneDeep(e));
+        set({ clipboard: { nodes: copiedNodes, edges: copiedEdges } });
+      },
+
+      pasteNodes: () => {
+        const { flowchart, clipboard } = get();
+        if (clipboard.nodes.length === 0) return;
+
+        // Reserva IDs novos sequencialmente sem colidir entre si
+        const idMap = new Map<string, string>();
+        const tempNodes = [...flowchart.nodes];
+        clipboard.nodes.forEach((n) => {
+          const newId = getNextAvailableNodeId(tempNodes);
+          idMap.set(n.id, newId);
+          tempNodes.push({ ...n, id: newId });
+        });
+
+        const newNodes: Node<NodeData>[] = clipboard.nodes.map((n) => ({
+          ..._.cloneDeep(n),
+          id: idMap.get(n.id)!,
+          position: { x: n.position.x + 30, y: n.position.y + 30 },
+          selected: true,
+        }));
+
+        const newEdges: Edge[] = clipboard.edges
+          .filter((e) => idMap.has(e.source) && idMap.has(e.target))
+          .map((e) => ({
+            ..._.cloneDeep(e),
+            id: `${idMap.get(e.source)}-${idMap.get(e.target)}-${e.sourceHandle}`,
+            source: idMap.get(e.source)!,
+            target: idMap.get(e.target)!,
+            selected: true,
+          }));
+
+        flowchart.nodes = [
+          ...flowchart.nodes.map((n) => ({ ...n, selected: false })),
+          ...newNodes,
+        ];
+        flowchart.edges = [
+          ...flowchart.edges.map((e) => ({ ...e, selected: false })),
+          ...newEdges,
+        ];
+        set({ flowchart });
+      },
+
+      cutNodes: (ids) => {
+        const { copyNodes, deleteNode } = get();
+        copyNodes(ids);
+        ids.forEach((id) => deleteNode(id));
+      },
     }),
     {
       name: "fluxolab_flow",
       version: 8,
+      partialize: (state) => {
+        const { clipboard, ...rest } = state;
+        return rest;
+      },
     },
   ),
 );
