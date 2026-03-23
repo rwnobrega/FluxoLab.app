@@ -31,7 +31,7 @@
     "CheckError_FunctionArityMismatch_2": "Function `{{id}}` requires exactly two arguments ({{count}} provided).",
     "CheckError_FunctionArityMismatch_n": "Function `{{id}}` requires exactly {{arity}} arguments ({{count}} provided).",
     "CheckError_FunctionDoesNotExist": "Function `{{id}}` does not exist.",
-    "CheckError_MultipleStart": "There are more than one start block.",
+    "CheckError_MultipleStart": "There is more than one start block.",
     "CheckError_NoOutgoing_Default": "Block has no outgoing edge.",
     "CheckError_NoOutgoing_Handle": "Block has no outgoing edge for output `{{output}}`.",
     "CheckError_NoStart": "There must be a start block.",
