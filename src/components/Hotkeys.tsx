@@ -5,12 +5,12 @@ import { useReactFlow } from "reactflow";
 import actions from "~/core/actions";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreMachine from "~/store/useStoreMachine";
-import useStoreFlowchart from "~/store/useStoreFlowchart";
+import useStoreClipboard from "~/store/useStoreClipboard";
 
 export default function (): JSX.Element {
   const { refInput } = useStoreEphemeral();
   const { machineState, executeAction } = useStoreMachine();
-  const { copyNodes, pasteNodes, cutNodes } = useStoreFlowchart();
+  const { copyNodes, pasteNodes, cutNodes } = useStoreClipboard();
   const { getNodes } = useReactFlow();
 
   for (const { actionId, hotkey, enabledStatuses } of actions) {
