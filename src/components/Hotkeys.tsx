@@ -6,11 +6,13 @@ import actions from "~/core/actions";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreMachine from "~/store/useStoreMachine";
 import useStoreClipboard from "~/store/useStoreClipboard";
+import useStoreFlowchart from "~/store/useStoreFlowchart";
 
 export default function (): JSX.Element {
   const { refInput } = useStoreEphemeral();
   const { machineState, executeAction } = useStoreMachine();
-  const { copyNodes, pasteNodes, cutNodes } = useStoreClipboard();
+  const { copyNodes, pasteNodes, cutNodes, selectAll } = useStoreClipboard();
+  const { undo, redo } = useStoreFlowchart();
   const { getNodes } = useReactFlow();
 
   for (const { actionId, hotkey, enabledStatuses } of actions) {
@@ -48,6 +50,16 @@ export default function (): JSX.Element {
     preventDefault: true,
   });
 
-  // useHotkeys("ctrl+a", selectAll);  // TODO: Implement selectAll
+  useHotkeys("ctrl+z, meta+z", () => undo(), {
+    preventDefault: true,
+  });
+
+  useHotkeys("ctrl+y, ctrl+shift+z, meta+y, meta+shift+z", () => redo(), {
+    preventDefault: true,
+  });
+
+  useHotkeys("ctrl+a, meta+a", () => selectAll(), {
+    preventDefault: true,
+  });
   return <></>;
 }
