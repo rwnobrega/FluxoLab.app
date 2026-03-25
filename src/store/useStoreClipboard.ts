@@ -2,7 +2,7 @@ import _ from "lodash";
 import { Edge, Node } from "reactflow";
 import { create } from "zustand";
 
-import { NodeData } from "./useStoreFlowchart";
+import { Flowchart, NodeData } from "./useStoreFlowchart";
 import useStoreFlowchart, { getNextAvailableNodeId } from "./useStoreFlowchart";
 
 interface StoreClipboard {
@@ -10,6 +10,7 @@ interface StoreClipboard {
   copyNodes: (ids: string[]) => void;
   pasteNodes: () => void;
   cutNodes: (ids: string[]) => void;
+  selectAll: () => void;
 }
 
 const useStoreClipboard = create<StoreClipboard>()((set, get) => ({
@@ -31,7 +32,8 @@ const useStoreClipboard = create<StoreClipboard>()((set, get) => ({
     const { clipboard } = get();
     if (clipboard.nodes.length === 0) return;
 
-    const { flowchart } = useStoreFlowchart.getState();
+    const { flowchart, history } = useStoreFlowchart.getState();
+    const newHistory: Flowchart[] = [...history, _.cloneDeep(flowchart)].slice(-50);
 
     // Reserva IDs novos sequencialmente sem colidir entre si
     const idMap = new Map<string, string>();
@@ -68,14 +70,23 @@ const useStoreClipboard = create<StoreClipboard>()((set, get) => ({
       ...newEdges,
     ];
 
-    useStoreFlowchart.setState({ flowchart });
+    useStoreFlowchart.setState({ flowchart, history: newHistory, future: [] });
   },
 
   cutNodes: (ids) => {
     const { copyNodes } = get();
-    const { deleteNode } = useStoreFlowchart.getState();
+    const { deleteNode, batchHistory } = useStoreFlowchart.getState();
     copyNodes(ids);
-    ids.forEach((id) => deleteNode(id));
+    batchHistory(() => {
+      ids.forEach((id) => deleteNode(id));
+    });
+  },
+
+  selectAll: () => {
+    const { flowchart } = useStoreFlowchart.getState();
+    flowchart.nodes = flowchart.nodes.map((n) => ({ ...n, selected: true }));
+    flowchart.edges = flowchart.edges.map((e) => ({ ...e, selected: true }));
+    useStoreFlowchart.setState({ flowchart });
   },
 }));
 
