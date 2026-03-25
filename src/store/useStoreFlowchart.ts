@@ -53,6 +53,11 @@ interface StoreFlowchart {
   changeVariableType: (id: string, type: DataType) => void;
   reorderVariables: (fromIndex: number, toIndex: number | undefined) => void;
   setSavedViewport: (viewport: Viewport) => void;
+  history: Flowchart[];
+  future: Flowchart[];
+  undo: () => void;
+  redo: () => void;
+  batchHistory: (fn: () => void) => void;
 }
 
 export function getNextAvailableNodeId(nodes: Node<NodeData>[]): string {
@@ -85,11 +90,28 @@ function getDefaultViewport(): Viewport {
 
 const useStoreFlowchart = create<StoreFlowchart>()(
   persist(
-    (set, get) => ({
-      flowchart: getDefaultFlowchart(),
-      savedViewport: getDefaultViewport(),
+    (set, get) => {
+      let historyBatchDepth: number = 0;
+      let historyBatchSaved: boolean = false;
+      let isDragging: boolean = false;
 
-      clearFlowchart: () => {
+      const saveHistory = () => {
+        if (historyBatchDepth > 0) {
+          if (historyBatchSaved) return;
+          historyBatchSaved = true;
+        }
+        const { flowchart, history } = get();
+        const newHistory = [...history, _.cloneDeep(flowchart)].slice(-50);
+        set({ history: newHistory, future: [] });
+      };
+
+      return {
+        flowchart: getDefaultFlowchart(),
+        savedViewport: getDefaultViewport(),
+        history: [],
+        future: [],
+
+        clearFlowchart: () => {
         set({
           flowchart: getDefaultFlowchart(),
           savedViewport: getDefaultViewport(),
@@ -126,6 +148,27 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       onNodesChange: (changes) => {
+        const hasRemove = changes.some((c) => c.type === "remove");
+        const hasPosition = changes.some(
+          (c) => c.type === "position" && c.dragging !== undefined
+        );
+
+        if (hasPosition) {
+          const dragStarting = changes.some(
+            (c) => c.type === "position" && c.dragging === true
+          );
+          const dragEnding = changes.some(
+            (c) => c.type === "position" && c.dragging === false
+          );
+
+          if (dragStarting && !isDragging) {
+            isDragging = true;
+            saveHistory();
+          }
+          if (dragEnding) isDragging = false;
+        }
+        if (hasRemove) saveHistory();
+
         const { flowchart } = get();
         flowchart.nodes = applyNodeChanges(changes, flowchart.nodes);
         set({ flowchart });
@@ -136,6 +179,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       addNode: (role, position) => {
+        saveHistory();
         const { flowchart } = get();
         const handles = getRoleHandles(role);
         const newNode = {
@@ -154,6 +198,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       deleteNode: (id) => {
+        saveHistory();
         const { flowchart } = get();
         flowchart.nodes = _.filter(flowchart.nodes, (node) => node.id !== id);
         flowchart.edges = _.filter(
@@ -163,6 +208,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       changeNodePayload: (id, value) => {
+        saveHistory();
         const { flowchart } = get();
         const node = _.find(flowchart.nodes, { id });
         assert(node !== undefined);
@@ -170,6 +216,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       addEdge: (connection) => {
+        saveHistory();
         const { flowchart } = get();
         flowchart.edges = _.reject(
           flowchart.edges,
@@ -181,6 +228,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       moveHandle: (connection) => {
+        saveHistory();
         const { flowchart } = get();
         const id = connection.source as string;
         const handle = connection.sourceHandle as Position;
@@ -191,6 +239,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       addVariable: () => {
+        saveHistory();
         const { flowchart } = get();
         const id = getNextAvailableVariableId(flowchart.variables);
         flowchart.variables = [
@@ -200,11 +249,13 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       removeVariable: (id) => {
+        saveHistory();
         const { flowchart } = get();
         flowchart.variables = _.reject(flowchart.variables, { id });
         set({ flowchart });
       },
       renameVariable: (id, newId) => {
+        saveHistory();
         const { flowchart } = get();
         flowchart.variables = _.map(flowchart.variables, (variable) => {
           if (variable.id === id) {
@@ -215,6 +266,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       changeVariableType: (id, type) => {
+        saveHistory();
         const { flowchart } = get();
         flowchart.variables = _.map(flowchart.variables, (variable) => {
           if (variable.id === id) {
@@ -225,6 +277,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       reorderVariables: (fromIndex, toIndex) => {
+        saveHistory();
         if (toIndex === undefined || fromIndex === toIndex) return;
         const { flowchart } = get();
         const variable = flowchart.variables[fromIndex];
@@ -233,7 +286,45 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       setSavedViewport: (viewport) => set({ savedViewport: viewport }),
-    }),
+      batchHistory: (fn: () => void) => {
+        historyBatchDepth++;
+        historyBatchSaved = false;
+        try {
+          fn();
+        } finally {
+          historyBatchDepth--;
+        }
+      },
+      undo: () => {
+        const { flowchart, history, future } = get();
+        if (history.length == 0) return;
+
+        const previousState = history[history.length - 1];
+        const newHistory = history.slice(0, -1);
+        const newFuture = [_.cloneDeep(flowchart), ...future];
+
+        set({
+          flowchart: _.cloneDeep(previousState),
+          history: newHistory,
+          future: newFuture,
+        });
+      },
+      redo: () => {
+        const { flowchart, history, future } = get();
+        if (future.length == 0) return;
+
+        const nextState = future[0];
+        const newFuture = future.slice(1);
+        const newHistory = [...history, _.cloneDeep(flowchart)];
+
+        set({
+          flowchart: _.cloneDeep(nextState),
+          history: newHistory,
+          future: newFuture,
+        });
+      },
+      };
+    },
     {
       name: "fluxolab_flow",
       version: 8,
