@@ -12,7 +12,7 @@ export default function (): JSX.Element {
   const { refInput } = useStoreEphemeral();
   const { machineState, executeAction } = useStoreMachine();
   const { copyNodes, pasteNodes, cutNodes, selectAll } = useStoreClipboard();
-  const { undo, redo } = useStoreFlowchart();
+  const { undo, redo } = useStoreFlowchart((s) => ({ undo: s.undo, redo: s.redo }));
   const { getNodes } = useReactFlow();
 
   for (const { actionId, hotkey, enabledStatuses } of actions) {
