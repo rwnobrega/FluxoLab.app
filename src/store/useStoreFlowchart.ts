@@ -94,6 +94,27 @@ const useStoreFlowchart = create<StoreFlowchart>()(
       let historyBatchDepth: number = 0;
       let historyBatchSaved: boolean = false;
       let isDragging: boolean = false;
+      let removeBatchOpen: boolean = false;
+
+      const defer = (cb: () => void) => {
+        if (typeof queueMicrotask === "function") {
+          return queueMicrotask(cb);
+        }
+        Promise.resolve().then(cb);
+      };
+
+      const beginRemoveHistoryBatch = () => {
+        if (removeBatchOpen) return;
+        removeBatchOpen = true;
+        historyBatchDepth++;
+        historyBatchSaved = false;
+
+        defer(() => {
+          historyBatchDepth--;
+          if (!historyBatchDepth) historyBatchSaved = false;
+          removeBatchOpen = false;
+        });
+      };
 
       const saveHistory = () => {
         if (historyBatchDepth > 0) {
@@ -167,13 +188,21 @@ const useStoreFlowchart = create<StoreFlowchart>()(
           }
           if (dragEnding) isDragging = false;
         }
-        if (hasRemove) saveHistory();
+        if (hasRemove) {
+          beginRemoveHistoryBatch();
+          saveHistory();
+        }
 
         const { flowchart } = get();
         flowchart.nodes = applyNodeChanges(changes, flowchart.nodes);
         set({ flowchart });
       },
       onEdgesChange: (changes) => {
+        if (changes.some((c) => c.type === "remove")) {
+          beginRemoveHistoryBatch();
+          saveHistory();
+        }
+
         const { flowchart } = get();
         flowchart.edges = applyEdgeChanges(changes, flowchart.edges);
         set({ flowchart });
@@ -277,8 +306,9 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       reorderVariables: (fromIndex, toIndex) => {
-        saveHistory();
         if (toIndex === undefined || fromIndex === toIndex) return;
+        saveHistory();
+        
         const { flowchart } = get();
         const variable = flowchart.variables[fromIndex];
         flowchart.variables.splice(fromIndex, 1);
@@ -293,6 +323,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
           fn();
         } finally {
           historyBatchDepth--;
+          if (!historyBatchDepth) historyBatchSaved = false;
         }
       },
       undo: () => {
