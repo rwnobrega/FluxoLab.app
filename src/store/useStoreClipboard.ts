@@ -17,14 +17,19 @@ const useStoreClipboard = create<StoreClipboard>()((set, get) => ({
 
   copyNodes: (ids) => {
     const { flowchart } = useStoreFlowchart.getState();
-    const idSet = new Set(ids);
-    const copiedNodes = flowchart.nodes
-      .filter((n) => idSet.has(n.id))
-      .map((n) => _.cloneDeep(n));
-    const copiedEdges = flowchart.edges
-      .filter((e) => idSet.has(e.source) && idSet.has(e.target))
-      .map((e) => _.cloneDeep(e));
-    set({ clipboard: { nodes: copiedNodes, edges: copiedEdges } });
+    const nodes = [];
+    for (const node of flowchart.nodes) {
+      if (_.includes(ids, node.id)) {
+        nodes.push(_.cloneDeep(node));
+      }
+    }
+    const edges = [];
+    for (const edge of flowchart.edges) {
+      if (_.includes(ids, edge.source) && _.includes(ids, edge.target)) {
+        edges.push(_.cloneDeep(edge));
+      }
+    }
+    set({ clipboard: { nodes, edges } });
   },
 
   pasteNodes: () => {
@@ -34,37 +39,45 @@ const useStoreClipboard = create<StoreClipboard>()((set, get) => ({
     const { flowchart } = useStoreFlowchart.getState();
 
     // Reserva IDs novos sequencialmente sem colidir entre si
-    const idMap = new Map<string, string>();
-    const tempNodes = [...flowchart.nodes];
-    clipboard.nodes.forEach((n) => {
-      const newId = getNextAvailableNodeId(tempNodes);
-      idMap.set(n.id, newId);
-      tempNodes.push({ ...n, id: newId });
-    });
+    const idMap: Record<string, string> = {};
+    const tempNodes = _.cloneDeep(flowchart.nodes);
+    for (const node of clipboard.nodes) {
+      const id = getNextAvailableNodeId(tempNodes);
+      idMap[node.id] = id;
+      tempNodes.push({ ...node, id });
+    }
 
-    const newNodes: Node<NodeData>[] = clipboard.nodes.map((n) => ({
-      ..._.cloneDeep(n),
-      id: idMap.get(n.id)!,
-      position: { x: n.position.x + 30, y: n.position.y + 30 },
-      selected: true,
-    }));
-
-    const newEdges: Edge[] = clipboard.edges
-      .filter((e) => idMap.has(e.source) && idMap.has(e.target))
-      .map((e) => ({
-        ..._.cloneDeep(e),
-        id: `${idMap.get(e.source)}-${idMap.get(e.target)}-${e.sourceHandle}`,
-        source: idMap.get(e.source)!,
-        target: idMap.get(e.target)!,
+    const newNodes: Node[] = [];
+    for (const node of clipboard.nodes) {
+      newNodes.push({
+        ..._.cloneDeep(node),
+        id: idMap[node.id],
+        position: { x: node.position.x + 20, y: node.position.y + 20 },
         selected: true,
-      }));
+      });
+    }
+
+    const newEdges: Edge[] = [];
+    for (const edge of clipboard.edges) {
+      if (_.has(idMap, edge.source) && _.has(idMap, edge.target)) {
+        const source = idMap[edge.source];
+        const target = idMap[edge.target];
+        newEdges.push({
+          ..._.cloneDeep(edge),
+          id: `${source}-${target}-${edge.sourceHandle}`,
+          source,
+          target,
+          selected: true,
+        });
+      }
+    }
 
     flowchart.nodes = [
-      ...flowchart.nodes.map((n) => ({ ...n, selected: false })),
+      ..._.map(flowchart.nodes, (node) => ({ ...node, selected: false })),
       ...newNodes,
     ];
     flowchart.edges = [
-      ...flowchart.edges.map((e) => ({ ...e, selected: false })),
+      ..._.map(flowchart.edges, (edge) => ({ ...edge, selected: false })),
       ...newEdges,
     ];
 
@@ -75,7 +88,7 @@ const useStoreClipboard = create<StoreClipboard>()((set, get) => ({
     const { copyNodes } = get();
     const { deleteNode } = useStoreFlowchart.getState();
     copyNodes(ids);
-    ids.forEach((id) => deleteNode(id));
+    ids.forEach(deleteNode);
   },
 }));
 
