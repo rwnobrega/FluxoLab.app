@@ -101,7 +101,7 @@ export default function (): JSX.Element {
       onNodeDragStart={() => setIsDraggingNode(true)}
       onNodeDragStop={() => setIsDraggingNode(false)}
       defaultViewport={savedViewport}
-      multiSelectionKeyCode="Control"
+      multiSelectionKeyCode="Shift"
       selectionKeyCode="Shift"
       deleteKeyCode="Delete"
       disableKeyboardA11y
