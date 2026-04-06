@@ -1,17 +1,18 @@
+import _ from "lodash";
 import React from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useReactFlow } from "reactflow";
 
 import actions from "~/core/actions";
+import useStoreClipboard from "~/store/useStoreClipboard";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreMachine from "~/store/useStoreMachine";
-import useStoreClipboard from "~/store/useStoreClipboard";
 
 export default function (): JSX.Element {
   const { refInput } = useStoreEphemeral();
   const { machineState, executeAction } = useStoreMachine();
   const { copyNodes, pasteNodes, cutNodes } = useStoreClipboard();
-  const { getNodes } = useReactFlow();
+  const { getNodes, setNodes } = useReactFlow();
 
   for (const { actionId, hotkey, enabledStatuses } of actions) {
     useHotkeys(
@@ -24,30 +25,58 @@ export default function (): JSX.Element {
           executeAction(actionId);
         }
       },
-      {
-        enableOnFormTags: ["INPUT", "TEXTAREA"],
-        preventDefault: true,
-      },
+      { preventDefault: true, enableOnFormTags: ["INPUT", "TEXTAREA"] },
     );
   }
 
-  const getSelectedIds = () =>
-    getNodes()
-      .filter((n) => n.selected)
-      .map((n) => n.id);
+  // Copy
+  useHotkeys(
+    "ctrl+c, meta+c",
+    () => {
+      const ids = _.map(_.filter(getNodes(), "selected"), "id");
+      copyNodes(ids);
+    },
+    { preventDefault: true },
+  );
 
-  useHotkeys("ctrl+c, meta+c", () => copyNodes(getSelectedIds()), {
-    preventDefault: true,
-  });
+  // Paste
+  useHotkeys(
+    "ctrl+v, meta+v",
+    () => {
+      pasteNodes();
+    },
+    { preventDefault: true },
+  );
 
-  useHotkeys("ctrl+v, meta+v", () => pasteNodes(), {
-    preventDefault: true,
-  });
+  // Cut
+  useHotkeys(
+    "ctrl+x, meta+x",
+    () => {
+      const ids = _.map(_.filter(getNodes(), "selected"), "id");
+      cutNodes(ids);
+    },
+    { preventDefault: true },
+  );
 
-  useHotkeys("ctrl+x, meta+x", () => cutNodes(getSelectedIds()), {
-    preventDefault: true,
-  });
+  // Select all
+  useHotkeys(
+    "ctrl+a, meta+a",
+    () => {
+      const nodes = _.map(getNodes(), (node) => ({ ...node, selected: true }));
+      setNodes(nodes);
+    },
+    { preventDefault: true },
+  );
 
-  // useHotkeys("ctrl+a", selectAll);  // TODO: Implement selectAll
+  // Select none
+  useHotkeys(
+    "esc",
+    () => {
+      const nodes = _.map(getNodes(), (node) => ({ ...node, selected: false }));
+      setNodes(nodes);
+    },
+    { preventDefault: true },
+  );
+
   return <></>;
 }
