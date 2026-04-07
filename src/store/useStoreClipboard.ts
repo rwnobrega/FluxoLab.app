@@ -33,7 +33,7 @@ const useStoreClipboard = create<StoreClipboard>()((set, get) => ({
   },
 
   pasteNodes: () => {
-    const { clipboard } = get();
+    const { clipboard, copyNodes } = get();
     if (clipboard.nodes.length === 0) return;
 
     const { flowchart } = useStoreFlowchart.getState();
@@ -80,6 +80,8 @@ const useStoreClipboard = create<StoreClipboard>()((set, get) => ({
       ..._.map(flowchart.edges, (edge) => ({ ...edge, selected: false })),
       ...newEdges,
     ];
+
+    copyNodes(_.map(newNodes, "id"));
 
     useStoreFlowchart.setState({ flowchart });
   },
