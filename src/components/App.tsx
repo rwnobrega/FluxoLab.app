@@ -54,12 +54,13 @@ export default function (): JSX.Element {
           {/* Painel Esquerdo - Blocos do fluxograma */}
           <Panel
             className="left-panel-container"
+            collapsible={true}
+            defaultSize={"150px"}
+            minSize={150}
+            maxSize={150}
+            collapsedSize={0}
             {...({
               ref: leftPanelRef,
-              collapsible: true,
-              defaultSize: "150px",
-              minSize: 70,
-              collapsedSize: 0,
               onCollapse: () => setLeftPanelVisible(false),
               onExpand: () => setLeftPanelVisible(true),
             } as any)}
