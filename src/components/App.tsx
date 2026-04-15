@@ -18,6 +18,7 @@ import UrlImporter from "./UrlImporter";
 
 export default function (): JSX.Element {
   const resizeHandleStyle = {
+    padding: "3px",
     backgroundColor: palette.gray300,
     background: `repeating-linear-gradient(
       45deg,
@@ -39,40 +40,30 @@ export default function (): JSX.Element {
         <Group orientation="horizontal" id="fluxolab_main">
           <Panel
             className="left-panel-container"
-            collapsible={true}
-            defaultSize={"150px"}
+            collapsible
+            defaultSize={150}
             minSize={150}
             maxSize={150}
             collapsedSize={0}
           >
-            <div
-              className="bg-light p-3 h-100"
-              style={{
-                minWidth: "150px",
-                maxWidth: "100%",
-                overflowY: "auto",
-                overflowX: "hidden",
-              }}
-            >
-              <Blocks />
-            </div>
+            <Blocks />
           </Panel>
-          <Separator style={{ width: "6px", ...resizeHandleStyle }} />
-          <Panel minSize={30}>
+          <Separator style={resizeHandleStyle} />
+          <Panel>
             <Flow />
           </Panel>
-          <Separator style={{ width: "6px", ...resizeHandleStyle }} />
+          <Separator style={resizeHandleStyle} />
           <Panel defaultSize={400} minSize={300}>
             <Group
               orientation="vertical"
               id="fluxolab_right"
               className="bg-light"
             >
-              <Panel defaultSize={40} minSize={24} className="p-3">
+              <Panel defaultSize="40%" minSize="20%" className="p-3">
                 <Variables />
               </Panel>
-              <Separator style={{ height: "6px", ...resizeHandleStyle }} />
-              <Panel defaultSize={60} className="p-3">
+              <Separator style={resizeHandleStyle} />
+              <Panel defaultSize="60%" minSize="20%" className="p-3">
                 <InputOutput />
               </Panel>
             </Group>
