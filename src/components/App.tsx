@@ -1,10 +1,9 @@
 import _ from "lodash";
-import React, { useEffect } from "react";
+import React from "react";
 import Stack from "react-bootstrap/Stack";
 import { Group, Panel, Separator } from "react-resizable-panels";
 import { ReactFlowProvider } from "reactflow";
 
-import useStoreEphemeral from "~/store/useStoreEphemeral";
 import palette from "~/utils/palette";
 
 import Flow from "./Flow";
@@ -18,11 +17,6 @@ import Updater from "./Updater";
 import UrlImporter from "./UrlImporter";
 
 export default function (): JSX.Element {
-  const leftPanelRef = useStoreEphemeral((state) => state.leftPanelRef);
-  const setLeftPanelVisible = useStoreEphemeral(
-    (state) => state.setLeftPanelVisible,
-  );
-
   const resizeHandleStyle = {
     backgroundColor: palette.gray300,
     background: `repeating-linear-gradient(
@@ -34,13 +28,6 @@ export default function (): JSX.Element {
     )`,
   };
 
-  // 2. Garantimos que o painel comece com o tamanho correto em pixels
-  useEffect(() => {
-    if (leftPanelRef.current) {
-      leftPanelRef.current.resize("150px");
-    }
-  }, [leftPanelRef]);
-
   return (
     <ReactFlowProvider>
       <Hotkeys />
@@ -49,9 +36,7 @@ export default function (): JSX.Element {
       <Toaster />
       <Stack className="vh-100 h-100" style={{ userSelect: "none" }}>
         <Navbar />
-
         <Group orientation="horizontal" id="fluxolab_main">
-          {/* Painel Esquerdo - Blocos do fluxograma */}
           <Panel
             className="left-panel-container"
             collapsible={true}
@@ -59,11 +44,6 @@ export default function (): JSX.Element {
             minSize={150}
             maxSize={150}
             collapsedSize={0}
-            {...({
-              ref: leftPanelRef,
-              onCollapse: () => setLeftPanelVisible(false),
-              onExpand: () => setLeftPanelVisible(true),
-            } as any)}
           >
             <div
               className="bg-light p-3 h-100"
@@ -77,17 +57,11 @@ export default function (): JSX.Element {
               <Blocks />
             </div>
           </Panel>
-
           <Separator style={{ width: "6px", ...resizeHandleStyle }} />
-
-          {/* Painel Central (Editor de Fluxo) */}
           <Panel minSize={30}>
             <Flow />
           </Panel>
-
           <Separator style={{ width: "6px", ...resizeHandleStyle }} />
-
-          {/* Painel Direito */}
           <Panel defaultSize={400} minSize={300}>
             <Group
               orientation="vertical"
@@ -97,9 +71,7 @@ export default function (): JSX.Element {
               <Panel defaultSize={40} minSize={24} className="p-3">
                 <Variables />
               </Panel>
-
               <Separator style={{ height: "6px", ...resizeHandleStyle }} />
-
               <Panel defaultSize={60} className="p-3">
                 <InputOutput />
               </Panel>

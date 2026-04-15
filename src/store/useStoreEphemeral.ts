@@ -1,14 +1,5 @@
-import { RefObject, createRef } from "react";
+import { RefObject } from "react";
 import { create } from "zustand";
-
-interface PanelImperativeApi {
-  collapse: () => void;
-  expand: () => void;
-  getSize: () => number;
-  isCollapsed: () => boolean;
-  isExpanded: () => boolean;
-  resize: (size: number | string) => void;
-}
 
 interface ToastContent {
   message: string;
@@ -27,13 +18,8 @@ interface StoreEphemeral {
   setMouseOverNodeId: (id: string | null) => void;
   toasts: ToastContent[];
   triggerToast: (content: ToastContent) => void;
-  refInput: React.RefObject<HTMLInputElement>;
-  setRefInput: (ref: React.RefObject<HTMLInputElement>) => void;
-  // Painel Esquerdo - Gerenciamento de Estado e Ref
-  leftPanelVisible: boolean;
-  setLeftPanelVisible: (visible: boolean) => void;
-  leftPanelRef: RefObject<PanelImperativeApi>;
-  toggleLeftPanel: () => void;
+  refInput: RefObject<HTMLInputElement>;
+  setRefInput: (ref: RefObject<HTMLInputElement>) => void;
 }
 
 const useStoreEphemeral = create<StoreEphemeral>()((set, get) => ({
@@ -53,21 +39,6 @@ const useStoreEphemeral = create<StoreEphemeral>()((set, get) => ({
   },
   refInput: { current: null },
   setRefInput: (ref) => set({ refInput: ref }),
-  // Implementação do Painel
-  leftPanelVisible: true,
-  leftPanelRef: createRef<PanelImperativeApi>(),
-  setLeftPanelVisible: (visible) => set({ leftPanelVisible: visible }),
-
-  toggleLeftPanel: () => {
-    const panel = get().leftPanelRef.current;
-    if (panel) {
-      if (panel.isCollapsed()) {
-        panel.expand();
-      } else {
-        panel.collapse();
-      }
-    }
-  },
 }));
 
 export default useStoreEphemeral;
