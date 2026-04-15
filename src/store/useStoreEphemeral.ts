@@ -1,4 +1,4 @@
-import { createRef, RefObject } from "react";
+import { RefObject, createRef } from "react";
 import { create } from "zustand";
 
 interface PanelImperativeApi {
@@ -57,7 +57,7 @@ const useStoreEphemeral = create<StoreEphemeral>()((set, get) => ({
   leftPanelVisible: true,
   leftPanelRef: createRef<PanelImperativeApi>(),
   setLeftPanelVisible: (visible) => set({ leftPanelVisible: visible }),
-  
+
   toggleLeftPanel: () => {
     const panel = get().leftPanelRef.current;
     if (panel) {
