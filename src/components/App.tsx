@@ -19,7 +19,6 @@ import UrlImporter from "./UrlImporter";
 export default function (): JSX.Element {
   const resizeHandleStyle = {
     padding: "3px",
-    backgroundColor: palette.gray300,
     background: `repeating-linear-gradient(
       45deg,
       ${palette.gray300},
@@ -27,6 +26,7 @@ export default function (): JSX.Element {
       ${palette.gray100} 2px,
       ${palette.gray100} 4px
     )`,
+    zIndex: 1,
   };
 
   return (
@@ -53,7 +53,7 @@ export default function (): JSX.Element {
             <Flow />
           </Panel>
           <Separator style={resizeHandleStyle} />
-          <Panel defaultSize={400} minSize={300}>
+          <Panel collapsible defaultSize={400} minSize={300}>
             <Group
               orientation="vertical"
               id="fluxolab_right"
