@@ -7,6 +7,7 @@ import actions from "~/core/actions";
 import useStoreClipboard from "~/store/useStoreClipboard";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreMachine from "~/store/useStoreMachine";
+import { redo, undo } from "~/store/useStoreHistory";
 
 export default function (): JSX.Element {
   const { refInput } = useStoreEphemeral();
@@ -77,6 +78,16 @@ export default function (): JSX.Element {
     },
     { preventDefault: true },
   );
+
+  // Undo
+  useHotkeys("ctrl+z, meta+z", () => undo(), {
+      preventDefault: true,
+  });
+
+  // Redo
+  useHotkeys("ctrl+y, ctrl+shift+z, meta+y, meta+shift+z", () => redo(), {
+      preventDefault: true,
+  });
 
   return <></>;
 }

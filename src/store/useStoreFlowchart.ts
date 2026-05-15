@@ -18,6 +18,7 @@ import { persist } from "zustand/middleware";
 import { DataType } from "~/core/dataTypes";
 import { Role, getRoleHandles } from "~/core/roles";
 import assert from "~/utils/assert";
+import { beginRemoveHistoryBatch, handleChanges, saveHistory } from "./useStoreHistory";
 
 import { SimpleFlowchart } from "./serialize";
 
@@ -34,9 +35,11 @@ export interface Flowchart {
   edges: Edge[];
 }
 
-interface StoreFlowchart {
+export interface StoreFlowchart {
   flowchart: Flowchart;
   savedViewport: Viewport;
+  history: Flowchart[];
+  future: Flowchart[];
   clearFlowchart: () => void;
   importSimpleFlowchart: (simpleFlowchart: SimpleFlowchart) => void;
   setTitle: (title: string) => void;
@@ -88,6 +91,8 @@ const useStoreFlowchart = create<StoreFlowchart>()(
     (set, get) => ({
       flowchart: getDefaultFlowchart(),
       savedViewport: getDefaultViewport(),
+      history: [],
+      future: [],
 
       clearFlowchart: () => {
         set({
@@ -126,16 +131,22 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       onNodesChange: (changes) => {
+        handleChanges(changes);
         const { flowchart } = get();
         flowchart.nodes = applyNodeChanges(changes, flowchart.nodes);
         set({ flowchart });
       },
       onEdgesChange: (changes) => {
+        if (changes.some((c) => c.type === "remove")) {
+            beginRemoveHistoryBatch();
+            saveHistory();
+        }
         const { flowchart } = get();
         flowchart.edges = applyEdgeChanges(changes, flowchart.edges);
         set({ flowchart });
       },
       addNode: (role, position) => {
+        saveHistory();
         const { flowchart } = get();
         const handles = getRoleHandles(role);
         const newNode = {
@@ -154,6 +165,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       deleteNode: (id) => {
+        saveHistory();
         const { flowchart } = get();
         flowchart.nodes = _.filter(flowchart.nodes, (node) => node.id !== id);
         flowchart.edges = _.filter(
@@ -163,6 +175,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       changeNodePayload: (id, value) => {
+        saveHistory();
         const { flowchart } = get();
         const node = _.find(flowchart.nodes, { id });
         assert(node !== undefined);
@@ -170,6 +183,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       addEdge: (connection) => {
+        saveHistory();
         const { flowchart } = get();
         flowchart.edges = _.reject(
           flowchart.edges,
@@ -181,6 +195,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       moveHandle: (connection) => {
+        saveHistory();
         const { flowchart } = get();
         const id = connection.source as string;
         const handle = connection.sourceHandle as Position;
@@ -191,6 +206,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       addVariable: () => {
+        saveHistory();
         const { flowchart } = get();
         const id = getNextAvailableVariableId(flowchart.variables);
         flowchart.variables = [
@@ -200,11 +216,13 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       removeVariable: (id) => {
+        saveHistory();
         const { flowchart } = get();
         flowchart.variables = _.reject(flowchart.variables, { id });
         set({ flowchart });
       },
       renameVariable: (id, newId) => {
+        saveHistory();
         const { flowchart } = get();
         flowchart.variables = _.map(flowchart.variables, (variable) => {
           if (variable.id === id) {
@@ -215,6 +233,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         set({ flowchart });
       },
       changeVariableType: (id, type) => {
+        saveHistory();
         const { flowchart } = get();
         flowchart.variables = _.map(flowchart.variables, (variable) => {
           if (variable.id === id) {
@@ -226,6 +245,7 @@ const useStoreFlowchart = create<StoreFlowchart>()(
       },
       reorderVariables: (fromIndex, toIndex) => {
         if (toIndex === undefined || fromIndex === toIndex) return;
+        saveHistory();
         const { flowchart } = get();
         const variable = flowchart.variables[fromIndex];
         flowchart.variables.splice(fromIndex, 1);
