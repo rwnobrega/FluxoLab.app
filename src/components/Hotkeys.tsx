@@ -6,8 +6,8 @@ import { useReactFlow } from "reactflow";
 import actions from "~/core/actions";
 import useStoreClipboard from "~/store/useStoreClipboard";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
-import useStoreMachine from "~/store/useStoreMachine";
 import { redo, undo } from "~/store/useStoreHistory";
+import useStoreMachine from "~/store/useStoreMachine";
 
 export default function (): JSX.Element {
   const { refInput } = useStoreEphemeral();
@@ -80,14 +80,22 @@ export default function (): JSX.Element {
   );
 
   // Undo
-  useHotkeys("ctrl+z, meta+z", () => undo(), {
-      preventDefault: true,
-  });
+  useHotkeys(
+    "ctrl+z, meta+z",
+    () => {
+      undo();
+    },
+    { preventDefault: true },
+  );
 
   // Redo
-  useHotkeys("ctrl+y, ctrl+shift+z, meta+y, meta+shift+z", () => redo(), {
-      preventDefault: true,
-  });
+  useHotkeys(
+    "ctrl+y, ctrl+shift+z, meta+y, meta+shift+z",
+    () => {
+      redo();
+    },
+    { preventDefault: true },
+  );
 
   return <></>;
 }

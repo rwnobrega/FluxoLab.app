@@ -18,9 +18,13 @@ import { persist } from "zustand/middleware";
 import { DataType } from "~/core/dataTypes";
 import { Role, getRoleHandles } from "~/core/roles";
 import assert from "~/utils/assert";
-import { beginRemoveHistoryBatch, handleChanges, saveHistory } from "./useStoreHistory";
 
 import { SimpleFlowchart } from "./serialize";
+import {
+  beginRemoveHistoryBatch,
+  handleChanges,
+  saveHistory,
+} from "./useStoreHistory";
 
 export interface NodeData {
   role: Role;
@@ -93,7 +97,6 @@ const useStoreFlowchart = create<StoreFlowchart>()(
       savedViewport: getDefaultViewport(),
       history: [],
       future: [],
-
       clearFlowchart: () => {
         set({
           flowchart: getDefaultFlowchart(),
@@ -138,8 +141,8 @@ const useStoreFlowchart = create<StoreFlowchart>()(
       },
       onEdgesChange: (changes) => {
         if (changes.some((c) => c.type === "remove")) {
-            beginRemoveHistoryBatch();
-            saveHistory();
+          beginRemoveHistoryBatch();
+          saveHistory();
         }
         const { flowchart } = get();
         flowchart.edges = applyEdgeChanges(changes, flowchart.edges);
