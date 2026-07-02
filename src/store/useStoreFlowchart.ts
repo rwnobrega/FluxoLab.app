@@ -124,6 +124,8 @@ const useStoreFlowchart = create<StoreFlowchart>()(
       },
       setTitle: (title) => {
         const { flowchart } = get();
+        if (title === flowchart.title) return;
+        useStoreHistory.getState().saveHistory();
         flowchart.title = title;
         set({ flowchart });
       },
