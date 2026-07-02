@@ -77,7 +77,7 @@ export default function (): JSX.Element {
       const nodes = _.map(getNodes(), (node) => ({ ...node, selected: false }));
       setNodes(nodes);
     },
-    { preventDefault: true },
+    { preventDefault: false },
   );
 
   // Undo
