@@ -6,13 +6,14 @@ import { useReactFlow } from "reactflow";
 import actions from "~/core/actions";
 import useStoreClipboard from "~/store/useStoreClipboard";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
-import { redo, undo } from "~/store/useStoreHistory";
+import useStoreHistory from "~/store/useStoreHistory";
 import useStoreMachine from "~/store/useStoreMachine";
 
 export default function (): JSX.Element {
   const { refInput } = useStoreEphemeral();
   const { machineState, executeAction } = useStoreMachine();
   const { copyNodes, pasteNodes, cutNodes } = useStoreClipboard();
+  const { undo, redo } = useStoreHistory();
   const { getNodes, setNodes } = useReactFlow();
 
   for (const { actionId, hotkey, enabledStatuses } of actions) {

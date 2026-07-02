@@ -1,93 +1,88 @@
 import _ from "lodash";
 import { NodeChange } from "reactflow";
+import { create } from "zustand";
 
-import UseStoreFlowchart from "./useStoreFlowchart";
+import useStoreFlowchart, { Flowchart } from "./useStoreFlowchart";
 
-let historyBatchDepth: number = 0;
-let historyBatchSaved: boolean = false;
-let isDragging: boolean = false;
-let removeBatchOpen: boolean = false;
+const MAX_HISTORY_LENGTH = 30;
 
-const defer = (cb: () => void) => {
-  if (typeof queueMicrotask === "function") return queueMicrotask(cb);
-  Promise.resolve().then(cb);
-};
+// Transient (non-reactive) state
+let isBatching = false;
+let isDragging = false;
 
-export function beginRemoveHistoryBatch() {
-  if (removeBatchOpen) return;
-  removeBatchOpen = true;
-  historyBatchDepth++;
-  historyBatchSaved = false;
-
-  defer(() => {
-    historyBatchDepth--;
-    if (!historyBatchDepth) historyBatchSaved = false;
-    removeBatchOpen = false;
-  });
+interface StoreHistory {
+  history: Flowchart[];
+  future: Flowchart[];
+  saveHistory: () => void;
+  handleNodeChanges: (changes: NodeChange[]) => void;
+  undo: () => void;
+  redo: () => void;
 }
 
-export function saveHistory() {
-  if (historyBatchDepth > 0) {
-    if (historyBatchSaved) return;
-    historyBatchSaved = true;
-  }
-  const { flowchart, history } = UseStoreFlowchart.getState();
-  const newHistory = [...history, _.cloneDeep(flowchart)].slice(-30);
-  UseStoreFlowchart.setState({ history: newHistory, future: [] });
-}
+const useStoreHistory = create<StoreHistory>()((set, get) => ({
+  history: [],
+  future: [],
 
-export function handleChanges(changes: NodeChange[]) {
-  const hasRemove = changes.some((c) => c.type === "remove");
-  const hasPosition = changes.some(
-    (c) => c.type === "position" && c.dragging !== undefined,
-  );
+  saveHistory: () => {
+    // Multiple calls within the same microtask (e.g., removing nodes and
+    // edges in a single gesture) are batched into a single snapshot.
+    if (isBatching) return;
+    isBatching = true;
+    queueMicrotask(() => {
+      isBatching = false;
+    });
 
-  if (hasPosition) {
-    const dragStarting = changes.some(
-      (c) => c.type === "position" && c.dragging === true,
+    const { history } = get();
+    const { flowchart } = useStoreFlowchart.getState();
+    set({
+      history: [...history, _.cloneDeep(flowchart)].slice(-MAX_HISTORY_LENGTH),
+      future: [],
+    });
+  },
+
+  handleNodeChanges: (changes) => {
+    const { saveHistory } = get();
+    if (_.some(changes, (change) => change.type === "remove")) {
+      saveHistory();
+    }
+    const dragStarting = _.some(
+      changes,
+      (change) => change.type === "position" && change.dragging === true,
     );
-    const dragEnding = changes.some(
-      (c) => c.type === "position" && c.dragging === false,
+    const dragEnding = _.some(
+      changes,
+      (change) => change.type === "position" && change.dragging === false,
     );
-
     if (dragStarting && !isDragging) {
       isDragging = true;
       saveHistory();
     }
-    if (dragEnding) isDragging = false;
-  }
-  if (hasRemove) {
-    beginRemoveHistoryBatch();
-    saveHistory();
-  }
-}
+    if (dragEnding) {
+      isDragging = false;
+    }
+  },
 
-export function undo() {
-  const { flowchart, history, future } = UseStoreFlowchart.getState();
-  if (history.length == 0) return;
+  undo: () => {
+    const { history, future } = get();
+    if (history.length === 0) return;
+    const { flowchart } = useStoreFlowchart.getState();
+    set({
+      history: history.slice(0, -1),
+      future: [_.cloneDeep(flowchart), ...future],
+    });
+    useStoreFlowchart.setState({ flowchart: _.cloneDeep(_.last(history)) });
+  },
 
-  const previousState = history[history.length - 1];
-  const newHistory = history.slice(0, -1);
-  const newFuture = [_.cloneDeep(flowchart), ...future];
+  redo: () => {
+    const { history, future } = get();
+    if (future.length === 0) return;
+    const { flowchart } = useStoreFlowchart.getState();
+    set({
+      history: [...history, _.cloneDeep(flowchart)],
+      future: future.slice(1),
+    });
+    useStoreFlowchart.setState({ flowchart: _.cloneDeep(future[0]) });
+  },
+}));
 
-  UseStoreFlowchart.setState({
-    flowchart: _.cloneDeep(previousState),
-    history: newHistory,
-    future: newFuture,
-  });
-}
-
-export function redo() {
-  const { flowchart, history, future } = UseStoreFlowchart.getState();
-  if (future.length == 0) return;
-
-  const nextState = future[0];
-  const newFuture = future.slice(1);
-  const newHistory = [...history, _.cloneDeep(flowchart)];
-
-  UseStoreFlowchart.setState({
-    flowchart: _.cloneDeep(nextState),
-    history: newHistory,
-    future: newFuture,
-  });
-}
+export default useStoreHistory;
