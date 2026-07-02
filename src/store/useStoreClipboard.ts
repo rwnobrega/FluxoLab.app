@@ -4,6 +4,7 @@ import { create } from "zustand";
 
 import { NodeData } from "./useStoreFlowchart";
 import useStoreFlowchart, { getNextAvailableNodeId } from "./useStoreFlowchart";
+import useStoreHistory from "./useStoreHistory";
 
 interface StoreClipboard {
   clipboard: { nodes: Node<NodeData>[]; edges: Edge[] };
@@ -35,6 +36,8 @@ const useStoreClipboard = create<StoreClipboard>()((set, get) => ({
   pasteNodes: () => {
     const { clipboard, copyNodes } = get();
     if (clipboard.nodes.length === 0) return;
+
+    useStoreHistory.getState().saveHistory();
 
     const { flowchart } = useStoreFlowchart.getState();
 
