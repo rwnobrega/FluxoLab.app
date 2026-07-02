@@ -16,215 +16,215 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
   return (
     <Modal size="lg" show={showModal} onHide={() => setShowModal(false)}>
       <Modal.Header closeButton>
-        <Modal.Title>{getString("ModalHelp_Title")}</Modal.Title>
+        <Modal.Title>{getString("ModalLanguage_Title")}</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ overflowY: "auto", maxHeight: "67vh" }}>
-        <h5>{getString("ModalHelp_SubtitleAssignment")}</h5>
+        <h5>{getString("ModalLanguage_SubtitleAssignment")}</h5>
         <Table striped bordered hover>
           <tbody>
             <tr>
               <td className={classes}>var = expr</td>
-              <td>{getString("ModalHelp_Assignment")}</td>
+              <td>{getString("ModalLanguage_Assignment")}</td>
             </tr>
           </tbody>
         </Table>
-        <h5>{getString("ModalHelp_SubtitleArithmetic")}</h5>
+        <h5>{getString("ModalLanguage_SubtitleArithmetic")}</h5>
         <Table striped bordered hover>
           <tbody>
             <tr>
               <td className={classes}>x + y</td>
-              <td>{getString("ModalHelp_Addition")}</td>
+              <td>{getString("ModalLanguage_Addition")}</td>
             </tr>
             <tr>
               <td className={classes}>x - y</td>
-              <td>{getString("ModalHelp_Subtraction")}</td>
+              <td>{getString("ModalLanguage_Subtraction")}</td>
             </tr>
             <tr>
               <td className={classes}>x * y</td>
-              <td>{getString("ModalHelp_Multiplication")}</td>
+              <td>{getString("ModalLanguage_Multiplication")}</td>
             </tr>
             <tr>
               <td className={classes}>x / y</td>
-              <td>{getString("ModalHelp_RealDivision")}</td>
+              <td>{getString("ModalLanguage_RealDivision")}</td>
             </tr>
             <tr>
               <td className={classes}>a div b</td>
-              <td>{getString("ModalHelp_IntegerDivision")}</td>
+              <td>{getString("ModalLanguage_IntegerDivision")}</td>
             </tr>
             <tr>
               <td className={classes}>a mod b</td>
-              <td>{getString("ModalHelp_Modulus")}</td>
+              <td>{getString("ModalLanguage_Modulus")}</td>
             </tr>
             <tr>
               <td className={classes}>+x</td>
-              <td>{getString("ModalHelp_Positive")}</td>
+              <td>{getString("ModalLanguage_Positive")}</td>
             </tr>
             <tr>
               <td className={classes}>-x</td>
-              <td>{getString("ModalHelp_Negative")}</td>
+              <td>{getString("ModalLanguage_Negative")}</td>
             </tr>
           </tbody>
         </Table>
-        <h5>{getString("ModalHelp_SubtitleComparison")}</h5>
+        <h5>{getString("ModalLanguage_SubtitleComparison")}</h5>
         <Table striped bordered hover>
           <tbody>
             <tr>
               <td className={classes}>x == y</td>
-              <td>{getString("ModalHelp_Equal")}</td>
+              <td>{getString("ModalLanguage_Equal")}</td>
             </tr>
             <tr>
               <td className={classes}>x != y</td>
-              <td>{getString("ModalHelp_NotEqual")}</td>
+              <td>{getString("ModalLanguage_NotEqual")}</td>
             </tr>
             <tr>
               <td className={classes}>x &gt; y</td>
-              <td>{getString("ModalHelp_Greater")}</td>
+              <td>{getString("ModalLanguage_Greater")}</td>
             </tr>
             <tr>
               <td className={classes}>x &gt;= y</td>
-              <td>{getString("ModalHelp_GreaterOrEqual")}</td>
+              <td>{getString("ModalLanguage_GreaterOrEqual")}</td>
             </tr>
             <tr>
               <td className={classes}>x &lt; y</td>
-              <td>{getString("ModalHelp_Less")}</td>
+              <td>{getString("ModalLanguage_Less")}</td>
             </tr>
             <tr>
               <td className={classes}>x &lt;= y</td>
-              <td>{getString("ModalHelp_LessOrEqual")}</td>
+              <td>{getString("ModalLanguage_LessOrEqual")}</td>
             </tr>
           </tbody>
         </Table>
-        <h5>{getString("ModalHelp_SubtitleLogical")}</h5>
+        <h5>{getString("ModalLanguage_SubtitleLogical")}</h5>
         <Table striped bordered hover>
           <tbody>
             <tr>
               <td className={classes}>a || b</td>
-              <td>{getString("ModalHelp_Disjunction")}</td>
+              <td>{getString("ModalLanguage_Disjunction")}</td>
             </tr>
             <tr>
               <td className={classes}>a && b</td>
-              <td>{getString("ModalHelp_Conjunction")}</td>
+              <td>{getString("ModalLanguage_Conjunction")}</td>
             </tr>
             <tr>
               <td className={classes}>!a</td>
-              <td>{getString("ModalHelp_Negation")}</td>
+              <td>{getString("ModalLanguage_Negation")}</td>
             </tr>
           </tbody>
         </Table>
-        <h5>{getString("ModalHelp_SubtitleFunctions")}</h5>
+        <h5>{getString("ModalLanguage_SubtitleFunctions")}</h5>
         <Table striped bordered hover>
           <tbody>
             <tr>
               <td className={classes}>pow(x, y)</td>
-              <td>{getString("ModalHelp_Power")}</td>
+              <td>{getString("ModalLanguage_Power")}</td>
             </tr>
             <tr>
               <td className={classes}>sqrt(x)</td>
-              <td>{getString("ModalHelp_SquareRoot")}</td>
+              <td>{getString("ModalLanguage_SquareRoot")}</td>
             </tr>
             <tr>
               <td className={classes}>log(x)</td>
-              <td>{getString("ModalHelp_NaturalLogarithm")}</td>
+              <td>{getString("ModalLanguage_NaturalLogarithm")}</td>
             </tr>
             <tr>
               <td className={classes}>log10(x)</td>
-              <td>{getString("ModalHelp_CommonLogarithm")}</td>
+              <td>{getString("ModalLanguage_CommonLogarithm")}</td>
             </tr>
             <tr>
               <td className={classes}>log2(x)</td>
-              <td>{getString("ModalHelp_BinaryLogarithm")}</td>
+              <td>{getString("ModalLanguage_BinaryLogarithm")}</td>
             </tr>
             <tr>
               <td className={classes}>exp(x)</td>
-              <td>{getString("ModalHelp_Exponential")}</td>
+              <td>{getString("ModalLanguage_Exponential")}</td>
             </tr>
             <tr>
               <td className={classes}>sin(x)</td>
-              <td>{getString("ModalHelp_Sine")}</td>
+              <td>{getString("ModalLanguage_Sine")}</td>
             </tr>
             <tr>
               <td className={classes}>cos(x)</td>
-              <td>{getString("ModalHelp_Cosine")}</td>
+              <td>{getString("ModalLanguage_Cosine")}</td>
             </tr>
             <tr>
               <td className={classes}>tan(x)</td>
-              <td>{getString("ModalHelp_Tangent")}</td>
+              <td>{getString("ModalLanguage_Tangent")}</td>
             </tr>
             <tr>
               <td className={classes}>asin(x)</td>
-              <td>{getString("ModalHelp_ArcSine")}</td>
+              <td>{getString("ModalLanguage_ArcSine")}</td>
             </tr>
             <tr>
               <td className={classes}>acos(x)</td>
-              <td>{getString("ModalHelp_ArcCosine")}</td>
+              <td>{getString("ModalLanguage_ArcCosine")}</td>
             </tr>
             <tr>
               <td className={classes}>atan(x)</td>
-              <td>{getString("ModalHelp_ArcTangent")}</td>
+              <td>{getString("ModalLanguage_ArcTangent")}</td>
             </tr>
             <tr>
               <td className={classes}>sinh(x)</td>
-              <td>{getString("ModalHelp_HyperbolicSine")}</td>
+              <td>{getString("ModalLanguage_HyperbolicSine")}</td>
             </tr>
             <tr>
               <td className={classes}>cosh(x)</td>
-              <td>{getString("ModalHelp_HyperbolicCosine")}</td>
+              <td>{getString("ModalLanguage_HyperbolicCosine")}</td>
             </tr>
             <tr>
               <td className={classes}>tanh(x)</td>
-              <td>{getString("ModalHelp_HyperbolicTangent")}</td>
+              <td>{getString("ModalLanguage_HyperbolicTangent")}</td>
             </tr>
             <tr>
               <td className={classes}>asinh(x)</td>
-              <td>{getString("ModalHelp_ArcSineHyperbolic")}</td>
+              <td>{getString("ModalLanguage_ArcSineHyperbolic")}</td>
             </tr>
             <tr>
               <td className={classes}>acosh(x)</td>
-              <td>{getString("ModalHelp_ArcCosineHyperbolic")}</td>
+              <td>{getString("ModalLanguage_ArcCosineHyperbolic")}</td>
             </tr>
             <tr>
               <td className={classes}>atanh(x)</td>
-              <td>{getString("ModalHelp_ArcTangentHyperbolic")}</td>
+              <td>{getString("ModalLanguage_ArcTangentHyperbolic")}</td>
             </tr>
             <tr>
               <td className={classes}>sign(x)</td>
-              <td>{getString("ModalHelp_Sign")}</td>
+              <td>{getString("ModalLanguage_Sign")}</td>
             </tr>
             <tr>
               <td className={classes}>abs(x)</td>
-              <td>{getString("ModalHelp_AbsoluteValue")}</td>
+              <td>{getString("ModalLanguage_AbsoluteValue")}</td>
             </tr>
             <tr>
               <td className={classes}>round(x)</td>
-              <td>{getString("ModalHelp_Round")}</td>
+              <td>{getString("ModalLanguage_Round")}</td>
             </tr>
             <tr>
               <td className={classes}>floor(x)</td>
-              <td>{getString("ModalHelp_Floor")}</td>
+              <td>{getString("ModalLanguage_Floor")}</td>
             </tr>
             <tr>
               <td className={classes}>ceil(x)</td>
-              <td>{getString("ModalHelp_Ceil")}</td>
+              <td>{getString("ModalLanguage_Ceil")}</td>
             </tr>
             <tr>
               <td className={classes}>min(x, y)</td>
-              <td>{getString("ModalHelp_Minimum")}</td>
+              <td>{getString("ModalLanguage_Minimum")}</td>
             </tr>
             <tr>
               <td className={classes}>max(x, y)</td>
-              <td>{getString("ModalHelp_Maximum")}</td>
+              <td>{getString("ModalLanguage_Maximum")}</td>
             </tr>
             <tr>
               <td className={classes}>rand()</td>
-              <td>{getString("ModalHelp_Rand")}</td>
+              <td>{getString("ModalLanguage_Rand")}</td>
             </tr>
             <tr>
               <td className={classes}>rand_int(a, b)</td>
-              <td>{getString("ModalHelp_RandInt")}</td>
+              <td>{getString("ModalLanguage_RandInt")}</td>
             </tr>
           </tbody>
         </Table>
-        <h5>{getString("ModalHelp_SubtitleConstants")}</h5>
+        <h5>{getString("ModalLanguage_SubtitleConstants")}</h5>
         <Table striped bordered hover>
           <tbody>
             <tr>

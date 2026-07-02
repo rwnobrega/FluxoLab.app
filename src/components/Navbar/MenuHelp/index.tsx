@@ -6,7 +6,7 @@ import useStoreStrings from "~/store/useStoreStrings";
 
 import About from "./About";
 import Examples from "./Examples";
-import Help from "./Help";
+import Help from "./Language";
 import Shortcuts from "./Shortcuts";
 
 export default function (): JSX.Element {
@@ -27,7 +27,7 @@ export default function (): JSX.Element {
         </Tooltip>
         <Dropdown.Menu>
           <Dropdown.Item onClick={() => setShowHelp(true)}>
-            {getString("MenuHelp_Help")}
+            {getString("MenuHelp_Language")}
           </Dropdown.Item>
           <Dropdown.Item onClick={() => setShowShortcuts(true)}>
             {getString("MenuHelp_Shortcuts")}
