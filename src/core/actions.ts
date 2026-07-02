@@ -13,7 +13,7 @@ const actions: Action[] = [
     actionId: "reset",
     hotkey: "F6",
     description: "PlayButton_Reset",
-    icon: "bi-arrow-clockwise",
+    icon: "bi-stop-fill",
     enabledStatuses: ["exception", "halted", "running", "waiting"],
   },
   {

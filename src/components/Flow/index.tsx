@@ -11,6 +11,7 @@ import ReactFlow, {
 
 import PlayButtons from "~/components/PlayButtons";
 import StatusMessage from "~/components/StatusMessage";
+import UndoRedoButtons from "~/components/UndoRedoButtons";
 import { Role } from "~/core/roles";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
@@ -115,7 +116,10 @@ export default function (): JSX.Element {
           gap={3}
           className="justify-content-between align-items-start"
         >
-          <PlayButtons />
+          <Stack direction="horizontal" gap={3}>
+            <PlayButtons />
+            <UndoRedoButtons />
+          </Stack>
           <StatusMessage />
         </Stack>
       </div>

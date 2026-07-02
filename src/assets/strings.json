@@ -160,6 +160,8 @@
     "ToastMessage_ImportError": "Error importing flowchart.",
     "ToastMessage_ImportSuccess": "Flowchart imported successfully.",
     "ToastMessage_LanguageChanged": "Language changed to {{language}}.",
+    "UndoRedo_Redo": "Redo",
+    "UndoRedo_Undo": "Undo",
     "VariableList_Add": "Add variable",
     "VariableList_Remove": "Remove variable",
     "VariableList_Title": "Variables"
@@ -325,6 +327,8 @@
     "ToastMessage_ImportError": "Erro ao importar fluxograma.",
     "ToastMessage_ImportSuccess": "Fluxograma importado com sucesso.",
     "ToastMessage_LanguageChanged": "Idioma alterado para {{language}}.",
+    "UndoRedo_Redo": "Refazer",
+    "UndoRedo_Undo": "Desfazer",
     "VariableList_Add": "Adicionar variável",
     "VariableList_Remove": "Remover variável",
     "VariableList_Title": "Variáveis"
