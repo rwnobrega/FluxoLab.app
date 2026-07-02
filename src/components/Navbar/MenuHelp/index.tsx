@@ -7,11 +7,13 @@ import useStoreStrings from "~/store/useStoreStrings";
 import About from "./About";
 import Examples from "./Examples";
 import Help from "./Help";
+import Shortcuts from "./Shortcuts";
 
 export default function (): JSX.Element {
   const { getString } = useStoreStrings();
 
   const [showHelp, setShowHelp] = useState(false);
+  const [showShortcuts, setShowShortcuts] = useState(false);
   const [showExamples, setShowExamples] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
 
@@ -27,6 +29,9 @@ export default function (): JSX.Element {
           <Dropdown.Item onClick={() => setShowHelp(true)}>
             {getString("MenuHelp_Help")}
           </Dropdown.Item>
+          <Dropdown.Item onClick={() => setShowShortcuts(true)}>
+            {getString("MenuHelp_Shortcuts")}
+          </Dropdown.Item>
           <Dropdown.Item onClick={() => setShowExamples(true)}>
             {getString("MenuHelp_Examples")}
           </Dropdown.Item>
@@ -36,8 +41,9 @@ export default function (): JSX.Element {
         </Dropdown.Menu>
       </Dropdown>
       <Help showModal={showHelp} setShowModal={setShowHelp} />
-      <About showModal={showAbout} setShowModal={setShowAbout} />
+      <Shortcuts showModal={showShortcuts} setShowModal={setShowShortcuts} />
       <Examples showModal={showExamples} setShowModal={setShowExamples} />
+      <About showModal={showAbout} setShowModal={setShowAbout} />
     </>
   );
 }
