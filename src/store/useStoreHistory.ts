@@ -2,9 +2,14 @@ import _ from "lodash";
 import { NodeChange } from "reactflow";
 import { create } from "zustand";
 
+import { simplify } from "./serialize";
 import useStoreFlowchart, { Flowchart } from "./useStoreFlowchart";
 
 const MAX_HISTORY_LENGTH = 30;
+
+function isSameFlowchart(a: Flowchart, b: Flowchart): boolean {
+  return _.isEqual(simplify(a), simplify(b));
+}
 
 // Transient (non-reactive) state
 let isBatching = false;
@@ -34,8 +39,12 @@ const useStoreHistory = create<StoreHistory>()((set, get) => ({
 
     const { history } = get();
     const { flowchart } = useStoreFlowchart.getState();
+    const last = _.last(history);
     set({
-      history: [...history, _.cloneDeep(flowchart)].slice(-MAX_HISTORY_LENGTH),
+      history:
+        last !== undefined && isSameFlowchart(last, flowchart)
+          ? history
+          : [...history, _.cloneDeep(flowchart)].slice(-MAX_HISTORY_LENGTH),
       future: [],
     });
   },
@@ -64,24 +73,40 @@ const useStoreHistory = create<StoreHistory>()((set, get) => ({
 
   undo: () => {
     const { history, future } = get();
-    if (history.length === 0) return;
     const { flowchart } = useStoreFlowchart.getState();
+    // Discard trailing snapshots identical to the current state; they come
+    // from actions that ended up not changing anything (e.g., a micro-drag
+    // that snapped back to the same grid cell) and would make undo a no-op.
+    const past = _.dropRightWhile(history, (snapshot) =>
+      isSameFlowchart(snapshot, flowchart),
+    );
+    if (past.length === 0) {
+      set({ history: past });
+      return;
+    }
     set({
-      history: history.slice(0, -1),
+      history: past.slice(0, -1),
       future: [_.cloneDeep(flowchart), ...future],
     });
-    useStoreFlowchart.setState({ flowchart: _.cloneDeep(_.last(history)) });
+    useStoreFlowchart.setState({ flowchart: _.cloneDeep(_.last(past)) });
   },
 
   redo: () => {
     const { history, future } = get();
-    if (future.length === 0) return;
     const { flowchart } = useStoreFlowchart.getState();
+    // Symmetric to undo: skip snapshots identical to the current state.
+    const next = _.dropWhile(future, (snapshot) =>
+      isSameFlowchart(snapshot, flowchart),
+    );
+    if (next.length === 0) {
+      set({ future: next });
+      return;
+    }
     set({
       history: [...history, _.cloneDeep(flowchart)],
-      future: future.slice(1),
+      future: next.slice(1),
     });
-    useStoreFlowchart.setState({ flowchart: _.cloneDeep(future[0]) });
+    useStoreFlowchart.setState({ flowchart: _.cloneDeep(next[0]) });
   },
 }));
 

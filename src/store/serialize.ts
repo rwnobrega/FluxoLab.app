@@ -55,7 +55,7 @@ type MiniFlowchart = [
   Array<[number, number, number]>, // edges (source, sourceHandle, target)
 ];
 
-function simplify(flowchart: Flowchart): SimpleFlowchart {
+export function simplify(flowchart: Flowchart): SimpleFlowchart {
   const { title, variables, nodes, edges } = flowchart;
   const nodes0 = _.map(nodes, (node) => ({
     id: node.id,
