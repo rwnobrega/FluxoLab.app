@@ -11,6 +11,7 @@ import ReactFlow, {
 
 import PlayButtons from "~/components/PlayButtons";
 import StatusMessage from "~/components/StatusMessage";
+import StructuredBadge from "~/components/StructuredBadge";
 import UndoRedoButtons from "~/components/UndoRedoButtons";
 import { Role } from "~/core/roles";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
@@ -120,7 +121,10 @@ export default function (): JSX.Element {
             <PlayButtons />
             <UndoRedoButtons />
           </Stack>
-          <StatusMessage />
+          <Stack gap={2} className="align-items-end">
+            <StatusMessage />
+            <StructuredBadge />
+          </Stack>
         </Stack>
       </div>
       <Controls
