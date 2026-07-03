@@ -1,0 +1,44 @@
+PseudoLang <: BaseGrammar {
+  Program = newline* variables newline+ VariableDeclaration* start newline+ Command* end_ newline*
+
+  VariableDeclaration
+    = NonemptyListOf<Identifier, ","> ":" Type newline+
+
+  Command
+    = read NonemptyListOf<Identifier, ","> newline+  --read
+    | write NonemptyListOf<Expression, ","> newline+  --write
+    | Identifier "=" Expression newline+  --assign
+    | IfClause ElseIfClause* ElseClause? endif newline+  --if
+    | while Expression newline+ Command* endwhile newline+  --while
+    | do newline+ Command* while2 Expression newline+  --doWhile
+
+  IfClause
+    = if Expression newline+ Command*
+
+  ElseIfClause
+    = elseif Expression newline+ Command*
+
+  ElseClause
+    = else newline+ Command*
+
+  comment = "//" (~"\n" any)* "\n"
+  newline = "\n" | comment
+  ellipsis = "..." " "* newline
+  space := " " | "\t" | ellipsis  // Redefine `space`
+
+  start = "Início" ~alnum
+  end_ = "Fim" ~alnum
+  variables = "Variáveis" ~alnum
+  read = "Leia" ~alnum
+  write = "Escreva" ~alnum
+  if = "Se" ~alnum
+  else = "Senão" ~alnum
+  elseif = "SenãoSe" ~alnum
+  endif = "FimSe" ~alnum
+  while = "Enquanto" ~alnum
+  endwhile = "FimEnquanto" ~alnum
+  while2 = "enquanto" ~alnum
+  do = "Faça" ~alnum
+
+  keyword += start | end_ | variables | read | write | if | else | elseif | endif | while | endwhile | do | while2
+}

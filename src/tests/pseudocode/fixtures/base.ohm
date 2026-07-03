@@ -1,0 +1,67 @@
+BaseGrammar {
+  Expression
+    = Expression "||" Expression0  --binary
+    | Expression0
+
+  Expression0
+    = Expression0 "&&" Expression1 --binary
+    | Expression1
+
+  Expression1
+    = Expression2 ("<=" | "<" | ">=" | ">" | "==" | "!=") Expression2  --binary
+    | Expression2
+
+  Expression2
+    = Expression2 ("+" | "-") Expression3  --binary
+    | Expression3
+
+  Expression3
+    = Expression3 ("*" | "/" | div | mod) Expression4  --binary
+    | Expression4
+
+  Expression4
+    = ("+" | "-" | "!") Expression4  --unary
+    | Primary
+
+  FunctionCall
+    = identifier "(" ListOf<Expression, ","> ")"
+
+  Parentheses
+    = "(" Expression ")"
+
+  Identifier
+    = identifier
+
+  Primary
+    = stringLiteral  --stringLiteral
+    | numberLiteral  --numberLiteral
+    | booleanLiteral  --booleanLiteral
+    | FunctionCall
+    | Identifier
+    | Parentheses
+
+  Type = number | boolean | string
+
+  true = "true" ~alnum
+  false = "false" ~alnum
+  div = "div" ~alnum
+  mod = "mod" ~alnum
+  number = "número" ~alnum
+  boolean = "lógico" ~alnum
+  string = "texto" ~alnum
+
+  keyword
+    = true | false | div | mod | number | boolean | string
+
+  identifier
+    = ~keyword (letter | "_") (alnum | "_")*
+
+  stringLiteral
+    = "\"" ("\\\"" | ~"\"" ~"\n" any)* "\""
+
+  numberLiteral
+    = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+
+  booleanLiteral
+    = true | false
+}
