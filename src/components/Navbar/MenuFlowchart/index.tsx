@@ -8,9 +8,11 @@ import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
 import Clear from "./Clear";
+import Pseudocode from "./Pseudocode";
 
 export default function (): JSX.Element {
   const [showClear, setShowClear] = useState(false);
+  const [showPseudocode, setShowPseudocode] = useState(false);
 
   const { flowchart } = useStoreFlowchart();
   const { triggerToast } = useStoreEphemeral();
@@ -42,9 +44,13 @@ export default function (): JSX.Element {
           <Dropdown.Item onClick={handleCopyLink}>
             {getString("MenuFlowchart_CopyLink")}
           </Dropdown.Item>
+          <Dropdown.Item onClick={() => setShowPseudocode(true)}>
+            {getString("MenuFlowchart_Pseudocode")}
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
       <Clear showModal={showClear} setShowModal={setShowClear} />
+      <Pseudocode showModal={showPseudocode} setShowModal={setShowPseudocode} />
     </>
   );
 }
