@@ -8,6 +8,8 @@ import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
 
+import PseudocodeView from "./PseudocodeView";
+
 interface Props {
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
@@ -40,14 +42,7 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
 
   function renderBody(): JSX.Element {
     if (result.ok) {
-      return (
-        <pre
-          className="border rounded bg-light p-3 mb-0"
-          style={{ maxHeight: "60vh", overflow: "auto" }}
-        >
-          {result.pseudocode}
-        </pre>
-      );
+      return <PseudocodeView code={result.pseudocode} />;
     }
     if (result.reason === "unstructured") {
       return (
