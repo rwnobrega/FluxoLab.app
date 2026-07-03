@@ -11,7 +11,8 @@
   "scripts": {
     "build": "vite build",
     "deploy": "npm run build && echo 'fluxolab.app' > ./dist/CNAME && npx gh-pages -d dist",
-    "dev": "vite serve"
+    "dev": "vite serve",
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@hello-pangea/dnd": "17.0.0",

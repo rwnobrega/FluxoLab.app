@@ -1,20 +1,19 @@
 {
   "compilerOptions": {
     "allowJs": false,
-    "baseUrl": "./src",
     "esModuleInterop": true,
     "jsx": "react",
-    "module": "ES6",
+    "module": "ES2022",
     "moduleResolution": "Bundler",
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": "./dist/",
-    "paths": { "~/*": ["*"] },
+    "paths": { "~/*": ["./src/*"] },
     "resolveJsonModule": true,
     "sourceMap": true,
     "strictNullChecks": true,
-    "target": "ES2016"
+    "target": "ES2022"
   }
 }
