@@ -18,7 +18,15 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
   const { triggerToast } = useStoreEphemeral();
   const { getString } = useStoreStrings();
 
-  const result = useMemo(() => flowchartToPseudocode(flowchart), [flowchart]);
+  // `useStoreFlowchart` actions update the flowchart in place, keeping the
+  // same object identity, so `flowchart` alone is not a reliable dependency
+  // (cf. the serialized dependencies in Updater.tsx).  Recomputing when the
+  // modal opens suffices: while it is open, the backdrop blocks editing, and
+  // undo/redo (the only remaining mutations) do replace the identity.
+  const result = useMemo(
+    () => flowchartToPseudocode(flowchart),
+    [flowchart, showModal],
+  );
 
   const handleCopy = () => {
     if (!result.ok) return;
