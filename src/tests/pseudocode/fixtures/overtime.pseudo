@@ -1,0 +1,11 @@
+Variáveis
+    hrs, pag: número
+Início
+    Escreva "Entre com as horas trabalhadas:"
+    Leia hrs
+    pag = 50 * hrs
+    Se hrs > 8
+        pag = pag + 25 * (hrs - 8)
+    FimSe
+    Escreva "Pagamento: ", pag
+Fim

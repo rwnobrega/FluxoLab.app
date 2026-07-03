@@ -1,0 +1,19 @@
+Variáveis
+    n: número
+    steps: número
+Início
+    Escreva "Entre com o termo inicial:"
+    Leia n
+    Escreva "Sequência de Collatz:"
+    steps = 0
+    Enquanto n != 1
+        Se n mod 2 == 0
+            n = n div 2
+        Senão
+            n = 3 * n + 1
+        FimSe
+        steps = steps + 1
+        Escreva n
+    FimEnquanto
+    Escreva "Número de passos: ", steps
+Fim

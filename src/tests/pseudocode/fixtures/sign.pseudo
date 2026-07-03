@@ -1,0 +1,13 @@
+Variáveis
+    n: número
+Início
+    Escreva "Entre com um número inteiro:"
+    Leia n
+    Se n > 0
+        Escreva "Positivo"
+    SenãoSe n < 0
+        Escreva "Negativo"
+    Senão
+        Escreva "Zero"
+    FimSe
+Fim

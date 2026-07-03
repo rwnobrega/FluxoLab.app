@@ -1,0 +1,15 @@
+Variáveis
+    a, b, c: número
+    limite: número
+Início
+    a = 0
+    b = 1
+    Escreva "Entre com o limite:"
+    Leia limite
+    Enquanto a <= limite
+        Escreva a
+        c = a + b
+        a = b
+        b = c
+    FimEnquanto
+Fim

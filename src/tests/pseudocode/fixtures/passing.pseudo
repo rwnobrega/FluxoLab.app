@@ -1,0 +1,16 @@
+Variáveis
+    nota1, nota2: número
+    freq: número
+    media: número
+Início
+    Escreva "Entre com as duas notas:"
+    Leia nota1, nota2
+    Escreva "Entre com a frequência:"
+    Leia freq
+    media = round((nota1 + nota2) / 2)
+    Se media >= 6 && freq >= 75
+        Escreva "Aprovado"
+    Senão
+        Escreva "Reprovado"
+    FimSe
+Fim

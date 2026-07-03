@@ -1,0 +1,16 @@
+Variáveis
+    sal, hrs, pag, tot: número
+    i: número
+Início
+    tot = 0
+    i = 1
+    Enquanto i <= 3
+        Escreva "Entre com o salário e as horas trabalhadas:"
+        Leia sal, hrs
+        pag = sal * hrs
+        Escreva "Pagamento: ", pag
+        tot = tot + pag
+        i = i + 1
+    FimEnquanto
+    Escreva "Total: ", tot
+Fim

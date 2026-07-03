@@ -1,0 +1,12 @@
+Variáveis
+    n, fat: número
+Início
+    Escreva "Entre com um inteiro não-negativo:"
+    Leia n
+    fat = 1
+    Enquanto n > 1
+        fat = fat * n
+        n = n - 1
+    FimEnquanto
+    Escreva "Fatorial: ", fat
+Fim
