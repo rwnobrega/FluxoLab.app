@@ -112,16 +112,12 @@ export default function (): JSX.Element {
       nodeOrigin={[0.5, 0.5]}
     >
       <div className="position-relative m-3">
-        <Stack
-          direction="horizontal"
-          gap={3}
-          className="justify-content-between align-items-start"
-        >
-          <Stack direction="horizontal" gap={3}>
+        <Stack direction="horizontal" gap={3}>
+          <Stack direction="horizontal" gap={3} className="align-self-start">
             <PlayButtons />
             <UndoRedoButtons />
           </Stack>
-          <Stack gap={2} className="align-items-end">
+          <Stack direction="vertical" gap={2} className="align-items-end">
             <StatusMessage />
             <StructuredBadge />
           </Stack>
