@@ -553,15 +553,69 @@ const missingEdge = chart(
   );
 }
 
-const infiniteSelfLoop = chart(
+const disconnectedFragment = chart(
   [
     ["0", Role.Start, ""],
-    ["1", Role.Assign, "x = x + 1"],
+    ["1", Role.Write, "x"],
     ["2", Role.End, ""],
+    ["3", Role.Read, "x"], // Disconnected fragment: 3 --> 4.
+    ["4", Role.End, ""],
   ],
   [
     ["0", "out", "1"],
-    ["1", "out", "1"], // Self loop; node 2 unreachable.
+    ["1", "out", "2"],
+    ["3", "out", "4"],
+  ],
+);
+{
+  const result = structurize(disconnectedFragment);
+  check(
+    "disconnected fragment -> invalid",
+    !result.ok &&
+      result.reason === "invalid" &&
+      JSON.stringify([...result.nodeIds].sort()) === '["3","4"]',
+    `  ${JSON.stringify(result)}`,
+  );
+}
+
+const detachedCycle = chart(
+  [
+    ["0", Role.Start, ""],
+    ["1", Role.End, ""],
+    ["2", Role.Assign, "x = x + 1"], // Detached cycle: 2 <--> 3.
+    ["3", Role.Assign, "x = x - 1"],
+  ],
+  [
+    ["0", "out", "1"],
+    ["2", "out", "3"],
+    ["3", "out", "2"],
+  ],
+);
+{
+  const result = structurize(detachedCycle);
+  check(
+    "detached cycle -> invalid",
+    !result.ok &&
+      result.reason === "invalid" &&
+      JSON.stringify([...result.nodeIds].sort()) === '["2","3"]',
+    `  ${JSON.stringify(result)}`,
+  );
+}
+
+// The self loop is placed behind a guard so that the flowchart stays valid:
+// an orphaned end block would now be reported as unreachable.
+const infiniteSelfLoop = chart(
+  [
+    ["0", Role.Start, ""],
+    ["1", Role.Conditional, "x > 0"],
+    ["2", Role.Assign, "x = x + 1"],
+    ["3", Role.End, ""],
+  ],
+  [
+    ["0", "out", "1"],
+    ["1", "true", "2"],
+    ["2", "out", "2"], // Self loop.
+    ["1", "false", "3"],
   ],
 );
 {

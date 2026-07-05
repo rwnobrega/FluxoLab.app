@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { Node } from "reactflow";
 
+import { getUnreachableNodeIds } from "~/core/graph";
 import { getExpectedText } from "~/core/language/errors";
 import grammar from "~/core/language/grammar";
 import semantics from "~/core/language/semantics";
@@ -57,6 +58,20 @@ function checkGraph(flowchart: Flowchart): MachineError[] {
           payload: { output },
         });
       }
+    }
+  }
+
+  // Every block must be reachable from the start block; in particular, only
+  // the start block may lack incoming edges. (Skipped when there is no start
+  // block, since that error is already reported above.)
+  if (startNodes.length > 0) {
+    const startIds = _.map(startNodes, "id");
+    for (const nodeId of getUnreachableNodeIds(flowchart, startIds)) {
+      errors.push({
+        type: "check",
+        message: "CheckError_Unreachable",
+        nodeId,
+      });
     }
   }
 

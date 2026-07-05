@@ -1,6 +1,7 @@
 import _ from "lodash";
 
 import { DataType } from "~/core/dataTypes";
+import { getUnreachableNodeIds } from "~/core/graph";
 import { Role } from "~/core/roles";
 import { Flowchart } from "~/store/useStoreFlowchart";
 
@@ -336,6 +337,14 @@ export function structurize(flowchart: Flowchart): StructurizeResult {
   const built = buildVertices(flowchart, startId);
   if (!(built instanceof Map)) {
     return { ok: false, reason: "invalid", nodeIds: built.invalidIds };
+  }
+
+  // Blocks that cannot be reached from the start block are dead code, which
+  // `check.ts` reports as errors; such a flowchart is invalid (rather than
+  // merely unstructured).
+  const unreachableIds = getUnreachableNodeIds(flowchart, [startId]);
+  if (unreachableIds.length > 0) {
+    return { ok: false, reason: "invalid", nodeIds: unreachableIds };
   }
 
   const vertices = built;
