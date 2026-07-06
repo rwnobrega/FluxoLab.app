@@ -112,7 +112,7 @@ export default function ({ id, data, selected }: Props): JSX.Element {
 
   const isMouseHover = mouseOverNodeId === id;
   const isDeleteVisible =
-    isMouseHover && !isDraggingNode && connectionSource === null;
+    (isMouseHover || selected) && !isDraggingNode && connectionSource === null;
   const isEditVisible =
     isDeleteVisible && !_.includes([Role.Start, Role.End], data.role);
 
