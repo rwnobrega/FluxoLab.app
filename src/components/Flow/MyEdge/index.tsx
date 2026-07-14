@@ -8,6 +8,7 @@ import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreMachine from "~/store/useStoreMachine";
 
 import SvgEdge from "./SvgEdge";
+import avoidObstacles, { Rect } from "./avoidObstacles";
 import generateSvgRoundedPath from "./generateSvgRoundedPath";
 import getBestPath from "./getBestPath";
 
@@ -52,7 +53,25 @@ export default function ({
 
   const sourcePosition = source.data.handlePositions[sourceHandleId];
 
-  const [path, targetPosition] = getBestPath(source, target, sourcePosition);
+  const [rawPath, targetPosition] = getBestPath(source, target, sourcePosition);
+
+  // Keep detour segments clear of any other node they would otherwise cross
+  // behind (e.g. a wide intermediate node under a loop-back edge).
+  const obstacles: Rect[] = _.chain(flowchart.nodes)
+    .reject((node) => node.id === sourceId || node.id === targetId)
+    .map((node) => {
+      const width = node.width ?? 0;
+      const height = node.height ?? 0;
+      return {
+        left: node.position.x - width / 2,
+        right: node.position.x + width / 2,
+        top: node.position.y - height / 2,
+        bottom: node.position.y + height / 2,
+      };
+    })
+    .value();
+
+  const path = avoidObstacles(rawPath, obstacles);
 
   if (_.includes([Role.Read, Role.Write], target.data.role)) {
     if (targetPosition === "left") {
