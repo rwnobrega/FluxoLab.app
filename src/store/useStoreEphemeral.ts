@@ -7,6 +7,11 @@ interface ToastContent {
   background: string;
 }
 
+interface Toast extends ToastContent {
+  id: number;
+  duration: number;
+}
+
 interface StoreEphemeral {
   isDraggingNode: boolean;
   setIsDraggingNode: (isDraggingNode: boolean) => void;
@@ -16,11 +21,14 @@ interface StoreEphemeral {
   setConnectionSourceHandle: (connectionSourceHandle: string | null) => void;
   mouseOverNodeId: string | null;
   setMouseOverNodeId: (id: string | null) => void;
-  toasts: ToastContent[];
+  toasts: Toast[];
   triggerToast: (content: ToastContent) => void;
+  removeToast: (id: number) => void;
   refInput: RefObject<HTMLInputElement>;
   setRefInput: (ref: RefObject<HTMLInputElement>) => void;
 }
+
+let toastIdCounter = 0;
 
 const useStoreEphemeral = create<StoreEphemeral>()((set, get) => ({
   isDraggingNode: false,
@@ -34,8 +42,13 @@ const useStoreEphemeral = create<StoreEphemeral>()((set, get) => ({
   setMouseOverNodeId: (id) => set({ mouseOverNodeId: id }),
   toasts: [],
   triggerToast: (content) => {
-    set({ toasts: [...get().toasts, content] });
-    setTimeout(() => set({ toasts: get().toasts.slice(1) }), 5000);
+    const id = toastIdCounter++;
+    const duration = 5000;
+    set({ toasts: [...get().toasts, { ...content, id, duration }] });
+    setTimeout(() => get().removeToast(id), duration);
+  },
+  removeToast: (id) => {
+    set({ toasts: get().toasts.filter((toast) => toast.id !== id) });
   },
   refInput: { current: null },
   setRefInput: (ref) => set({ refInput: ref }),
