@@ -1,14 +1,20 @@
 import _ from "lodash";
 import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
 import Nav from "react-bootstrap/Nav";
 import Stack from "react-bootstrap/Stack";
 import { Group, Panel, Separator } from "react-resizable-panels";
 import { ReactFlowProvider } from "reactflow";
 
+import { traceToMarkdown } from "~/core/traceTable";
+import useStoreEphemeral from "~/store/useStoreEphemeral";
+import useStoreFlowchart from "~/store/useStoreFlowchart";
+import useStoreMachine from "~/store/useStoreMachine";
 import useStoreStrings from "~/store/useStoreStrings";
 import palette from "~/utils/palette";
 
 import Flow from "./Flow";
+import Tooltip from "./General/Tooltip";
 import Hotkeys from "./Hotkeys";
 import Navbar from "./Navbar";
 import Blocks from "./Panels/BlockList";
@@ -23,6 +29,48 @@ export default function (): JSX.Element {
   const [rightTab, setRightTab] = useState<"workspace" | "trace">("workspace");
 
   const { getString } = useStoreStrings();
+  const { flowchart, addVariable } = useStoreFlowchart();
+  const { stateHistory, machineState } = useStoreMachine();
+  const { triggerToast } = useStoreEphemeral();
+
+  // The desk-check has content once at least one step has been taken.
+  const hasTrace = stateHistory.length > 0;
+
+  const handleCopyTrace = () => {
+    const markdown = traceToMarkdown(
+      flowchart,
+      [...stateHistory, machineState],
+      getString,
+    );
+    void navigator.clipboard.writeText(markdown);
+    triggerToast({
+      message: getString("ToastMessage_CopyTraceTable"),
+      icon: "bi-clipboard-check",
+      background: "secondary",
+    });
+  };
+
+  // Contextual action shown at the right of the tab bar (avoids repeating a
+  // per-panel header that just echoes the tab name).
+  const tabAction =
+    rightTab === "workspace" ? (
+      <Tooltip text={getString("VariableList_Add")}>
+        <Button size="sm" className="fw-semibold" onClick={addVariable}>
+          <i className="bi bi-plus-lg" />
+        </Button>
+      </Tooltip>
+    ) : (
+      <Button
+        size="sm"
+        variant="secondary"
+        className="fw-semibold text-nowrap"
+        disabled={!hasTrace}
+        onClick={handleCopyTrace}
+      >
+        <i className="bi bi-clipboard me-1" />
+        {getString("Button_Copy")}
+      </Button>
+    );
 
   const resizeHandleStyle = {
     padding: "3px",
@@ -68,18 +116,29 @@ export default function (): JSX.Element {
                 onSelect={(key) =>
                   setRightTab((key as "workspace" | "trace") ?? "workspace")
                 }
-                className="flex-nowrap px-2 pt-2"
+                className="flex-nowrap align-items-center px-2 pt-2"
               >
                 <Nav.Item>
-                  <Nav.Link eventKey="workspace" className="py-1">
+                  <Nav.Link
+                    eventKey="workspace"
+                    className={`py-1 text-nowrap text-black ${
+                      rightTab === "workspace" ? "fw-bold" : ""
+                    }`}
+                  >
                     {getString("RightTab_Workspace")}
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="trace" className="py-1">
+                  <Nav.Link
+                    eventKey="trace"
+                    className={`py-1 text-nowrap text-black ${
+                      rightTab === "trace" ? "fw-bold" : ""
+                    }`}
+                  >
                     {getString("TraceTable_Title")}
                   </Nav.Link>
                 </Nav.Item>
+                <Nav.Item className="ms-auto pb-1">{tabAction}</Nav.Item>
               </Nav>
               <div className="flex-fill" style={{ minHeight: 0 }}>
                 {rightTab === "workspace" ? (

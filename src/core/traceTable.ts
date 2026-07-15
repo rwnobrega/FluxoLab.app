@@ -96,3 +96,47 @@ export default function buildTraceTable(
 
   return rows;
 }
+
+// Renders the desk-check as Markdown (input/output summary + the table), handy
+// for pasting into reports or documentation.
+export function traceToMarkdown(
+  flowchart: Flowchart,
+  states: MachineState[],
+  getString: (key: string) => string,
+): string {
+  const rows = buildTraceTable(flowchart, states);
+  const interaction = _.last(states)?.interaction ?? [];
+  const inputs = interaction
+    .filter((atom) => atom.direction === "in")
+    .map((atom) => atom.text);
+  const outputs = interaction
+    .filter((atom) => atom.direction === "out")
+    .map((atom) => atom.text);
+
+  const blockLabel = (row: TraceRow): string =>
+    row.role === Role.Start || row.role === Role.End
+      ? getString(`BlockLabel_${row.role}`)
+      : row.nodeId;
+
+  const header = ["#", "Bloco", ..._.map(flowchart.variables, "id")];
+  const line = (cells: string[]) => `| ${cells.join(" | ")} |`;
+  const body = _.map(rows, (row) =>
+    line([
+      String(row.step),
+      blockLabel(row),
+      ..._.map(flowchart.variables, ({ id }) => {
+        const value = row.memory[id]?.value ?? null;
+        return value === null ? "?" : JSON.stringify(value);
+      }),
+    ]),
+  );
+
+  return [
+    `${getString("TraceTable_Input")}: ${inputs.join(" ")}`,
+    `${getString("TraceTable_Output")}: ${outputs.join(" ")}`,
+    "",
+    line(header),
+    line(header.map(() => "---")),
+    ...body,
+  ].join("\n");
+}
