@@ -8,6 +8,7 @@ import { DataType } from "~/core/dataTypes";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreMachine from "~/store/useStoreMachine";
 import useStoreStrings from "~/store/useStoreStrings";
+import palette from "~/utils/palette";
 
 export interface Props {
   id: string;
@@ -56,7 +57,10 @@ export default function ({ id }: Props): JSX.Element {
         </Form.Select>
       </td>
       <td className="w-100">
-        <small className="d-flex p-1 fw-bold font-monospace text-success bg-success bg-opacity-10 border border-success border-opacity-10 rounded-1">
+        <small
+          className="d-flex p-1 fw-bold font-monospace bg-body-secondary bg-opacity-50 border rounded-1"
+          style={{ color: palette.gray800 }}
+        >
           {value === null ? "?" : JSON.stringify(value)}
         </small>
       </td>

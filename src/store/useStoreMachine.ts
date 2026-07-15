@@ -78,7 +78,10 @@ const useStoreMachine = create<StoreMachine>()((set, get) => ({
       machineState.memory[id] = { type, value: null };
     }
     machineState.rand = get().seed;
-    set({ machineState, flowchart });
+    // Clear the execution history: a reset starts a fresh run, so no state
+    // from a previous run should linger (this also keeps the desk-check table
+    // scoped to the current run).
+    set({ machineState, flowchart, stateHistory: [] });
   },
   executeAction: (actionId) => {
     const { flowchart, stateHistory, machineState, resetMachine } = get();
