@@ -50,12 +50,12 @@ export default function (): JSX.Element {
   return (
     <div className="d-flex flex-column h-100">
       {rows.length > 0 && (
-        <div className="mb-2 small font-monospace">
+        <div className="mb-2">
           <div className="d-flex align-items-center mb-1">
-            <span className="fw-semibold" style={{ minWidth: "5em" }}>
+            <span style={{ minWidth: "5em" }}>
               {getString("TraceTable_Input")}:
             </span>
-            <span className="flex-fill d-flex flex-wrap gap-2 px-2 py-1 rounded bg-primary bg-opacity-10">
+            <span className="flex-fill d-flex flex-wrap gap-2 px-2 py-1 rounded bg-primary bg-opacity-10 small font-monospace">
               {inputs.length > 0
                 ? inputs.map((atom, index) => (
                     <span
@@ -70,10 +70,10 @@ export default function (): JSX.Element {
             </span>
           </div>
           <div className="d-flex align-items-center">
-            <span className="fw-semibold" style={{ minWidth: "5em" }}>
+            <span style={{ minWidth: "5em" }}>
               {getString("TraceTable_Output")}:
             </span>
-            <span className="flex-fill d-flex flex-wrap gap-2 px-2 py-1 rounded bg-success bg-opacity-10">
+            <span className="flex-fill d-flex flex-wrap gap-2 px-2 py-1 rounded bg-success bg-opacity-10 small font-monospace">
               {outputs.length > 0
                 ? outputs.map((atom, index) => (
                     <span
