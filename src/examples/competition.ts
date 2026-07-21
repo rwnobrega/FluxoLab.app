@@ -6,11 +6,11 @@ import { DataType } from "../core/dataTypes";
 import { Role } from "../core/roles";
 
 const example: SimpleFlowchart = {
-  title: "passing",
+  title: "competition",
   variables: [
-    { id: "grade1", type: DataType.Number },
-    { id: "grade2", type: DataType.Number },
-    { id: "freq", type: DataType.Number },
+    { id: "score1", type: DataType.Number },
+    { id: "score2", type: DataType.Number },
+    { id: "duration", type: DataType.Number },
     { id: "average", type: DataType.Number },
   ],
   nodes: [
@@ -25,42 +25,42 @@ const example: SimpleFlowchart = {
       id: "1",
       role: Role.Read,
       position: { x: 400, y: 160 },
-      payload: "grade1, grade2",
+      payload: "score1, score2",
       handlePositions: { out: Position.Bottom },
     },
     {
       id: "2",
       role: Role.Read,
       position: { x: 400, y: 240 },
-      payload: "freq",
+      payload: "duration",
       handlePositions: { out: Position.Bottom },
     },
     {
       id: "3",
       role: Role.Assign,
       position: { x: 400, y: 320 },
-      payload: "average = round((grade1 + grade2) / 2)",
+      payload: "average = round((score1 + score2) / 2)",
       handlePositions: { out: Position.Bottom },
     },
     {
       id: "4",
       role: Role.Conditional,
       position: { x: 400, y: 400 },
-      payload: "average >= 6 && freq >= 75",
+      payload: "average >= 6 && duration <= 3.5",
       handlePositions: { true: Position.Left, false: Position.Right },
     },
     {
       id: "5",
       role: Role.Write,
       position: { x: 240, y: 480 },
-      payload: '"Passed"',
+      payload: '"Qualified"',
       handlePositions: { out: Position.Bottom },
     },
     {
       id: "6",
       role: Role.Write,
       position: { x: 560, y: 480 },
-      payload: '"Failed"',
+      payload: '"Not qualified"',
       handlePositions: { out: Position.Bottom },
     },
     {

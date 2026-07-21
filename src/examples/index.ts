@@ -1,9 +1,9 @@
 import { SimpleFlowchart } from "~/store/serialize";
 
+import competition from "./competition";
 import factorial from "./factorial";
 import heron from "./heron";
 import overtime from "./overtime";
-import passing from "./passing";
 import payment from "./payment";
 import secret from "./secret";
 import sign from "./sign";
@@ -11,7 +11,7 @@ import sign from "./sign";
 const examples: SimpleFlowchart[] = [
   heron,
   overtime,
-  passing,
+  competition,
   sign,
   payment,
   factorial,
