@@ -1,6 +1,6 @@
 Variáveis
-    n: número
-    steps: número
+    n: inteiro
+    steps: inteiro
 Início
     Escreva "Entre com o termo inicial:"
     Leia n

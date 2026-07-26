@@ -1,7 +1,7 @@
 import _ from "lodash";
 import * as ohm from "ohm-js";
 
-import { DataType, getDataParser } from "~/core/dataTypes";
+import { getDataParser, getDataType, widen } from "~/core/dataTypes";
 import { MachineState } from "~/store/useStoreMachine";
 import assert from "~/utils/assert";
 
@@ -44,8 +44,7 @@ export function execWrite(_a: ohm.Node, b: ohm.Node): void {
   let output = "";
   for (const expression of b.asIteration().children) {
     const value = expression.eval(state);
-    const dataType = typeof value as DataType;
-    const parser = getDataParser(dataType);
+    const parser = getDataParser(getDataType(value));
     output += parser.write(value);
   }
   state.interaction.push({ direction: "out", text: output });
@@ -61,7 +60,11 @@ export function execAssign(
   const state: MachineState = this.args.state;
   const variableId = b.sourceString;
   const expression = d.eval(state);
-  state.memory[variableId].value = expression;
+  // The check phase accepts an integer expression assigned to a real variable;
+  // the value has to follow, or the variable would hold something of a type
+  // other than the one it declares.
+  const { type } = state.memory[variableId];
+  state.memory[variableId].value = widen(expression, type);
   state.outPort = "out";
 }
 

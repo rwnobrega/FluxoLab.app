@@ -207,9 +207,12 @@ const useStoreFlowchart = create<StoreFlowchart>()(
         useStoreHistory.getState().saveHistory();
         const { flowchart } = get();
         const id = getNextAvailableVariableId(flowchart.variables);
+        // Integer is the default on purpose: if the student needed a real, the
+        // very first division tells them so; if the default were real, a
+        // counter would silently work and the choice would never be made.
         flowchart.variables = [
           ...flowchart.variables,
-          { id, type: DataType.Number },
+          { id, type: DataType.Integer },
         ];
         set({ flowchart });
       },
@@ -254,7 +257,18 @@ const useStoreFlowchart = create<StoreFlowchart>()(
     }),
     {
       name: "fluxolab_flow",
-      version: 8,
+      version: 9,
+      migrate: (persisted: any, version: number) => {
+        if (version < 9) {
+          // `number` was split into `integer` and `real`; the old single
+          // numeric type behaved exactly like `real`, so that is what the
+          // flowchart the student had open becomes.
+          for (const variable of persisted?.flowchart?.variables ?? []) {
+            if (variable.type === "number") variable.type = DataType.Real;
+          }
+        }
+        return persisted;
+      },
       partialize: ({ flowchart, savedViewport }) => ({
         flowchart,
         savedViewport,

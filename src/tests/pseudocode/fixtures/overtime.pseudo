@@ -1,5 +1,5 @@
 Variáveis
-    hrs, pag: número
+    hrs, pag: real
 Início
     Escreva "Entre com as horas trabalhadas:"
     Leia hrs

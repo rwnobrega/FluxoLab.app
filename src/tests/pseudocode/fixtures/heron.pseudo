@@ -1,7 +1,7 @@
 Variáveis
-    a, b, c: número
-    s: número
-    area: número
+    a, b, c: real
+    s: real
+    area: real
 Início
     Escreva "Entre com os três lados do triângulo:"
     Leia a, b, c

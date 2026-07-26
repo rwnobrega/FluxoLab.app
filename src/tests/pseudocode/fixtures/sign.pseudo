@@ -1,5 +1,5 @@
 Variáveis
-    n: número
+    n: inteiro
 Início
     Escreva "Entre com um número inteiro:"
     Leia n

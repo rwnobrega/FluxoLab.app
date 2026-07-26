@@ -1,7 +1,6 @@
-import { DataType } from "~/core/dataTypes";
+import { DataType, Value } from "~/core/dataTypes";
 
 import grammar from "./grammar";
-import { Value } from "./library";
 import {
   CheckError,
   checkAssign,
@@ -42,7 +41,8 @@ const semantics = grammar.createSemantics();
 
 semantics.addOperation<DataType | null>("getType(variables)", {
   Primary_stringLiteral: (_a) => DataType.String,
-  Primary_numberLiteral: (_a) => DataType.Number,
+  Primary_integerLiteral: (_a) => DataType.Integer,
+  Primary_realLiteral: (_a) => DataType.Real,
   Primary_booleanLiteral: (_a) => DataType.Boolean,
   Identifier: getTypeIdentifier,
   Parentheses: getTypeParentheses,
@@ -57,7 +57,8 @@ semantics.addOperation<DataType | null>("getType(variables)", {
 
 semantics.addOperation<CheckError | null>("check(variables)", {
   Primary_stringLiteral: (_a) => null,
-  Primary_numberLiteral: (_a) => null,
+  Primary_integerLiteral: (_a) => null,
+  Primary_realLiteral: (_a) => null,
   Primary_booleanLiteral: (_a) => null,
   Identifier: checkIdentifier,
   Parentheses: checkParentheses,
@@ -78,7 +79,8 @@ semantics.addOperation<CheckError | null>("check(variables)", {
 
 semantics.addOperation<Value>("eval(state)", {
   Primary_stringLiteral: (a) => JSON.parse(a.sourceString),
-  Primary_numberLiteral: (a) => JSON.parse(a.sourceString),
+  Primary_integerLiteral: (a) => BigInt(a.sourceString),
+  Primary_realLiteral: (a) => parseFloat(a.sourceString),
   Primary_booleanLiteral: (a) => JSON.parse(a.sourceString),
   Identifier: evalIdentifier,
   Parentheses: evalParentheses,

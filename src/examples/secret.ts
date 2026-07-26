@@ -8,9 +8,9 @@ import { Role } from "../core/roles";
 const example: SimpleFlowchart = {
   title: "secret",
   variables: [
-    { id: "secret", type: DataType.Number },
-    { id: "guess", type: DataType.Number },
-    { id: "tries", type: DataType.Number },
+    { id: "secret", type: DataType.Integer },
+    { id: "guess", type: DataType.Integer },
+    { id: "tries", type: DataType.Integer },
   ],
   nodes: [
     {

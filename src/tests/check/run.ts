@@ -77,10 +77,10 @@ function summarize(errors: MachineError[]): string {
 
 console.log("== Structural checks (src/core/check.ts) ==");
 
-const xNumber = [{ id: "x", type: DataType.Number }];
+const xInteger = [{ id: "x", type: DataType.Integer }];
 
 const connected = makeFlowchart(
-  xNumber,
+  xInteger,
   [
     { id: "0", role: Role.Start, payload: "" },
     { id: "1", role: Role.Read, payload: "x" },
@@ -105,7 +105,7 @@ const connected = makeFlowchart(
 /* ---------------------- 2. Disconnected fragment ------------------------- */
 
 const withFragment = makeFlowchart(
-  xNumber,
+  xInteger,
   [
     { id: "0", role: Role.Start, payload: "" },
     { id: "1", role: Role.Read, payload: "x" },
@@ -137,7 +137,7 @@ const withFragment = makeFlowchart(
 /* -------------------------- 3. Detached cycle ---------------------------- */
 
 const withCycle = makeFlowchart(
-  xNumber,
+  xInteger,
   [
     { id: "0", role: Role.Start, payload: "" },
     { id: "1", role: Role.End, payload: "" },
@@ -166,7 +166,7 @@ const withCycle = makeFlowchart(
 /* --------------------------- 4. No start block --------------------------- */
 
 const noStart = makeFlowchart(
-  xNumber,
+  xInteger,
   [
     { id: "0", role: Role.Read, payload: "x" },
     { id: "1", role: Role.End, payload: "" },

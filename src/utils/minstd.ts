@@ -11,8 +11,10 @@ const rand = (x: number): number => {
   return x / modulus;
 };
 
-const randInt = (a: number, b: number, x: number): number => {
-  return Math.floor((b - a + 1) * rand(x) + a);
+// The bounds are integers (and so is the result), but the generator itself
+// works on floats, so the offset is drawn as a float and converted back.
+const randInt = (a: bigint, b: bigint, x: number): bigint => {
+  return a + BigInt(Math.floor(Number(b - a + 1n) * rand(x)));
 };
 
 export default {

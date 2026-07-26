@@ -1,6 +1,6 @@
 Variáveis
-    sal, hrs, pag, tot: número
-    i: número
+    sal, hrs, pag, tot: real
+    i: inteiro
 Início
     tot = 0
     i = 1

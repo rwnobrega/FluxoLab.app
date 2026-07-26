@@ -4,10 +4,10 @@ import * as ohm from "ohm-js";
 import { DataType } from "~/core/dataTypes";
 
 import {
-  binaryOperators,
   constants,
-  functions,
-  unaryOperators,
+  findBinaryOperator,
+  findFunction,
+  findUnaryOperator,
 } from "./library";
 
 export function getTypeIdentifier(a: ohm.Node): DataType | null {
@@ -32,8 +32,8 @@ export function getTypeExpressionBinary(
   const leftType = a.getType(this.args.variables);
   const id = b.sourceString;
   const rightType = c.getType(this.args.variables);
-  const operationObject = _.find(binaryOperators, { id, leftType, rightType });
-  return operationObject !== undefined ? operationObject.resultType : null;
+  const operator = findBinaryOperator(id, leftType, rightType);
+  return operator !== undefined ? operator.resultType : null;
 }
 
 export function getTypeUnaryOperator(
@@ -42,8 +42,8 @@ export function getTypeUnaryOperator(
 ): DataType | null {
   const id = a.sourceString;
   const operandType = b.getType(this.args.variables);
-  const operationObject = _.find(unaryOperators, { id, operandType });
-  return operationObject !== undefined ? operationObject.resultType : null;
+  const operator = findUnaryOperator(id, operandType);
+  return operator !== undefined ? operator.resultType : null;
 }
 
 export function getTypeFunctionCall(
@@ -53,9 +53,9 @@ export function getTypeFunctionCall(
   _d: ohm.Node,
 ): DataType | null {
   const id = a.sourceString;
-  const parameterTypes = _.map(c.asIteration().children, (child) =>
+  const argumentTypes = _.map(c.asIteration().children, (child) =>
     child.getType(this.args.variables),
   );
-  const functionObject = _.find(functions, { id, parameterTypes });
-  return functionObject !== undefined ? functionObject.returnType : null;
+  const func = findFunction(id, argumentTypes);
+  return func !== undefined ? func.returnType : null;
 }

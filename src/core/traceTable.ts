@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { DataType } from "~/core/dataTypes";
+import { DataType, displayValue } from "~/core/dataTypes";
 import { Role } from "~/core/roles";
 import { Flowchart } from "~/store/useStoreFlowchart";
 import { MachineState } from "~/store/useStoreMachine";
@@ -102,7 +102,7 @@ export default function buildTraceTable(
 export function traceToMarkdown(
   flowchart: Flowchart,
   states: MachineState[],
-  getString: (key: string) => string,
+  getString: (key: string, replacements?: Record<string, any>) => string,
 ): string {
   const rows = buildTraceTable(flowchart, states);
   const interaction = _.last(states)?.interaction ?? [];
@@ -124,10 +124,9 @@ export function traceToMarkdown(
     line([
       String(row.step),
       blockLabel(row),
-      ..._.map(flowchart.variables, ({ id }) => {
-        const value = row.memory[id]?.value ?? null;
-        return value === null ? "?" : JSON.stringify(value);
-      }),
+      ..._.map(flowchart.variables, ({ id }) =>
+        displayValue(row.memory[id]?.value ?? null, getString),
+      ),
     ]),
   );
 

@@ -1,13 +1,16 @@
 import _ from "lodash";
 import * as ohm from "ohm-js";
 
+import { isAssignable } from "~/core/dataTypes";
 import { MachineError } from "~/store/useStoreMachine";
 
 import {
-  binaryOperators,
   constants,
+  findBinaryOperator,
+  findFunction,
+  findFunctionOverloads,
+  findUnaryOperator,
   functions,
-  unaryOperators,
 } from "./library";
 
 export interface CheckError {
@@ -53,7 +56,7 @@ export function checkExpressionBinary(
   const leftType = a.getType(this.args.variables);
   const id = b.sourceString;
   const rightType = c.getType(this.args.variables);
-  const operator = _.find(binaryOperators, { id, leftType, rightType });
+  const operator = findBinaryOperator(id, leftType, rightType);
   if (operator === undefined) {
     return {
       message: "CheckError_BinaryOperatorTypeMismatch",
@@ -71,7 +74,7 @@ export function checkExpressionUnary(
   if (bCheck !== null) return bCheck;
   const id = a.sourceString;
   const operandType = b.getType(this.args.variables);
-  const operator = _.find(unaryOperators, { id, operandType });
+  const operator = findUnaryOperator(id, operandType);
   if (operator === undefined) {
     return {
       message: "CheckError_UnaryOperatorTypeMismatch",
@@ -92,15 +95,14 @@ export function checkFunctionCall(
     if (error !== null) return error;
   }
   const id = a.sourceString;
-  const function_ = _.find(functions, { id });
-  if (function_ === undefined) {
+  const overloads = findFunctionOverloads(id);
+  if (overloads.length === 0) {
     return {
       message: "CheckError_FunctionDoesNotExist",
       payload: { id },
     };
   }
-  const { parameterTypes } = function_;
-  const arity = parameterTypes.length;
+  const arity = overloads[0].parameterTypes.length;
   const count = c.asIteration().children.length;
   if (arity !== count) {
     return {
@@ -111,10 +113,14 @@ export function checkFunctionCall(
   const argumentTypes = _.map(c.asIteration().children, (child) =>
     child.getType(this.args.variables),
   );
-  if (!_.isEqual(argumentTypes, parameterTypes)) {
+  if (findFunction(id, argumentTypes) === undefined) {
+    // Signatures are listed from the most specific to the most general, and
+    // widening makes the last one accept everything the earlier ones do, so it
+    // is the one worth showing the student.
+    const { parameterTypes } = overloads[overloads.length - 1];
     return {
       message: "CheckError_FunctionArgumentTypeMismatch",
-      payload: { id, count: arity, parameterTypes: parameterTypes },
+      payload: { id, count: arity, parameterTypes },
     };
   }
   return null;
@@ -195,7 +201,7 @@ export function checkAssign(
   if (cCheck !== null) return cCheck;
   const leftType = b.getType(this.args.variables);
   const rightType = d.getType(this.args.variables);
-  if (leftType !== rightType) {
+  if (!isAssignable(rightType, leftType)) {
     return {
       message: "CheckError_AssignmentTypeMismatch",
       payload: { id, leftType, rightType },

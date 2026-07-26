@@ -55,13 +55,18 @@ export default function (
     state.status = "running";
     state.timeSlot += 1;
   } catch (error) {
+    // Runtime errors are thrown as `{ message, payload }`, where `message` is
+    // a key into the string table. A real `Error` reaching this point is a bug
+    // in FluxoLab itself, and its message must not be shown as if it were one
+    // of ours.
+    const isLanguageError = !(error instanceof Error);
     state.status = "exception";
     state.errors = [
       {
         type: "runtime",
         nodeId: node.id,
-        message: error.message,
-        payload: error.payload,
+        message: isLanguageError ? error.message : "RuntimeError_Internal",
+        payload: isLanguageError ? error.payload : { details: String(error) },
       },
     ];
     return state;

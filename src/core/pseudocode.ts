@@ -460,7 +460,8 @@ function isAtomic(src: string): boolean {
 const INDENT = "    ";
 
 const DATA_TYPE_NAMES: Record<DataType, string> = {
-  [DataType.Number]: "número",
+  [DataType.Integer]: "inteiro",
+  [DataType.Real]: "real",
   [DataType.Boolean]: "lógico",
   [DataType.String]: "texto",
 };

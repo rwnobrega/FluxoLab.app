@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 import Alert from "react-bootstrap/Alert";
 import Table from "react-bootstrap/Table";
 
+import { displayValue } from "~/core/dataTypes";
 import { Role, getRoleBoxStyle } from "~/core/roles";
 import { TraceRow } from "~/core/traceTable";
 import { Flowchart } from "~/store/useStoreFlowchart";
@@ -20,11 +21,6 @@ const NARROW_COL: React.CSSProperties = { width: "1%", whiteSpace: "nowrap" };
 interface Props {
   variables: Flowchart["variables"];
   rows: TraceRow[];
-}
-
-function formatValue(value: any): string {
-  // Matches the rendering used in the Variables panel: unknown -> "?".
-  return value === null ? "?" : JSON.stringify(value);
 }
 
 // "Bloco" cell: Start/End show their label, other blocks show their id inside
@@ -118,7 +114,7 @@ export default function ({ variables, rows }: Props): JSX.Element {
                   className="font-monospace fw-bold"
                   style={{ color: VALUE_COLOR }}
                 >
-                  {formatValue(row.memory[id]?.value ?? null)}
+                  {displayValue(row.memory[id]?.value ?? null, getString)}
                 </td>
               ))}
             </tr>

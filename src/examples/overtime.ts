@@ -8,8 +8,8 @@ import { Role } from "../core/roles";
 const example: SimpleFlowchart = {
   title: "overtime",
   variables: [
-    { id: "hours", type: DataType.Number },
-    { id: "pay", type: DataType.Number },
+    { id: "hours", type: DataType.Real },
+    { id: "pay", type: DataType.Real },
   ],
   nodes: [
     {

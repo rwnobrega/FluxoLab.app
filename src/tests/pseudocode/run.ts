@@ -43,7 +43,8 @@ interface ParsedProgram {
 }
 
 const TYPE_BY_NAME: Record<string, DataType> = {
-  número: DataType.Number,
+  inteiro: DataType.Integer,
+  real: DataType.Real,
   lógico: DataType.Boolean,
   texto: DataType.String,
 };

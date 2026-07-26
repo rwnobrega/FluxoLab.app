@@ -1,6 +1,6 @@
 Variáveis
-    a, b, c: número
-    limite: número
+    a, b, c: inteiro
+    limite: inteiro
 Início
     a = 0
     b = 1

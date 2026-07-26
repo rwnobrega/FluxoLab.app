@@ -19,6 +19,27 @@ export default function ({ showModal, setShowModal }: Props): JSX.Element {
         <Modal.Title>{getString("ModalLanguage_Title")}</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ overflowY: "auto", maxHeight: "67vh" }}>
+        <h5>{getString("ModalLanguage_SubtitleDataTypes")}</h5>
+        <Table striped bordered hover>
+          <tbody>
+            <tr>
+              <td className={classes}>{getString("DataType_integer")}</td>
+              <td>{getString("ModalLanguage_TypeInteger")}</td>
+            </tr>
+            <tr>
+              <td className={classes}>{getString("DataType_real")}</td>
+              <td>{getString("ModalLanguage_TypeReal")}</td>
+            </tr>
+            <tr>
+              <td className={classes}>{getString("DataType_boolean")}</td>
+              <td>{getString("ModalLanguage_TypeBoolean")}</td>
+            </tr>
+            <tr>
+              <td className={classes}>{getString("DataType_string")}</td>
+              <td>{getString("ModalLanguage_TypeString")}</td>
+            </tr>
+          </tbody>
+        </Table>
         <h5>{getString("ModalLanguage_SubtitleAssignment")}</h5>
         <Table striped bordered hover>
           <tbody>

@@ -10,8 +10,13 @@ import { Role, getRoleHandles } from "~/core/roles";
 
 import { Flowchart, NodeData } from "./useStoreFlowchart";
 
+// A shared link stores *indices* into this table, so it is append-only:
+// inserting or reordering an entry would silently change the meaning of every
+// link already out there. Index 0 used to be the single numeric type `number`,
+// which behaved exactly like today's `real` -- so that is what it expands to,
+// and old links keep running unchanged.
 const revAlias = [
-  "number",
+  "real",
   "string",
   "boolean",
   "start",
@@ -24,6 +29,7 @@ const revAlias = [
   "out",
   "true",
   "false",
+  "integer",
 ];
 const dirAlias = _.fromPairs(_.map(revAlias, (item, index) => [item, index]));
 

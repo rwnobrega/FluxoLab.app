@@ -1,5 +1,5 @@
 Variáveis
-    n, fat: número
+    n, fat: inteiro
 Início
     Escreva "Entre com um inteiro não-negativo:"
     Leia n

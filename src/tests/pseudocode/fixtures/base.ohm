@@ -34,24 +34,26 @@ BaseGrammar {
 
   Primary
     = stringLiteral  --stringLiteral
-    | numberLiteral  --numberLiteral
+    | realLiteral  --realLiteral
+    | integerLiteral  --integerLiteral
     | booleanLiteral  --booleanLiteral
     | FunctionCall
     | Identifier
     | Parentheses
 
-  Type = number | boolean | string
+  Type = integer | real | boolean | string
 
   true = "true" ~alnum
   false = "false" ~alnum
   div = "div" ~alnum
   mod = "mod" ~alnum
-  number = "número" ~alnum
+  integer = "inteiro" ~alnum
+  real = "real" ~alnum
   boolean = "lógico" ~alnum
   string = "texto" ~alnum
 
   keyword
-    = true | false | div | mod | number | boolean | string
+    = true | false | div | mod | integer | real | boolean | string
 
   identifier
     = ~keyword (letter | "_") (alnum | "_")*
@@ -59,8 +61,15 @@ BaseGrammar {
   stringLiteral
     = "\"" ("\\\"" | ~"\"" ~"\n" any)* "\""
 
-  numberLiteral
-    = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+  integerLiteral
+    = digit+
+
+  realLiteral
+    = digit+ "." digit+ exponentPart?  --point
+    | digit+ exponentPart  --exponent
+
+  exponentPart
+    = ("E" | "e") ("+" | "-")? digit+
 
   booleanLiteral
     = true | false

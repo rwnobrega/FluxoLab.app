@@ -8,8 +8,8 @@ import { Role } from "../core/roles";
 const example: SimpleFlowchart = {
   title: "factorial",
   variables: [
-    { id: "n", type: DataType.Number },
-    { id: "fat", type: DataType.Number },
+    { id: "n", type: DataType.Integer },
+    { id: "fat", type: DataType.Integer },
   ],
   nodes: [
     {
