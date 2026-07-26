@@ -15,7 +15,9 @@
  *  8. Serialization of variable types (shared links).
  *  9. Executing commands, where a widened value is actually stored.
  * 10. Running a whole flowchart end to end.
+ * 11. Type names: one vocabulary for the panel and the pseudocode.
  */
+import strings from "~/assets/strings.json";
 import {
   DataType,
   Value,
@@ -26,6 +28,7 @@ import {
 import execute from "~/core/execute";
 import grammar from "~/core/language/grammar";
 import semantics from "~/core/language/semantics";
+import { emitPseudocode } from "~/core/pseudocode";
 import factorial from "~/examples/factorial";
 import { SimpleFlowchart, deserialize, serialize } from "~/store/serialize";
 import { Flowchart } from "~/store/useStoreFlowchart";
@@ -528,6 +531,31 @@ function runFlowchart(simple: SimpleFlowchart, inputs: string[]): string[] {
     "30! is computed exactly",
     output.length === 1 && output[0] === expected.toString(),
     `  got ${JSON.stringify(output)}, expected ${expected}`,
+  );
+}
+
+/* ------------------------ 11. One vocabulary for types ------------------- */
+
+console.log("\n== Type names ==");
+
+{
+  // The variables panel and the generated pseudocode must call each type by the
+  // same name. They drifted apart once (`booleano` in the panel against
+  // `lógico` in the pseudocode, for the same program), so this pins them.
+  const ptBR: Record<string, string> = strings["pt-BR"];
+  const variables = [Integer, Real, Boolean, String].map((type, index) => ({
+    id: `v${index}`,
+    type,
+  }));
+  const emitted = emitPseudocode(variables, [])
+    .split("\n")
+    .slice(1, 1 + variables.length)
+    .map((line) => line.trim().split(": ")[1]);
+  const shown = variables.map(({ type }) => ptBR[`DataType_${type}`]);
+  check(
+    "the pseudocode and the variables panel agree",
+    JSON.stringify(emitted) === JSON.stringify(shown),
+    `  pseudocode ${JSON.stringify(emitted)} vs panel ${JSON.stringify(shown)}`,
   );
 }
 
