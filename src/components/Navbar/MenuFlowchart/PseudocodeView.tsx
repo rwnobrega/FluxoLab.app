@@ -24,7 +24,7 @@ const KEYWORDS = new Set([
   "enquanto",
 ]);
 
-const TYPES = new Set(["número", "lógico", "texto"]);
+const TYPES = new Set(["inteiro", "real", "lógico", "texto"]);
 const WORD_OPERATORS = new Set(["div", "mod"]);
 const BOOLEANS = new Set(["true", "false"]);
 const BUILTINS = new Set([
