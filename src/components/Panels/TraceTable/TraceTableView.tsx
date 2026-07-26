@@ -12,7 +12,7 @@ import palette from "~/utils/palette";
 
 // Variable values are shown in dark gray. Input/output are summarized above the
 // table (in the tab), so the table has no output column.
-const VALUE_COLOR = palette.gray800;
+const VALUE_COLOR = palette.gray600;
 
 // Shrink the "#" and "Bloco" columns to their content, letting the variable
 // columns take the remaining width.
@@ -122,7 +122,7 @@ export default function ({ variables, rows }: Props): JSX.Element {
                     style={{ color: VALUE_COLOR, ...VALUE_COL }}
                   >
                     <span className="d-block text-truncate" title={text}>
-                      {text}
+                      <small>{text}</small>
                     </span>
                   </td>
                 );

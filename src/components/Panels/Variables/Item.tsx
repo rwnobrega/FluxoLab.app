@@ -62,7 +62,7 @@ export default function ({ id }: Props): JSX.Element {
       <td className="w-100" style={{ maxWidth: 0 }}>
         <small
           className="d-flex p-1 fw-bold font-monospace bg-body-secondary bg-opacity-50 border rounded-1"
-          style={{ color: palette.gray800 }}
+          style={{ color: palette.gray600 }}
         >
           <span className="text-truncate" style={{ minWidth: 0 }} title={text}>
             {text}
