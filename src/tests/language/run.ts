@@ -337,26 +337,23 @@ for (const [source, expected] of writes) {
   );
 }
 
-const getString = (key: string, replacements: Record<string, any> = {}) =>
-  key === "Value_Digits" ? `${replacements.count} digits` : key;
-
-check(
-  "an uninitialized variable displays as ?",
-  displayValue(null, getString) === "?",
-);
+check("an uninitialized variable displays as ?", displayValue(null) === "?");
 check(
   "a string is quoted in the variables panel",
-  displayValue("abc", getString) === '"abc"',
+  displayValue("abc") === '"abc"',
 );
 check(
-  "a huge integer is abbreviated",
-  displayValue(10n ** 100n, getString) === "10000000…00000000 (101 digits)",
-  `  got ${displayValue(10n ** 100n, getString)}`,
+  "an empty string is distinguishable from an uninitialized variable",
+  displayValue("") === '""',
 );
+// Eliding is the view's business (CSS, with the whole value on hover), so this
+// hands back every digit however many there are.
 check(
-  "an integer of 24 digits is shown in full",
-  displayValue(10n ** 23n, getString) === `1${"0".repeat(23)}`,
+  "a huge integer is displayed in full",
+  displayValue(10n ** 100n) === `1${"0".repeat(100)}`,
+  `  got ${displayValue(10n ** 100n)}`,
 );
+check("a real keeps its decimal point", displayValue(3) === "3.0");
 
 /* ----------------------------- 7. Reading -------------------------------- */
 

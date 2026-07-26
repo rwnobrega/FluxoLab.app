@@ -98,11 +98,12 @@ export default function buildTraceTable(
 }
 
 // Renders the desk-check as Markdown (input/output summary + the table), handy
-// for pasting into reports or documentation.
+// for pasting into reports or documentation. Nothing is elided here: on screen
+// a huge integer is cut down to the column width, but a report wants the value.
 export function traceToMarkdown(
   flowchart: Flowchart,
   states: MachineState[],
-  getString: (key: string, replacements?: Record<string, any>) => string,
+  getString: (key: string) => string,
 ): string {
   const rows = buildTraceTable(flowchart, states);
   const interaction = _.last(states)?.interaction ?? [];
@@ -125,7 +126,7 @@ export function traceToMarkdown(
       String(row.step),
       blockLabel(row),
       ..._.map(flowchart.variables, ({ id }) =>
-        displayValue(row.memory[id]?.value ?? null, getString),
+        displayValue(row.memory[id]?.value ?? null),
       ),
     ]),
   );

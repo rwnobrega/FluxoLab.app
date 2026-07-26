@@ -9,6 +9,13 @@ import palette from "~/utils/palette";
 
 import TraceTableView from "./TraceTableView";
 
+/* An input/output atom can be a single unbreakable run of characters -- a
+ * 121-digit integer, say -- and a flex item does not shrink below its contents
+ * by default, so without these the box would grow past the panel instead of
+ * wrapping. `text-break` (on the box, inherited by the atoms) is what allows a
+ * break in the middle of such a run. */
+const SHRINKABLE: React.CSSProperties = { minWidth: 0 };
+
 export default function (): JSX.Element {
   const { flowchart } = useStoreFlowchart();
   const { stateHistory, machineState, executeAction } = useStoreMachine();
@@ -55,13 +62,16 @@ export default function (): JSX.Element {
             <span style={{ minWidth: "5em" }}>
               {getString("TraceTable_Input")}:
             </span>
-            <span className="flex-fill d-flex flex-wrap gap-2 px-2 py-1 rounded bg-primary bg-opacity-10 small font-monospace">
+            <span
+              className="flex-fill d-flex flex-wrap gap-2 px-2 py-1 rounded bg-primary bg-opacity-10 small font-monospace text-break"
+              style={SHRINKABLE}
+            >
               {inputs.length > 0
                 ? inputs.map((atom, index) => (
                     <span
                       key={index}
                       className={atom.current ? "fw-bold" : ""}
-                      style={{ color: palette.blue }}
+                      style={{ color: palette.blue, ...SHRINKABLE }}
                     >
                       {atom.text}
                     </span>
@@ -73,13 +83,16 @@ export default function (): JSX.Element {
             <span style={{ minWidth: "5em" }}>
               {getString("TraceTable_Output")}:
             </span>
-            <span className="flex-fill d-flex flex-wrap gap-2 px-2 py-1 rounded bg-success bg-opacity-10 small font-monospace">
+            <span
+              className="flex-fill d-flex flex-wrap gap-2 px-2 py-1 rounded bg-success bg-opacity-10 small font-monospace text-break"
+              style={SHRINKABLE}
+            >
               {outputs.length > 0
                 ? outputs.map((atom, index) => (
                     <span
                       key={index}
                       className={atom.current ? "fw-bold" : ""}
-                      style={{ color: palette.green }}
+                      style={{ color: palette.green, ...SHRINKABLE }}
                     >
                       {atom.text}
                     </span>

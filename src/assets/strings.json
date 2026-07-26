@@ -203,7 +203,6 @@
     "TraceTable_Title": "Desk check",
     "UndoRedo_Redo": "Redo",
     "UndoRedo_Undo": "Undo",
-    "Value_Digits": "{{count}} [[digit|digits]]",
     "VariableList_Add": "Add variable",
     "VariableList_Remove": "Remove variable",
     "VariableList_Title": "Variables"
@@ -412,7 +411,6 @@
     "TraceTable_Title": "Teste de mesa",
     "UndoRedo_Redo": "Refazer",
     "UndoRedo_Undo": "Desfazer",
-    "Value_Digits": "{{count}} [[dígito|dígitos]]",
     "VariableList_Add": "Adicionar variável",
     "VariableList_Remove": "Remover variável",
     "VariableList_Title": "Variáveis"

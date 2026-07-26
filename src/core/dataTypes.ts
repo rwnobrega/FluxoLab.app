@@ -180,30 +180,20 @@ export function getDataParser(dataType: DataType): DataParser {
 
 /* ----------------------------- Displaying -------------------------------- */
 
-// An integer wider than this is abbreviated: the variables panel is a narrow
-// column, and `1000!` has 2568 digits.
-const MAX_DISPLAY_DIGITS = 24;
-
 /**
  * How a value is shown in the variables panel and in the desk-check table.
  *
  * This is deliberately not the parser's `write`, which feeds the output
- * stream: here strings are quoted (so that an empty string is distinguishable
- * from an uninitialized variable) and huge integers are abbreviated. A `null`
- * value means "not initialized yet".
+ * stream: here a string is quoted, so that an empty string is distinguishable
+ * from an uninitialized variable (`null`, shown as `?`).
+ *
+ * An integer is always returned in full, however many digits it has. Cutting a
+ * value down to fit is the view's business, not this function's: the panel and
+ * the desk-check table elide with CSS (and offer the whole value on hover),
+ * while the Markdown copy of the desk check wants nothing elided at all.
  */
-export function displayValue(
-  value: Value | null,
-  getString: (key: string, replacements?: Record<string, any>) => string,
-): string {
+export function displayValue(value: Value | null): string {
   if (value === null) return "?";
   if (typeof value === "string") return JSON.stringify(value);
-  if (typeof value === "bigint") {
-    const sign = value < 0n ? "-" : "";
-    const digits = (value < 0n ? -value : value).toString();
-    if (digits.length <= MAX_DISPLAY_DIGITS) return `${sign}${digits}`;
-    const count = getString("Value_Digits", { count: digits.length });
-    return `${sign}${digits.slice(0, 8)}…${digits.slice(-8)} (${count})`;
-  }
   return getDataParser(getDataType(value)).write(value);
 }

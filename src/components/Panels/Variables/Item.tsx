@@ -24,6 +24,7 @@ export default function ({ id }: Props): JSX.Element {
   if (!_.has(machineState.memory, id)) return <></>;
 
   const { type, value } = machineState.memory[id];
+  const text = displayValue(value);
 
   return (
     <>
@@ -56,12 +57,16 @@ export default function ({ id }: Props): JSX.Element {
           ))}
         </Form.Select>
       </td>
-      <td className="w-100">
+      {/* `maxWidth: 0` keeps a long value from widening the column: the cell
+          takes whatever room is left and the text is elided into it. */}
+      <td className="w-100" style={{ maxWidth: 0 }}>
         <small
           className="d-flex p-1 fw-bold font-monospace bg-body-secondary bg-opacity-50 border rounded-1"
           style={{ color: palette.gray800 }}
         >
-          {displayValue(value, getString)}
+          <span className="text-truncate" style={{ minWidth: 0 }} title={text}>
+            {text}
+          </span>
         </small>
       </td>
       <td>

@@ -18,6 +18,11 @@ const VALUE_COLOR = palette.gray800;
 // columns take the remaining width.
 const NARROW_COL: React.CSSProperties = { width: "1%", whiteSpace: "nowrap" };
 
+// A variable column shares the leftover width evenly and never grows to fit its
+// contents: `maxWidth: 0` is what lets an arbitrarily long integer be elided
+// instead of stretching the table (the whole value is on the cell's tooltip).
+const VALUE_COL: React.CSSProperties = { maxWidth: 0 };
+
 interface Props {
   variables: Flowchart["variables"];
   rows: TraceRow[];
@@ -108,15 +113,20 @@ export default function ({ variables, rows }: Props): JSX.Element {
               <td style={NARROW_COL}>
                 <BlockBadge nodeId={row.nodeId} role={row.role} />
               </td>
-              {_.map(variables, ({ id }) => (
-                <td
-                  key={id}
-                  className="font-monospace fw-bold"
-                  style={{ color: VALUE_COLOR }}
-                >
-                  {displayValue(row.memory[id]?.value ?? null, getString)}
-                </td>
-              ))}
+              {_.map(variables, ({ id }) => {
+                const text = displayValue(row.memory[id]?.value ?? null);
+                return (
+                  <td
+                    key={id}
+                    className="font-monospace fw-bold"
+                    style={{ color: VALUE_COLOR, ...VALUE_COL }}
+                  >
+                    <span className="d-block text-truncate" title={text}>
+                      {text}
+                    </span>
+                  </td>
+                );
+              })}
             </tr>
           );
         })}
