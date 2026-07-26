@@ -23,6 +23,14 @@ const NARROW_COL: React.CSSProperties = { width: "1%", whiteSpace: "nowrap" };
 // instead of stretching the table (the whole value is on the cell's tooltip).
 const VALUE_COL: React.CSSProperties = { maxWidth: 0 };
 
+// The header names each variable the way the Variables panel does, where the
+// name sits on a small `secondary` button. Here it is a label and not a control,
+// so it goes on a `span`, and `pointer-events: none` drops what would otherwise
+// be left of the button behavior: the hover background and the hand cursor.
+// (`.btn` already sets `user-select: none`, so nothing is lost by it.)
+const VARIABLE_CHIP_CLASS = "btn btn-secondary btn-sm font-monospace";
+const VARIABLE_CHIP: React.CSSProperties = { pointerEvents: "none" };
+
 interface Props {
   variables: Flowchart["variables"];
   rows: TraceRow[];
@@ -94,8 +102,10 @@ export default function ({ variables, rows }: Props): JSX.Element {
           <th style={NARROW_COL}>{getString("TraceTable_Step")}</th>
           <th style={NARROW_COL}>{getString("TraceTable_Block")}</th>
           {_.map(variables, ({ id }) => (
-            <th key={id} className="font-monospace fst-italic">
-              {id}
+            <th key={id}>
+              <span className={VARIABLE_CHIP_CLASS} style={VARIABLE_CHIP}>
+                {id}
+              </span>
             </th>
           ))}
         </tr>
