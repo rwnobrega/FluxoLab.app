@@ -40,8 +40,6 @@ Language {
   Identifier ([[Syntax_Identifier]])
     = identifier
 
-  // `realLiteral` must come first: `3.5` would otherwise match `integerLiteral`
-  // as `3`, and an ordered choice does not backtrack once it has succeeded.
   Primary
     = stringLiteral  --stringLiteral
     | realLiteral  --realLiteral
@@ -75,8 +73,6 @@ Language {
   integerLiteral ([[Syntax_IntegerLiteral]])
     = digit+
 
-  // A literal is real if (and only if) it is written like one: `3` is an
-  // integer, while `3.0` and `3e2` are reals.
   realLiteral ([[Syntax_RealLiteral]])
     = digit+ "." digit+ exponentPart?  --point
     | digit+ exponentPart  --exponent
