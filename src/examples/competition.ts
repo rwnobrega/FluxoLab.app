@@ -46,7 +46,7 @@ const example: SimpleFlowchart = {
       id: "4",
       role: Role.Conditional,
       position: { x: 400, y: 400 },
-      payload: "average >= 6 && duration <= 3.5",
+      payload: "average >= 6.0 && duration <= 3.5",
       handlePositions: { true: Position.Left, false: Position.Right },
     },
     {

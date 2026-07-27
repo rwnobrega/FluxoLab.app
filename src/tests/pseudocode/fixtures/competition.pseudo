@@ -8,7 +8,7 @@ Início
     Escreva "Entre com a duração da apresentação:"
     Leia dur
     media = (nota1 + nota2) / 2
-    Se media >= 6 && dur <= 3.5
+    Se media >= 6.0 && dur <= 3.5
         Escreva "Classificado"
     Senão
         Escreva "Desclassificado"
