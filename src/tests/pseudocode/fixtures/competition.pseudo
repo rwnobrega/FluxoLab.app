@@ -1,0 +1,16 @@
+Variáveis
+    nota1, nota2: inteiro
+    dur: real
+    media: real
+Início
+    Escreva "Entre com as notas dos dois jurados:"
+    Leia nota1, nota2
+    Escreva "Entre com a duração da apresentação:"
+    Leia dur
+    media = (nota1 + nota2) / 2
+    Se media >= 6 && dur <= 3.5
+        Escreva "Classificado"
+    Senão
+        Escreva "Desclassificado"
+    FimSe
+Fim

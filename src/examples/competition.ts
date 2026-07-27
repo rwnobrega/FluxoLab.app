@@ -8,10 +8,10 @@ import { Role } from "../core/roles";
 const example: SimpleFlowchart = {
   title: "competition",
   variables: [
-    { id: "score1", type: DataType.Real },
-    { id: "score2", type: DataType.Real },
+    { id: "score1", type: DataType.Integer },
+    { id: "score2", type: DataType.Integer },
     { id: "duration", type: DataType.Real },
-    { id: "average", type: DataType.Integer },
+    { id: "average", type: DataType.Real },
   ],
   nodes: [
     {
@@ -39,7 +39,7 @@ const example: SimpleFlowchart = {
       id: "3",
       role: Role.Assign,
       position: { x: 400, y: 320 },
-      payload: "average = round((score1 + score2) / 2)",
+      payload: "average = (score1 + score2) / 2",
       handlePositions: { out: Position.Bottom },
     },
     {
