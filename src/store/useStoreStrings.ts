@@ -6,6 +6,24 @@ import stringsJson from "~/assets/strings.json";
 
 const strings: Record<string, Record<string, string>> = stringsJson;
 
+// The browser reports whatever tag the reader configured (`pt-PT`, `en-GB`,
+// `pt`), but strings only exist for a few of them. Resolve a preference list
+// onto a supported tag: exact match first, then any language with the same
+// primary subtag, so a reader in Portugal gets Portuguese rather than English.
+// Storing the resolved tag instead of the raw one is what keeps `language` in
+// agreement with the strings actually on screen.
+export function resolveLanguage(tags: readonly string[]): string {
+  const supported = _.keys(strings);
+  const primary = (tag: string) => _.toLower(tag).split("-")[0];
+  for (const tag of tags) {
+    const match =
+      _.find(supported, (lang) => _.toLower(lang) === _.toLower(tag)) ??
+      _.find(supported, (lang) => primary(lang) === primary(tag));
+    if (match !== undefined) return match;
+  }
+  return "en";
+}
+
 type Replacement = string | number | boolean | Array<string | number | boolean>;
 
 interface StoreStrings {
@@ -20,7 +38,7 @@ interface StoreStrings {
 const useStoreStrings = create<StoreStrings>()(
   persist(
     (set, get) => ({
-      language: navigator.language,
+      language: resolveLanguage(navigator.languages),
       setLanguage: (language) => set({ language }),
       getString: (key: string, replacements = {}) => {
         const stringsLanguage = strings[get().language] ?? strings.en;
@@ -63,7 +81,16 @@ const useStoreStrings = create<StoreStrings>()(
     }),
     {
       name: "fluxolab_strings",
-      version: 1,
+      version: 2,
+      migrate: (persisted: any, version: number) => {
+        if (version < 2 && persisted !== null) {
+          // `language` used to be `navigator.language` verbatim, so it could
+          // be a tag with no strings behind it: the reader saw English while
+          // the stored tag still said `pt-PT`.
+          persisted.language = resolveLanguage([persisted.language ?? ""]);
+        }
+        return persisted;
+      },
     },
   ),
 );

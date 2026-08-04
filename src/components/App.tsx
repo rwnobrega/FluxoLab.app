@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Nav from "react-bootstrap/Nav";
 import Stack from "react-bootstrap/Stack";
@@ -28,10 +28,17 @@ import UrlImporter from "./UrlImporter";
 export default function (): JSX.Element {
   const [rightTab, setRightTab] = useState<"workspace" | "trace">("workspace");
 
-  const { getString } = useStoreStrings();
+  const { language, getString } = useStoreStrings();
   const { flowchart, addVariable } = useStoreFlowchart();
   const { stateHistory, machineState } = useStoreMachine();
   const { triggerToast } = useStoreEphemeral();
+
+  // The `lang` of `index.html` is a static `en`; without this the browser
+  // reads a Portuguese interface as English and offers to translate it into
+  // the language it is already written in.
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
 
   // The desk-check has content once at least one step has been taken.
   const hasTrace = stateHistory.length > 0;
