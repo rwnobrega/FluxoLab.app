@@ -18,6 +18,9 @@ export interface TraceRow {
   output: string | null;
   // Text read from the input at this step, if any.
   input: string | null;
+  // True on the last row while its block is still *about* to run: it is the
+  // block highlighted in the flowchart, and the values are those it will read.
+  pending: boolean;
 }
 
 /**
@@ -31,6 +34,14 @@ export interface TraceRow {
  * the values shown are the memory *after* that block executed
  * (`states[k + 1].memory`). This is the pedagogical convention: "run this
  * instruction, here is the resulting state".
+ *
+ * Those rows alone lag the flowchart by one step, because the block drawn with
+ * the highlight is `curNodeId`, the one *about* to run, while the last row is
+ * the one that has just run. So a final `pending` row is appended for the
+ * current block, carrying the memory as it stands on arrival; executing it
+ * fills that same row in and opens the next one, which is how a desk check is
+ * filled in by hand. The halted case (an End block, reached but never
+ * executed) is just this rule with nothing left to run.
  */
 export default function buildTraceTable(
   flowchart: Flowchart,
@@ -69,27 +80,33 @@ export default function buildTraceTable(
       memory: after.memory,
       output,
       input,
+      pending: false,
     });
   }
 
-  // The End block is *reached* but never *executed* (the machine halts on
-  // arrival), so it produces no transition. Append it explicitly as the final
-  // row when execution has halted, mirroring a hand-written desk check.
+  // The row for the block that is *about* to run, so that the highlighted row
+  // and the highlighted block always name the same thing. Two states have no
+  // such block: `invalid` (nothing will run at all) and `exception` (the block
+  // did run, and its row is already the last one above).
   const last = _.last(states);
   if (
     last !== undefined &&
-    last.status === "halted" &&
-    last.curNodeId !== null
+    last.status !== "invalid" &&
+    last.status !== "exception"
   ) {
-    const endNode = _.find(flowchart.nodes, { id: last.curNodeId });
-    if (endNode !== undefined && endNode.data.role === Role.End) {
+    const node =
+      last.curNodeId === null
+        ? _.find(flowchart.nodes, { data: { role: Role.Start } })
+        : _.find(flowchart.nodes, { id: last.curNodeId });
+    if (node !== undefined) {
       rows.push({
         step: rows.length,
-        nodeId: endNode.id,
-        role: Role.End,
+        nodeId: node.id,
+        role: node.data.role,
         memory: last.memory,
         output: null,
         input: null,
+        pending: true,
       });
     }
   }
