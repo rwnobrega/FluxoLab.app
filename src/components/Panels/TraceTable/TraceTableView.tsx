@@ -3,8 +3,8 @@ import React, { useEffect, useRef } from "react";
 import Alert from "react-bootstrap/Alert";
 import Table from "react-bootstrap/Table";
 
+import NodeIdBadge from "~/components/NodeIdBadge";
 import { displayValue } from "~/core/dataTypes";
-import { Role, getRoleBoxStyle } from "~/core/roles";
 import { TraceRow } from "~/core/traceTable";
 import { Flowchart } from "~/store/useStoreFlowchart";
 import useStoreStrings from "~/store/useStoreStrings";
@@ -34,38 +34,6 @@ const VARIABLE_CHIP: React.CSSProperties = { pointerEvents: "none" };
 interface Props {
   variables: Flowchart["variables"];
   rows: TraceRow[];
-}
-
-// "Bloco" cell: Start/End show their label, other blocks show their id inside
-// a small box tinted by role, mirroring the flowchart's block colors.
-function BlockBadge({ nodeId, role }: { nodeId: string; role: Role }) {
-  const { getString } = useStoreStrings();
-
-  if (role === Role.Start || role === Role.End) {
-    return (
-      <span className="fw-semibold">{getString(`BlockLabel_${role}`)}</span>
-    );
-  }
-
-  // A rounded box tinted by the block's role color. We intentionally skip the
-  // role clipPath (parallelogram / diamond) used in the flowchart: at badge
-  // size it would clip the id. The color alone conveys the block type.
-  const boxStyle = getRoleBoxStyle(role);
-  return (
-    <span
-      className="d-inline-flex justify-content-center align-items-center small fw-bold"
-      style={{
-        minWidth: "28px",
-        height: "28px",
-        padding: "0 8px",
-        color: boxStyle.textColor,
-        background: boxStyle.backgroundColor,
-        borderRadius: "6px",
-      }}
-    >
-      {nodeId}
-    </span>
-  );
 }
 
 export default function ({ variables, rows }: Props): JSX.Element {
@@ -121,7 +89,7 @@ export default function ({ variables, rows }: Props): JSX.Element {
             >
               <td style={NARROW_COL}>{row.step}</td>
               <td style={NARROW_COL}>
-                <BlockBadge nodeId={row.nodeId} role={row.role} />
+                <NodeIdBadge nodeId={row.nodeId} />
               </td>
               {_.map(variables, ({ id }) => {
                 const text = displayValue(row.memory[id]?.value ?? null);

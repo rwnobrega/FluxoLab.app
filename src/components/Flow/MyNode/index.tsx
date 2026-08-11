@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Position, useReactFlow } from "reactflow";
 
 import NodeModal from "~/components/Modals/NodeModal";
+import NodeIdBadge from "~/components/NodeIdBadge";
 import { Role, getRoleBoxStyle, getRoleHandles } from "~/core/roles";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlowchart, { NodeData } from "~/store/useStoreFlowchart";
@@ -145,6 +146,20 @@ export default function ({ id, data, selected }: Props): JSX.Element {
             </span>
           </>
         </Box>
+        {/* Hung on the corner, like the buttons on the other three, and drawn
+            outside the box so that the clip path of a parallelogram or of a
+            diamond -- which eats exactly this corner -- does not cut it. */}
+        <span
+          style={{
+            position: "absolute",
+            top: -8,
+            left: -8,
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        >
+          <NodeIdBadge nodeId={id} />
+        </span>
         <Button
           variant="danger"
           top={-8}

@@ -10,8 +10,6 @@ export interface TraceRow {
   step: number;
   // Id of the block that was *executed* to produce this row.
   nodeId: string;
-  // Role of that block (used to style the badge in the "Bloco" column).
-  role: Role;
   // Snapshot of memory *after* the block ran (null value === "unknown").
   memory: Record<string, { type: DataType; value: any }>;
   // Text written to the output at this step, if any.
@@ -76,7 +74,6 @@ export default function buildTraceTable(
     rows.push({
       step: rows.length,
       nodeId: node.id,
-      role: node.data.role,
       memory: after.memory,
       output,
       input,
@@ -102,7 +99,6 @@ export default function buildTraceTable(
       rows.push({
         step: rows.length,
         nodeId: node.id,
-        role: node.data.role,
         memory: last.memory,
         output: null,
         input: null,
@@ -131,17 +127,12 @@ export function traceToMarkdown(
     .filter((atom) => atom.direction === "out")
     .map((atom) => atom.text);
 
-  const blockLabel = (row: TraceRow): string =>
-    row.role === Role.Start || row.role === Role.End
-      ? getString(`BlockLabel_${row.role}`)
-      : row.nodeId;
-
   const header = ["#", "Bloco", ..._.map(flowchart.variables, "id")];
   const line = (cells: string[]) => `| ${cells.join(" | ")} |`;
   const body = _.map(rows, (row) =>
     line([
       String(row.step),
-      blockLabel(row),
+      row.nodeId,
       ..._.map(flowchart.variables, ({ id }) =>
         displayValue(row.memory[id]?.value ?? null),
       ),
