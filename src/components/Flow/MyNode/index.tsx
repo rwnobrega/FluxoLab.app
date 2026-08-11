@@ -32,6 +32,7 @@ export default function ({ id, data, selected }: Props): JSX.Element {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const {
+    rightTab,
     isDraggingNode,
     connectionSource,
     connectionSourceHandle,
@@ -146,20 +147,26 @@ export default function ({ id, data, selected }: Props): JSX.Element {
             </span>
           </>
         </Box>
-        {/* Hung on the corner, like the buttons on the other three, and drawn
+        {/* Only while the desk-check is on screen: the number exists to tie a
+            row of that table to a box here, and outside it would be one more
+            mark competing with the label for the reader's attention.
+
+            Hung on the corner, like the buttons on the other three, and drawn
             outside the box so that the clip path of a parallelogram or of a
             diamond -- which eats exactly this corner -- does not cut it. */}
-        <span
-          style={{
-            position: "absolute",
-            top: -8,
-            left: -8,
-            zIndex: 1,
-            pointerEvents: "none",
-          }}
-        >
-          <NodeIdBadge nodeId={id} />
-        </span>
+        {rightTab === "trace" && (
+          <span
+            style={{
+              position: "absolute",
+              top: -8,
+              left: -8,
+              zIndex: 1,
+              pointerEvents: "none",
+            }}
+          >
+            <NodeIdBadge nodeId={id} />
+          </span>
+        )}
         <Button
           variant="danger"
           top={-8}

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Nav from "react-bootstrap/Nav";
 import Stack from "react-bootstrap/Stack";
@@ -7,7 +7,7 @@ import { Group, Panel, Separator } from "react-resizable-panels";
 import { ReactFlowProvider } from "reactflow";
 
 import { traceToMarkdown } from "~/core/traceTable";
-import useStoreEphemeral from "~/store/useStoreEphemeral";
+import useStoreEphemeral, { RightTab } from "~/store/useStoreEphemeral";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreMachine from "~/store/useStoreMachine";
 import useStoreStrings from "~/store/useStoreStrings";
@@ -26,12 +26,10 @@ import Updater from "./Updater";
 import UrlImporter from "./UrlImporter";
 
 export default function (): JSX.Element {
-  const [rightTab, setRightTab] = useState<"workspace" | "trace">("workspace");
-
   const { language, getString } = useStoreStrings();
   const { flowchart, addVariable } = useStoreFlowchart();
   const { stateHistory, machineState } = useStoreMachine();
-  const { triggerToast } = useStoreEphemeral();
+  const { rightTab, setRightTab, triggerToast } = useStoreEphemeral();
 
   // The `lang` of `index.html` is a static `en`; without this the browser
   // reads a Portuguese interface as English and offers to translate it into
@@ -121,7 +119,7 @@ export default function (): JSX.Element {
                 variant="tabs"
                 activeKey={rightTab}
                 onSelect={(key) =>
-                  setRightTab((key as "workspace" | "trace") ?? "workspace")
+                  setRightTab((key as RightTab) ?? "workspace")
                 }
                 className="flex-nowrap align-items-center px-2 pt-2"
               >

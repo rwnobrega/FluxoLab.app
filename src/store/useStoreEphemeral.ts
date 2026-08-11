@@ -12,7 +12,14 @@ interface Toast extends ToastContent {
   duration: number;
 }
 
+export type RightTab = "workspace" | "trace";
+
 interface StoreEphemeral {
+  // Which tab of the right panel is showing. Interface state, but it lives
+  // here instead of in `App` because the flowchart reads it too: the block
+  // numbers are drawn only while the desk-check is on screen.
+  rightTab: RightTab;
+  setRightTab: (rightTab: RightTab) => void;
   isDraggingNode: boolean;
   setIsDraggingNode: (isDraggingNode: boolean) => void;
   connectionSource: string | null;
@@ -31,6 +38,8 @@ interface StoreEphemeral {
 let toastIdCounter = 0;
 
 const useStoreEphemeral = create<StoreEphemeral>()((set, get) => ({
+  rightTab: "workspace",
+  setRightTab: (rightTab) => set({ rightTab }),
   isDraggingNode: false,
   setIsDraggingNode: (isDraggingNode) => set({ isDraggingNode }),
   connectionSource: null,
