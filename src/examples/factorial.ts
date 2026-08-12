@@ -21,16 +21,16 @@ const example: SimpleFlowchart = {
     },
     {
       id: "1",
-      role: Role.Assign,
-      position: { x: 400, y: 280 },
-      payload: "fat = 1",
+      role: Role.Read,
+      position: { x: 400, y: 200 },
+      payload: "n",
       handlePositions: { out: Position.Bottom },
     },
     {
       id: "2",
-      role: Role.Read,
-      position: { x: 400, y: 200 },
-      payload: "n",
+      role: Role.Assign,
+      position: { x: 400, y: 280 },
+      payload: "fat = 1",
       handlePositions: { out: Position.Bottom },
     },
     {
@@ -70,14 +70,14 @@ const example: SimpleFlowchart = {
     },
   ],
   edges: [
-    { source: "2", sourceHandle: "out", target: "1" },
+    { source: "0", sourceHandle: "out", target: "1" },
+    { source: "1", sourceHandle: "out", target: "2" },
+    { source: "2", sourceHandle: "out", target: "3" },
     { source: "3", sourceHandle: "true", target: "4" },
     { source: "4", sourceHandle: "out", target: "5" },
+    { source: "5", sourceHandle: "out", target: "3" },
     { source: "3", sourceHandle: "false", target: "6" },
     { source: "6", sourceHandle: "out", target: "7" },
-    { source: "1", sourceHandle: "out", target: "3" },
-    { source: "5", sourceHandle: "out", target: "3" },
-    { source: "0", sourceHandle: "out", target: "2" },
   ],
 };
 
