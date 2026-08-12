@@ -1,9 +1,10 @@
 import _ from "lodash";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Position, useReactFlow } from "reactflow";
 
 import NodeModal from "~/components/Modals/NodeModal";
-import NodeIdBadge from "~/components/NodeIdBadge";
+import NodeNumberBadge from "~/components/NodeNumberBadge";
+import { getNodeNumbers } from "~/core/graph";
 import { Role, getRoleBoxStyle, getRoleHandles } from "~/core/roles";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreFlowchart, { NodeData } from "~/store/useStoreFlowchart";
@@ -39,11 +40,20 @@ export default function ({ id, data, selected }: Props): JSX.Element {
     mouseOverNodeId,
     setMouseOverNodeId,
   } = useStoreEphemeral();
-  const { deleteNode, addEdge } = useStoreFlowchart();
+  const { flowchart, deleteNode, addEdge } = useStoreFlowchart();
   const { machineState } = useStoreMachine();
   const { language } = useStoreStrings();
 
   const { getZoom } = useReactFlow();
+
+  // Recomputed from the whole flowchart, because this block's number depends on
+  // the others: deleting a box or rewiring an edge renumbers what comes after.
+  // The store replaces both arrays on every edit, so the memo is exact, and one
+  // pass over a flowchart of this size costs nothing.
+  const nodeNumbers = useMemo(
+    () => getNodeNumbers(flowchart),
+    [flowchart.nodes, flowchart.edges],
+  );
 
   useEffect(() => {
     if (labelRef.current !== null) {
@@ -164,7 +174,7 @@ export default function ({ id, data, selected }: Props): JSX.Element {
               pointerEvents: "none",
             }}
           >
-            <NodeIdBadge nodeId={id} />
+            <NodeNumberBadge number={nodeNumbers.get(id) ?? 0} />
           </span>
         )}
         <Button

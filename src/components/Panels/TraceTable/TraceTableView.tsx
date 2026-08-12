@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import Alert from "react-bootstrap/Alert";
 import Table from "react-bootstrap/Table";
 
-import NodeIdBadge from "~/components/NodeIdBadge";
+import NodeNumberBadge from "~/components/NodeNumberBadge";
 import { displayValue } from "~/core/dataTypes";
 import { TraceRow } from "~/core/traceTable";
 import { Flowchart } from "~/store/useStoreFlowchart";
@@ -33,10 +33,13 @@ const VARIABLE_CHIP: React.CSSProperties = { pointerEvents: "none" };
 
 interface Props {
   variables: Flowchart["variables"];
+  // Block number of each node, as shown on the boxes in the flowchart. Passed
+  // in rather than computed here so that both views number from one source.
+  nodeNumbers: Map<string, number>;
   rows: TraceRow[];
 }
 
-export default function ({ variables, rows }: Props): JSX.Element {
+export default function ({ variables, nodeNumbers, rows }: Props): JSX.Element {
   const { getString } = useStoreStrings();
 
   // Keep the current (last) row in view as execution advances or steps back.
@@ -89,7 +92,7 @@ export default function ({ variables, rows }: Props): JSX.Element {
             >
               <td style={NARROW_COL}>{row.step}</td>
               <td style={NARROW_COL}>
-                <NodeIdBadge nodeId={row.nodeId} />
+                <NodeNumberBadge number={nodeNumbers.get(row.nodeId) ?? 0} />
               </td>
               {_.map(variables, ({ id }) => {
                 const text = displayValue(row.memory[id]?.value ?? null);

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Form from "react-bootstrap/Form";
 
+import { getNodeNumbers } from "~/core/graph";
 import buildTraceTable from "~/core/traceTable";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
 import useStoreMachine from "~/store/useStoreMachine";
@@ -42,6 +43,7 @@ export default function (): JSX.Element {
   };
 
   const rows = buildTraceTable(flowchart, [...stateHistory, machineState]);
+  const nodeNumbers = getNodeNumbers(flowchart);
 
   // Input/output summary. Atoms appended in the last transition (index beyond
   // the previous state's interaction) belong to the current step and are bold.
@@ -103,7 +105,11 @@ export default function (): JSX.Element {
         </div>
       )}
       <div className="flex-fill" style={{ overflow: "auto", minHeight: 0 }}>
-        <TraceTableView variables={flowchart.variables} rows={rows} />
+        <TraceTableView
+          variables={flowchart.variables}
+          nodeNumbers={nodeNumbers}
+          rows={rows}
+        />
       </div>
       {isWaiting && (
         <Form.Control

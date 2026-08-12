@@ -3,7 +3,7 @@ import React from "react";
 import palette from "~/utils/palette";
 
 interface Props {
-  nodeId: string;
+  number: number;
 }
 
 /**
@@ -12,8 +12,11 @@ interface Props {
  * in the flowchart while that table is open. White on black on purpose -- the
  * role colors already say what kind of block it is, and a number tinted by
  * role would compete with them instead of tying the two views together.
+ *
+ * The number comes from `getNodeNumbers` (src/core/graph.ts), which numbers
+ * the blocks in the order the program runs them; it is not the node id.
  */
-export default function ({ nodeId }: Props): JSX.Element {
+export default function ({ number }: Props): JSX.Element {
   return (
     <span
       className="d-inline-flex justify-content-center align-items-center font-monospace fw-bold"
@@ -28,7 +31,7 @@ export default function ({ nodeId }: Props): JSX.Element {
         borderRadius: "4px",
       }}
     >
-      {nodeId}
+      {number}
     </span>
   );
 }
