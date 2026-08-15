@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
 
+import InputQueue from "~/components/InputQueue";
 import useStoreEphemeral from "~/store/useStoreEphemeral";
 import useStoreMachine from "~/store/useStoreMachine";
 import useStoreStrings from "~/store/useStoreStrings";
@@ -15,18 +16,24 @@ export default function (): JSX.Element {
   const [inputText, setInputText] = useState("");
 
   const { setRefInput } = useStoreEphemeral();
-  const { machineState, executeAction } = useStoreMachine();
+  const { machineState, sendInput } = useStoreMachine();
   const { getString } = useStoreStrings();
 
   useEffect(() => {
     setRefInput(refInput);
   }, [refInput]);
 
+  // The field is open whenever the machine can still read, not only while it
+  // is blocked: input given ahead of time waits in the queue, which is what
+  // lets a whole run be typed in one go.
+  const isAccepting = ["ready", "running", "waiting"].includes(
+    machineState.status,
+  );
+
   const handleSendInput = () => {
     const inputTextTrimmed = inputText.trim();
     if (inputTextTrimmed.length > 0) {
-      machineState.input = inputTextTrimmed;
-      executeAction("nextStep");
+      sendInput(inputTextTrimmed);
       setInputText("");
     }
   };
@@ -56,11 +63,13 @@ export default function (): JSX.Element {
         ))}
         <div ref={refStackEnd} />
       </Stack>
+      <InputQueue />
       <Form.Control
         ref={refInput}
         size="sm"
         value={inputText}
-        disabled={machineState.status !== "waiting"}
+        placeholder={getString("Interaction_Placeholder")}
+        disabled={!isAccepting}
         onChange={(event) => setInputText(event.target.value)}
         onKeyDown={(event) => {
           if (event.key === "Enter") {

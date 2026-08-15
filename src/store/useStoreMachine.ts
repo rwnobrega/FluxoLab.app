@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { Action } from "~/core/actions";
 import check from "~/core/check";
 import { DataType } from "~/core/dataTypes";
-import execute from "~/core/execute";
+import execute, { refreshStatus } from "~/core/execute";
 import assert from "~/utils/assert";
 import minstd from "~/utils/minstd";
 
@@ -28,7 +28,10 @@ export interface MachineState {
   curNodeId: string | null;
   timeSlot: number;
   memory: MachineMemory;
-  input: string | null;
+  // Tokens typed but not yet read, oldest first. A read takes one per variable
+  // and leaves the rest queued, so input can be given a line at a time, all at
+  // once before the run, or anywhere in between.
+  inputBuffer: string[];
   outPort: string | null;
   rand: number;
   interaction: InteractionAtom[];
@@ -49,13 +52,15 @@ interface StoreMachine {
   seed: number;
   resetMachine: (flowchart: Flowchart) => void;
   executeAction: (actionId: Action["actionId"]) => void;
+  sendInput: (text: string) => void;
+  clearInput: () => void;
 }
 
 const getEmptyMachineState = (): MachineState => ({
   curNodeId: null,
   timeSlot: 0,
   memory: {},
-  input: null,
+  inputBuffer: [],
   outPort: null,
   rand: 0,
   interaction: [],
@@ -103,6 +108,42 @@ const useStoreMachine = create<StoreMachine>()((set, get) => ({
         break;
       }
     }
+  },
+  sendInput: (text) => {
+    const { flowchart, machineState } = get();
+    assert(flowchart !== null);
+    const tokens = _.filter(_.split(text, /\s+/), (token) => token.length > 0);
+    if (tokens.length === 0) return;
+    // A machine that has halted, failed or does not compile has nothing to
+    // read: queuing tokens for it would only leave them stranded.
+    const accepting = ["ready", "running", "waiting"];
+    if (!accepting.includes(machineState.status)) return;
+    const wasWaiting = machineState.status === "waiting";
+    const state = refreshStatus(flowchart, {
+      ...machineState,
+      inputBuffer: [...machineState.inputBuffer, ...tokens],
+    });
+    set({ machineState: state });
+    // Answering a machine that was blocked also takes the step it was blocked
+    // on, so that typing a line and pressing Enter still reads it -- the
+    // gesture from before the queue existed. Tokens typed ahead of a read that
+    // is not yet under the highlight only wait in the queue: what advances the
+    // machine then is the step button, as for every other block.
+    if (wasWaiting && state.status === "running") {
+      get().executeAction("nextStep");
+    }
+  },
+  clearInput: () => {
+    const { flowchart, machineState } = get();
+    assert(flowchart !== null);
+    // Emptying the queue is the way back from a mistyped line: without it, a
+    // token typed by accident could only be got rid of by restarting the run.
+    set({
+      machineState: refreshStatus(flowchart, {
+        ...machineState,
+        inputBuffer: [],
+      }),
+    });
   },
 }));
 

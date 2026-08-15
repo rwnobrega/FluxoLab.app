@@ -12,15 +12,13 @@ export function execStart(_a: ohm.Node): void {
 
 export function execRead(_a: ohm.Node, b: ohm.Node): void {
   const state: MachineState = this.args.state;
-  assert(state.input !== null);
-  const inputTokens = state.input.split(/\s+/);
   const children = b.asIteration().children;
-  if (children.length !== inputTokens.length) {
-    throw {
-      message: "RuntimeError_InvalidNumberOfTokens",
-      payload: { count: inputTokens.length, expected: children.length },
-    };
-  }
+  // A read takes exactly one token per variable off the head of the queue and
+  // leaves the rest for the reads that follow. The machine only leaves the
+  // `waiting` status once the queue is long enough, so a short queue here is a
+  // failure of that gate, not of the program being run.
+  assert(state.inputBuffer.length >= children.length);
+  const inputTokens = state.inputBuffer.slice(0, children.length);
   for (const [child, input] of _.zip(children, inputTokens)) {
     assert(child !== undefined && input !== undefined);
     const variableId = child.sourceString;
@@ -34,8 +32,11 @@ export function execRead(_a: ohm.Node, b: ohm.Node): void {
     }
     state.memory[variableId].value = parser.read(input);
   }
-  state.interaction.push({ direction: "in", text: state.input });
-  state.input = null;
+  // What is recorded is what the block read, not what was typed: a line typed
+  // ahead of time may answer several reads, and each of them shows its own
+  // share.
+  state.interaction.push({ direction: "in", text: inputTokens.join(" ") });
+  state.inputBuffer = state.inputBuffer.slice(children.length);
   state.outPort = "out";
 }
 

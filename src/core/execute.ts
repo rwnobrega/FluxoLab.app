@@ -21,6 +21,36 @@ function getStartNode(flowchart: Flowchart): Node<NodeData> {
   return node;
 }
 
+/**
+ * Number of tokens a read block takes from the input queue: one per variable
+ * it names. Its payload is a comma-separated list of identifiers, and an
+ * identifier cannot contain a comma, so counting the separators is exact for
+ * every payload the checker accepts.
+ */
+export function readArity(node: Node<NodeData>): number {
+  return node.data.payload.split(",").length;
+}
+
+/**
+ * Recomputes whether the machine can move from where it stands. Only a read
+ * blocks, and only while the queue holds fewer tokens than it needs, so this
+ * is what turns `waiting` into `running` when input arrives -- and back again
+ * if the queue is emptied. Any other status (`ready`, `halted`, `exception`,
+ * `invalid`) is left alone: it does not depend on the queue.
+ */
+export function refreshStatus(
+  flowchart: Flowchart,
+  state: MachineState,
+): MachineState {
+  if (state.status !== "running" && state.status !== "waiting") return state;
+  if (state.curNodeId === null) return state;
+  const node = getNodeById(flowchart, state.curNodeId);
+  if (node.data.role !== Role.Read) return state;
+  const status: MachineState["status"] =
+    state.inputBuffer.length >= readArity(node) ? "running" : "waiting";
+  return { ...state, status };
+}
+
 function getOutgoingEdge(
   sourceId: string,
   handleId: string,
@@ -75,11 +105,11 @@ export default function (
   assert(state.outPort !== null);
   state.curNodeId = getOutgoingEdge(node.id, state.outPort, flowchart);
   const nextNode = getNodeById(flowchart, state.curNodeId);
-  if (nextNode.data.role === Role.End && state.status === "running") {
+  if (nextNode.data.role === Role.End) {
     state.status = "halted";
-  } else if (nextNode.data.role === Role.Read && state.status === "running") {
-    state.status = "waiting";
+    return state;
   }
-
-  return state;
+  // Arriving at a read no longer stops the machine by itself: it stops only if
+  // the queue cannot answer it.
+  return refreshStatus(flowchart, state);
 }

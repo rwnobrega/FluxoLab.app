@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Form from "react-bootstrap/Form";
 
+import InputQueue from "~/components/InputQueue";
 import { getNodeNumbers } from "~/core/graph";
 import buildTraceTable from "~/core/traceTable";
 import useStoreFlowchart from "~/store/useStoreFlowchart";
@@ -19,7 +20,7 @@ const SHRINKABLE: React.CSSProperties = { minWidth: 0 };
 
 export default function (): JSX.Element {
   const { flowchart } = useStoreFlowchart();
-  const { stateHistory, machineState, executeAction } = useStoreMachine();
+  const { stateHistory, machineState, sendInput } = useStoreMachine();
   const { getString } = useStoreStrings();
 
   const [inputText, setInputText] = useState("");
@@ -36,8 +37,7 @@ export default function (): JSX.Element {
   const handleSendInput = () => {
     const trimmed = inputText.trim();
     if (trimmed.length > 0) {
-      machineState.input = trimmed;
-      executeAction("nextStep");
+      sendInput(trimmed);
       setInputText("");
     }
   };
@@ -111,6 +111,7 @@ export default function (): JSX.Element {
           rows={rows}
         />
       </div>
+      <InputQueue className="mt-2" />
       {isWaiting && (
         <Form.Control
           ref={inputRef}

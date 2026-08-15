@@ -15,8 +15,11 @@
  *  8. Serialization of variable types (shared links).
  *  9. Executing commands, where a widened value is actually stored.
  * 10. Running a whole flowchart end to end.
- * 11. Type names: one vocabulary for the panel and the pseudocode.
+ * 11. The input queue: what a read takes from it, and when it blocks.
+ * 12. Type names: one vocabulary for the panel and the pseudocode.
  */
+import _ from "lodash";
+
 import strings from "~/assets/strings.json";
 import {
   DataType,
@@ -25,10 +28,11 @@ import {
   getDataParser,
   getDataType,
 } from "~/core/dataTypes";
-import execute from "~/core/execute";
+import execute, { readArity, refreshStatus } from "~/core/execute";
 import grammar from "~/core/language/grammar";
 import semantics from "~/core/language/semantics";
 import { emitPseudocode } from "~/core/pseudocode";
+import { Role } from "~/core/roles";
 import factorial from "~/examples/factorial";
 import { SimpleFlowchart, deserialize, serialize } from "~/store/serialize";
 import { Flowchart } from "~/store/useStoreFlowchart";
@@ -417,12 +421,12 @@ console.log("\n== Serialization ==");
 
 console.log("\n== Commands ==");
 
-function execCommand(source: string, input: string | null = null) {
+function execCommand(source: string, ...inputBuffer: string[]) {
   const memory: Record<string, { type: DataType; value: Value | null }> = {};
   for (const { id, type } of VARIABLES) memory[id] = { type, value: null };
   const state: any = {
     memory,
-    input,
+    inputBuffer,
     interaction: [],
     outPort: null,
     rand: 1,
@@ -498,7 +502,7 @@ function runFlowchart(simple: SimpleFlowchart, inputs: string[]): string[] {
     curNodeId: null,
     timeSlot: 0,
     memory,
-    input: null,
+    inputBuffer: [...inputs],
     outPort: null,
     rand: 1,
     interaction: [],
@@ -506,10 +510,11 @@ function runFlowchart(simple: SimpleFlowchart, inputs: string[]): string[] {
     errors: [],
   };
 
-  const pending = [...inputs];
   for (let step = 0; step < 10000; step += 1) {
     if (state.status === "halted" || state.status === "exception") break;
-    if (state.status === "waiting") state.input = pending.shift() ?? "0";
+    // A machine still waiting has run out of queued input: feeding it forever
+    // would only spin, so the run stops here.
+    if (state.status === "waiting") break;
     state = execute(flowchart, state);
   }
   if (state.status === "exception") {
@@ -531,7 +536,137 @@ function runFlowchart(simple: SimpleFlowchart, inputs: string[]): string[] {
   );
 }
 
-/* ------------------------ 11. One vocabulary for types ------------------- */
+/* -------------------------- 11. The input queue -------------------------- */
+
+console.log("\n== Input queue ==");
+
+/* start -> read a, b -> write a -> read c -> write c -> end
+ *
+ * Two reads with three variables between them: enough to tell apart a queue
+ * that is consumed token by token from one that is emptied by every read. */
+const queueFlowchart = {
+  title: "queue",
+  variables: [
+    { id: "a", type: Integer },
+    { id: "b", type: Integer },
+    { id: "c", type: Integer },
+  ],
+  nodes: [
+    { id: "0", data: { role: Role.Start, payload: "" } },
+    { id: "1", data: { role: Role.Read, payload: "a, b" } },
+    { id: "2", data: { role: Role.Write, payload: "a" } },
+    { id: "3", data: { role: Role.Read, payload: "c" } },
+    { id: "4", data: { role: Role.Write, payload: "c" } },
+    { id: "5", data: { role: Role.End, payload: "" } },
+  ],
+  edges: [
+    { source: "0", sourceHandle: "out", target: "1" },
+    { source: "1", sourceHandle: "out", target: "2" },
+    { source: "2", sourceHandle: "out", target: "3" },
+    { source: "3", sourceHandle: "out", target: "4" },
+    { source: "4", sourceHandle: "out", target: "5" },
+  ],
+} as unknown as Flowchart;
+
+// Runs until the machine stops on its own: halted, failed, or blocked on a
+// read the queue cannot answer.
+function runQueue(tokens: string[]): any {
+  const memory: Record<string, { type: DataType; value: Value | null }> = {};
+  for (const { id, type } of queueFlowchart.variables) {
+    memory[id] = { type, value: null };
+  }
+  let state: any = {
+    curNodeId: null,
+    timeSlot: 0,
+    memory,
+    inputBuffer: [...tokens],
+    outPort: null,
+    rand: 1,
+    interaction: [],
+    status: "ready",
+    errors: [],
+  };
+  for (let step = 0; step < 100; step += 1) {
+    if (state.status !== "ready" && state.status !== "running") break;
+    state = execute(queueFlowchart, state);
+  }
+  return state;
+}
+
+const atoms = (state: any, direction: string): string[] =>
+  state.interaction
+    .filter((atom: any) => atom.direction === direction)
+    .map((atom: any) => atom.text);
+
+check(
+  "a read block takes one token per variable",
+  readArity(queueFlowchart.nodes[1]) === 2 &&
+    readArity(queueFlowchart.nodes[3]) === 1,
+);
+
+{
+  // The point of the queue: one line typed once answers every read after it.
+  const state = runQueue(["1", "2", "3"]);
+  check(
+    "tokens left over feed the reads that follow",
+    state.status === "halted" &&
+      _.isEqual(atoms(state, "out"), ["1", "3"]) &&
+      state.memory.c.value === 3n,
+    `  got ${state.status}, ${JSON.stringify(atoms(state, "out"))}`,
+  );
+}
+
+{
+  // Each read shows what it read, not what was typed.
+  const state = runQueue(["1", "2", "3"]);
+  check(
+    "each read records its own share of the line",
+    _.isEqual(atoms(state, "in"), ["1 2", "3"]),
+    `  got ${JSON.stringify(atoms(state, "in"))}`,
+  );
+}
+
+{
+  // Too few tokens is not an error: the machine stops and waits, holding on to
+  // what it has (`read a, b` will not read `a` and leave `b` unset).
+  const state = runQueue(["1"]);
+  check(
+    "a read blocks until every one of its tokens is there",
+    state.status === "waiting" &&
+      state.curNodeId === "1" &&
+      _.isEqual(state.inputBuffer, ["1"]) &&
+      state.memory.a.value === null,
+    `  got ${state.status}, queue ${JSON.stringify(state.inputBuffer)}`,
+  );
+}
+
+{
+  // ... and the same state goes back to running as soon as the token it was
+  // missing is queued. This is the transition the input field relies on.
+  const blocked = runQueue(["1"]);
+  const fed = refreshStatus(queueFlowchart, {
+    ...blocked,
+    inputBuffer: [...blocked.inputBuffer, "2"],
+  });
+  check(
+    "a queued token unblocks a waiting machine",
+    fed.status === "running" && fed.curNodeId === "1",
+    `  got ${fed.status}`,
+  );
+}
+
+{
+  // Too many tokens is not an error either -- the extra ones simply stay
+  // queued, which is what typing ahead of the program looks like.
+  const state = runQueue(["1", "2", "3", "4"]);
+  check(
+    "tokens nobody reads stay in the queue",
+    state.status === "halted" && _.isEqual(state.inputBuffer, ["4"]),
+    `  got ${state.status}, queue ${JSON.stringify(state.inputBuffer)}`,
+  );
+}
+
+/* ------------------------ 12. One vocabulary for types ------------------- */
 
 console.log("\n== Type names ==");
 
