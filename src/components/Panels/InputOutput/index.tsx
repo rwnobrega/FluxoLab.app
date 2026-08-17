@@ -68,7 +68,6 @@ export default function (): JSX.Element {
         ref={refInput}
         size="sm"
         value={inputText}
-        placeholder={getString("Interaction_Placeholder")}
         disabled={!isAccepting}
         onChange={(event) => setInputText(event.target.value)}
         onKeyDown={(event) => {

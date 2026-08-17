@@ -71,6 +71,20 @@ export default function ({ id, data, selected }: Props): JSX.Element {
       drop-shadow(0 -1px 1px ${color})`;
   }
 
+  function getTraceNumberPosition(): { top: number; left: number } {
+    return {
+      top: -13,
+      left: {
+        start: -6,
+        read: 8,
+        write: 8,
+        assign: -8,
+        conditional: 8,
+        end: -6,
+      }[data.role],
+    };
+  }
+
   useEffect(() => {
     setBoxFilter(() => {
       const isTargetNode =
@@ -168,10 +182,9 @@ export default function ({ id, data, selected }: Props): JSX.Element {
           <span
             style={{
               position: "absolute",
-              top: -8,
-              left: -8,
               zIndex: 1,
               pointerEvents: "none",
+              ...getTraceNumberPosition(),
             }}
           >
             <NodeNumberBadge number={nodeNumbers.get(id) ?? 0} />

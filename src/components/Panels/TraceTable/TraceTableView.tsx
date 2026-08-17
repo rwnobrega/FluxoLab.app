@@ -91,7 +91,7 @@ export default function ({ variables, nodeNumbers, rows }: Props): JSX.Element {
               className={isCurrent ? "table-primary" : ""}
             >
               <td style={NARROW_COL}>{row.step}</td>
-              <td style={NARROW_COL}>
+              <td style={{ ...NARROW_COL, paddingTop: "1px" }}>
                 <NodeNumberBadge number={nodeNumbers.get(row.nodeId) ?? 0} />
               </td>
               {_.map(variables, ({ id }) => {

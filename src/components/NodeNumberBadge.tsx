@@ -23,9 +23,8 @@ export default function ({ number }: Props): JSX.Element {
       style={{
         minWidth: "18px",
         height: "18px",
-        padding: "0 4px",
+        paddingTop: "2px",
         fontSize: "11px",
-        lineHeight: 1,
         color: "white",
         background: palette.gray900,
         borderRadius: "4px",
